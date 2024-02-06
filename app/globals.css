@@ -2,32 +2,140 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.home-bg {
+  background-image: url("/img/background.png");
+  background-repeat: no-repeat;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+.verify-bg {
+  background: url("/img/verify.png");
+  background-repeat: no-repeat;
+}
+
+.welcome-bg {
+  background-image: url("/img/welcome.png");
+  background-repeat: no-repeat;
+}
+
+.create-bg {
+  background-image: url("/img/create_bg.png");
+  background-repeat: no-repeat;
+}
+
+.about-org-bg {
+  background-image: url("/img/aboutorg.png");
+  background-repeat: no-repeat;
+}
+
+.invite-bg {
+  background-image: url("/img/invite.png");
+  background-repeat: no-repeat;
+}
+
+.runshifts-bg {
+  background-image: url("/img/Runshifts.png");
+  background-repeat: no-repeat;
+}
+
+.login-bg {
+  background-image: url("/img/login.png");
+  background-repeat: no-repeat;
+}
+
+.change-bg {
+  background-image: url("/img/change.png");
+  background-repeat: no-repeat;
+}
+
+.confirm-bg {
+  background-image: url("/img/confirm.png");
+  background-repeat: no-repeat;
+}
+
+.reset-bg {
+  background-image: url("/img/reset.png");
+  background-repeat: no-repeat;
+}
+.check-bg {
+  background-image: url("/img/check.png");
+  background-repeat: no-repeat;
+}
+
+.login-verify-bg {
+  background-image: url("/img/hijab.png");
+  background-repeat: no-repeat;
+}
+
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Add your Tailwind CSS styles here or import your stylesheets */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #fafbfc;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar.translate-x-0 {
+  transform: translateX(0);
+}
+
+.sidebar.-translate-x-full {
+  transform: translateX(-100%);
+}
+
+.navbar {
+  padding: 10px;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.toggle-btn {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.close-btn {
+  position: absolute;
+  padding: 5px 15px;
+  cursor: pointer;
+  right: 0;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-container {
+  position: sticky;
+  top: 0;
+  background-color: #fafbfc;
+  height: 100vh;
+  padding-left: 2px;
+  border-right: 1px solid #d1d5db; /* Adjust the border color if needed */
+}
+
+.parent-container {
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    display: none;
+  }
+
+  .sidebar {
+    width: 100vw;
+    top: 0;
+    left: 0;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
