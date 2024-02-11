@@ -39,7 +39,8 @@ function LoginVerify() {
 
       console.log(response);
       localStorage.setItem("token", response.data.token)
-      router.push("/welcome");
+      localStorage.setItem("user", JSON.stringify(response.data.user))
+      router.push("/schedule");
     } catch (err) {
       console.log(err)
       console.error(

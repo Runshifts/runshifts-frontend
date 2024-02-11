@@ -4,6 +4,7 @@ import axios from "axios";
 import { RiUserLine } from "react-icons/ri";
 import { IoMailOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function InviteTeam() {
   const router = useRouter();
@@ -162,9 +163,11 @@ function InviteTeam() {
                 </button>
               </form>
 
-              <p className="font-bold text-gray-800 text-center">
-                Do this later
-              </p>
+              <Link href={"/schedule"}>
+                <p className="font-bold text-gray-800 text-center">
+                  Do this later
+                </p>
+              </Link>
             </div>
           </div>
         </div>

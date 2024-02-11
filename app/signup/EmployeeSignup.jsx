@@ -58,7 +58,7 @@ function Signup() {
     const data = await fetchData("http://localhost:2024/api/v1/users/employees", "post", formData)
     if(data.statusCode === 201){
       sessionStorage.setItem("email", formData.email)
-      router.push("/verify-email")
+      router.push("/login-verify")
     }else setError(data.message)
     setLoading(false)
   }, [formData, fetchData, router])

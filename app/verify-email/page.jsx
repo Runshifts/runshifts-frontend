@@ -39,6 +39,7 @@ function Verify() {
 
       console.log(response);
       localStorage.setItem("token", response.data.token)
+      localStorage.setItem("user", JSON.stringify(response.data.user))
       router.push("/welcome");
     } catch (err) {
       console.log(err)
@@ -55,7 +56,7 @@ function Verify() {
 
   return (
     <>
-      <div className="login-verify-bg h-screen bg-cover bg-center flex items-center justify-start ">
+      <div className="verify-bg h-screen bg-cover bg-center flex items-center justify-start ">
         <div className="mx-auto md:w-[400px] pl-8 ml-8 pt-8">
           <div className="w-full max-w-sm ">
             <div className="bg-white shadow-md rounded-md px-8 pt-6 pb-8 mb-4">
