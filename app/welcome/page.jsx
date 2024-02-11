@@ -1,6 +1,50 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect, useReducer } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 function Welcome() {
+  const router = useRouter();
+
+  const [businessName, setBusinessName] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleInputChange = (e) => {
+    setBusinessName(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate the form data if needed
+    if (!businessName) {
+      setError("Business name is required");
+      return;
+    }
+
+    try {
+      // const response = await axios.post("http://localhost:2024/api/v1/users/organization", {
+      //   businessName: businessName,
+      // });
+
+      sessionStorage.setItem("businessName", businessName);
+
+      // console.log("Business created successfully:", response.data);
+
+      setBusinessName("");
+      setError(null);
+      setSuccess(true);
+      router.push("/aboutorg");
+    } catch (err) {
+      setError("Error creating business");
+      console.error(
+        "Error creating business:",
+        err.message || err.response?.data
+      );
+      setSuccess(false);
+    }
+  };
   return (
     <>
       <div className="welcome-bg h-screen bg-cover bg-center flex items-center justify-start ">
@@ -17,24 +61,34 @@ function Welcome() {
                   What is your organization name?
                 </p>
 
-                <form action="" method="post">
-                  <div className="flex flex-col space-y-16">
-                    <div className="flex flex-row items-center justify-between mx-auto w-full max-w-xs pb-4 pt-1">
-                      <div className="w-full h-10 ">
+                <form onSubmit={handleSubmit} className="max-w-xs mx-auto">
+                  <div className="flex flex-col space-y-4">
+                    <div className="flex flex-row items-center justify-between w-full pb-4 pt-1">
+                      <div className="w-full h-10">
                         <input
-                          className="w-full h-full  px-5 outline-none rounded-xl border border-gray-200 text-sm bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
+                          className="w-full h-full px-5 outline-none rounded-xl border border-gray-200 text-sm bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
                           type="text"
                           placeholder="Business name"
-                          name=""
-                          id=""
+                          value={businessName}
+                          onChange={handleInputChange}
+                          required
                         />
                       </div>
                     </div>
+                    {error && <p className="text-red-500">{error}</p>}
+                    {success && (
+                      <p className="text-green-500">
+                        Business added successfully!
+                      </p>
+                    )}
+                    <button
+                      type="submit"
+                      className="bg-[#7ED957] text-white rounded-md w-full p-2"
+                    >
+                      Next
+                    </button>
                   </div>
                 </form>
-                <button className="bg-[#7ED957] text-white rounded-md w-full p-2 my-4 ">
-                  Next
-                </button>
               </div>
             </div>
           </div>

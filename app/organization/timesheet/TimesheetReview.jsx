@@ -1,6 +1,7 @@
 import React from "react";
-import profilepic from "./Ellipse1.svg";
+import profilepic from "../../../public/dashboardImgs/timesheet1.svg";
 import Review from "./Review";
+import Image from "next/image";
 
 function TimesheetReview() {
   return (
@@ -8,7 +9,7 @@ function TimesheetReview() {
       <div className="max-w-lg bg-white rounded-xl p-4 m-2 flex flex-col justify-center shadow-xl">
         <div className="flex flex-col items-center justify-center">
           <h1 className="text-center font-bold">Timesheet Review</h1>
-          <img src={profilepic} alt="profile pic" />
+          <Image src={profilepic} height={50} width={50} alt="profile pic" />
         </div>
         <div>
           <div className="flex items-center justify-center flex-col md:flex-row">

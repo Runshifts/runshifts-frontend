@@ -1,11 +1,10 @@
-
 "use client";
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import axios from "axios";
 
-function CheckInvite() {
+function LoginVerify() {
   const router = useRouter();
 
   const [verificationCode, setVerificationCode] = useState([
@@ -27,22 +26,20 @@ function CheckInvite() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = "http://localhost:2024/api/v1/users/accept-invite";
+    const URL = "http://localhost:2024/api/v1/users/verify-email";
 
     try {
-      const fullInvitationCode = verificationCode.join("");
+      const fullVerificationCode = verificationCode.join("");
       console.log(verificationCode)
 
       const response = await axios.post(URL, {
-        invitationCode: fullInvitationCode, 
+        emailVerificationCode: fullVerificationCode, 
+        email: sessionStorage.getItem("email"),
       });
 
       console.log(response);
-      if(response.data.statusCode === 200) {
-        localStorage.setItem("token", response.data.token)
-        router.push("/organization");
-      }
-      
+      localStorage.setItem("token", response.data.token)
+      router.push("/welcome");
     } catch (err) {
       console.log(err)
       console.error(
@@ -63,16 +60,15 @@ function CheckInvite() {
           <div className="w-full max-w-sm ">
             <div className="bg-white shadow-md rounded-md px-8 pt-6 pb-8 mb-4">
               <div className=" bg-white rounded-md">
-                <h1 className="py-4 text-2xl font-bold leading-12 tracking-tight text-left text-[#1B1818]">
-                See if  you’ve been invited to a team
+                <h1 className="p-3 text-2xl font-bold leading-12 tracking-tight text-left text-[#1B1818]">
+                  Verify account
                 </h1>
 
-                <p className="text-xs text-gray-800 font-semibold py-3">
-                Please provide the invite code that was sent to your work email address
+                <p className="text-xs text-gray-800 font-semibold p-3">
+                  Input the 6 digit code sent to your email
                 </p>
 
                 <form onSubmit={handleSubmit}>
-                  <p className="text-xs py-2 pl-2">Invite code</p>
                   <div className="flex justify-center">
                     {verificationCode.map((digit, index) => (
                       <input
@@ -88,30 +84,15 @@ function CheckInvite() {
                       />
                     ))}
                   </div>
-                  <div className="flex flex-col items-center justify-between">
-                    <button
-                      
-                  type="button"
-                  onClick={handleSubmit}
-                      className="bg-[#7ED957] text-white rounded-md w-full p-2 my-5 "
-                    >
-                      Check now
-                    </button>
-
-                    <p className="text-gray-600">or</p>
-
-                    <button
-                    
-                  onClick={handleSubmit}
-                      type="button"
-                      className="bg-white border border-[#7ED957] text-gray-700 font-bold rounded-md w-full p-2 my-5 "
-                    >
-                      Create a new account
-                    </button>
-                  </div>
                 </form>
 
-               
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="bg-[#7ED957] text-white rounded-md w-full p-2 my-4 "
+                >
+                  Verify email
+                </button>
                 <p className="text-red-500 text-sm"> {verificationError} </p>
               </div>
             </div>
@@ -122,9 +103,4 @@ function CheckInvite() {
   );
 }
 
-export default CheckInvite;
-
-
-
-
-
+export default LoginVerify;

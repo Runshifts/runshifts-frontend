@@ -5,7 +5,7 @@ function TeamAppgroup() {
   return (
     <section>
       <div className="flex items-center justify-center ">
-        <Link href="/newmember">
+        <Link href="/organization/team/newmember">
           <button className="bg-[#5BC62D] rounded-sm flex items-center jusitfy-center text-sm mx-1 px-2 py-1">
             <div>
               <AddSvg />

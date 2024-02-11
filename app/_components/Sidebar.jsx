@@ -1,13 +1,17 @@
+"use client"
 import React from "react";
 import { SidebarData } from "../_data/SidebarData";
 import Avatar from "../_assets/sidebarImg/Avatar.png";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 function Sidebar({ isOpen, onClose }) {
 
+  const Pathname = usePathname();
+
   const activeLink =
-    "hover:bg-green-100 text-[#449522] pl-4 mt-4 w-full h-12 flex justify-start items-center text-sm space-x-1 font-semibold bg-green-100";
+    "hover:bg-green-100 text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold bg-green-100";
   const normalLink =
     "hover:bg-green-100 hover:text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold";
 
@@ -49,28 +53,27 @@ function Sidebar({ isOpen, onClose }) {
           <div className="ml-4 pl-4 ">
             {SidebarData.map((item, index) => {
               return (
-                <div key={index}>
+                <div key={index} >
                   <Link
                     href={item.path}
-                    // className={({ isActive }) =>
-                    //   isActive ? activeLink : normalLink
-                    // }
+                    className={Pathname === item.path ? activeLink : normalLink}
                   >
                     <span>
                       {" "}
                       <Image src={item.icon} alt="icon" />{" "}
                     </span>
-                    <span className="px-3"> {item.title} </span>
+                    <span className="px-3 text-center"> {item.title} </span>
                   </Link>
                 </div>
               );
             })}
-          </div>
-
-          <div className="text-center before:text-[12px] mt-16 pt-10 text-gray-500">
+            <div className="text-sm text-center m-2 text-gray-500">
             <p>You&apos;re in a team management made easy.</p>
             <p>Learn more</p>
           </div>
+          </div>
+
+          
         </div>
         {/* )}    */}
       </section>

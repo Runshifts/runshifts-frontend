@@ -1,4 +1,4 @@
-import Avatar from './marketer.svg'
+import Avatar from "../../public/dashboardImgs/marketer.svg";
 
 export const LogsData = [
     {

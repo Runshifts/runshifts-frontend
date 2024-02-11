@@ -1,5 +1,6 @@
 import React from "react"
 import { TeamListData } from "../../_data/StaffListData"
+import Image from "next/image"
 
 function TeamListCards() {
   return (
@@ -15,7 +16,7 @@ function TeamListCards() {
               key={team.id}
               className="bg-white p-2 m-2 rounded-md shadow-lg flex flex-row justify-between items-center"
             >
-              <img
+              <Image height={50} width={50}
                 src={team.icon}
                 alt="profilepic"
                 className="w-10 h-10 rounded-full mx-"

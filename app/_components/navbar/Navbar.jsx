@@ -125,6 +125,7 @@ import React from "react"
 import NavIcon from "./Nav-icon.png"
 import NavLogo from "./runshifts-logo.png"
 import profileAvatar from "./dp.png"
+import Image from "next/image"
 
 function Navbar({ onToggle }) {
   return (
@@ -133,7 +134,8 @@ function Navbar({ onToggle }) {
         <div className="bg-white h-20 px-4 w-screen flex justify-between items-center border-b-2">
           <div className="flex items-center justify-center">
             <div className="cursor-pointer">
-              <img
+              <Image
+              height={50} width={50}
                 onClick={onToggle}
                 src={NavIcon}
                 alt="icon"
@@ -141,7 +143,7 @@ function Navbar({ onToggle }) {
               />
             </div>
             <div className="">
-              <img src={NavLogo} alt="logo" width={86} />
+              <Image height={50} width={50} src={NavLogo} alt="logo" width={86} />
             </div>
           </div>
 
@@ -233,7 +235,7 @@ function Navbar({ onToggle }) {
             </div>
 
             <div className="px-2">
-              <img src={profileAvatar} alt="dp" />
+              <Image height={40} width={40} src={profileAvatar} alt="dp" />
             </div>
           </div>
         </div>

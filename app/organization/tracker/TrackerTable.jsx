@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import Avatar from "./Ellipse.svg";
 import { IoEyeOutline } from "react-icons/io5";
 import Breakdown from './Breakdown'
+import Image from "next/image";
 
 
 const Tracker = (props) => {
@@ -46,7 +47,7 @@ const Tracker = (props) => {
             {employeeNames1.map((employee, rowIndex) => (
               <tr key={rowIndex}>
                 <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                  <img src={Avatar} alt="avatar" className="pr-2" />
+                  <Image height={50} width={50} src={Avatar} alt="avatar" className="pr-2" />
                   {employee}
                 </td>
                 <td className="py-1 px-4 text-sm text-[#252525] font-medium">
@@ -98,7 +99,7 @@ const Tracker = (props) => {
             {employeeNames2.map((employee, rowIndex) => (
               <tr key={rowIndex}>
                 <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                  <img src={Avatar} alt="avatar" className="pr-2" />
+                  <Image height={50} width={50} src={Avatar} alt="avatar" className="pr-2" />
                   {employee}
                 </td>
                 <td className="py-1 px-4 text-sm text-[#252525] font-medium">
@@ -129,7 +130,7 @@ const Tracker = (props) => {
             {employeeNames3.map((employee, rowIndex) => (
               <tr key={rowIndex}>
                 <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                  <img src={Avatar} alt="avatar" className="pr-2" />
+                  <Image height={50} width={50} src={Avatar} alt="avatar" className="pr-2" />
                   {employee}
                 </td>
                 <td className="py-1 px-4 text-sm text-[#252525] font-medium">
@@ -160,7 +161,7 @@ const Tracker = (props) => {
             {employeeNames2.map((employee, rowIndex) => (
               <tr key={rowIndex}>
                 <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                  <img src={Avatar} alt="avatar" className="pr-2" />
+                  <Image height={50} width={50} src={Avatar} alt="avatar" className="pr-2" />
                   {employee}
                 </td>
                 <td className="py-1 px-4 text-sm text-[#252525] font-medium">

@@ -1,7 +1,58 @@
-import React from "react"
-import { IoMailOutline } from "react-icons/io5"
+"use client";
 
-function Signup() {
+import React, { useState } from "react";
+import { IoMailOutline } from "react-icons/io5";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
+function Reset() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleInputChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleRequestReset = async () => {
+    // Validate the email address
+    if (!email.trim()) {
+      setError("Please provide your email address");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:2024/api/v1/users/request-password-reset",
+        {
+          email: email,
+        }
+      );
+      console.log(response);
+
+      if (response.data.statusCode === 200) {
+        sessionStorage.setItem("email", email);
+        setSuccess(true);
+        setError(null);
+        router.push("/confirm-reset");
+        alert(response.data.message)
+      } else {
+        console.error(
+          "An error occurred during password reset:",
+          error.message
+        );
+      }
+
+      console.log("Password reset request successful:", response.data);
+    } catch (error) {
+      console.log(error);
+      console.error("An error occurred during password reset:", error.message);
+      setError("Failed to reset password. Please try again.");
+      setSuccess(false);
+    }
+  };
+
   return (
     <>
       <div className="">
@@ -22,9 +73,13 @@ function Signup() {
                   >
                     Email address
                   </label>
-                  <div class="relative">
+                  <div className="relative">
                     <input
                       type="text"
+                      id="email"
+                      name="email"
+                      value={email}
+                      onChange={handleInputChange}
                       className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:shadow-outline"
                     />
                     <div
@@ -37,9 +92,17 @@ function Signup() {
                   </div>
                 </div>
 
+                {error && <div style={{ color: "red" }}>{error}</div>}
+                {success && (
+                  <div style={{ color: "green" }}>
+                    Reset request sent successfully!
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between">
                   <button
                     type="button"
+                    onClick={handleRequestReset}
                     className="bg-[#7ED957] text-white rounded-md w-full p-2 my-4 "
                   >
                     Request reset
@@ -51,7 +114,7 @@ function Signup() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Signup
+export default Reset;

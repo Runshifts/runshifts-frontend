@@ -1,6 +1,7 @@
 import React from "react"
 import { StaffListData } from "../../_data/StaffListData"
 import Link from "next/link"
+import Image from "next/image"
 
 function StaffListCards() {
   return (
@@ -14,7 +15,7 @@ function StaffListCards() {
               key={staff.id}
               className="bg-white p-2 m-2 rounded-md shadow-md flex flex-col items-center"
             >
-              <img
+              <Image height={50} width={50}
                 src={staff.icon}
                 alt="profilepic"
                 className="w-10 h-10 rounded-full mb-4"

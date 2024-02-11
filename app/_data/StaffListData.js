@@ -1,6 +1,6 @@
-import Avatar from "../organization/payroll/Ellipse.svg"
-import Avatar2 from "./supervisor.svg"
-import Avatar3 from "./marketer.svg"
+import Avatar2 from "../../public/dashboardImgs/supervisor.svg";
+import Avatar3 from "../../public/dashboardImgs/marketer.svg";
+import Avatar from "../../public/dashboardImgs/payrol.svg";
 
 export const StaffListData = [
   {

@@ -1,6 +1,7 @@
 import React from "react";
 import AddShift from "./AddShiftBtn";
 import Avatar from "./Ellipse.svg";
+import Image from "next/image";
 
 const ScheduleTable = () => {
   return (
@@ -85,7 +86,7 @@ const ScheduleTable = () => {
           <tr>
             <td className="py-2 px-2 border-r border-gray-500">
               <div className="flex items-center justify-center bg-red-200 rounded-full ">
-                <img src={Avatar} alt="alt" />
+                <Image height={50} width={50} src={Avatar} alt="alt" />
                 <div className=" px-2 text-[#252525]">
                   <h1 className="font-bold">Ottobong</h1>
                   <p>6.2 / $62</p>
@@ -94,7 +95,7 @@ const ScheduleTable = () => {
             </td>
             <td className="py-2 px-4 border-r border-gray-500" colSpan="2">
               <div className="flex items-center justify-center py-2 px-3 bg-red-200 rounded-full ">
-                <img src={Avatar} alt="avatar" />
+                <Image height={50} width={50} src={Avatar} alt="avatar" />
                 <div className="flex items-center justify-center">
                   <p className="px-2 font-bold text-[#252525]">
                     Monday - Tuesday

@@ -1,5 +1,6 @@
 import React from "react";
-import Avatar from "./Ellipse.svg";
+import Avatar from "../../../public/dashboardImgs/payrol.svg";
+import Image from "next/image";
 
 const ScheduleTable = () => {
   const employeeNames = [
@@ -32,7 +33,7 @@ const ScheduleTable = () => {
                 <input type="checkbox" className="form-checkbox" />
               </td>
               <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                <img src={Avatar} alt="avatar" className="pr-2" />
+                <Image src={Avatar} alt="avatar" height={50} width={50} className="pr-2" />
                 {employee}
               </td>
               <td className="py-1 px-4 text-sm  text-[#252525] font-medium">

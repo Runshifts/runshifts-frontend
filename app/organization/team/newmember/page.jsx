@@ -1,5 +1,6 @@
 import React from "react"
-import profilepic from "../timesheet/Ellipse1.svg"
+import profilepic from "/public/dashboardImgs/timesheet1.svg"
+import Image from "next/image"
 
 const NewMember = () => {
   return (
@@ -7,7 +8,7 @@ const NewMember = () => {
       <div className="bg-white p-4 w-80 max-w-lg rounded-md shadow-lg">
         <div className="flex flex-col items-center justify-center">
           <h1 className="text-center font-bold">New team member</h1>
-          <img src={profilepic} alt="profile pic" />
+          <Image src={profilepic} alt="profile pic" />
         </div>
         <form className="flex flex-col space-y-4">
           <div className="flex flex-col">

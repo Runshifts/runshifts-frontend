@@ -1,5 +1,6 @@
 import React from "react"
-import Avatar from "../../_data/marketer.svg"
+import Avatar from "../../../public/dashboardImgs/marketer.svg";
+import Image from "next/image"
 
 function LogsContentSide() {
   return (
@@ -7,7 +8,8 @@ function LogsContentSide() {
       <div className="hidden md:flex justify-start items-center flex-col px-4 py-2">
         <div className="bg-white p-2 m-1 rounded-md shadow-lg">
           <div className="bg-[#E5F7DD] rounded-md p-2 my-2 flex justify-start items-center">
-            <img
+            <Image
+            height={50} width={50}
               src={Avatar}
               alt="profilepic"
               className="w-10 h-10 rounded-full mx-"
