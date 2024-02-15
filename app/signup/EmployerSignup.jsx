@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { IoMailOutline } from "react-icons/io5";
 import { LuShieldCheck } from "react-icons/lu";
-import { FaRegEyeSlash, FaApple } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import { FaRegEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import SocialProviders from "../_components/Auth/SocialProviders";
 
 function Signup() {
   const router = useRouter();
@@ -147,28 +147,7 @@ function Signup() {
                   </button>
                 </div>
                 {error && <p style={{ color: "red" }}>{error}</p>}
-
-                <p className="text-gray-700 font-bold text-sm pl-3 text-center">
-                  or
-                </p>
-
-                <p className="text-center text-gray-400">Continue with</p>
-
-                <div className="flex justify-around items-center mt-5 mb-2 ">
-                  <div className="border rounded-md flex items-center justify-around py-2 px-3">
-                    <FcGoogle />
-                    <p className="text-gray-700 font-bold text-sm pl-3">
-                      Google
-                    </p>
-                  </div>
-                  <div className="border rounded-md flex items-center justify-center py-2 px-3">
-                    <FaApple />
-                    <p className="text-gray-700 font-bold text-sm pl-3">
-                      AppleID
-                    </p>
-                  </div>
-                </div>
-
+                <SocialProviders/>
                 <p className="text-gray-700 font-semibold text-sm pl-3 mt-5">
                   Already have an account?{" "}
                   <span className="text-[#7ED957]">

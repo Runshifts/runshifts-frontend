@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import SocialProviders from "../_components/Auth/SocialProviders";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -102,6 +103,7 @@ const LoginForm = () => {
       >
         {loading ? "Logging in..." : "Login"}
       </button>
+      <SocialProviders/>
     </form>
   );
 };
