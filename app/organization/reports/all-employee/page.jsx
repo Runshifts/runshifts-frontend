@@ -1,8 +1,7 @@
-import React from "react"
-import LogExport from "../../_components/AppComps/LogExport"
-import ReportFilterGroup from "../../_components/AppComps/ReportFilterGroup"
-import Charts from './charts'
-import Optioncard from '../userprofile/Optioncard'
+import React from "react";
+import LogExport from "../../../_components/AppComps/LogExport";
+import ReportFilterGroup from "../../../_components/AppComps/ReportFilterGroup";
+import Charts from "./Employee-charts";
 
 function Reports() {
   return (
@@ -18,9 +17,8 @@ function Reports() {
         <Charts />
       </div>
       {/* {showCard && <Optioncard onClose={handleCloseCard} />} */}
-
     </section>
-  )
+  );
 }
 
-export default Reports
+export default Reports;
