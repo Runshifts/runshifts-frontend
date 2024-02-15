@@ -3,12 +3,12 @@ import AuthWithAppleButton from "./AuthWithAppleButton"
 import SocialProviderButton from "./SocialProviderButton"
 import AuthWithGoogleButton from "./AuthWithGoogleButton"
 import GoogleIcon from "@/app/_assets/icons/Google"
-import ContinueWithDivider from "./ContinueWithDivider"
+import DividerWithCenteredText from "../DividerWithCenteredText"
 
 export default function SocialProviders() {
   return (
     <div className="flex flex-col w-full gap-8">
-      <ContinueWithDivider />
+      <DividerWithCenteredText text="Continue with" />
       <div className="flex w-full gap-3">
         <AuthWithGoogleButton
           childComponent={(props) => (
