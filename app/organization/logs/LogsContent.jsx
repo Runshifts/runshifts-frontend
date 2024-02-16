@@ -2,6 +2,7 @@ import React from "react"
 import { LogsData } from "../../_data/LogsData"
 import LogsContentSide from "./LogsContentSide"
 import { HiOutlineTrash } from "react-icons/hi"
+import Image from "next/image"
 
 function LogsContent() {
   return (
@@ -13,8 +14,10 @@ function LogsContent() {
               key={log.id}
               className="bg-white p-2 m-1 rounded-md shadow-lg flex items-center  flex-row"
             >
-              <img
+              <Image
                 src={log.avatar}
+                width={80}
+                height={80}
                 alt="profilepic"
                 className="w-10 h-10 rounded-full"
               />

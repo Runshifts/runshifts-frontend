@@ -1,12 +1,13 @@
 import React from "react"
 import profilepic from "./Ellipse2.svg"
+import Image from "next/image"
 
 const YourFormComponent = ({ toggleLargeModal }) => {
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
       <div className="flex flex-col items-center justify-center">
         <h1 className="text-center font-bold ">Time Review</h1>
-        <img className="pt-3" src={profilepic} alt="profile pic" />
+        <Image width={30} height={30} className="pt-3" src={profilepic} alt="profile pic" />
       </div>
       <form>
         <div className="mb-4">

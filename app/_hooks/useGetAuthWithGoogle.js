@@ -19,7 +19,7 @@ export default function useGetAuthWithGoogle(accountType, organizationId) {
         router.push(res.user.type === "employee" ? "/employee" : "organization")
       } else console.log("err", res)
     },
-    [accountType, organizationId]
+    [accountType, organizationId, fetchData, router]
   )
 
   return requestAuthWithGoogleAccessToken

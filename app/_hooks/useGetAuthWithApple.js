@@ -17,7 +17,7 @@ export default function useGetAuthWithApple(accountType, organizationId) {
         console.log("success", res)
       else console.log("err", res)
     },
-    [accountType, organizationId]
+    [accountType, organizationId, fetchData]
   )
 
   return requestAuthWithApple
