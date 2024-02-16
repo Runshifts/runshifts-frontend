@@ -5,7 +5,6 @@ import { IoMailOutline } from "react-icons/io5"
 import { LuShieldCheck } from "react-icons/lu"
 import { FaRegEyeSlash, FaApple } from "react-icons/fa"
 import { TbBuildingSkyscraper } from "react-icons/tb"
-import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import useAxios from "../_hooks/useAxios"
@@ -26,49 +25,65 @@ function Signup() {
   const [loadingOrgSearch, setLoadingOrgSearch] = useState(false)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-  const organizationListRef = useOutsideClick(() => setShowOrgSearchDropdown(false))
+  const organizationListRef = useOutsideClick(() =>
+    setShowOrgSearchDropdown(false)
+  )
 
-  const handleCompanyNameChange = useCallback((e) => {
-    setError("")
-    setOrganizationName(prev => {
-      if(e.target.value.length < prev.length && formData.organizationId.length > 0) return ""
-      else return e.target.value
-    })
-    if(e.target.value.trim().length > 0){
-    setFormData(prev => ({ ...prev, organizationId: ""}))
-    setLoadingOrgSearch(true)
-    if(e.target.value.length === 0) setShowOrgSearchDropdown(false)
-    else setShowOrgSearchDropdown(true)
-    }
-  }, [formData.organizationId])
+  const handleCompanyNameChange = useCallback(
+    (e) => {
+      setError("")
+      setOrganizationName((prev) => {
+        if (
+          e.target.value.length < prev.length &&
+          formData.organizationId.length > 0
+        )
+          return ""
+        else return e.target.value
+      })
+      if (e.target.value.trim().length > 0) {
+        setFormData((prev) => ({ ...prev, organizationId: "" }))
+        setLoadingOrgSearch(true)
+        if (e.target.value.length === 0) setShowOrgSearchDropdown(false)
+        else setShowOrgSearchDropdown(true)
+      }
+    },
+    [formData.organizationId]
+  )
 
   const handleInputChange = (e) => {
     setError("")
     setFormData({ ...formData, [e.target.name]: e.target.value.trim() })
   }
 
-  const handleCreateAccount = useCallback(async (e) => {
-    e.preventDefault()
-    const formDataKeys = Object.keys(formData)
-    if(formDataKeys.some(key => formData[key].length === 0)){
-      setError("All fields are required")
-      return
-    }
-    setLoading(true)
-    const data = await fetchData("http://localhost:2024/api/v1/users/employees", "post", formData)
-    if(data.statusCode === 201){
-      sessionStorage.setItem("email", formData.email)
-      router.push("/login-verify")
-    }else setError(data.message)
-    setLoading(false)
-  }, [formData, fetchData, router])
+  const handleCreateAccount = useCallback(
+    async (e) => {
+      e.preventDefault()
+      const formDataKeys = Object.keys(formData)
+      if (formDataKeys.some((key) => formData[key].length === 0)) {
+        setError("All fields are required")
+        return
+      }
+      setLoading(true)
+      const data = await fetchData(
+        "http://localhost:2024/api/v1/users/employees",
+        "post",
+        formData
+      )
+      if (data.statusCode === 201) {
+        sessionStorage.setItem("email", formData.email)
+        router.push("/login-verify")
+      } else setError(data.message)
+      setLoading(false)
+    },
+    [formData, fetchData, router]
+  )
 
   const makeOrganizationsSearch = useCallback(
     async (searchText) => {
       const data = await fetchData(
         `http://localhost:2024/api/v1/organizations?search=${searchText}&limit=20`,
         "get"
-      )    
+      )
       if (data.statusCode === 200) setOrganizations(data.results)
       else setOrganizations([])
       setLoadingOrgSearch(false)
@@ -78,7 +93,8 @@ function Signup() {
 
   useEffect(() => {
     const delayOrganizationSearchTimerId = setTimeout(() => {
-      organizationName.trim().length > 0 && makeOrganizationsSearch(organizationName.trim())
+      organizationName.trim().length > 0 &&
+        makeOrganizationsSearch(organizationName.trim())
       organizationName.trim().length === 0 && setOrganizations([])
     }, 500)
     return () => clearTimeout(delayOrganizationSearchTimerId)
@@ -95,7 +111,7 @@ function Signup() {
                 className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
               >
                 <h1 className="py-4 text-3xl font-semibold leading-12 tracking-tight text-left text-[#1B1818]">
-                  Create an account for employee
+                  Lets get you setup with RunShifts
                 </h1>
                 {error && (
                   <p className="text-red-500 text-center my-2">{error}</p>
@@ -107,7 +123,7 @@ function Signup() {
                   >
                     Company name
                   </label>
-                  <div class="relative">
+                  <div className="relative">
                     <input
                       type="text"
                       name="organizationName"
@@ -171,7 +187,7 @@ function Signup() {
                   >
                     Company email
                   </label>
-                  <div class="relative">
+                  <div className="relative">
                     <input
                       type="email"
                       name="email"
@@ -240,33 +256,14 @@ function Signup() {
                     onClick={handleCreateAccount}
                     disabled={loading}
                     className={`${
-                      loading ? "bg-[#7ED957]/50 cursor-not-allowed" : "bg-[#7ED957] cursor-pointer"
+                      loading
+                        ? "bg-[#7ED957]/50 cursor-not-allowed"
+                        : "bg-[#7ED957] cursor-pointer"
                     } text-white rounded-md w-full p-2 my-4`}
                   >
                     {loading ? "Loading..." : "Create account"}
                   </button>
                 </div>
-                <p className="text-gray-700 font-bold text-sm pl-3 text-center">
-                  or
-                </p>
-
-                <p className="text-center text-gray-400">Continue with</p>
-
-                <div className="flex justify-around items-center mt-5 mb-2 ">
-                  <div className="border rounded-md flex items-center justify-around py-2 px-3">
-                    <FcGoogle />
-                    <p className="text-gray-700 font-bold text-sm pl-3">
-                      Google
-                    </p>
-                  </div>
-                  <div className="border rounded-md flex items-center justify-center py-2 px-3">
-                    <FaApple />
-                    <p className="text-gray-700 font-bold text-sm pl-3">
-                      AppleID
-                    </p>
-                  </div>
-                </div>
-
                 <p className="text-gray-700 font-semibold text-sm pl-3 mt-5">
                   Already have an account?{" "}
                   <span className="text-[#7ED957]">

@@ -143,7 +143,7 @@ function Navbar({ onToggle }) {
               />
             </div>
             <div className="">
-              <Image height={50} width={50} src={NavLogo} alt="logo" width={86} />
+              <Image height={50} width={50} src={NavLogo} alt="logo" />
             </div>
           </div>
 

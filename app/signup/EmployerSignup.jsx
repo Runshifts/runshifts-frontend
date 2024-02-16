@@ -1,56 +1,58 @@
-"use client";
-import { useState } from "react";
-import { IoMailOutline } from "react-icons/io5";
-import { LuShieldCheck } from "react-icons/lu";
-import { FaRegEyeSlash, FaApple } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import axios from "axios";
+"use client"
+import { useState } from "react"
+import { IoMailOutline } from "react-icons/io5"
+import { LuShieldCheck } from "react-icons/lu"
+import { FaRegEyeSlash } from "react-icons/fa"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import axios from "axios"
+import SocialProviders from "../_components/Auth/SocialProviders"
+import useGetAuthWithGoogle from "../_hooks/useGetAuthWithGoogle"
+import useGetAuthWithApple from "../_hooks/useGetAuthWithApple"
 
 function Signup() {
-  const router = useRouter();
+  const router = useRouter()
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  });
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  })
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
   const handleCreateAccount = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
-    const URL = "http://localhost:2024/api/v1/users/employers";
-    let data;
+    const URL = "http://localhost:2024/api/v1/users/employers"
+    let data
 
     try {
-      const response = await axios.post(URL, formData);
-      console.log(response);
-      data = response.data;
+      const response = await axios.post(URL, formData)
+      console.log(response)
+      data = response.data
     } catch (err) {
       console.error(
         "Error creating account:",
         err.message || err.response?.data
-      );
-      data = err.response?.data || {};
+      )
+      data = err.response?.data || {}
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
 
     if (data?.statusCode === 201) {
-      console.log("successful response", data);
-      sessionStorage.setItem('email', formData.email)
-      router.push("/verify-email");
+      console.log("successful response", data)
+      sessionStorage.setItem("email", formData.email)
+      router.push("/verify-email")
     } else {
-      console.log("bad response", data);
+      console.log("bad response", data)
     }
-  };
+  }
 
   return (
     <>
@@ -72,7 +74,7 @@ function Signup() {
                   >
                     Company email
                   </label>
-                  <div class="relative">
+                  <div className="relative">
                     <input
                       type="email"
                       name="email"
@@ -147,28 +149,7 @@ function Signup() {
                   </button>
                 </div>
                 {error && <p style={{ color: "red" }}>{error}</p>}
-
-                <p className="text-gray-700 font-bold text-sm pl-3 text-center">
-                  or
-                </p>
-
-                <p className="text-center text-gray-400">Continue with</p>
-
-                <div className="flex justify-around items-center mt-5 mb-2 ">
-                  <div className="border rounded-md flex items-center justify-around py-2 px-3">
-                    <FcGoogle />
-                    <p className="text-gray-700 font-bold text-sm pl-3">
-                      Google
-                    </p>
-                  </div>
-                  <div className="border rounded-md flex items-center justify-center py-2 px-3">
-                    <FaApple />
-                    <p className="text-gray-700 font-bold text-sm pl-3">
-                      AppleID
-                    </p>
-                  </div>
-                </div>
-
+                <SocialProviders accountType="employer" />
                 <p className="text-gray-700 font-semibold text-sm pl-3 mt-5">
                   Already have an account?{" "}
                   <span className="text-[#7ED957]">
@@ -181,7 +162,7 @@ function Signup() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default Signup;
+export default Signup
