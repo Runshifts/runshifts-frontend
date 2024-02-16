@@ -5,12 +5,10 @@ import { IoMailOutline } from "react-icons/io5"
 import { LuShieldCheck } from "react-icons/lu"
 import { FaRegEyeSlash, FaApple } from "react-icons/fa"
 import { TbBuildingSkyscraper } from "react-icons/tb"
-import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import useAxios from "../_hooks/useAxios"
 import useOutsideClick from "../_hooks/useOutsideClick"
-import SocialProviders from "../_components/Auth/SocialProviders"
 
 function Signup() {
   const fetchData = useAxios()
@@ -125,7 +123,7 @@ function Signup() {
                   >
                     Company name
                   </label>
-                  <div class="relative">
+                  <div className="relative">
                     <input
                       type="text"
                       name="organizationName"
@@ -189,7 +187,7 @@ function Signup() {
                   >
                     Company email
                   </label>
-                  <div class="relative">
+                  <div className="relative">
                     <input
                       type="email"
                       name="email"
@@ -266,7 +264,6 @@ function Signup() {
                     {loading ? "Loading..." : "Create account"}
                   </button>
                 </div>
-                <SocialProviders />
                 <p className="text-gray-700 font-semibold text-sm pl-3 mt-5">
                   Already have an account?{" "}
                   <span className="text-[#7ED957]">
