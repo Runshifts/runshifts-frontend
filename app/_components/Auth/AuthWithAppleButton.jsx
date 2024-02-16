@@ -5,7 +5,7 @@ import AppleLogin from "react-apple-login"
 export default function AuthWithAppleButton({ childComponent = () => <></>, onSuccess }) {
   return (
     <AppleLogin 
-      clientId="runshifts_service_id_primary"
+      clientId={process.env.NEXT_PUBLIC_APPLE_CLIENT_ID}
       redirectURI="https://runshifts.vercel.app"
       callback={onSuccess}
       scope="email name"
