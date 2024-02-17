@@ -6,14 +6,19 @@ import GoogleIcon from "@/app/_assets/icons/Google"
 import DividerWithCenteredText from "../DividerWithCenteredText"
 import useGetAuthWithGoogle from "@/app/_hooks/useGetAuthWithGoogle"
 import useGetAuthWithApple from "@/app/_hooks/useGetAuthWithApple"
-import { useCallback, useContext } from "react"
+import { useCallback, useContext, useEffect } from "react"
 import { AuthLoadingContext } from "@/app/_providers/AuthLoadingProvider"
+import { useSearchParams } from "next/navigation"
 
 export default function SocialProviders({
   onGoogleAuthSuccess = () => {},
   onAppleAuthSuccess = () => {},
-  accountType
+  accountType,
+  redirectPath = "",
 }) {
+  const searchParams = useSearchParams()
+  const appleAuthCode = useMemo(() => searchParams.get("code"), [searchParams])
+
   const { updateLoading } = useContext(AuthLoadingContext)
   const requestGoogleAuth = useGetAuthWithGoogle(accountType)
   const requestAppleAuth = useGetAuthWithApple(accountType)
@@ -30,15 +35,24 @@ export default function SocialProviders({
   )
 
   const handleAppleAuthSuccess = useCallback(
-    (data) => {
+    (code) => {
       updateLoading(true)
-      requestAppleAuth(data).finally(() => {
-        onAppleAuthSuccess(data)
+      requestAppleAuth(code).finally(() => {
+        onAppleAuthSuccess(code)
         updateLoading(false)
       })
     },
     [onAppleAuthSuccess, updateLoading, requestAppleAuth]
   )
+
+  useEffect(() => {
+    if(appleAuthCode){
+      console.log(appleAuthCode)
+      handleAppleAuthSuccess(appleAuthCode)
+      searchParams.delete("code")
+    }
+  }, [searchParams, appleAuthCode, handleAppleAuthSuccess
+  ])
   return (
     <div className="flex flex-col w-full gap-8">
       <DividerWithCenteredText text="Continue with" />
@@ -50,6 +64,7 @@ export default function SocialProviders({
           )}
         />
         <AuthWithAppleButton
+          path={redirectPath}
           onSuccess={handleAppleAuthSuccess}
           childComponent={(props) => (
             <SocialProviderButton {...props} Icon={AppleIcon} text="Apple ID" />

@@ -117,7 +117,7 @@ const LoginForm = () => {
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
-              <SocialProviders />
+              <SocialProviders redirectPath="/login" />
             </form>
           </FormCard>
         </div>
