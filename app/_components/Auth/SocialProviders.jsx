@@ -6,11 +6,19 @@ import GoogleIcon from "@/app/_assets/icons/Google"
 import DividerWithCenteredText from "../DividerWithCenteredText"
 import useGetAuthWithGoogle from "@/app/_hooks/useGetAuthWithGoogle"
 import useGetAuthWithApple from "@/app/_hooks/useGetAuthWithApple"
-import { useCallback, useContext, useEffect } from "react"
+import { Suspense, useCallback, useContext, useEffect } from "react"
 import { AuthLoadingContext } from "@/app/_providers/AuthLoadingProvider"
 import { useSearchParams } from "next/navigation"
 
-export default function SocialProviders({
+
+export default function SocialProvidersWrappedInSuspense(){
+  return(
+    <Suspense>
+      <SocialProviders/>
+    </Suspense>
+  )
+}
+function SocialProviders({
   onGoogleAuthSuccess = () => {},
   onAppleAuthSuccess = () => {},
   accountType,
