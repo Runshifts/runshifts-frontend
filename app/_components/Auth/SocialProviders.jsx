@@ -6,7 +6,7 @@ import GoogleIcon from "@/app/_assets/icons/Google"
 import DividerWithCenteredText from "../DividerWithCenteredText"
 import useGetAuthWithGoogle from "@/app/_hooks/useGetAuthWithGoogle"
 import useGetAuthWithApple from "@/app/_hooks/useGetAuthWithApple"
-import { Suspense, useCallback, useContext, useEffect } from "react"
+import { Suspense, useCallback, useContext, useEffect, useMemo } from "react"
 import { AuthLoadingContext } from "@/app/_providers/AuthLoadingProvider"
 import { useSearchParams } from "next/navigation"
 
