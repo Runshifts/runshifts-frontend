@@ -10,11 +10,17 @@ import { Suspense, useCallback, useContext, useEffect, useMemo } from "react"
 import { AuthLoadingContext } from "@/app/_providers/AuthLoadingProvider"
 import { useSearchParams } from "next/navigation"
 
-
-export default function SocialProvidersWrappedInSuspense(){
-  return(
+export default function SocialProvidersWrappedInSuspense(
+  props = {
+    onGoogleAuthSuccess: () => {},
+    onAppleAuthSuccess: () => {},
+    accountType,
+    redirectPath: "",
+  }
+) {
+  return (
     <Suspense>
-      <SocialProviders/>
+      <SocialProviders {...props} />
     </Suspense>
   )
 }
@@ -54,13 +60,12 @@ function SocialProviders({
   )
 
   useEffect(() => {
-    if(appleAuthCode){
+    if (appleAuthCode) {
       console.log(appleAuthCode)
       handleAppleAuthSuccess(appleAuthCode)
       searchParams.delete("code")
     }
-  }, [searchParams, appleAuthCode, handleAppleAuthSuccess
-  ])
+  }, [searchParams, appleAuthCode, handleAppleAuthSuccess])
   return (
     <div className="flex flex-col w-full gap-8">
       <DividerWithCenteredText text="Continue with" />
