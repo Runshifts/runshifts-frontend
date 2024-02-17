@@ -6,7 +6,7 @@ export default function AuthWithAppleButton({ childComponent = () => <></>, onSu
   return (
     <AppleLogin 
       clientId={process.env.NEXT_PUBLIC_APPLE_CLIENT_ID}
-      redirectURI="https://runshifts.vercel.app"
+      redirectURI={process.env.NEXT_PUBLIC_BASE_URI}
       callback={onSuccess}
       scope="email name"
       responseMode="query"
