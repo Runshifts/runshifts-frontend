@@ -63,7 +63,7 @@ function SocialProviders({
     if (appleAuthCode) {
       console.log(appleAuthCode)
       handleAppleAuthSuccess(appleAuthCode)
-      searchParams.delete("code")
+      
     }
   }, [searchParams, appleAuthCode, handleAppleAuthSuccess])
   return (
