@@ -24,7 +24,7 @@ function Reset() {
 
     try {
       const response = await axios.post(
-        "http://localhost:2024/api/v1/users/request-password-reset",
+        "/users/request-password-reset",
         {
           email: email,
         }

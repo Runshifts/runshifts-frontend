@@ -26,7 +26,7 @@ function Signup() {
     e.preventDefault()
     setLoading(true)
 
-    const URL = "http://localhost:2024/api/v1/users/employers"
+    const URL = "/users/employers"
     let data
 
     try {

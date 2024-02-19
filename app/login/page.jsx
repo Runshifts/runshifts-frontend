@@ -30,7 +30,7 @@ const LoginForm = () => {
       e.preventDefault()
       updateLoading(true)
       const res = await fetchData(
-        "http://localhost:2024/api/v1/users/login",
+        `/users/login`,
         "post",
         formData
       )
@@ -41,7 +41,7 @@ const LoginForm = () => {
         })
         setError(null)
         localStorage.setItem("token", res.token)
-        localStorage.setItem("user", res.user)
+        localStorage.setItem("user", JSON.stringify(res.user))
         router.push(
           res.user.type === "employer"
             ? "/organization"

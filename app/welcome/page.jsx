@@ -8,7 +8,6 @@ function Welcome() {
 
   const [businessName, setBusinessName] = useState("");
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
 
   const handleInputChange = (e) => {
     setBusinessName(e.target.value);
@@ -16,25 +15,14 @@ function Welcome() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate the form data if needed
     if (!businessName) {
       setError("Business name is required");
       return;
     }
-
     try {
-      // const response = await axios.post("http://localhost:2024/api/v1/users/organization", {
-      //   businessName: businessName,
-      // });
-
       sessionStorage.setItem("businessName", businessName);
-
-      // console.log("Business created successfully:", response.data);
-
       setBusinessName("");
       setError(null);
-      setSuccess(true);
       router.push("/aboutorg");
     } catch (err) {
       setError("Error creating business");
@@ -42,7 +30,6 @@ function Welcome() {
         "Error creating business:",
         err.message || err.response?.data
       );
-      setSuccess(false);
     }
   };
   return (
@@ -76,11 +63,6 @@ function Welcome() {
                       </div>
                     </div>
                     {error && <p className="text-red-500">{error}</p>}
-                    {success && (
-                      <p className="text-green-500">
-                        Business added successfully!
-                      </p>
-                    )}
                     <button
                       type="submit"
                       className="bg-[#7ED957] text-white rounded-md w-full p-2"

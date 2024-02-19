@@ -65,7 +65,7 @@ function Signup() {
       }
       setLoading(true)
       const data = await fetchData(
-        "http://localhost:2024/api/v1/users/employees",
+        "/users/employees",
         "post",
         formData
       )
@@ -81,7 +81,7 @@ function Signup() {
   const makeOrganizationsSearch = useCallback(
     async (searchText) => {
       const data = await fetchData(
-        `http://localhost:2024/api/v1/organizations?search=${searchText}&limit=20`,
+        `/organizations?search=${searchText}&limit=20`,
         "get"
       )
       if (data.statusCode === 200) setOrganizations(data.results)

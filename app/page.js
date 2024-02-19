@@ -16,7 +16,7 @@ const Home = () => {
         <h1 className="py-2 text-2xl font-semibold leading-12 tracking-tight text-left text-[#1B1818]">
           Sign up
         </h1>
-        <div className="text-gray-800">
+        <div className="text-gray-800 cursor-pointer">
           <div
             className="border rounded-md flex items-center p-3 m-2 mb-5"
             name="signupType"
@@ -35,7 +35,7 @@ const Home = () => {
             </div>
           </div>
           <div
-            className="border rounded-md flex items-center p-3 m-2 mt-3"
+            className="border rounded-md flex items-center p-3 m-2 mt-3 cursor-pointer"
             name="signupType"
             value="employee"
             onClick={() => router.push("/signup?type=employee")}
