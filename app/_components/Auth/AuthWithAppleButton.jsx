@@ -36,20 +36,23 @@ export default function AuthWithAppleButton({
     usePopup: false,
   }
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback(async () => {
     console.log("kjhgfddfghj")
-    // const response = await
-    appleAuthHelpers.signIn({
-      authOptions,
-      onSuccess,
-      onError: (error) => console.error(error),
-    })
+    try {
+      const response = await appleAuthHelpers.signIn({
+        authOptions,
+        onError: (error) => console.error(error),
+      })
 
-    // if (response) {
-    //   console.log(response)
-    // } else {
-    //   console.error("Error performing apple signin.")
-    // }
-  }, [onSuccess, authOptions])
+      if (response) {
+        console.log(response)
+      } else {
+        console.error("Error performing apple signin.", response)
+      }
+    } catch (err) {
+      console.log("\n\n\n\n\nn\n\nn\n\n\n\n\n\n\n\nn\n\n")
+      console.log("Apple Auth error", err)
+    }
+  }, [])
   return <>{childComponent({ onClick: handleClick })}</>
 }
