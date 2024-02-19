@@ -9,6 +9,7 @@ import useGetAuthWithApple from "@/app/_hooks/useGetAuthWithApple"
 import { Suspense, useCallback, useContext, useEffect, useMemo } from "react"
 import { AuthLoadingContext } from "@/app/_providers/AuthLoadingProvider"
 import { useSearchParams } from "next/navigation"
+import ErrorBoundary from "@/app/_errorBoundaries"
 
 export default function SocialProvidersWrappedInSuspense(
   props = {
@@ -71,21 +72,31 @@ function SocialProviders({
   return (
     <div className="flex flex-col w-full gap-8">
       <DividerWithCenteredText text="Continue with" />
-      <div className="flex w-full gap-2 md:gap-3 justify-center">
-        <AuthWithGoogleButton
-          onSuccess={handleGoogleAuthSuccess}
-          childComponent={(props) => (
-            <SocialProviderButton {...props} Icon={GoogleIcon} text="Google" />
-          )}
-        />
-        <AuthWithAppleButton
-          path={redirectPath}
-          onSuccess={handleAppleAuthSuccess}
-          childComponent={(props) => (
-            <SocialProviderButton {...props} Icon={AppleIcon} text="Apple ID" />
-          )}
-        />
-      </div>
+      <ErrorBoundary fallback={<p>Something went wrong</p>}>
+        <div className="flex w-full gap-2 md:gap-3 justify-center">
+          <AuthWithGoogleButton
+            onSuccess={handleGoogleAuthSuccess}
+            childComponent={(props) => (
+              <SocialProviderButton
+                {...props}
+                Icon={GoogleIcon}
+                text="Google"
+              />
+            )}
+          />
+          <AuthWithAppleButton
+            path={redirectPath}
+            onSuccess={handleAppleAuthSuccess}
+            childComponent={(props) => (
+              <SocialProviderButton
+                {...props}
+                Icon={AppleIcon}
+                text="Apple ID"
+              />
+            )}
+          />
+        </div>
+      </ErrorBoundary>
     </div>
   )
 }
