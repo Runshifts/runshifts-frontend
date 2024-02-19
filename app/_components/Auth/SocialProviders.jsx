@@ -40,7 +40,9 @@ function SocialProviders({
   const handleGoogleAuthSuccess = useCallback(
     (data) => {
       updateLoading(true)
-      requestGoogleAuth(data.access_token).finally(() => {
+      requestGoogleAuth(data.access_token).catch(err => {
+        console.log(err)
+      }).finally(() => {
         onGoogleAuthSuccess(data)
         updateLoading(false)
       })
@@ -51,7 +53,7 @@ function SocialProviders({
   const handleAppleAuthSuccess = useCallback(
     (code) => {
       updateLoading(true)
-      requestAppleAuth(code).finally(() => {
+      requestAppleAuth(code).catch((err) => console.log("appleauth", err)).finally(() => {
         onAppleAuthSuccess(code)
         updateLoading(false)
       })
