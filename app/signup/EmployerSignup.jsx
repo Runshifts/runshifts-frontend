@@ -147,7 +147,7 @@ function Signup() {
                   </button>
                 </div>
                 {error && <p style={{ color: "red" }}>{error}</p>}
-                <SocialProviders accountType="employer" redirectPath="/signup" />
+                <SocialProviders accountType="employer" redirectPath="signup" />
                 <p className="text-gray-700 font-semibold text-sm pl-3 mt-5">
                   Already have an account?{" "}
                   <span className="text-[#7ED957]">
