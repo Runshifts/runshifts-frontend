@@ -53,6 +53,6 @@ export default function AuthWithAppleButton({
       console.log("\n\n\n\n\nn\n\nn\n\n\n\n\n\n\n\nn\n\n")
       console.log("Apple Auth error", err)
     }
-  }, [])
+  }, [authOptions,])
   return <>{childComponent({ onClick: handleClick })}</>
 }
