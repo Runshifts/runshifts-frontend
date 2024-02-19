@@ -32,7 +32,7 @@ export default function AuthWithAppleButton({
     scope: "email name",
     redirectURI: `${process.env.NEXT_PUBLIC_BASE_URI}/${path}`,
     /** State string that is returned with the apple response */
-    state: "state",
+    state: "employer",
     usePopup: false,
   }
 
