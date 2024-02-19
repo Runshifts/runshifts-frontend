@@ -178,7 +178,9 @@ function Navbar({ onToggle, onImageClick }) {
             </form>
 
             <div className="px-2 cursor-pointer">
+              <Link href={'/organization/notification'}>
               <BellSvg />
+              </Link>
             </div>
 
             <div className="hidden md:block cursor-pointer">

@@ -1,5 +1,6 @@
 import React from "react";
 import Avatar from "./Ellipse2.svg";
+import Image from "next/image";
 
 function ShiftReq() {
   return (
@@ -10,7 +11,7 @@ function ShiftReq() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="border border-gray-400 rounded-lg p-3">
           <div className=" flex items-center justify-start my-1">
-            <img src={Avatar} alt="avatar" />
+            <Image src={Avatar} alt="avatar" />
             <p className="text-sm px-2">Charlse Jenkins</p>
           </div>
 
@@ -31,7 +32,7 @@ function ShiftReq() {
 
         <div className="border border-gray-400 rounded-lg p-3">
           <div className=" flex items-center justify-start my-1">
-            <img src={Avatar} alt="avatar" />
+            <Image src={Avatar} alt="avatar" />
             <p className="text-sm px-2">Charlse Jenkins</p>
           </div>
 
@@ -52,7 +53,7 @@ function ShiftReq() {
 
         <div className="border border-gray-400 rounded-lg p-3">
           <div className=" flex items-center justify-start my-1">
-            <img src={Avatar} alt="avatar" />
+            <Image src={Avatar} alt="avatar" />
             <p className="text-sm px-2">Charlse Jenkins</p>
           </div>
 
