@@ -12,10 +12,9 @@ export default function useGetAuthWithGoogle(accountType, organizationId) {
         type: accountType,
         organization: organizationId,
       })
-      console.log(res, googleAccessToken)
       if (res.statusCode === 201 || res.statusCode === 200){
         localStorage.setItem("user", JSON.stringify(res.user))
-        if(res.token){
+        if(res.statusCode === 200){
           localStorage.setItem("token", res.token)
           router.push(
             res.user.type === "employee" ? "/employee" : "organization"
