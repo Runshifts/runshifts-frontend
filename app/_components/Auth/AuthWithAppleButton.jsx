@@ -1,6 +1,6 @@
 "use client"
 import { useCallback } from "react"
-import { appleAuthHelpers, useScript } from "react-apple-signin-auth"
+import { appleAuthHelpers } from "react-apple-signin-auth"
 
 // import AppleLogin from "react-apple-login"
 
@@ -23,9 +23,9 @@ export default function AuthWithAppleButton({
   onSuccess,
   path = "",
 }) {
-  useScript(
-    "https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
-  )
+  // useScript(
+  //   "https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+  // )
 
   const authOptions = {
     clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
