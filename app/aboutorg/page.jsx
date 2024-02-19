@@ -20,7 +20,7 @@ function About() {
       return;
     }
 
-    const URL = "http://localhost:2024/api/v1/organizations";
+    const URL = "/organizations";
 
     try {
       const [minStaffCount, maxStaffCount] = employeeCount.split("-")

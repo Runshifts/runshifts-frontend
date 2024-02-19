@@ -26,7 +26,7 @@ function Verify() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = "http://localhost:2024/api/v1/users/verify-password-reset-code";
+    const URL = "/users/verify-password-reset-code";
 
     try {
       const fullResetCode = verificationCode.join("");

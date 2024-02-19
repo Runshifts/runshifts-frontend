@@ -26,7 +26,7 @@ function Verify() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = "http://localhost:2024/api/v1/users/verify-email";
+    const URL = "/users/verify-email";
 
     try {
       const fullVerificationCode = verificationCode.join("");

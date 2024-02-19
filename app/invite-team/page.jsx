@@ -36,7 +36,7 @@ function InviteTeam() {
 
     try {
       const response = await axios.post(
-        "http://localhost:2024/api/v1/users/employees/invite",
+        "/users/employees/invite",
         {
           teamMembers: [...teamMembers, formData],
         },

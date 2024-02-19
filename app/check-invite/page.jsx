@@ -27,7 +27,7 @@ function CheckInvite() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = "http://localhost:2024/api/v1/users/accept-invite";
+    const URL = "/users/accept-invite";
 
     try {
       const fullInvitationCode = verificationCode.join("");
