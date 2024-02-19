@@ -5,15 +5,22 @@ import { useMemo } from "react"
 
 import EmployerSignup from "./EmployerSignup"
 import EmployeeSignup from "./EmployeeSignup"
+import ErrorBoundary from "../_errorBoundaries"
 
 function Page() {
+  return (
+    <ErrorBoundary>
+      <SignupPagesWrappedInSuspense />
+    </ErrorBoundary>
+  )
+}
+function SignupPagesWrappedInSuspense() {
   return (
     <Suspense>
       <SignupPages />
     </Suspense>
   )
 }
-
 function SignupPages() {
   const router = useRouter()
   const query = useSearchParams()
