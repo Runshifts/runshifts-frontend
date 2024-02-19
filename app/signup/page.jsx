@@ -22,6 +22,6 @@ function SignupPages() {
   }, [query])
   if (signupType === "employer") return <EmployerSignup />
   else if (signupType === "employee") return <EmployeeSignup />
-  else return router.push("/")
+  else return <EmployerSignup />
 }
 export default Page
