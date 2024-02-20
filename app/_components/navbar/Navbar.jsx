@@ -156,11 +156,7 @@ function Navbar({ onToggle, onImageClick }) {
               />
             </div>
             <div className="">
-<<<<<<< HEAD
               <Image height={86} width={86} src={NavLogo} alt="logo" />
-=======
-              <Image height={50} width={50} src={NavLogo} alt="logo" />
->>>>>>> afcdb07d868ebdfaab98371e2e381774d8a06059
             </div>
           </div>
 
