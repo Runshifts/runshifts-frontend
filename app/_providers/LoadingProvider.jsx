@@ -2,16 +2,16 @@
 
 import { createContext, useState } from "react"
 
-export const AuthLoadingContext = createContext()
+export const LoadingContext = createContext()
 
-export default function AuthLoadingProvider({ children }) {
+export default function LoadingProvider({ children }) {
   const [loading, setLoading] = useState()
 
   return (
-    <AuthLoadingContext.Provider
+    <LoadingContext.Provider
       value={{ loading, updateLoading: (val) => setLoading(val) }}
     >
       {children}
-    </AuthLoadingContext.Provider>
+    </LoadingContext.Provider>
   )
 }
