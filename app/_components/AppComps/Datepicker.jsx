@@ -1,40 +1,28 @@
 "use client"
-import React, { useState } from 'react';
+import LeftChevron from "@/app/_assets/svgs/LeftChevron"
+import RightChevron from "@/app/_assets/svgs/RightChevron"
+import React, { useCallback } from "react"
 
-const DateRangePicker = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+const DateRangePicker = ({ currentWeek, goToNextWeek, goToPrevWeek }) => {
 
-  const updateDate = (days) => {
-    const newDate = new Date(currentDate);
-    newDate.setDate(currentDate.getDate() + days);
-    setCurrentDate(newDate);
-  };
-
-  const formatDate = (date) => {
-    const options = {  month: 'short', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
-  };
+  const formatDate = useCallback((date) => {
+    const options = { month: "short", day: "numeric" }
+    return date.toLocaleDateString("en-US", options)
+  }, [])
 
   return (
-    <div className="flex my-4 mb-4">
-      <button
-        className="text-sm font-bold"
-        onClick={() => updateDate(-1)}
-      >
-        &lt;
+    <div className="flex gap-[20px] text-info-700 text-[14px] leading-[16px] items-center">
+      <button className="text-sm font-bold" onClick={goToPrevWeek}>
+        <LeftChevron />
       </button>
-      <div className="font-bold text-sm text-[#252525] px-2">
-        {formatDate(new Date(currentDate.setDate(currentDate.getDate() - 4)))} to{' '}
-        {formatDate(new Date(currentDate.setDate(currentDate.getDate() + 4)))}
+      <div className="font-bold text-sm text-[#252525] whitespace-nowrap">
+        {formatDate(currentWeek.start)} - {formatDate(currentWeek.end)}
       </div>
-      <button
-        className="text-sm"
-        onClick={() => updateDate(1)}
-      >
-        &gt;
+      <button className="text-sm" onClick={goToNextWeek}>
+        <RightChevron />
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default DateRangePicker;
+export default DateRangePicker
