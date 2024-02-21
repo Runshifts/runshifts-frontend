@@ -1,4 +1,4 @@
-import useOutsideClick from "@/app/_hooks/useOutsideClick"
+import useOutsideClick from "../../_hooks/useOutsideClick"
 import { useState } from "react"
 
 export default function DropDown({ dropdownContent, dropDownTrigger }) {

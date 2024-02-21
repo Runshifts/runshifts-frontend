@@ -1,6 +1,6 @@
 "use client"
 import DateRangePicker from "./Datepicker"
-import FilterSvg from "@/app/_assets/svgs/FilterSvg"
+import FilterSvg from "../../_assets/svgs/FilterSvg"
 import Select from "./Select"
 import DropDown from "./Dropdown"
 

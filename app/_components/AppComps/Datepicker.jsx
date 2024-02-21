@@ -1,6 +1,6 @@
 "use client"
-import LeftChevron from "@/app/_assets/svgs/LeftChevron"
-import RightChevron from "@/app/_assets/svgs/RightChevron"
+import LeftChevron from "../../_assets/svgs/LeftChevron"
+import RightChevron from "../../_assets/svgs/RightChevron"
 import React, { useCallback } from "react"
 
 const DateRangePicker = ({ currentWeek, goToNextWeek, goToPrevWeek }) => {

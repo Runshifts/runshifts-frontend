@@ -1,5 +1,5 @@
 "use client"
-import DownChevron from "@/app/_assets/svgs/DownChevron"
+import DownChevron from "../../_assets/svgs/DownChevron"
 import { useCallback } from "react"
 import DropDown from "./Dropdown"
 

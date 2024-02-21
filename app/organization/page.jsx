@@ -9,6 +9,7 @@ import FilterGroup from "../_components/AppComps/FilterGroup"
 import Heading from "../_components/Headings"
 import Calender from "./Calender"
 import { DashboardContext } from "../_providers/DashboardContext"
+import { UserContext } from "../_providers/UserProvider"
 
 function Dashboard() {
   const {
@@ -16,15 +17,17 @@ function Dashboard() {
     goToPrevWeek,
     currentWeek,
     shiftsInCurrentWeek,
-    loading,
     tableGrouping,
+    todaysSnapshot,
+    loadingShifts,
   } = useContext(DashboardContext)
 
-  if (loading) return <section className="p-3 min-h-screen">loading...</section>
+
+  const { user } = useContext(UserContext)
   return (
     <section className="p-3 min-h-screen">
       <div className="flex items-center justify-between py-3">
-        <Heading>Welcome Ottobong</Heading>
+        <Heading className="capitalize">Welcome {user?.firstName}</Heading>
         <Export />
       </div>
       <FilterGroup
@@ -41,14 +44,14 @@ function Dashboard() {
           goToPrevWeek={goToPrevWeek}
           currentWeek={currentWeek}
         />
-        <Calender shifts={shiftsInCurrentWeek} />
+        <Calender loading={loadingShifts} shifts={shiftsInCurrentWeek} />
         <h1 className="font-semibold text-lg text-info-700 mx-3 py-2">
           Today&apos;s schedule
         </h1>
-        <Table groupedShifts={tableGrouping}  />
+        <Table groupedShifts={tableGrouping} />
       </div>
-      <Snapshot />
-      <Wages />
+      <Snapshot snapshotData={todaysSnapshot} />
+      <Wages snapshotData={todaysSnapshot} />
     </section>
   )
 }
