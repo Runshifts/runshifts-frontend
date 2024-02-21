@@ -62,7 +62,7 @@ function Snapshot({ snapshotData }) {
           </div>
           <div className="bg-white rounded-md overflow-hidden text-gray-700">
             <SnapshotCard
-              headingText={`Cureently on break: ${snapshotData?.usersCurrentlyOnBreak ?? "..."}`}
+              headingText={`Currently on break: ${snapshotData?.usersCurrentlyOnBreak ?? "..."}`}
               actionText={"View time tracker"}
               actionPath={"/organization"}
               action={() => {}}
