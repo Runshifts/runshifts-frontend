@@ -2,68 +2,60 @@ import React from "react";
 import Avatar from "../../../public/dashboardImgs/payrol.svg";
 import Image from "next/image";
 
-const PayrollTable = () => {
-  const employeeNames = [
-    "Charlse Jenkings",
-    "Otto Chris",
-    "Ariana Woods",
-    "Bernard Oslo",
+const EarningTable = () => {
+  const purposeTitle = [
+    "EWA Withdrawal",
+    "Wage",
+    "Wage",
+    "Wage Withdrawal",
   ];
 
   return (
-    <div className="rounded-lg overflow-x-auto  shadow-lg">
+    <div className="p-4 rounded-lg overflow-x-auto  shadow-lg">
       <table className="min-w-full bg-gray-50 ">
         <thead className="bg-gray-100">
           <tr>
             <th className="py-2 px-4">
               <input type="checkbox" className="form-checkbox" />
             </th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">Employee</th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">Week 1</th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">Week 2</th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">Week 3</th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">Week 4</th>
+            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">Purpose</th>
+            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">Amount</th>
+            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">Status</th>
+            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">Date</th>
             <th className="py-2 px-4 text-[#2252525] text-xs font-thin"></th>
           </tr>
         </thead>
         <tbody>
-          {employeeNames.map((employee, rowIndex) => (
+          {purposeTitle.map((purpose, rowIndex) => (
             <tr key={rowIndex}>
               <td className="py-2 px-4">
                 <input type="checkbox" className="form-checkbox" />
               </td>
               <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                <Image src={Avatar} alt="avatar" height={50} width={50} className="pr-2" />
-                {employee}
+                {purpose}
               </td>
               <td className="py-1 px-4 text-sm  text-[#252525] font-medium">
                 <input
                   type="text"
                   className="border-none w-full text-[#449522] focus:outline-none"
-                  value="245,343"
+                  value="£720"
                 />
               </td>
               <td className="py-1 px-4 text-sm text-[#252525] font-medium">
                 <input
                   type="text"
-                  className="border-none w-full text-[#449522] focus:outline-none"
-                  value="245,343"
+                  className="border-none w-full text-[#283142] focus:outline-none"
+                  value="Completed"
                 />
               </td>
-              <td className="py-1 px-4 text-sm text-[#252525] font-medium">
+              <td className="py-1 px-4 text-sm  text-[#252525] font-medium">
                 <input
                   type="text"
-                  className="border-none w-full text-[#449522] focus:outline-none"
-                  value="245,343"
+                  className="border-none w-full text-[#1D2433] focus:outline-none"
+                  value="29 Dec 2023"
                 />
               </td>
-              <td className="py-1 px-4 text-sm text-[#252525] font-medium ">
-                <input
-                  type="text"
-                  className="border-none w-full text-[#252525] focus:outline-none"
-                  value="-"
-                />
-              </td>
+            
               <td className="py-1 px-4 text-sm text-[#252525] font-medium">
                 {/* <Link to='/timesheetReview'> */}
                   <MoreSvg />
@@ -77,7 +69,7 @@ const PayrollTable = () => {
   );
 };
 
-export default PayrollTable;
+export default EarningTable;
 
 function MoreSvg() {
   return (

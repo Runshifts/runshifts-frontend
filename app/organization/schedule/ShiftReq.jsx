@@ -11,7 +11,11 @@ function ShiftReq() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="border border-gray-400 rounded-lg p-3">
           <div className=" flex items-center justify-start my-1">
+<<<<<<< HEAD
+            <Image src={Avatar} alt="avatar" />
+=======
             <Image width={30} height={30} src={Avatar} alt="avatar" />
+>>>>>>> afcdb07d868ebdfaab98371e2e381774d8a06059
             <p className="text-sm px-2">Charlse Jenkins</p>
           </div>
 
@@ -32,7 +36,11 @@ function ShiftReq() {
 
         <div className="border border-gray-400 rounded-lg p-3">
           <div className=" flex items-center justify-start my-1">
+<<<<<<< HEAD
+            <Image src={Avatar} alt="avatar" />
+=======
             <Image width={30} height={30} src={Avatar} alt="avatar" />
+>>>>>>> afcdb07d868ebdfaab98371e2e381774d8a06059
             <p className="text-sm px-2">Charlse Jenkins</p>
           </div>
 
@@ -53,7 +61,11 @@ function ShiftReq() {
 
         <div className="border border-gray-400 rounded-lg p-3">
           <div className=" flex items-center justify-start my-1">
+<<<<<<< HEAD
+            <Image src={Avatar} alt="avatar" />
+=======
             <Image width={30} height={30} src={Avatar} alt="avatar" />
+>>>>>>> afcdb07d868ebdfaab98371e2e381774d8a06059
             <p className="text-sm px-2">Charlse Jenkins</p>
           </div>
 

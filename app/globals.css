@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .home-bg {
   background-image: url("/img/background.png");
   background-repeat: no-repeat;
