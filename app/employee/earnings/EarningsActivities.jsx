@@ -1,40 +1,41 @@
 import React from 'react'
 
-function MyActivities() {
+function EarningsActivities() {
   return (
-    <div className="bg-white rounded-xl shadow-xl p-4 my-2">
-    <h1 className="font-semibold text-lg text-[#292D32] mx-3 py-2 ">
-      My activities
-    </h1>        
+    <div className=" p-4 my-2">
+        
     <div className="my-3  text-[#252525] grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="bg-[#E5F7DD] p-4 flex items-center justify-center rounded-lg">
+          <div className="bg-[#CBF0BC] p-2 rounded-full">
+          <RequestedSvg />
+          </div>
+
+          <div className="px-4">
+          <div className='flex justify-start items-center'>
+            <h1 className="font-xl font-bold py-2 pr-2">£193,923</h1>
+            <EyeSvg />
+            </div>            
+            <p className="text-xs py-1">Total Earnings</p>
+          </div>
+        </div>
+
         <div className="bg-[#E5F7DD] p-4 flex items-center justify-center rounded-lg">
           <div className="bg-[#CBF0BC] p-2 rounded-full">
             <EarnedSvg />
           </div>
 
           <div className="px-4">
-            <h1 className="font-xl font-bold py-2">300</h1>
-            <p className="text-xs py-1">Hours Worked</p>
-          </div>
-        </div>
-
-        <div className="bg-[#E5F7DD] p-4 flex items-center justify-center rounded-lg">
-          <div className="bg-[#CBF0BC] p-2 rounded-full">
-            <RequestedSvg />
-          </div>
-
-          <div className="px-4">
             <div className='flex justify-start items-center'>
-            <h1 className="font-xl font-bold py-2 pr-2">£193,923</h1>
+            <h1 className="font-xl font-bold py-2 pr-2">£96,334</h1>
             <EyeSvg />
             </div>
-            <p className="text-xs py-1">Amount Earned</p>
+            <p className="text-xs py-1">Amount Available for EWA</p>
           </div>
         </div>
 
         <div className="bg-[#E5F7DD] p-4 flex items-center justify-center rounded-lg">
           <div className="bg-[#CBF0BC] p-2 rounded-full">
-            <NextSvg />
+          <RequestedSvg />
           </div>
 
           <div className="px-4">
@@ -42,7 +43,7 @@ function MyActivities() {
             <h1 className="font-xl font-bold py-2 pr-2">£800</h1>
             <EyeSvg />
             </div>
-            <p className="text-xs py-1">EWA Funds Available</p>
+            <p className="text-xs py-1">Available Funds for Withdrawal</p>
           </div>
         </div>
       </div>
@@ -50,7 +51,7 @@ function MyActivities() {
   )
 }
 
-export default MyActivities
+export default EarningsActivities
 
 function EarnedSvg() {
     return (

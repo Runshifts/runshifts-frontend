@@ -30,7 +30,7 @@ function ShiftSwap() {
 
           <div className="flex justify-between items-center my-2">
             <button className="bg-[#FFBC33] text-white px-4 py-2 mr-2 rounded-lg">
-              Accept
+              Pending
             </button>
             <p className="text-gray-700 font-bold my-1">12:15:23 Left</p>
           </div>

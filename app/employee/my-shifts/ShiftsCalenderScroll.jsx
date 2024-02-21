@@ -72,6 +72,7 @@ function ShiftsCalenderScroll() {
                   <p className="text-xs">8am-2pm</p>
                 </div>
               </div>
+              <p className="border border-dotted border-gray-800 rounded m-1 text-center text-xs">Open shift</p>
           </div>
         </div>
         <div className="flex-none w-32 h-28 border-dotted border-2 border-gray-300 rounded-md  bg-white m-1 flex items-center justify-center md:w-36">

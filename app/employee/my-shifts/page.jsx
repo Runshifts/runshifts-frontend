@@ -1,5 +1,6 @@
 import DateRangePicker from "@/app/_components/AppComps/Datepicker";
 import ShiftsCalenderScroll from "./ShiftsCalenderScroll";
+import ShiftSwapReq from "./ShiftSwapReq";
 
 
 function page() {
@@ -24,6 +25,10 @@ function page() {
       </div>
 
       <ShiftsCalenderScroll />
+
+      <div>
+        <ShiftSwapReq />
+      </div>
     </section>
   );
 }
