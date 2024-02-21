@@ -7,7 +7,7 @@ import DividerWithCenteredText from "../DividerWithCenteredText"
 import useGetAuthWithGoogle from "@/app/_hooks/useGetAuthWithGoogle"
 import useGetAuthWithApple from "@/app/_hooks/useGetAuthWithApple"
 import { Suspense, useCallback, useContext, useEffect, useMemo } from "react"
-import { AuthLoadingContext } from "@/app/_providers/AuthLoadingProvider"
+import { LoadingContext } from "@/app/_providers/LoadingProvider"
 import { useSearchParams } from "next/navigation"
 import ErrorBoundary from "@/app/_errorBoundaries"
 
@@ -34,19 +34,21 @@ function SocialProviders({
   const searchParams = useSearchParams()
   const appleAuthCode = useMemo(() => searchParams.get("code"), [searchParams])
 
-  const { updateLoading } = useContext(AuthLoadingContext)
+  const { updateLoading } = useContext(LoadingContext)
   const requestGoogleAuth = useGetAuthWithGoogle(accountType)
   const requestAppleAuth = useGetAuthWithApple(accountType)
 
   const handleGoogleAuthSuccess = useCallback(
     (data) => {
       updateLoading(true)
-      requestGoogleAuth(data.access_token).catch(err => {
-        console.log(err)
-      }).finally(() => {
-        onGoogleAuthSuccess(data)
-        updateLoading(false)
-      })
+      requestGoogleAuth(data.access_token)
+        .catch((err) => {
+          console.log(err)
+        })
+        .finally(() => {
+          onGoogleAuthSuccess(data)
+          updateLoading(false)
+        })
     },
     [onGoogleAuthSuccess, updateLoading, requestGoogleAuth]
   )
@@ -54,10 +56,12 @@ function SocialProviders({
   const handleAppleAuthSuccess = useCallback(
     (code) => {
       updateLoading(true)
-      requestAppleAuth(code).catch((err) => console.log("appleauth", err)).finally(() => {
-        onAppleAuthSuccess(code)
-        updateLoading(false)
-      })
+      requestAppleAuth(code)
+        .catch((err) => console.log("appleauth", err))
+        .finally(() => {
+          onAppleAuthSuccess(code)
+          updateLoading(false)
+        })
     },
     [onAppleAuthSuccess, updateLoading, requestAppleAuth]
   )
@@ -66,7 +70,6 @@ function SocialProviders({
     if (appleAuthCode) {
       console.log(appleAuthCode)
       handleAppleAuthSuccess(appleAuthCode)
-      
     }
   }, [searchParams, appleAuthCode, handleAppleAuthSuccess])
   return (

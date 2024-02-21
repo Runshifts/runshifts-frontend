@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google"
 import "./globals.css"
 import GoogleOAuthProvider from "./_providers/GoogleAuth"
-import AuthLoadingProvider from "./_providers/AuthLoadingProvider"
+import LoadingProvider from "./_providers/LoadingProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
           defer
         ></script>
         <GoogleOAuthProvider>
-          <AuthLoadingProvider>{children}</AuthLoadingProvider>
+          <LoadingProvider>{children}</LoadingProvider>
         </GoogleOAuthProvider>
       </body>
     </html>

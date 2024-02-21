@@ -3,13 +3,13 @@
 import React, { useCallback, useContext, useState } from "react"
 import { useRouter } from "next/navigation"
 import SocialProviders from "../_components/Auth/SocialProviders"
-import { AuthLoadingContext } from "../_providers/AuthLoadingProvider"
+import { LoadingContext } from "../_providers/LoadingProvider"
 import FormCard from "../_components/Auth/FormCard"
 import Link from "next/link"
 import useAxios from "../_hooks/useAxios"
 
 const LoginForm = () => {
-  const { loading, updateLoading } = useContext(AuthLoadingContext)
+  const { loading, updateLoading } = useContext(LoadingContext)
   const fetchData = useAxios()
   const router = useRouter()
   const [formData, setFormData] = useState({
@@ -29,11 +29,7 @@ const LoginForm = () => {
     async (e) => {
       e.preventDefault()
       updateLoading(true)
-      const res = await fetchData(
-        `/users/login`,
-        "post",
-        formData
-      )
+      const res = await fetchData(`/users/login`, "post", formData)
       if (res.statusCode === 200) {
         setFormData({
           email: "",

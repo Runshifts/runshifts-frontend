@@ -6,11 +6,12 @@ axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_SERVER_URL
 export default function useAxios() {
   const fetchData = useCallback(async (url, method = "get", body, headers = {}) => {
     try {
-      const response = await axios[method](url, body, {
+      const response = await axios[method](url, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           ...headers,
         },
+        data: body
       })
       return response.data
     } catch (error) {
