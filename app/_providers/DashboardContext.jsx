@@ -32,7 +32,7 @@ export default function DashboardProvider({ children }) {
   const [loadingShifts, setLoadingShifts] = useState(true)
   const [fetchingShiftsError, setFetchingShiftsError] = useState(false)
   const [weeksFetched, setWeeksFetched] = useState({})
-  const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges } = useGetWeekRanges()
+  const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } = useGetWeekRanges(new Date(Date.now()), 50)
   const fetchData = useAxios()
   const [todaysSnapshot, setTodaysSnapshot] = useState(null)
   const [allShifts, setAllShifts] = useState([])
@@ -65,10 +65,6 @@ export default function DashboardProvider({ children }) {
       )
     })
   }, [allShifts, currentWeek.end, currentWeek.start])
-
-  const shiftsInCurrentWeekGroupedByDate = useMemo(() => {
-    return groupShiftsByDayOfTheWeek(listOfShiftsInCurrentWeek)
-  }, [listOfShiftsInCurrentWeek])
 
   const fetchShifts = useCallback(
     async (date) => {
@@ -122,8 +118,9 @@ export default function DashboardProvider({ children }) {
         loadingShifts,
         fetchingShiftsError,
         tableGrouping: todaysShiftsGroupedByAssigneesIntoHours,
-        shiftsInCurrentWeek: shiftsInCurrentWeekGroupedByDate,
+        shiftsInCurrentWeek: listOfShiftsInCurrentWeek,
         weekRanges,
+        jumpToWeek
       }}
     >
       {children}

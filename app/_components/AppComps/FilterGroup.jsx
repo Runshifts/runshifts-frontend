@@ -1,62 +1,36 @@
 "use client"
-import DateRangePicker from "./Datepicker"
 import FilterSvg from "../../_assets/svgs/FilterSvg"
-import Select, { Option } from "./Select"
+import SelectTrigger, { Option } from "./Select"
 import DropDown from "./Dropdown"
-import SelectTrigger from "./Select"
 import { formatDate } from "@/app/_utils"
+import { useMemo } from "react"
 
-function FilterGroup({
-  goToNextWeek,
-  goToPrevWeek,
-  currentWeek,
-  weekRanges = [],
-  locations = [],
-  departments = [],
-  roles = []
+export function LocationFilter({
+  options = [],
+  isActive,
+  currentValue,
+  updateCurrentValue,
 }) {
-  return (
-    <section>
-      <div className="py-4 flex gap-[8px] justify-between lg:justify-start items-center">
-        <DateRangePicker
-          goToNextWeek={goToNextWeek}
-          goToPrevWeek={goToPrevWeek}
-          currentWeek={currentWeek}
-        />
-        <MobileFilter />
-        <ul className="hidden lg:flex flex-wrap gap-[8px]">
-          <li>
-            <LocationFilter options={locations} />
-          </li>
-          <li>
-            <DepartmentsOrRolesFilter name="Departments" options={departments} />
-          </li>
-          <li>
-            <WeekFilter options={weekRanges} />
-          </li>
-          <li>
-            <DepartmentsOrRolesFilter name="Roles" options={roles} />
-          </li>
-        </ul>
-      </div>
-    </section>
+  const currentLocation = useMemo(
+    () => options.find((it) => it._id === currentValue),
+    [options, currentValue]
   )
-}
-
-function LocationFilter({ options = [], isActive, currentValue = "Location" }) {
   return (
     <DropDown
       dropDownTrigger={({ isOpen }) => (
         <SelectTrigger
           isOpen={isActive || isOpen}
-          name={currentValue}
+          name={currentLocation?.address || "Location"}
           options={options}
         />
       )}
       dropdownContent={
         <>
+          <Option onClick={() => updateCurrentValue(null)}>Location</Option>
           {options.map((opt) => (
-            <Option key={opt._id}>{opt.address}</Option>
+            <Option onClick={() => updateCurrentValue(opt._id)} key={opt._id}>
+              {opt.address}
+            </Option>
           ))}
         </>
       }
@@ -64,7 +38,13 @@ function LocationFilter({ options = [], isActive, currentValue = "Location" }) {
   )
 }
 
-function DepartmentsOrRolesFilter({ name, options = [], isActive, currentValue }) {
+export function DepartmentsOrRolesFilter({
+  name,
+  options = [],
+  isActive,
+  currentValue,
+  updateCurrentValue,
+}) {
   return (
     <DropDown
       dropDownTrigger={({ isOpen }) => (
@@ -76,8 +56,11 @@ function DepartmentsOrRolesFilter({ name, options = [], isActive, currentValue }
       )}
       dropdownContent={
         <>
+          <Option onClick={() => updateCurrentValue(null)}>{name}</Option>
           {options.map((opt) => (
-            <Option key={opt._id}>{opt.name}</Option>
+            <Option onClick={() => updateCurrentValue(opt.name)} key={opt._id}>
+              {opt.name}
+            </Option>
           ))}
         </>
       }
@@ -85,20 +68,32 @@ function DepartmentsOrRolesFilter({ name, options = [], isActive, currentValue }
   )
 }
 
-function WeekFilter({ options = [], isActive, currentValue }) {
+export function WeekFilter({
+  options = [],
+  isActive,
+  currentValue,
+  updateCurrentValue,
+}) {
   return (
     <DropDown
       dropDownTrigger={({ isOpen }) => (
         <SelectTrigger
           isOpen={isActive || isOpen}
-          name={currentValue || "Week"}
+          name={
+            currentValue
+              ? `${formatDate(currentValue.start)}  -  ${formatDate(
+                  currentValue.end
+                )}`
+              : "Week"
+          }
           options={options}
         />
       )}
       dropdownContent={
         <>
+          <Option onClick={() => updateCurrentValue(null)}>Week</Option>
           {options.map((opt, idx) => (
-            <Option key={idx}>
+            <Option key={idx} onClick={() => updateCurrentValue(opt, idx)}>
               <span className="flex justify-between">
                 <>{formatDate(opt.start)}</>
                 &nbsp;&nbsp;&mdash;&nbsp;&nbsp;
@@ -112,7 +107,7 @@ function WeekFilter({ options = [], isActive, currentValue }) {
   )
 }
 
-function MobileFilter() {
+export function MobileFilter() {
   return (
     <DropDown
       dropDownTrigger={
@@ -129,5 +124,3 @@ function MobileFilter() {
     />
   )
 }
-
-export default FilterGroup

@@ -34,14 +34,14 @@ function Snapshot({ snapshotData }) {
             <SnapshotCard
               headingText={`Scheduled: ${snapshotData?.hoursOfWorkScheduledToday ?? "..."} Hrs`}
               actionText={"View today's schedule"}
-              actionPath={"/organization"}
+              actionPath={"/organization/schedule"}
               action={() => {}}
             />
             <hr className="border border-b border-[#757575]" />
             <SnapshotCard
               headingText={"Unfilled open shifts"}
               actionText={"View details"}
-              actionPath={"/organization"}
+              actionPath={"/organization/schedule?focus=openShifts"}
               action={() => {}}
             />
           </div>
@@ -49,14 +49,14 @@ function Snapshot({ snapshotData }) {
             <SnapshotCard
               headingText={`Currently clocked in: ${snapshotData?.shiftsClockedInToday ?? "..."}`}
               actionText={"View time tracker"}
-              actionPath={"/organization"}
+              actionPath={"/organization/tracker?focus=clockedInShifts"}
               action={() => {}}
             />
             <hr className="border border-b border-[#757575]" />
             <SnapshotCard
               headingText={"Users with time off"}
               actionText={"View time off requests"}
-              actionPath={"/organization"}
+              actionPath={"/organization/tracker?focus=timeOffRequests"}
               action={() => {}}
             />
           </div>
@@ -64,14 +64,14 @@ function Snapshot({ snapshotData }) {
             <SnapshotCard
               headingText={`Currently on break: ${snapshotData?.usersCurrentlyOnBreak ?? "..."}`}
               actionText={"View time tracker"}
-              actionPath={"/organization"}
+              actionPath={"/organization/tracker?focus=onBreak"}
               action={() => {}}
             />
             <hr className="border border-b border-[#757575]" />
             <SnapshotCard
               headingText={"Pending shifts requests"}
               actionText={"View pending shift requests"}
-              actionPath={"/organization"}
+              actionPath={"/organization/schedule?focus=pendingShiftRequests"}
               action={() => {}}
             />
           </div>

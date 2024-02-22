@@ -48,7 +48,6 @@ export default function DepartmentsAndRolesProvider({
       !hasCachedDepartments ? await fetchData(`industries/${organizationIndustry}/departments`, "get") : {},
       !hasCachedRoles ? await fetchData(`industries/${organizationIndustry}/roles`, "get") : {},
     ])
-    console.log(departmentsResponse, rolesResponse)
     if (departmentsResponse.statusCode === 200) {
       setDepartments(departmentsResponse.results)
       localStorage.setItem(
