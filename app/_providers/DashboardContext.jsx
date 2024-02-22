@@ -32,7 +32,7 @@ export default function DashboardProvider({ children }) {
   const [loadingShifts, setLoadingShifts] = useState(true)
   const [fetchingShiftsError, setFetchingShiftsError] = useState(false)
   const [weeksFetched, setWeeksFetched] = useState({})
-  const { goToNextWeek, currentWeek, goToPrevWeek } = useGetWeekRanges()
+  const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges } = useGetWeekRanges()
   const fetchData = useAxios()
   const [todaysSnapshot, setTodaysSnapshot] = useState(null)
   const [allShifts, setAllShifts] = useState([])
@@ -123,6 +123,7 @@ export default function DashboardProvider({ children }) {
         fetchingShiftsError,
         tableGrouping: todaysShiftsGroupedByAssigneesIntoHours,
         shiftsInCurrentWeek: shiftsInCurrentWeekGroupedByDate,
+        weekRanges,
       }}
     >
       {children}

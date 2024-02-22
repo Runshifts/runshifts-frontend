@@ -6,6 +6,14 @@ export const formatHourAsAmOrPm = (hour) => {
   return `${hour % 12 || 12}${hour < 12 ? "am" : "pm"}`
 }
 
+export const formatDate = (date, options = {}) => {
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    ...options,
+  })
+}
+
 export const getPreviousMonday = (date) => {
   let prevMonday = new Date(date)
   throwInvalidDateError(prevMonday)
