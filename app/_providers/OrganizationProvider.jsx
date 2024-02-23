@@ -5,6 +5,7 @@ import useAxios from "../_hooks/useAxios"
 import DASHBOARD_URLS from "../organization/dashboardURLs"
 import LocationsProvider from "../_providers/LocationsProvider"
 import DepartmentsAndRolesProvider from "./DepartmentsAndRolesProvider"
+import ShiftsManagementProvider from "./ShiftManagementContext"
 
 export const OrganizationContext = createContext()
 
@@ -36,7 +37,9 @@ export default function OrganizationProvider({ children }) {
         <DepartmentsAndRolesProvider
           organizationIndustry={organization?.industry}
         >
-          {children}
+          <ShiftsManagementProvider organizationId={organization?._id}>
+            {children}
+          </ShiftsManagementProvider>
         </DepartmentsAndRolesProvider>
       </LocationsProvider>
     </OrganizationContext.Provider>

@@ -5,12 +5,10 @@ import Table from "./Table"
 import Snapshot from "./Snapshot"
 import Wages from "./Wages"
 import Export from "../_components/AppComps/Export"
-import {
-  MobileFilter,
-} from "../_components/AppComps/FilterGroup"
+import { MobileFilter } from "../_components/AppComps/FilterGroup"
 import Heading from "../_components/Headings"
 import Calender from "./Calender"
-import { DashboardContext } from "../_providers/DashboardContext"
+import DashboardProvider, { DashboardContext } from "../_providers/DashboardContext"
 import { UserContext } from "../_providers/UserProvider"
 import { groupShiftsByDayOfTheWeek } from "../_utils/shifts"
 import useRenderShiftFilters from "../_hooks/useRenderShiftFilters"
@@ -91,4 +89,11 @@ function Dashboard() {
   )
 }
 
-export default Dashboard
+export default function DashboardProviderWrapper() {
+  
+  return (
+    <DashboardProvider>
+      <Dashboard />
+    </DashboardProvider>
+  )
+}
