@@ -1,14 +1,10 @@
 "use client"
-import LeftChevron from "@/app/_assets/svgs/LeftChevron"
-import RightChevron from "@/app/_assets/svgs/RightChevron"
-import React, { useCallback } from "react"
+import { formatDate } from "@/app/_utils"
+import LeftChevron from "../../_assets/svgs/LeftChevron"
+import RightChevron from "../../_assets/svgs/RightChevron"
+import React from "react"
 
 const DateRangePicker = ({ currentWeek, goToNextWeek, goToPrevWeek }) => {
-
-  const formatDate = useCallback((date) => {
-    const options = { month: "short", day: "numeric" }
-    return date.toLocaleDateString("en-US", options)
-  }, [])
 
   return (
     <div className="flex gap-[20px] text-info-700 text-[14px] leading-[16px] items-center">

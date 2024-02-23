@@ -1,15 +1,15 @@
-import AppleIcon from "@/app/_assets/icons/Apple"
+import AppleIcon from "../../_assets/svgs/Apple"
 import AuthWithAppleButton from "./AuthWithAppleButton"
 import SocialProviderButton from "./SocialProviderButton"
 import AuthWithGoogleButton from "./AuthWithGoogleButton"
-import GoogleIcon from "@/app/_assets/icons/Google"
+import GoogleIcon from "../../_assets/svgs/Google"
 import DividerWithCenteredText from "../DividerWithCenteredText"
-import useGetAuthWithGoogle from "@/app/_hooks/useGetAuthWithGoogle"
-import useGetAuthWithApple from "@/app/_hooks/useGetAuthWithApple"
+import useGetAuthWithGoogle from "../../_hooks/useGetAuthWithGoogle"
+import useGetAuthWithApple from "../../_hooks/useGetAuthWithApple"
 import { Suspense, useCallback, useContext, useEffect, useMemo } from "react"
-import { LoadingContext } from "@/app/_providers/LoadingProvider"
+import { LoadingContext } from "../../_providers/LoadingProvider"
 import { useSearchParams } from "next/navigation"
-import ErrorBoundary from "@/app/_errorBoundaries"
+import ErrorBoundary from "../../_errorBoundaries"
 
 export default function SocialProvidersWrappedInSuspense(
   props = {

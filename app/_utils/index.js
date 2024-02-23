@@ -6,6 +6,14 @@ export const formatHourAsAmOrPm = (hour) => {
   return `${hour % 12 || 12}${hour < 12 ? "am" : "pm"}`
 }
 
+export const formatDate = (date, options = {}) => {
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    ...options,
+  })
+}
+
 export const getPreviousMonday = (date) => {
   let prevMonday = new Date(date)
   throwInvalidDateError(prevMonday)
@@ -37,18 +45,23 @@ export const getPastWeekRanges = (numberOfWeeksToGenerate, startDate) => {
       start: getPreviousMonday(newD),
       end: getNextSunday(newD),
     }
-    ranges.push(range)
+    const lastPushedRange = ranges[ranges.length - 1]
+    if (
+      !lastPushedRange ||
+      lastPushedRange.start.toDateString() !== range.start.toDateString()
+    )
+      ranges.push(range)
+    else numberOfDays += 7
+
     if (dateMarker <= 0) {
       if (currentDate.getMonth() === 0) {
-        currentDate.setFullYear(
-          currentDate.getFullYear() - 1,
-          11,
-          currentDate.getDate() + currentDate.getDay()
-        )
+        console.log(currentDate)
+        currentDate.setFullYear(currentDate.getFullYear() - 1, 11, 28)
+        dateMarker = currentDate.getDate() + currentDate.getDay()
       } else {
-        currentDate.setMonth(currentDate.getMonth() - 1)
+        currentDate.setMonth(currentDate.getMonth() - 1, 28)
+        dateMarker = currentDate.getDate() - dateMarker
       }
-      dateMarker = currentDate.getDate() - dateMarker
     } else {
       dateMarker = dateMarker - 7
     }

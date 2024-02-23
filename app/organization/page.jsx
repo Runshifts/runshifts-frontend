@@ -1,14 +1,19 @@
 "use client"
-import React, { useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import DateRangePicker from "../_components/AppComps/Datepicker"
 import Table from "./Table"
 import Snapshot from "./Snapshot"
 import Wages from "./Wages"
 import Export from "../_components/AppComps/Export"
-import FilterGroup from "../_components/AppComps/FilterGroup"
+import {
+  MobileFilter,
+} from "../_components/AppComps/FilterGroup"
 import Heading from "../_components/Headings"
 import Calender from "./Calender"
 import { DashboardContext } from "../_providers/DashboardContext"
+import { UserContext } from "../_providers/UserProvider"
+import { groupShiftsByDayOfTheWeek } from "../_utils/shifts"
+import useRenderShiftFilters from "../_hooks/useRenderShiftFilters"
 
 function Dashboard() {
   const {
@@ -16,39 +21,72 @@ function Dashboard() {
     goToPrevWeek,
     currentWeek,
     shiftsInCurrentWeek,
-    loading,
     tableGrouping,
+    todaysSnapshot,
+    loadingShifts,
+    weekRanges,
+    jumpToWeek,
   } = useContext(DashboardContext)
+  const { user } = useContext(UserContext)
 
-  if (loading) return <section className="p-3 min-h-screen">loading...</section>
+  const { filteredShifts, renderShiftFilters, setWeekFilter } =
+    useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
+  const shiftsInCurrentWeekGroupedByDate = useMemo(() => {
+    return groupShiftsByDayOfTheWeek(filteredShifts)
+  }, [filteredShifts])
+
   return (
     <section className="p-3 min-h-screen">
       <div className="flex items-center justify-between py-3">
-        <Heading>Welcome Ottobong</Heading>
+        <Heading className="capitalize">Welcome {user?.firstName}</Heading>
         <Export />
       </div>
-      <FilterGroup
-        goToNextWeek={goToNextWeek}
-        goToPrevWeek={goToPrevWeek}
-        currentWeek={currentWeek}
-      />
+      <div className="py-4 flex gap-[8px] justify-between lg:justify-start items-center">
+        <DateRangePicker
+          goToNextWeek={() => {
+            setWeekFilter(null)
+            goToNextWeek()
+          }}
+          goToPrevWeek={() => {
+            goToPrevWeek()
+            setWeekFilter(null)
+          }}
+          currentWeek={currentWeek}
+        />
+
+        <MobileFilter />
+        <ul className="hidden lg:flex flex-wrap gap-[8px]">
+          {renderShiftFilters({
+            onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
+          })}
+        </ul>
+      </div>
       <div className="bg-[#efeded] flex flex-col gap-y-[8px] rounded p-[16px] overflow-x-auto scrollbar-hide">
         <h1 className="font-semibold text-[#292D32] text-[1rem] leading-normal">
           Calendar
         </h1>
         <DateRangePicker
-          goToNextWeek={goToNextWeek}
-          goToPrevWeek={goToPrevWeek}
+          goToNextWeek={() => {
+            setWeekFilter(null)
+            goToNextWeek()
+          }}
+          goToPrevWeek={() => {
+            goToPrevWeek()
+            setWeekFilter(null)
+          }}
           currentWeek={currentWeek}
         />
-        <Calender shifts={shiftsInCurrentWeek} />
+        <Calender
+          loading={loadingShifts}
+          shifts={shiftsInCurrentWeekGroupedByDate}
+        />
         <h1 className="font-semibold text-lg text-info-700 mx-3 py-2">
           Today&apos;s schedule
         </h1>
-        <Table groupedShifts={tableGrouping}  />
+        <Table groupedShifts={tableGrouping} />
       </div>
-      <Snapshot />
-      <Wages />
+      <Snapshot snapshotData={todaysSnapshot} />
+      <Wages snapshotData={todaysSnapshot} />
     </section>
   )
 }
