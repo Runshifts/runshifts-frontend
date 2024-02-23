@@ -17,7 +17,7 @@ export default function useGetWeekRanges(startDate = new Date(Date.now()), numbe
     if (currentRangeIdx === weekRanges.length - 1) {
       setWeekRanges((prev) => [
         ...prev,
-        ...getFutureWeekRanges(NUMBER_OF_WEEKRANGES_TO_GENERATE, highestDate),
+        ...getFutureWeekRanges(numberOfWeeksToGenerate, highestDate),
       ])
     }
     setCurrentRangeIdx((prev) => prev + 1)
@@ -30,10 +30,10 @@ export default function useGetWeekRanges(startDate = new Date(Date.now()), numbe
     lowestDate.setDate(lowestDate.getDate() - 7)
     if (currentRangeIdx <= 0) {
       setWeekRanges((prev) => [
-        ...getPastWeekRanges(NUMBER_OF_WEEKRANGES_TO_GENERATE, lowestDate),
+        ...getPastWeekRanges(numberOfWeeksToGenerate, lowestDate),
         ...prev,
       ])
-      setCurrentRangeIdx(NUMBER_OF_WEEKRANGES_TO_GENERATE - 1)
+      setCurrentRangeIdx(numberOfWeeksToGenerate - 1)
     } else {
       setCurrentRangeIdx((prev) => prev - 1)
     }

@@ -92,7 +92,7 @@ export function WeekFilter({
       dropdownContent={
         <>
           <Option onClick={() => updateCurrentValue(null)}>Week</Option>
-          {options.map((opt, idx) => (
+          {[...options.map((opt, idx) => (
             <Option key={idx} onClick={() => updateCurrentValue(opt, idx)}>
               <span className="flex justify-between">
                 <>{formatDate(opt.start)}</>
@@ -100,7 +100,7 @@ export function WeekFilter({
                 <>{formatDate(opt.end)}</>
               </span>
             </Option>
-          ))}
+          ))].reverse()}
         </>
       }
     />

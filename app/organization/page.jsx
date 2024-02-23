@@ -6,19 +6,14 @@ import Snapshot from "./Snapshot"
 import Wages from "./Wages"
 import Export from "../_components/AppComps/Export"
 import {
-  DepartmentsOrRolesFilter,
-  LocationFilter,
   MobileFilter,
-  WeekFilter,
 } from "../_components/AppComps/FilterGroup"
 import Heading from "../_components/Headings"
 import Calender from "./Calender"
 import { DashboardContext } from "../_providers/DashboardContext"
 import { UserContext } from "../_providers/UserProvider"
-import { LocationsContext } from "../_providers/LocationsProvider"
-import { DepartmentsAndRolesContext } from "../_providers/DepartmentsAndRolesProvider"
-import useFilterShifts from "../_hooks/useFilterShifts"
 import { groupShiftsByDayOfTheWeek } from "../_utils/shifts"
+import useRenderShiftFilters from "../_hooks/useRenderShiftFilters"
 
 function Dashboard() {
   const {
@@ -32,23 +27,10 @@ function Dashboard() {
     weekRanges,
     jumpToWeek,
   } = useContext(DashboardContext)
-
-  const { locations } = useContext(LocationsContext)
-  const { departments, roles } = useContext(DepartmentsAndRolesContext)
   const { user } = useContext(UserContext)
 
-  const {
-    filteredShifts,
-    roleFilter,
-    departmentFilter,
-    locationFilter,
-    weekFilter,
-    setWeekFilter,
-    setRoleFilter,
-    setDepartmentFilter,
-    setLocationFilter,
-  } = useFilterShifts(shiftsInCurrentWeek)
-
+  const { filteredShifts, renderShiftFilters, setWeekFilter } =
+    useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
   const shiftsInCurrentWeekGroupedByDate = useMemo(() => {
     return groupShiftsByDayOfTheWeek(filteredShifts)
   }, [filteredShifts])
@@ -71,41 +53,12 @@ function Dashboard() {
           }}
           currentWeek={currentWeek}
         />
+
         <MobileFilter />
         <ul className="hidden lg:flex flex-wrap gap-[8px]">
-          <li>
-            <LocationFilter
-              updateCurrentValue={setLocationFilter}
-              currentValue={locationFilter}
-              options={locations}
-            />
-          </li>
-          <li>
-            <DepartmentsOrRolesFilter
-              updateCurrentValue={setDepartmentFilter}
-              currentValue={departmentFilter}
-              name="Departments"
-              options={departments}
-            />
-          </li>
-          <li>
-            <WeekFilter
-              options={weekRanges}
-              updateCurrentValue={(newFilterValue, idx) => {
-                setWeekFilter(newFilterValue)
-                newFilterValue !== null && jumpToWeek(idx)
-              }}
-              currentValue={weekFilter}
-            />
-          </li>
-          <li>
-            <DepartmentsOrRolesFilter
-              updateCurrentValue={setRoleFilter}
-              currentValue={roleFilter}
-              name="Roles"
-              options={roles}
-            />
-          </li>
+          {renderShiftFilters({
+            onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
+          })}
         </ul>
       </div>
       <div className="bg-[#efeded] flex flex-col gap-y-[8px] rounded p-[16px] overflow-x-auto scrollbar-hide">

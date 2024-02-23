@@ -12,7 +12,6 @@ import DASHBOARD_URLS from "../organization/dashboardURLs"
 import useGetWeekRanges from "../_hooks/useGetWeekRanges"
 import {
   groupShiftsByAssignee,
-  groupShiftsByDayOfTheWeek,
   groupShiftsByHours,
 } from "../_utils/shifts"
 import { OrganizationContext } from "./OrganizationProvider"
@@ -32,7 +31,7 @@ export default function DashboardProvider({ children }) {
   const [loadingShifts, setLoadingShifts] = useState(true)
   const [fetchingShiftsError, setFetchingShiftsError] = useState(false)
   const [weeksFetched, setWeeksFetched] = useState({})
-  const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } = useGetWeekRanges(new Date(Date.now()), 50)
+  const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } = useGetWeekRanges(new Date(Date.now()), 7)
   const fetchData = useAxios()
   const [todaysSnapshot, setTodaysSnapshot] = useState(null)
   const [allShifts, setAllShifts] = useState([])
