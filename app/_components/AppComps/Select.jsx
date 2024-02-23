@@ -1,50 +1,22 @@
 "use client"
-import DownChevron from "@/app/_assets/svgs/DownChevron"
-import { useCallback } from "react"
-import DropDown from "./Dropdown"
+import DownChevron from "../../_assets/svgs/DownChevron"
 
-export default function Select({
-  name,
-  options = [],
-  handleSelect = () => {},
-  children,
-  ...props
-}) {
-
-  const onSelect = useCallback(
-    (option) => {
-      console.log(option)
-      handleSelect(option)
-    },
-    [handleSelect]
-  )
-
+export default function SelectTrigger({ name, children, isOpen, ...props }) {
   return (
-    <DropDown
-      dropDownTrigger={({ isOpen }) => (
-        <div
-          {...props}
-          aria-label={name}
-          role="listbox"
-          className={`${
-            isOpen ? "border-solid border-black" : "border-transparent"
-          } border cursor-pointer relative bg-[#F4F5F7] text-[#7A869A] px-[8px] py-[4px] gap-[23px] text-[14px] leading-[20px] rounded-md flex justify-between items-center`}
-        >
-          {name} <DownChevron />
-        </div>
-      )}
-      dropdownContent={
-        <>
-          {options.map((opt) => (
-            <Option key={opt} onClick={() => onSelect(opt)}>{opt}</Option>
-          ))}
-        </>
-      }
-    />
+    <div
+      {...props}
+      aria-label={name}
+      role="listbox"
+      className={`${
+        isOpen ? "border-solid border-black" : "border-transparent"
+      } border cursor-pointer relative bg-[#F4F5F7] text-[#7A869A] px-[8px] py-[4px] gap-[23px] text-[14px] leading-[20px] rounded-md flex justify-between items-center`}
+    >
+      {children || name} <DownChevron />
+    </div>
   )
 }
 
-function Option({ children, onClick }) {
+export function Option({ children, onClick }) {
   return (
     <span
       onClick={onClick}

@@ -1,36 +1,46 @@
-import React from 'react'
+import React, { useMemo } from "react"
+import { SnapshotCard } from "./Snapshot"
+import { getNextSunday, getPreviousMonday } from "../_utils"
 
-function Snapshot() {
+function Snapshot({ snapshotData }) {
+  const today = useMemo(() => new Date(Date.now()).toLocaleDateString("en-us"), [])
+  const thisWeek = useMemo(
+    () => ({
+      start: getPreviousMonday(new Date(Date.now())).toLocaleDateString("en-us"),
+      end: getNextSunday(new Date(Date.now())).toLocaleDateString("en-us"),
+    }),
+    []
+  )
   return (
     <section>
-        <div className=' bg-[#efeded] rounded-md my-3 p-2'>
-            <h1 className='text-[#292D32] mx-3 py-3 font-semibold text-lg'>Wages</h1>
+      <div className="flex flex-col gap-y-[8px] bg-[#efeded] rounded-md my-3 p-4">
+        <h1 className="text-[#292D32] font-semibold text-lg">Wages</h1>
 
-            
-
-            <div className='grid grid-cols-1 gap-3 mx-3 md:grid-cols-2 '>
-                <div className='bg-white rounded-md text-gray-700 flex justify-between items-center'>
-                    <div className='ml-4 p-3 m-2 leading-4 py-2'>
-                        <h1 className=' pt-3 font-semibold text-lg'>Today&apos;s labour cost</h1>
-                        <p className='text-xs underline cursor-pointer'>View today&apos;s cost</p>
-                    </div>
-                    <div>
-                        <p className='font-semibold mr-4'>$203</p>
-                    </div>
-                </div>
-
-                <div className='bg-white rounded-md text-gray-700 flex justify-between items-center'>
-                    <div className='ml-4  p-3 m-2 leading-4 py-2'>
-                        <h1 className=' pt-3 font-semibold text-lg'>Week&apos;s labour cost</h1>
-                        <p className='text-xs underline cursor-pointer'>View week&apos;s cost</p>
-                    </div>
-                    <div>
-                        <p className='font-semibold mr-4'>$2,203</p>
-                    </div>
-                </div>
-
-            </div>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 ">
+          <div className="bg-white flex justify-betwen items-center grow rounded-md overflow-hidden text-gray-700">
+            <SnapshotCard
+              headingText={"Today's labour cost"}
+              actionText={"View today's cost"}
+              actionPath={`/organization/reports?start=${today}&end=${today}&focus=labourCost`}
+              action={() => {}}
+            />
+            <p className="font-semibold ml-auto mr-4 text-info-700">
+              ${snapshotData?.projectedLabourCostsToday.toLocaleString("en-us")}
+            </p>
+          </div>
+          <div className="bg-white flex justify-betwen items-center grow rounded-md overflow-hidden text-gray-700">
+            <SnapshotCard
+              headingText={"Week's labour cost"}
+              actionText={"View week's cost"}
+              actionPath={`/organization/reports?start=${thisWeek.start}&end=${thisWeek.end}&focus=labourCost`}
+              action={() => {}}
+            />
+            <p className="font-semibold ml-auto mr-4 text-info-700">
+              ${snapshotData?.projectedLabourCostsToday.toLocaleString("en-us")}
+            </p>
+          </div>
         </div>
+      </div>
     </section>
   )
 }
