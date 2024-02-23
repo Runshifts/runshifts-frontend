@@ -42,7 +42,7 @@ export function ShiftRequest({ shiftRequest = {} }) {
             {seconds} Left
           </>
         ) : (
-          <span className="opacity-30">Expired</span>
+          <span className="opacity-30 font-[500] text-4">Expired</span>
         )}
       </p>
 

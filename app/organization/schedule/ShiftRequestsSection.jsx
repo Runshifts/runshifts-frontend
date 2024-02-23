@@ -13,7 +13,7 @@ export default function ShiftRequestsSection({ shiftRequests = [], loading }) {
       {loading ? (
         <CardSkeletonLoader />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-3 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-[8px] md:grid-cols-3 w-full">
           {shiftRequests.map((shiftReq) => (
             <ShiftRequest key={shiftReq._id} shiftRequest={shiftReq} />
           ))}

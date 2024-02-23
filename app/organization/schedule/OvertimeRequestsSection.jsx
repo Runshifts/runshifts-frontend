@@ -12,7 +12,7 @@ export default function OvertimeRequestsSection({ overtimeRequests = [], loading
       {loading ? (
         <CardSkeletonLoader />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-3 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-[8px] md:grid-cols-3 w-full">
           {overtimeRequests.map((shiftReq) => (
             <OvertimeRequest key={shiftReq._id} overtimeRequest={shiftReq} />
           ))}
