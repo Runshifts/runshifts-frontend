@@ -1,18 +1,19 @@
 "use client";
 import React from "react";
 import { AdminSidebarData } from "../_data/AdminSidebarData";
-import Avatar from "../_assets/sidebarImg/Avatar.png";
 import Link from "next/link";
 import Image from "next/image";
+import settings from "../_assets/adminIcons/settings.svg";
 import { usePathname } from "next/navigation";
 
 function AdminSidebar({ isOpen, onClose }) {
   const Pathname = usePathname();
 
   const activeLink =
-    "hover:bg-green-100 text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold bg-green-100";
+    "hover:bg-green-100 text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-3 font-semibold bg-green-100";
+
   const normalLink =
-    "hover:bg-green-100 hover:text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold";
+    "hover:bg-green-100 hover:text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-3 font-semibold";
 
   return (
     <>
@@ -21,9 +22,8 @@ function AdminSidebar({ isOpen, onClose }) {
           <button className="block close-btn md:hidden" onClick={onClose}>
             <CloseSvg />
           </button>
-         
 
-          <div className="h-10 self-stretch ">
+          <div className="h-10  ">
             {AdminSidebarData.map((item, index) => {
               return (
                 <div key={index}>
@@ -35,18 +35,31 @@ function AdminSidebar({ isOpen, onClose }) {
                       {" "}
                       <Image src={item.icon} alt="icon" />{" "}
                     </span>
-                    <span className="text-sm text-[#42526E] not-italic font-medium leading-10"> {item.title} </span>
+                    <span className="text-sm mx-4 text-[#42526E] not-italic font-medium leading-10">
+                      {" "}
+                      {item.title}{" "}
+                    </span>
                   </Link>
                 </div>
               );
             })}
-            <div className="text-sm text-center mt-12 m-2 text-gray-500">
-              <p>You&apos;re in a team management made easy.</p>
-              <p>Learn more</p>
+            <div className="text-sm text-center mt-16  text-gray-500">
+              <Link
+                href={"/admin/settings"}
+                className={Pathname === settings ? activeLink : normalLink}
+              >
+                <span>
+                  {" "}
+                  <Image src={settings} alt="icon" />{" "}
+                </span>
+                <span className="text-sm text-[#42526E] not-italic font-medium leading-10">
+                  {" "}
+                  Settings{" "}
+                </span>
+              </Link>
             </div>
           </div>
         </div>
-        
       </section>
     </>
   );

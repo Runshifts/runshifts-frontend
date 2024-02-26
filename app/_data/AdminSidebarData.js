@@ -1,11 +1,11 @@
-import bulb from '../_assets/sidebarImg/bulb.svg'
-import date from '../_assets/sidebarImg/date.svg'
+import employers from '../_assets/adminIcons/employers.svg'
+import employees from '../_assets/adminIcons/employees.svg'
+import shift from '../_assets/adminIcons/shift.svg'
+import billings from '../_assets/adminIcons/billings.svg'
+import knowledge from '../_assets/adminIcons/knowledge.svg'
+import support from '../_assets/adminIcons/support.svg'
+import user from '../_assets/adminIcons/user.svg'
 import dashboard from '../_assets/sidebarImg/dashboard.svg'
-import tracker from '../_assets/sidebarImg/watch.svg'
-import logs from '../_assets/sidebarImg/logs.png'
-import earnings from '../_assets/sidebarImg/earning.svg'
-import timesheet from '../_assets/sidebarImg/timesheet.png'
-import team from '../_assets/sidebarImg/team.svg'
 import report from '../_assets/sidebarImg/report.svg'
 
 
@@ -18,22 +18,22 @@ export const AdminSidebarData = [
     {
         title: 'Manage Employers',
         path: '/admin/manage-employers',
-        icon: earnings,
+        icon: employers,
     },
     {
         title: 'Manage Employees',
         path: '/admin/manage-employees',
-        icon: earnings,
+        icon: employees,
     },
     {
         title: 'Shift Management',
         path: '/admin/shift-mgt',
-        icon: earnings,
+        icon: shift,
     },
     {
         title: 'Billings',
         path: '/admin/billings',
-        icon: earnings,
+        icon: billings,
     },
     {
         title: 'Reports',
@@ -43,17 +43,17 @@ export const AdminSidebarData = [
     {
         title: 'Knowledge Base',
         path: '/admin/knowledge-base',
-        icon: earnings,
+        icon: knowledge,
     },
     {
         title: 'Support',
         path: '/admin/support',
-        icon: earnings,
+        icon: support,
     },
     {
         title: 'User Roles',
         path: '/admin/user-roles',
-        icon: earnings,
+        icon: user,
     },
 
 ]

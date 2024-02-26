@@ -163,7 +163,7 @@ function Navbar({ onToggle, onImageClick }) {
           <div className="flex items-center justify-between">
             <form>
               <div className="relative">
-                <div className="start-5 md:absolute inset-y-0 start-1 flex items-center ps-3 pointer-events-none">
+                <div className="start-5 md:absolute inset-y-0 inset-2  flex items-center ps-3 pointer-events-none">
                   <SearchIcon />
                 </div>
                 <input
