@@ -14,7 +14,7 @@ function page() {
           <button className="px-2 py-1 mx-1 bg-[#5BC62D] text-sm rounded-sm">
             <div className="flex items-center">
               <BagSvg />
-              <p className="text-white  text-sm">Request overtime</p>
+              <p className="text-white  text-sm">Request EWA  </p>
             </div>
           </button>
 

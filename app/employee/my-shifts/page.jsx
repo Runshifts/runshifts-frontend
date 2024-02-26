@@ -15,7 +15,7 @@ function page() {
             Request overtime
           </button>
           <button className="p-2 mx-1 text-[#42526E] bg-white text-sm rounded-sm">
-            Request overtime
+            Request time off
           </button>
         </div>
       </div>
