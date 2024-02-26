@@ -17,12 +17,12 @@ export const AdminSidebarData = [
     },  
     {
         title: 'Manage Employers',
-        path: '/admin/manageEmployers',
+        path: '/admin/manage-employers',
         icon: earnings,
     },
     {
         title: 'Manage Employees',
-        path: '/admin/manageEmployees',
+        path: '/admin/manage-employees',
         icon: earnings,
     },
     {
@@ -33,11 +33,6 @@ export const AdminSidebarData = [
     {
         title: 'Billings',
         path: '/admin/billings',
-        icon: earnings,
-    },
-    {
-        title: 'Payroll',
-        path: '/organization/payroll',
         icon: earnings,
     },
     {

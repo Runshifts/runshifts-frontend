@@ -143,7 +143,7 @@ function Navbar({ onToggle, onImageClick }) {
   return (
     <>
       <section>
-        <div className="bg-white h-20 px-4 w-screen flex justify-between items-center border-b-2">
+        <div className="bg-white h-20 px-4 min-w-screen flex justify-between items-center border-b-2">
           <div className="flex items-center justify-around">
             <div className="cursor-pointer">
               <Image

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { EmpSidebarData } from "../_data/EmpSidebarData";
+import { AdminSidebarData } from "../_data/AdminSidebarData";
 import Avatar from "../_assets/sidebarImg/Avatar.png";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,21 +16,15 @@ function AdminSidebar({ isOpen, onClose }) {
 
   return (
     <>
-      <section className="parent-container h-screen fixed">
+      <section className="parent-container h-screen">
         <div className={`sidebar-container ${isOpen ? "hidden" : ""}`}>
           <button className="block close-btn md:hidden" onClick={onClose}>
             <CloseSvg />
           </button>
-          <div className="flex items-center justify-start pl-4 pt-6 pb-2">
-            <Image src={Avatar} alt="avatar" />
-            <div className="pl-3">
-              <h1 className="font-bold text-sm text-gray-600">Gravity Falls</h1>
-              <p className="font-semibold text-xs text-gray-500">HR Company</p>
-            </div>
-          </div>
+         
 
-          <div className="ml-4 pl-4 ">
-            {EmpSidebarData.map((item, index) => {
+          <div className="h-10 self-stretch ">
+            {AdminSidebarData.map((item, index) => {
               return (
                 <div key={index}>
                   <Link
@@ -52,7 +46,7 @@ function AdminSidebar({ isOpen, onClose }) {
             </div>
           </div>
         </div>
-        {/* )}    */}
+        
       </section>
     </>
   );
