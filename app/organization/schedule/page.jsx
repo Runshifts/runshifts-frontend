@@ -1,6 +1,6 @@
 import React from 'react'
 import Export from '../../_components/AppComps/Export'
-import FilterGroup from '../../_components/AppComps/FilterGroup'
+// import FilterGroup from '../../_components/AppComps/FilterGroup'
 import ScheduleTable from './ScheduleTable'
 import ShiftReq from './ShiftReq'
 
@@ -14,7 +14,6 @@ function Dashboard() {
         <Export />
         
         </div>
-        <FilterGroup />
         <div>
           <ScheduleTable />
         </div>

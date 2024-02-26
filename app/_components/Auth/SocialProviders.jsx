@@ -1,8 +1,9 @@
-import AppleIcon from "../../_assets/icons/Apple"
+
+import AppleIcon from "../../_assets/svgs/Apple"
 import AuthWithAppleButton from "./AuthWithAppleButton"
 import SocialProviderButton from "./SocialProviderButton"
 import AuthWithGoogleButton from "./AuthWithGoogleButton"
-import GoogleIcon from "../../_assets/icons/Google"
+import GoogleIcon from "../../_assets/svgs/Google"
 import DividerWithCenteredText from "../DividerWithCenteredText"
 import useGetAuthWithGoogle from "../../_hooks/useGetAuthWithGoogle"
 import useGetAuthWithApple from "../../_hooks/useGetAuthWithApple"

@@ -2,7 +2,6 @@ import DateRangePicker from "../../_components/AppComps/Datepicker";
 import ShiftsCalenderScroll from "./ShiftsCalenderScroll";
 import ShiftSwapReq from "./ShiftSwapReq";
 
-
 function page() {
   return (
     <section className="p-3 h-screen">
@@ -30,7 +29,7 @@ function page() {
         <ShiftSwapReq />
       </div>
     </section>
-  );
+  )
 }
 
-export default page;
+export default page

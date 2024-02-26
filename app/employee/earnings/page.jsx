@@ -1,7 +1,7 @@
-import DateRangePicker from "@/app/_components/AppComps/Datepicker";
-import WorkersFilter from "../timesheet/WorkersFilter";
-import EarningsActivities from "./EarningsActivities";
-import EarningTable from "./EarningTable";
+import DateRangePicker from "../_components/AppComps/Datepicker"
+import WorkersFilter from "../timesheet/WorkersFilter"
+import EarningsActivities from "./EarningsActivities"
+import EarningTable from "./EarningTable"
 
 function page() {
   return (
@@ -39,10 +39,10 @@ function page() {
 
       <EarningTable />
     </section>
-  );
+  )
 }
 
-export default page;
+export default page
 
 function BagSvg() {
   return (
@@ -82,7 +82,7 @@ function BagSvg() {
         fill="white"
       />
     </svg>
-  );
+  )
 }
 
 function ExportSvg() {
@@ -107,5 +107,5 @@ function ExportSvg() {
         fill="#42526E"
       />
     </svg>
-  );
+  )
 }
