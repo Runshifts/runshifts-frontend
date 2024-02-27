@@ -1,7 +1,6 @@
 "use client"
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import Export from "../../_components/AppComps/Export"
-// import FilterGroup from '../../_components/AppComps/FilterGroup'
 import ScheduleTable from "./ScheduleTable"
 import ShiftAndOvertimeRequestsProvider, {
   ShiftAndOvertimeRequestsContext,
@@ -15,13 +14,45 @@ import {
   groupShiftsByAssignee,
   groupShiftsByDayOfTheWeek,
 } from "@/app/_utils/shifts"
+import DateRangePicker from "@/app/_components/AppComps/Datepicker"
+import useRenderShiftFilters from "@/app/_hooks/useRenderShiftFilters"
+import { OrganizationContext } from "@/app/_providers/OrganizationProvider"
 
 function Schedule() {
+  const [selectedUser, setSelectedUser] = useState(null)
   const { shiftRequests, overtimeRequests, loadingShiftRequests } = useContext(
     ShiftAndOvertimeRequestsContext
   )
-  const { allShifts, shiftsInCurrentWeek, currentWeek } = useContext(DashboardContext)
-  const { start, end, allDays } = useMemo(() => {
+  const { employees } = useContext(OrganizationContext)
+
+  const {
+    shiftsInCurrentWeek,
+    currentWeek,
+    goToNextWeek,
+    goToPrevWeek,
+    jumpToWeek,
+    weekRanges,
+    indexOfThePresentWeek,
+    loadingShifts,
+  } = useContext(DashboardContext)
+
+  const presentWeek = useMemo(
+    () => ({
+      ...(weekRanges[indexOfThePresentWeek] || {
+        start: getPreviousMonday(new Date(Date.now())),
+        end: getNextSunday(new Date(Date.now())),
+      }),
+    }),
+    [indexOfThePresentWeek]
+  )
+  const isDuplicationAllowed = useMemo(() => {
+    return currentWeek.start.getTime() >= presentWeek.start.getTime()
+  }, [presentWeek.start, currentWeek.start])
+
+  const { filteredShifts, renderShiftFilters, setWeekFilter } =
+    useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
+
+  const { allDays } = useMemo(() => {
     const start = getPreviousMonday(new Date(currentWeek.start))
     const end = getNextSunday(new Date(currentWeek.start))
     const allDays = [new Date(start)]
@@ -32,23 +63,16 @@ function Schedule() {
       start.setHours(start.getHours() + 24)
     }
     return {
-      start: getPreviousMonday(currentWeek.start),
-      end: getNextSunday(currentWeek.end),
       allDays,
     }
   }, [currentWeek.start, currentWeek.end])
 
-  const shiftsInThisWeek = useMemo(() => {
-    return allShifts.filter((shift) => {
-      return (
-        new Date(shift.startTime).getTime() >= start.getTime() &&
-        new Date(shift.startTime).getTime() <= end.getTime()
-      )
-    })
-  }, [allShifts, start, end])
-
   const shiftsGroupedByAssigneesIntoDays = useMemo(() => {
-    const groupingByAssignees = groupShiftsByAssignee(shiftsInCurrentWeek)
+    let finalFilteredShifts =
+      selectedUser === null
+        ? filteredShifts
+        : filteredShifts.filter((it) => it?.assignee?._id === selectedUser?._id)
+    const groupingByAssignees = groupShiftsByAssignee(finalFilteredShifts)
     for (const key in groupingByAssignees) {
       groupingByAssignees[key] = {
         assignee: groupingByAssignees[key][0]?.assignee,
@@ -56,16 +80,39 @@ function Schedule() {
       }
     }
     return groupingByAssignees
-  }, [shiftsInThisWeek])
+  }, [filteredShifts, selectedUser])
 
   return (
     <section className="p-3 h-screen">
-      <div className="flex items-center justify-between py-3">
-        <Heading as="h1">Schedule</Heading>
-        <Export />
+      <div className="flex items-start flex-col gap-6 pt-6 pb-4">
+        <div className="flex items-center justify-between w-full">
+          <Heading as="h1">Schedule</Heading>
+          <Export isDuplicationAllowed={isDuplicationAllowed} />
+        </div>
+        <ul className="flex list-none gap-2">
+          <DateRangePicker
+            goToNextWeek={() => {
+              setWeekFilter(null)
+              goToNextWeek()
+            }}
+            goToPrevWeek={() => {
+              goToPrevWeek()
+              setWeekFilter(null)
+            }}
+            currentWeek={currentWeek}
+          />
+          {renderShiftFilters({
+            onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
+          })}
+        </ul>
       </div>
       <div className="mb-[24px]">
         <ScheduleTable
+          employees={employees}
+          selectedUser={selectedUser}
+          handleUserFilterSelect={(selection) => setSelectedUser(selection)}
+          canBeDuplicated={isDuplicationAllowed}
+          loading={loadingShifts}
           shiftsGroupedByAssignees={shiftsGroupedByAssigneesIntoDays}
           allDays={allDays}
           showAddShiftModal={() => {}}
