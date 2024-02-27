@@ -28,7 +28,11 @@ export function LocationFilter({
         <>
           <Option onClick={() => updateCurrentValue(null)}>Location</Option>
           {options.map((opt) => (
-            <Option onClick={() => updateCurrentValue(opt._id)} key={opt._id}>
+            <Option
+              isSelected={currentLocation?.address === opt?.address}
+              onClick={() => updateCurrentValue(opt._id)}
+              key={opt._id}
+            >
               {opt.address}
             </Option>
           ))}
@@ -58,7 +62,13 @@ export function DepartmentsOrRolesFilter({
         <>
           <Option onClick={() => updateCurrentValue(null)}>{name}</Option>
           {options.map((opt) => (
-            <Option onClick={() => updateCurrentValue(opt.name)} key={opt._id}>
+            <Option
+              isSelected={
+                opt.name.toLowerCase() === currentValue?.toLowerCase()
+              }
+              onClick={() => updateCurrentValue(opt.name)}
+              key={opt._id}
+            >
               {opt.name}
             </Option>
           ))}
@@ -74,39 +84,47 @@ export function WeekFilter({
   currentValue,
   updateCurrentValue,
 }) {
+  const displayName = useMemo(() => {
+    return currentValue
+      ? `${formatDate(currentValue.start)}  -  ${formatDate(currentValue.end)}`
+      : "Week"
+  }, [currentValue])
+  
   return (
     <DropDown
       dropDownTrigger={({ isOpen }) => (
         <SelectTrigger
           isOpen={isActive || isOpen}
-          name={
-            currentValue
-              ? `${formatDate(currentValue.start)}  -  ${formatDate(
-                  currentValue.end
-                )}`
-              : "Week"
-          }
+          name={displayName}
           options={options}
         />
       )}
       dropdownContent={
         <>
           <Option onClick={() => updateCurrentValue(null)}>Week</Option>
-          {[...options.map((opt, idx) => (
-            <Option key={idx} onClick={() => updateCurrentValue(opt, idx)}>
-              <span className="flex justify-between">
-                <>{formatDate(opt.start)}</>
-                &nbsp;&nbsp;&mdash;&nbsp;&nbsp;
-                <>{formatDate(opt.end)}</>
-              </span>
-            </Option>
-          ))].reverse()}
+          {[
+            ...options.map((opt, idx) => (
+              <Option
+                key={idx}
+                onClick={() => updateCurrentValue(opt, idx)}
+                isSelected={
+                  opt.start.toDateString() ===
+                  currentValue?.start.toDateString()
+                }
+              >
+                <span className="flex justify-between">
+                  <>{formatDate(opt.start)}</>
+                  &nbsp;&nbsp;&mdash;&nbsp;&nbsp;
+                  <>{formatDate(opt.end)}</>
+                </span>
+              </Option>
+            )),
+          ].reverse()}
         </>
       }
     />
   )
 }
-
 
 export function UsersFilter({
   name,
@@ -121,17 +139,21 @@ export function UsersFilter({
         <SelectTrigger
           shouldApplyStyles={false}
           isOpen={isActive || isOpen}
-          name={currentValue.name || name}
+          name={currentValue?.firstName || currentValue?.email || name}
           options={options}
-          className="flex items-center justify-between w-full text-[14px] text-info-600 font-[600]"
+          className="flex items-center capitalize justify-between w-full text-[14px] text-info-600 font-[600]"
         />
       )}
       dropdownContent={
         <>
           <Option onClick={() => updateCurrentValue(null)}>{name}</Option>
           {options.map((opt) => (
-            <Option onClick={() => updateCurrentValue(opt._id)} key={opt._id}>
-              {opt.name}
+            <Option
+              isSelected={currentValue?.email === opt.email}
+              onClick={() => updateCurrentValue(opt)}
+              key={opt._id}
+            >
+              {opt.firstName || opt.email}
             </Option>
           ))}
         </>
@@ -157,4 +179,3 @@ export function MobileFilter() {
     />
   )
 }
- 
