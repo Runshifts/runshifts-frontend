@@ -10,10 +10,10 @@ function AdminSidebar({ isOpen, onClose }) {
   const Pathname = usePathname();
 
   const activeLink =
-    "hover:bg-green-100 text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-3 font-semibold bg-green-100";
+    "hover:bg-green-100 text-[#449522] pl-4 my-0 mt-4 w-full flex justify-start items-center text-sm space-x-3 font-semibold bg-green-100";
 
   const normalLink =
-    "hover:bg-green-100 hover:text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-3 font-semibold";
+    "hover:bg-green-100 hover:text-[#449522] pl-4 my-0 mt-4 w-full flex justify-start items-center text-sm space-x-3 font-semibold";
 
   return (
     <>

@@ -162,19 +162,20 @@ function Navbar({ onToggle, onImageClick }) {
 
           <div className="flex items-center justify-between">
             <form>
-              <div className="relative">
-                <div className="start-5 md:absolute inset-y-0 inset-2  flex items-center ps-3 pointer-events-none">
-                  <SearchIcon />
-                </div>
-                <input
-                  type="search"
-                  name="name"
-                  id="default-search"
-                  className="hidden md:block  cursor-pointer w-full mr-5 px-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
-                  placeholder="Search"
-                  required
-                />
-              </div>
+            <div className="relative">
+  <div className="md:absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+    <SearchIcon />
+  </div>
+  <input
+    type="search"
+    name="name"
+    id="default-search"
+    className="hidden md:block cursor-pointer w-full px-4 py-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+    placeholder="Search"
+    required
+  />
+</div>
+
             </form>
 
             <div className="px-2 cursor-pointer">
