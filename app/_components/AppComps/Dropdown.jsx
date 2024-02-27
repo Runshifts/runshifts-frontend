@@ -1,7 +1,7 @@
 import useOutsideClick from "../../_hooks/useOutsideClick"
 import { useState } from "react"
 
-export default function DropDown({ dropdownContent, dropDownTrigger }) {
+export default function DropDown({ dropdownContent, dropDownTrigger, styleTrigger = true }) {
   const [showDropDown, setShowDropDown] = useState(false)
   const dropdownRef = useOutsideClick(() => setShowDropDown(false))
 

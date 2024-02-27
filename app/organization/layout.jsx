@@ -2,6 +2,7 @@ import "../globals.css"
 import GlobalLayout from "../_components/GlobalLayout"
 import UserProvider from "../_providers/UserProvider"
 import OrganizationProvider from "../_providers/OrganizationProvider"
+import DashboardProvider from "../_providers/DashboardContext"
 
 export const metadata = {
   title: "Runshifts | Organizations",
@@ -13,7 +14,9 @@ export default function RootLayout({ children }) {
     <>
       <GlobalLayout>
         <UserProvider>
-          <OrganizationProvider>{children}</OrganizationProvider>
+          <OrganizationProvider>
+            <DashboardProvider>{children}</DashboardProvider>
+          </OrganizationProvider>
         </UserProvider>
       </GlobalLayout>
     </>

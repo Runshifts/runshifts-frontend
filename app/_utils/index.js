@@ -59,6 +59,8 @@ export const getPastWeekRanges = (numberOfWeeksToGenerate, startDate) => {
       start: getPreviousMonday(newD),
       end: getNextSunday(newD),
     }
+    range.start.setHours(0, 0, 0, 0)
+    range.end.setHours(23, 59, 59)
     const lastPushedRange = ranges[ranges.length - 1]
     if (
       !lastPushedRange ||
@@ -69,7 +71,6 @@ export const getPastWeekRanges = (numberOfWeeksToGenerate, startDate) => {
 
     if (dateMarker <= 0) {
       if (currentDate.getMonth() === 0) {
-        console.log(currentDate)
         currentDate.setFullYear(currentDate.getFullYear() - 1, 11, 28)
         dateMarker = currentDate.getDate() + currentDate.getDay()
       } else {
@@ -119,4 +120,8 @@ export const getFutureWeekRanges = (numberOfWeeksToGenerate, startDate) => {
     numberOfDays = numberOfDays - 7
   }
   return ranges
+}
+
+export function randomIntFromInterval(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }

@@ -24,6 +24,19 @@ export const DashboardContext = createContext({
   fetchShifts: () => {},
   todaysShifts: [],
   todaysSnapshot: {},
+  fetchShifts: () => {},
+  goToNextWeek: () => {},
+  goToPrevWeek: () => {},
+  currentWeek: {},
+  todaysSnapshot: () => {},
+  todaysShifts: () => {},
+  loadingShifts: () => {},
+  fetchingShiftsError: () => {},
+  tableGrouping: {},
+  shiftsInCurrentWeek: [],
+  weekRanges: () => {},
+  jumpToWeek: () => {},
+  indexOfThePresentWeek: 0
 })
 
 export default function DashboardProvider({ children }) {
@@ -35,6 +48,13 @@ export default function DashboardProvider({ children }) {
   const fetchData = useAxios()
   const [todaysSnapshot, setTodaysSnapshot] = useState(null)
   const [allShifts, setAllShifts] = useState([])
+
+  const indexOfThePresentWeek = useMemo(() => {
+    const today = new Date(Date.now())
+    return weekRanges.findIndex(it => {
+      return it.start.getTime() <= today.getTime() && it.end.getTime() >= today.getTime()
+    })
+  }, [weekRanges])
 
   const todaysShifts = useMemo(() => {
     return allShifts.filter((shift) => {
@@ -119,7 +139,8 @@ export default function DashboardProvider({ children }) {
         tableGrouping: todaysShiftsGroupedByAssigneesIntoHours,
         shiftsInCurrentWeek: listOfShiftsInCurrentWeek,
         weekRanges,
-        jumpToWeek
+        jumpToWeek,
+        indexOfThePresentWeek
       }}
     >
       {children}

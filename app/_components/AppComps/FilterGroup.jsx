@@ -107,6 +107,39 @@ export function WeekFilter({
   )
 }
 
+
+export function UsersFilter({
+  name,
+  options = [],
+  isActive,
+  currentValue,
+  updateCurrentValue,
+}) {
+  return (
+    <DropDown
+      dropDownTrigger={({ isOpen }) => (
+        <SelectTrigger
+          shouldApplyStyles={false}
+          isOpen={isActive || isOpen}
+          name={currentValue.name || name}
+          options={options}
+          className="flex items-center justify-between w-full text-[14px] text-info-600 font-[600]"
+        />
+      )}
+      dropdownContent={
+        <>
+          <Option onClick={() => updateCurrentValue(null)}>{name}</Option>
+          {options.map((opt) => (
+            <Option onClick={() => updateCurrentValue(opt._id)} key={opt._id}>
+              {opt.name}
+            </Option>
+          ))}
+        </>
+      }
+    />
+  )
+}
+
 export function MobileFilter() {
   return (
     <DropDown
@@ -124,3 +157,4 @@ export function MobileFilter() {
     />
   )
 }
+ 
