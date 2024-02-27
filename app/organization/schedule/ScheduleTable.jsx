@@ -143,7 +143,7 @@ function AssigneeRow({
               canBeDuplicated={canBeDuplicated}
             />
           </Fragment>
-          {!assigneeShifts.length && (
+          {!assigneeShifts.length  && canBeDuplicated && (
             <AddShift
               onClick={() =>
                 showAddShiftModal({

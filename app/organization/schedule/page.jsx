@@ -1,5 +1,5 @@
 "use client"
-import React, { useContext, useMemo, useState } from "react"
+import React, { useCallback, useContext, useMemo, useState } from "react"
 import Export from "../../_components/AppComps/Export"
 import ScheduleTable from "./ScheduleTable"
 import ShiftAndOvertimeRequestsProvider, {
@@ -17,8 +17,16 @@ import {
 import DateRangePicker from "@/app/_components/AppComps/Datepicker"
 import useRenderShiftFilters from "@/app/_hooks/useRenderShiftFilters"
 import { OrganizationContext } from "@/app/_providers/OrganizationProvider"
+import Modal from "@/app/_components/AppComps/Modal"
+import NewShiftForm from "./NewShiftForm"
 
 function Schedule() {
+  const [newShiftDetails, setNewShiftDetails] = useState(null)
+
+  const handleAddShiftClick = useCallback((dayOfTheWeek) => {
+    setNewShiftDetails({})
+  }, [])
+
   const [selectedUser, setSelectedUser] = useState(null)
   const { shiftRequests, overtimeRequests, loadingShiftRequests } = useContext(
     ShiftAndOvertimeRequestsContext
@@ -84,6 +92,9 @@ function Schedule() {
 
   return (
     <section className="p-3 h-screen">
+      <Modal open={newShiftDetails !== null}>
+        <NewShiftForm onCancel={() => setNewShiftDetails(null)} />
+      </Modal>
       <div className="flex items-start flex-col gap-6 pt-6 pb-4">
         <div className="flex items-center justify-between w-full">
           <Heading as="h1">Schedule</Heading>
@@ -101,9 +112,11 @@ function Schedule() {
             }}
             currentWeek={currentWeek}
           />
-          {renderShiftFilters({
-            onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
-          })}
+          <li className="hidden md:flex gap-2">
+            {renderShiftFilters({
+              onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
+            })}
+          </li>
         </ul>
       </div>
       <div className="mb-[24px]">
@@ -115,7 +128,9 @@ function Schedule() {
           loading={loadingShifts}
           shiftsGroupedByAssignees={shiftsGroupedByAssigneesIntoDays}
           allDays={allDays}
-          showAddShiftModal={() => {}}
+          showAddShiftModal={(dayOfTheWeek) =>
+            handleAddShiftClick(dayOfTheWeek)
+          }
           duplicateShift={() => {}}
         />
       </div>

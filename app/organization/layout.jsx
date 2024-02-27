@@ -19,6 +19,7 @@ export default function RootLayout({ children }) {
           </OrganizationProvider>
         </UserProvider>
       </GlobalLayout>
+      <div id="modal-container"/>
     </>
   )
 }

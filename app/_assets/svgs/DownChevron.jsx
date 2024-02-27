@@ -21,3 +21,7 @@ export default function DownChevron(){
     </svg>
   )
 }
+
+export function DownChevronLight(){
+  return(<></>)
+}
