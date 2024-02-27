@@ -7,12 +7,16 @@ import LocationsProvider from "../_providers/LocationsProvider"
 import DepartmentsAndRolesProvider from "./DepartmentsAndRolesProvider"
 import ShiftsManagementProvider from "./ShiftManagementContext"
 
-export const OrganizationContext = createContext()
+export const OrganizationContext = createContext({
+  employees: [],
+  organization: null,
+})
 
 export default function OrganizationProvider({ children }) {
   const fetchData = useAxios()
-  const [intiRetries, setInitRetries] = useState(0)
+  const [initRetries, setInitRetries] = useState(0)
   const [organization, setOrganization] = useState(null)
+  const [employees, setEmployees] = useState([])
   const [isFetchingOrganization, setIsFetchingOrganization] = useState(
     organization === null
   )
@@ -25,13 +29,24 @@ export default function OrganizationProvider({ children }) {
     } else setInitRetries((prev) => prev + 1)
   }, [])
 
+  const fetchEmployees = useCallback(async () => {
+    if(!organization) return
+    const res = await fetchData(DASHBOARD_URLS.employees(organization._id), "get")
+    if (res.statusCode === 200) {
+      setEmployees(res.employees)
+    }
+  }, [organization?._id])
+
   useEffect(() => {
-    if (intiRetries <= 10) fetchOrganization()
-  }, [fetchOrganization])
+    if (initRetries <= 10){
+      fetchOrganization()
+      fetchEmployees()
+    }
+  }, [fetchOrganization, fetchEmployees])
 
   return (
     <OrganizationContext.Provider
-      value={{ organization, fetchOrganization, isFetchingOrganization }}
+      value={{ organization, fetchOrganization, isFetchingOrganization, employees }}
     >
       <LocationsProvider organizationId={organization?._id}>
         <DepartmentsAndRolesProvider
