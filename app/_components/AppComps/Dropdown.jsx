@@ -21,7 +21,7 @@ export default function DropDown({ dropdownContent, dropDownTrigger, styleTrigge
       <div
         className={`${
           showDropDown
-            ? "max-h-[50dvh] overflow-auto pb-[44px]"
+            ? "max-h-[400px] overflow-auto pb-[44px]"
             : "max-h-0 overflow-hidden"
         } absolute shadow rounded-[3px] z-[10] top-[calc(115%)] bg-white min-w-full w-max flex flex-col items-start text-[14px]`}
       >
