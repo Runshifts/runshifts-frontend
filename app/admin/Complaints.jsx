@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import Avatar from "./Ellipse.svg";
+import Image from "next/image";
 
 function Complaints() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -24,7 +26,6 @@ function Complaints() {
       document.addEventListener("click", handleOutsideClick);
     }
 
-    // Cleanup the event listener when the component unmounts or modal is closed
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
@@ -33,7 +34,7 @@ function Complaints() {
   return (
     <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {isModalVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-10 z-50 flex  justify-center items-center">
+        <div className="fixed inset-0  z-50 flex  justify-center items-center">
           <div
             className="bg-white rounded-xl shadow-xl p-2 text-xs not-italic leading-5"
             ref={modalContentRef}>
@@ -128,14 +129,15 @@ function Complaints() {
         <div className="bg-white rounded shadow-xl p-3 flex justify-between my-2">
           <div className="flex justify-around items-center">
             <input type="checkbox" />
+            <Image src={Avatar} alt="dp" height={24} width={24} className="ml-3" />
             <p className="mx-5 text-[#706763] text-sm not-italic font-normal leading-5">
-              ID: <span className="text-[#1D2433] ">121234FA</span>
+              Maritime Global Service
             </p>
           </div>
 
           <div className="flex justify-between items-center">
-            <p className="mx-5 px-5 mr-5 text-sm text-[#42526E] not-italic font-normal leading-5">
-              Open
+            <p className="bg-[#FAA995] mx-5 px-1 mr-5 text-sm text-[#B22A09] not-italic font-normal leading-5 rounded-full w-fit">
+              Employer
             </p>
             <MoreSvg />
           </div>
@@ -144,14 +146,15 @@ function Complaints() {
         <div className="bg-white rounded shadow-xl p-3 flex justify-between my-2">
           <div className="flex justify-around items-center">
             <input type="checkbox" />
+            <Image src={Avatar} alt="dp" height={24} width={24} className="ml-3" />
             <p className="mx-5 text-[#706763] text-sm not-italic font-normal leading-5">
-              ID: <span className="text-[#1D2433] ">121234FA</span>
+              Jonah Ford
             </p>
           </div>
 
           <div className="flex justify-between items-center">
-            <p className="mx-5 px-5 mr-5 text-sm text-[#42526E] not-italic font-normal leading-5">
-              Open
+            <p className="bg-[#CBF0BC] mx-5 px-1 mr-5 text-sm text-[#5BC62D] not-italic font-normal leading-5 rounded-full w-fit">
+              Employee
             </p>
             <MoreSvg />
           </div>
@@ -160,14 +163,15 @@ function Complaints() {
         <div className="bg-white rounded shadow-xl p-3 flex justify-between my-2">
           <div className="flex justify-around items-center">
             <input type="checkbox" />
+            <Image src={Avatar} alt="dp" height={24} width={24} className="ml-3" />
             <p className="mx-5 text-[#706763] text-sm not-italic font-normal leading-5">
-              ID: <span className="text-[#1D2433] ">121234FA</span>
+              Jonah Ford
             </p>
           </div>
 
           <div className="flex justify-between items-center">
-            <p className="mx-5 px-5 mr-5 text-sm text-[#42526E] not-italic font-normal leading-5">
-              Open
+            <p className="bg-[#CBF0BC] mx-5 px-1 mr-5 text-sm text-[#5BC62D] not-italic font-normal leading-5 rounded-full w-fit">
+              Employee
             </p>
             <MoreSvg />
           </div>
@@ -176,14 +180,15 @@ function Complaints() {
         <div className="bg-white rounded shadow-xl p-3 flex justify-between my-2">
           <div className="flex justify-around items-center">
             <input type="checkbox" />
+            <Image src={Avatar} alt="dp" height={24} width={24} className="ml-3" />
             <p className="mx-5 text-[#706763] text-sm not-italic font-normal leading-5">
-              ID: <span className="text-[#1D2433] ">121234FA</span>
+              Maritime Global Service
             </p>
           </div>
 
           <div className="flex justify-between items-center">
-            <p className="mx-5 px-5 mr-5 text-sm text-[#42526E] not-italic font-normal leading-5">
-              Open
+            <p className="bg-[#FAA995] mx-5 px-1 mr-5 text-sm text-[#B22A09] not-italic font-normal leading-5 rounded-full w-fit">
+              Employer
             </p>
             <MoreSvg />
           </div>
@@ -244,18 +249,3 @@ function CheckboxSvg() {
 
   );
 }
-
-// const MoreSvg = ({ onClick }) => {
-//     return (
-//       <svg
-//         xmlns="http://www.w3.org/2000/svg"
-//         fill="none"
-//         viewBox="0 0 24 24"
-//         stroke="currentColor"
-//         className="h-6 w-6 cursor-pointer"
-//         onClick={onClick}  {/* Ensure that onClick is passed to the SVG */}
-//       >
-//         {/* Add your SVG content here */}
-//       </svg>
-//     );
-//   };
