@@ -12,7 +12,7 @@ function ShiftsCalenderScroll() {
         </h1>
 
         <button className="p-2 mx-1 bg-[#5BC62D] text-white text-sm rounded-sm">
-          Request overtime
+          Accept all shifts
         </button>
       </div>
 

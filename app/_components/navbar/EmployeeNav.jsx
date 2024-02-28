@@ -20,7 +20,7 @@ function Navbar({ onToggle, onImageClick }) {
   return (
     <>
       <section>
-        <div className="bg-white h-20 px-4 w-screen flex justify-between items-center border-b-2">
+        <div className="bg-white h-20 px-4 min-w-screen flex justify-between items-center border-b-2">
           <div className="flex items-center justify-around">
             <div className="cursor-pointer">
               <Image
@@ -40,14 +40,14 @@ function Navbar({ onToggle, onImageClick }) {
           <div className="flex items-center justify-between">
             <form>
               <div className="relative">
-                <div className="start-5 md:absolute inset-y-0 start-1 flex items-center ps-3 pointer-events-none">
+                <div className="md:absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                   <SearchIcon />
                 </div>
                 <input
                   type="search"
                   name="name"
                   id="default-search"
-                  className="hidden md:block  cursor-pointer w-full mr-5 px-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                  className="hidden md:block cursor-pointer w-full px-4 py-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
                   placeholder="Search"
                   required
                 />
@@ -55,8 +55,8 @@ function Navbar({ onToggle, onImageClick }) {
             </form>
 
             <div className="px-2 cursor-pointer">
-              <Link href={'/organization/notification'}>
-              <BellSvg />
+              <Link href={"/organization/notification"}>
+                <BellSvg />
               </Link>
             </div>
 
