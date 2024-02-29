@@ -1,5 +1,5 @@
-import CheckMark from "@/app/_assets/svgs/CheckMark"
-import DropDown from "@/app/_components/AppComps/Dropdown"
+import CheckMark from "../../_assets/svgs/CheckMark"
+import DropDown from "../../_components/AppComps/Dropdown"
 import { useContext, useState } from "react"
 import { LocationsContext } from "../../_providers/LocationsProvider"
 import { Option } from "../../_components/AppComps/Select"
@@ -118,7 +118,7 @@ export default function NewShiftForm({ onCancel, employee }) {
   )
 }
 
-function FormLocationInput() {
+function FormLocationInput({ currentLocation, updateCurrentValue,  }) {
   const { locations } = useContext(LocationsContext)
   return (
     <DropDown

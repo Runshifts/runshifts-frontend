@@ -1,5 +1,5 @@
 export const throwInvalidDateError = (date) => {
-  if (date.toString() === "Invalid Date") throw new Error("Invalid Date!")
+  if (!date || date.toString() === "Invalid Date") throw new Error("Invalid Date!")
 }
 
 export const getDateOrdinal = (date) => {

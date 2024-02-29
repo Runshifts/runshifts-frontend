@@ -2,7 +2,7 @@
 import FilterSvg from "../../_assets/svgs/FilterSvg"
 import SelectTrigger, { Option } from "./Select"
 import DropDown from "./Dropdown"
-import { formatDate } from "@/app/_utils"
+import { formatDate } from "../../_utils"
 import { useMemo } from "react"
 
 export function LocationFilter({

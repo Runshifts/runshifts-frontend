@@ -1,7 +1,7 @@
-import { getAmOrPm } from "@/app/_utils";
+import { getAmOrPm } from "../../_utils";
 import { AcceptAndRejectButtons, UserDisplay, formatRequestStartDate } from "./ShiftRequest";
 import { useMemo } from "react";
-import { CardSkeletonLoader } from "@/app/_components/Skeletons/CardSkeleton";
+import { CardSkeletonLoader } from "../../_components/Skeletons/CardSkeleton";
 
 export default function OvertimeRequestsSection({ overtimeRequests = [], loading }){
   return (

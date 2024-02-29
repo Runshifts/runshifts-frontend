@@ -1,5 +1,5 @@
 "use client"
-import { formatDate } from "@/app/_utils"
+import { formatDate } from "../../_utils"
 import LeftChevron from "../../_assets/svgs/LeftChevron"
 import RightChevron from "../../_assets/svgs/RightChevron"
 import React from "react"

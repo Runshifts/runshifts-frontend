@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useEffect, useState } from "react"
 import useAxios from "../_hooks/useAxios"
-import DASHBOARD_URLS from "../organization/dashboardURLs"
+import DASHBOARD_URLS from "../_urls/dashboardURLs"
 import LocationsProvider from "../_providers/LocationsProvider"
 import DepartmentsAndRolesProvider from "./DepartmentsAndRolesProvider"
 import ShiftsManagementProvider from "./ShiftManagementContext"

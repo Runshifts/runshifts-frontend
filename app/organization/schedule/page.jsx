@@ -1,24 +1,31 @@
 "use client"
-import React, { useCallback, useContext, useMemo, useState } from "react"
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 import Export from "../../_components/AppComps/Export"
 import ScheduleTable from "./ScheduleTable"
 import ShiftAndOvertimeRequestsProvider, {
   ShiftAndOvertimeRequestsContext,
-} from "@/app/_providers/ShiftAndOvertimeRequestsProvider"
-import Heading from "@/app/_components/Headings"
+} from "../../_providers/ShiftAndOvertimeRequestsProvider"
+import Heading from "../../_components/Headings"
 import ShiftRequestsSection from "./ShiftRequestsSection"
 import OvertimeRequestsSection from "./OvertimeRequestsSection"
-import { DashboardContext } from "@/app/_providers/DashboardContext"
-import { getNextSunday, getPreviousMonday } from "@/app/_utils"
+import { DashboardContext } from "../../_providers/DashboardContext"
+import { getNextSunday, getPreviousMonday } from "../../_utils"
 import {
   groupShiftsByAssignee,
   groupShiftsByDayOfTheWeek,
-} from "@/app/_utils/shifts"
-import DateRangePicker from "@/app/_components/AppComps/Datepicker"
-import useRenderShiftFilters from "@/app/_hooks/useRenderShiftFilters"
-import { OrganizationContext } from "@/app/_providers/OrganizationProvider"
-import Modal from "@/app/_components/AppComps/Modal"
+} from "../../_utils/shifts"
+import DateRangePicker from "../../_components/AppComps/Datepicker"
+import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
+import { OrganizationContext } from "../../_providers/OrganizationProvider"
+import Modal from "../../_components/AppComps/Modal"
 import NewShiftForm from "./NewShiftForm"
+import useHandleShiftDuplication from "../../_hooks/useHandleShiftDuplication"
 
 function Schedule() {
   const [newShiftDetails, setNewShiftDetails] = useState(null)
@@ -31,7 +38,7 @@ function Schedule() {
   const { shiftRequests, overtimeRequests, loadingShiftRequests } = useContext(
     ShiftAndOvertimeRequestsContext
   )
-  const { employees } = useContext(OrganizationContext)
+  const { employees, organization } = useContext(OrganizationContext)
 
   const {
     shiftsInCurrentWeek,
@@ -42,7 +49,13 @@ function Schedule() {
     weekRanges,
     indexOfThePresentWeek,
     loadingShifts,
+    updateAllShifts,
   } = useContext(DashboardContext)
+
+  const { duplicateWeek, inProgress } = useHandleShiftDuplication({
+    week: currentWeek,
+    updateShifts: updateAllShifts,
+  })
 
   const presentWeek = useMemo(
     () => ({
@@ -53,7 +66,7 @@ function Schedule() {
     }),
     [indexOfThePresentWeek]
   )
-  const isDuplicationAllowed = useMemo(() => {
+  const isPastWeek = useMemo(() => {
     return currentWeek.start.getTime() >= presentWeek.start.getTime()
   }, [presentWeek.start, currentWeek.start])
 
@@ -98,7 +111,10 @@ function Schedule() {
       <div className="flex items-start flex-col gap-6 pt-6 pb-4">
         <div className="flex items-center justify-between w-full">
           <Heading as="h1">Schedule</Heading>
-          <Export isDuplicationAllowed={isDuplicationAllowed} />
+          <Export
+            loading={inProgress}
+            duplicateWeek={() => duplicateWeek(organization?._id)}
+          />
         </div>
         <ul className="flex list-none gap-2">
           <DateRangePicker
@@ -112,11 +128,11 @@ function Schedule() {
             }}
             currentWeek={currentWeek}
           />
-          <li className="hidden md:flex gap-2">
+          <ul className="hidden md:flex gap-2">
             {renderShiftFilters({
               onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
             })}
-          </li>
+          </ul>
         </ul>
       </div>
       <div className="mb-[24px]">
@@ -124,7 +140,7 @@ function Schedule() {
           employees={employees}
           selectedUser={selectedUser}
           handleUserFilterSelect={(selection) => setSelectedUser(selection)}
-          canBeDuplicated={isDuplicationAllowed}
+          isPastWeek={isPastWeek}
           loading={loadingShifts}
           shiftsGroupedByAssignees={shiftsGroupedByAssigneesIntoDays}
           allDays={allDays}

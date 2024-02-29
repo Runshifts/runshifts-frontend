@@ -1,5 +1,5 @@
 import { ShiftRequest } from "./ShiftRequest"
-import { CardSkeletonLoader } from "@/app/_components/Skeletons/CardSkeleton"
+import { CardSkeletonLoader } from "../../_components/Skeletons/CardSkeleton"
 
 export default function ShiftRequestsSection({ shiftRequests = [], loading }) {
   return (

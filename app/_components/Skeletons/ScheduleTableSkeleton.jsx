@@ -1,6 +1,6 @@
-import placeholderImage from "@/app/_assets/img/user.png"
-import CopySvg from "@/app/_assets/svgs/Copy"
-import { formatHourAsAmOrPm } from "@/app/_utils"
+import placeholderImage from "../../_assets/img/user.png"
+import CopySvg from "../../_assets/svgs/Copy"
+import { formatHourAsAmOrPm } from "../../_utils"
 import Image from "next/image"
 import { Fragment } from "react"
 
@@ -18,7 +18,7 @@ export default function ScheduleTableLoadingSkeleton({ columns = [] }) {
 function PlaceholderRow({ columns }) {
   return (
     <tr className="animate-pulse ease">
-      <td className="border-r border-r-info-800 border-t border-t-info-800">
+      <td className="sticky left-0 z-[10] border-r border-r-gray-800 bg-[#efeded] border-r-info-800 border-t border-t-info-800">
         <AssigneePillPlaceholder />
       </td>
       {columns.map((_, idx) => (
@@ -54,11 +54,11 @@ function AssigneePillPlaceholder() {
 function AssigneeShiftPlaceholder() {
   return (
     <Fragment>
-      <div className="flex bg-red-200 gap-[4px] my-[10px] items-center w-max justify-center px-[4px] py-[4px] rounded-full ">
+      <div className="flex bg-red-200 gap-[4px] items-center w-max justify-center p-[4px] rounded-full ">
         <Image
           className="rounded-full"
-          height={24}
-          width={24}
+          height={20}
+          width={20}
           src={placeholderImage}
           alt="avatar"
         />

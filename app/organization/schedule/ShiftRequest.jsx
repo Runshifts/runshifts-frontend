@@ -1,8 +1,8 @@
 import React, { useMemo } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
-import { getDateOrdinal } from "@/app/_utils"
-import useCountdown from "@/app/_hooks/useCountDown"
+import { getDateOrdinal } from "../../_utils"
+import useCountdown from "../../_hooks/useCountDown"
 
 export function ShiftRequest({ shiftRequest = {} }) {
   const shiftStart = useMemo(

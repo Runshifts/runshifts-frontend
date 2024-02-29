@@ -1,13 +1,13 @@
 import React, { Fragment, useMemo } from "react"
 import AddShift from "./AddShiftBtn"
 import Image from "next/image"
-import { UsersFilter } from "@/app/_components/AppComps/FilterGroup"
-import placeholderImage from "@/app/_assets/img/user.png"
-import { formatHourAsAmOrPm, randomIntFromInterval } from "@/app/_utils"
-import CopySvg from "@/app/_assets/svgs/Copy"
+import { UsersFilter } from "../../_components/AppComps/FilterGroup"
+import placeholderImage from "../../_assets/img/user.png"
+import { formatHourAsAmOrPm, randomIntFromInterval } from "../../_utils"
+import CopySvg from "../../_assets/svgs/Copy"
 import ScheduleTableLoadingSkeleton, {
   ScheduleTableFillers,
-} from "@/app/_components/Skeletons/ScheduleTableSkeleton"
+} from "../../_components/Skeletons/ScheduleTableSkeleton"
 
 const ScheduleTable = ({
   employees = [],
@@ -16,7 +16,7 @@ const ScheduleTable = ({
   shiftsGroupedByAssignees = {},
   showAddShiftModal,
   duplicateShift,
-  canBeDuplicated = false,
+  isPastWeek = true,
   handleUserFilterSelect,
   selectedUser,
 }) => {
@@ -30,7 +30,7 @@ const ScheduleTable = ({
       <div className=" h-[50dvh] max-h-[600px] overflow-auto">
         <table className="min-w-full bg-[#EFEDED] rounded-lg min-h-full">
           <thead className="text-[#252525]">
-            <tr>
+            <tr className="border-b border-b-800">
               <th className="sticky z-[1] left-0 bg-[#EFEDED] py-2 px-4 border-b border-r border-gray-800">
                 <div className="relative  text-left whitespace-nowrap">
                   <UsersFilter
@@ -44,10 +44,10 @@ const ScheduleTable = ({
               {allDays.map((date, idx) => (
                 <DayOfTheWeekTableHead
                   key={idx}
+                  className={`${
+                    idx === allDays.length - 1 ? "" : "border-r border-r-info-800"
+                  }`}
                   date={date}
-                  style={{
-                    borderRight: idx === allDays.length - 1 && "0 !important",
-                  }}
                 />
               ))}
             </tr>
@@ -60,7 +60,10 @@ const ScheduleTable = ({
               </th>
               {allDays.map((_, index) => (
                 <td
-                  className="py-2 px-4 border-b border-r border-gray-800 text-gray-300 font-bold"
+                  className="py-2 px-4 border-y border-r border-gray-800 text-gray-300 font-bold"
+                  style={{
+                    borderRight: index === allDays.length - 1 && "none",
+                  }}
                   key={index}
                 ></td>
               ))}
@@ -76,7 +79,7 @@ const ScheduleTable = ({
                 allDays={allDays}
                 assignee={current.assignee}
                 shiftsGroupedByDays={current.shifts}
-                canBeDuplicated={canBeDuplicated}
+                isPastWeek={isPastWeek}
               />
             ))}
             <ScheduleTableFillers
@@ -98,7 +101,7 @@ function AssigneeRow({
   shiftsGroupedByDays = {},
   showAddShiftModal = () => {},
   duplicateShift = () => {},
-  canBeDuplicated,
+  isPastWeek,
 }) {
   const shifts = useMemo(() => {
     const shiftsModified = { ...shiftsGroupedByDays }
@@ -124,8 +127,8 @@ function AssigneeRow({
   )
 
   return (
-    <tr>
-      <td className="sticky p-[10px] left-0 bg-[#EFEDED] border-t border-t-gray-800 border-r-solid border-r border-r-gray-800">
+    <tr className="border-b border-b-gray-800 h-[52px] sticky z-1">
+      <td className="p-[10px] left-0 bg-[#EFEDED] border-r-solid border-r border-r-gray-800">
         <AssigneePill assignee={assigneeModified} />
       </td>
 
@@ -140,10 +143,10 @@ function AssigneeRow({
               assignee={assigneeModified}
               duplicateShift={duplicateShift}
               shifts={assigneeShifts}
-              canBeDuplicated={canBeDuplicated}
+              isPastWeek={isPastWeek}
             />
           </Fragment>
-          {!assigneeShifts.length  && canBeDuplicated && (
+          {!assigneeShifts.length  && isPastWeek && (
             <AddShift
               onClick={() =>
                 showAddShiftModal({
@@ -163,7 +166,7 @@ function AssigneeShiftsMapping({
   assignee = {},
   duplicateShift = () => {},
   shifts = [],
-  canBeDuplicated,
+  isPastWeek,
 }) {
   return (
     <>
@@ -171,7 +174,7 @@ function AssigneeShiftsMapping({
         <Fragment key={item?._id || idx}>
           <div
             style={{ backgroundColor: assignee.color }}
-            className="flex mx-auto gap-[4px] my-[10px] items-center w-max justify-center px-[4px] py-[4px] rounded-full "
+            className="flex mx-auto gap-[4px] my-[10px] items-center w-max justify-center p-[4px] rounded-full "
           >
             <Image
               className="rounded-full"
@@ -182,7 +185,7 @@ function AssigneeShiftsMapping({
             />
             {formatHourAsAmOrPm(new Date(item.startTime).getHours())}-
             {formatHourAsAmOrPm(new Date(item.endTime).getHours())}
-            {canBeDuplicated && (
+            {isPastWeek && (
               <button
                 name="duplicate shift"
                 onClick={() => {
@@ -225,7 +228,7 @@ function AssigneePill({ assignee = {} }) {
     </div>
   )
 }
-function DayOfTheWeekTableHead({ date = new Date(), style }) {
+function DayOfTheWeekTableHead({ date = new Date(), className }) {
   const daysOfTheWeek = [
     "Sun",
     "Mon",
@@ -237,10 +240,7 @@ function DayOfTheWeekTableHead({ date = new Date(), style }) {
     "Sun",
   ]
   return (
-    <th
-      className="text-info-600 p-4 border-x border-b border-gray-800 min-w-[120px]"
-      style={style}
-    >
+    <th className={`${className} text-info-600 p-4 min-w-[120px]`}>
       <div className="flex flex-col items-center justify-center w- gap-[10px]">
         <span className="text-[14px]">{date.getDate()}</span>
         <span className="text-[24px] font-[600]">

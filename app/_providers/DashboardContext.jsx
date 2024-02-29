@@ -8,12 +8,9 @@ import {
   useState,
 } from "react"
 import useAxios from "../_hooks/useAxios"
-import DASHBOARD_URLS from "../organization/dashboardURLs"
+import DASHBOARD_URLS from "../_urls/dashboardURLs"
 import useGetWeekRanges from "../_hooks/useGetWeekRanges"
-import {
-  groupShiftsByAssignee,
-  groupShiftsByHours,
-} from "../_utils/shifts"
+import { groupShiftsByAssignee, groupShiftsByHours } from "../_utils/shifts"
 import { OrganizationContext } from "./OrganizationProvider"
 
 export const DashboardContext = createContext({
@@ -36,7 +33,8 @@ export const DashboardContext = createContext({
   shiftsInCurrentWeek: [],
   weekRanges: () => {},
   jumpToWeek: () => {},
-  indexOfThePresentWeek: 0
+  indexOfThePresentWeek: 0,
+  updateAllShifts: () => {},
 })
 
 export default function DashboardProvider({ children }) {
@@ -44,15 +42,19 @@ export default function DashboardProvider({ children }) {
   const [loadingShifts, setLoadingShifts] = useState(true)
   const [fetchingShiftsError, setFetchingShiftsError] = useState(false)
   const [weeksFetched, setWeeksFetched] = useState({})
-  const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } = useGetWeekRanges(new Date(Date.now()), 7)
+  const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } =
+    useGetWeekRanges(new Date(Date.now()), 7)
   const fetchData = useAxios()
   const [todaysSnapshot, setTodaysSnapshot] = useState(null)
   const [allShifts, setAllShifts] = useState([])
 
   const indexOfThePresentWeek = useMemo(() => {
     const today = new Date(Date.now())
-    return weekRanges.findIndex(it => {
-      return it.start.getTime() <= today.getTime() && it.end.getTime() >= today.getTime()
+    return weekRanges.findIndex((it) => {
+      return (
+        it.start.getTime() <= today.getTime() &&
+        it.end.getTime() >= today.getTime()
+      )
     })
   }, [weekRanges])
 
@@ -85,6 +87,17 @@ export default function DashboardProvider({ children }) {
     })
   }, [allShifts, currentWeek.end, currentWeek.start])
 
+  const updateAllShifts = useCallback((newShifts = []) => {
+    setAllShifts((prev) => {
+      return [
+        ...prev,
+        ...newShifts.filter(
+          (shift) => JSON.stringify(prev).includes(shift._id) === false
+        ),
+      ]
+    })
+  }, [])
+  
   const fetchShifts = useCallback(
     async (date) => {
       if (!organization) return
@@ -100,11 +113,11 @@ export default function DashboardProvider({ children }) {
           ...prev,
           [stringifiedDate]: res.schedule.shifts,
         }))
-        setAllShifts((prev) => [...prev, ...res.schedule.shifts])
+        updateAllShifts(res.schedule.shifts)
       } else setFetchingShiftsError(true)
       setLoadingShifts(false)
     },
-    [organization?._id, weeksFetched]
+    [organization?._id, weeksFetched, updateAllShifts]
   )
 
   const fetchSnapshot = useCallback(async () => {
@@ -140,7 +153,8 @@ export default function DashboardProvider({ children }) {
         shiftsInCurrentWeek: listOfShiftsInCurrentWeek,
         weekRanges,
         jumpToWeek,
-        indexOfThePresentWeek
+        indexOfThePresentWeek,
+        updateAllShifts,
       }}
     >
       {children}

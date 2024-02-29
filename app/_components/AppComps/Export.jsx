@@ -1,7 +1,7 @@
-import CopySvg from "@/app/_assets/svgs/Copy"
-import React from "react"
+import CopySvg from "../../_assets/svgs/Copy"
+import Spinner from "../../_assets/svgs/Spinner"
 
-function Export({ isDuplicationAllowed = false }) {
+function Export({ duplicateWeek = () => {}, loading }) {
   return (
     <section>
       <div className="flex items-center justify-center ">
@@ -12,15 +12,24 @@ function Export({ isDuplicationAllowed = false }) {
           <p className="text-white px-2">Export</p>
         </button>
         <button
-          disabled={isDuplicationAllowed === false}
-          className="hidden md:flex items-center cursor-pointer justify-center disabled:opacity-[.5] disabled:border disabled:cursor-not-allowed rounded-md bg-[#091E420A] text-info-500 px-3 py-2"
+          onClick={duplicateWeek}
+          disabled={loading}
+          className="hidden md:flex gap-x-2 items-center cursor-pointer justify-center disabled:opacity-[.8] disabled:border disabled:cursor-not-allowed rounded-md bg-[#091E420A] text-info-500 px-3 py-2"
         >
-          <CopySvg />
-          <p className="px-2">Duplicate</p>
+          {loading ? (
+            <>
+              <Spinner /> Duplicating
+            </>
+          ) : (
+            <>
+              <CopySvg />
+              <span className="px-2">Duplicate</span>
+            </>
+          )}
         </button>
-        <div className="bg-gray-200 mx-2">
+        <button className="bg-gray-200 mx-2">
           <MoreSvg />
-        </div>
+        </button>
       </div>
     </section>
   )
