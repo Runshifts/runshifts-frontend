@@ -59,7 +59,7 @@ const SignupTable = () => {
               <input type="checkbox" className="form-checkbox" />
             </th>
             <th className="py-2 px-4 text-[#2252525] text-xs font-thin">
-              Employee
+              Employer
             </th>
             <th className="py-2 px-4 text-[#2252525] text-xs font-thin">
               Location
