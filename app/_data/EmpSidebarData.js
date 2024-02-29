@@ -9,7 +9,7 @@ import team from '../_assets/sidebarImg/team.svg'
 import report from '../_assets/sidebarImg/report.svg'
 
 
-export const SidebarData = [
+export const EmpSidebarData = [
     {
         title: 'Quick start guide',
         path: '#',
@@ -17,43 +17,32 @@ export const SidebarData = [
     },
     {
         title: 'Dashboard',
-        path: '/organization',
+        path: '/employee',
         icon: dashboard,
     },
     {
-        title: 'Schedule',
-        path: '/organization/schedule',
+        title: 'My Shifts',
+        path: '/employee/my-shifts',
         icon: earnings,
     },
     {
         title: 'Timesheet',
-        path: '/organization/timesheet',
+        path: '/employee/timesheet',
         icon: tracker,
     },
     {
-        title: 'Payroll',
-        path: '/organization/payroll',
+        title: 'Earning',
+        path: '/employee/earnings',
         icon: earnings,
     },
     {
         title: 'Tracker',
-        path: '/organization/tracker',
+        path: '/employee/tracker',
         icon: tracker,
     },
     {
-        title: 'Team',
-        path: '/organization/team',
-        icon: team,
-    },
-    {
         title: 'Logs',
-        path: '/organization/logs',
+        path: '/employee/logs',
         icon: bulb
     },
-    {
-        title: 'Reports',
-        path: '/organization/reports',
-        icon: report,
-    },
-
 ]

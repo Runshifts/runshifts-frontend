@@ -17,7 +17,7 @@ function Sidebar({ isOpen, onClose }) {
 
   return (
     <>
-      <section className="parent-container h-screen fixed">
+      <section className="parent-container h-screen ">
       <div className={`sidebar-container ${isOpen ? "hidden" : ""}`}>
 
           <button className="block close-btn md:hidden" onClick={onClose}>
@@ -62,12 +62,12 @@ function Sidebar({ isOpen, onClose }) {
                       {" "}
                       <Image src={item.icon} alt="icon" />{" "}
                     </span>
-                    <span className="px-3 text-center"> {item.title} </span>
+                    <span className="text-sm text-[#42526E] not-italic font-medium leading-10"> {item.title} </span>
                   </Link>
                 </div>
               );
             })}
-            <div className="text-sm text-center m-2 text-gray-500">
+            <div className="text-sm text-center mt-12 m-2 text-gray-500">
             <p>You&apos;re in a team management made easy.</p>
             <p>Learn more</p>
           </div>

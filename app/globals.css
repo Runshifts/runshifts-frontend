@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.custom-button {
+  @apply rounded-sm;
+  @apply bg-[#5BC62D] text-[#ffffff];
+  @apply px-4 py-2;
+  @apply text-center text-sm not-italic font-medium leading-5
+}
 
 .home-bg {
   background-image: url("/img/background.png");
@@ -74,7 +80,6 @@
   align-items: center;
 }
 
-/* Add your Tailwind CSS styles here or import your stylesheets */
 .sidebar {
   width: 250px;
   height: 100vh;

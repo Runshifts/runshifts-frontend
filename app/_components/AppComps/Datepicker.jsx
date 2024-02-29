@@ -2,10 +2,12 @@
 import { formatDate } from "../../_utils"
 import LeftChevron from "../../_assets/svgs/LeftChevron"
 import RightChevron from "../../_assets/svgs/RightChevron"
-import React from "react"
 
-const DateRangePicker = ({ currentWeek, goToNextWeek, goToPrevWeek }) => {
-
+const DateRangePicker = ({
+  currentWeek = { start: new Date(Date.now()), end: new Date(Date.now()) },
+  goToNextWeek = () => {},
+  goToPrevWeek = () => {},
+}) => {
   return (
     <div className="flex gap-[20px] text-info-700 text-[14px] leading-[16px] items-center">
       <button className="text-sm font-bold" onClick={goToPrevWeek}>
@@ -18,7 +20,7 @@ const DateRangePicker = ({ currentWeek, goToNextWeek, goToPrevWeek }) => {
         <RightChevron />
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default DateRangePicker
+export default DateRangePicker;
