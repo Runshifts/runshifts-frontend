@@ -5,9 +5,7 @@ import Table from "./Table"
 import Snapshot from "./Snapshot"
 import Wages from "./Wages"
 import Export from "../_components/AppComps/Export"
-import {
-  MobileFilter,
-} from "../_components/AppComps/FilterGroup"
+import { MobileFilter } from "../_components/AppComps/FilterGroup"
 import Heading from "../_components/Headings"
 import Calender from "./Calender"
 import { DashboardContext } from "../_providers/DashboardContext"
@@ -15,7 +13,7 @@ import { UserContext } from "../_providers/UserProvider"
 import { groupShiftsByDayOfTheWeek } from "../_utils/shifts"
 import useRenderShiftFilters from "../_hooks/useRenderShiftFilters"
 
-function Dashboard() {
+export default function Dashboard() {
   const {
     goToNextWeek,
     goToPrevWeek,
@@ -83,12 +81,10 @@ function Dashboard() {
         <h1 className="font-semibold text-lg text-info-700 mx-3 py-2">
           Today&apos;s schedule
         </h1>
-        <Table groupedShifts={tableGrouping} />
+        <Table title="Name" groupedShifts={tableGrouping} />
       </div>
       <Snapshot snapshotData={todaysSnapshot} />
       <Wages snapshotData={todaysSnapshot} />
     </section>
   )
 }
-
-export default Dashboard
