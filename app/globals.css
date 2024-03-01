@@ -5,7 +5,7 @@
 .custom-button {
   @apply rounded-sm;
   @apply bg-[#5BC62D] text-[#ffffff];
-  @apply px-4 py-2;
+  @apply px-2 py-1;
   @apply text-center text-sm not-italic font-medium leading-5
 }
 
