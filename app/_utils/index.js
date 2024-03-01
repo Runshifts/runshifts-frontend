@@ -1,9 +1,23 @@
 export const throwInvalidDateError = (date) => {
-  if (date.toString() === "Invalid Date") throw new Error("Invalid Date!")
+  if (!date || date.toString() === "Invalid Date") throw new Error("Invalid Date!")
+}
+
+export const getDateOrdinal = (date) => {
+  const last = +String(date).slice(-2)
+  if (last > 3 && last < 21) return "th"
+  const remainder = last % 10
+  if (remainder === 1) return "st"
+  if (remainder === 2) return "nd"
+  if (remainder === 3) return "rd"
+  return "th"
+}
+
+export const getAmOrPm = (hour) => {
+  return hour < 12 ? "am" : "pm"
 }
 
 export const formatHourAsAmOrPm = (hour) => {
-  return `${hour % 12 || 12}${hour < 12 ? "am" : "pm"}`
+  return `${hour % 12 || 12}${getAmOrPm(hour)}`
 }
 
 export const formatDate = (date, options = {}) => {
@@ -45,6 +59,8 @@ export const getPastWeekRanges = (numberOfWeeksToGenerate, startDate) => {
       start: getPreviousMonday(newD),
       end: getNextSunday(newD),
     }
+    range.start.setHours(0, 0, 0, 0)
+    range.end.setHours(23, 59, 59)
     const lastPushedRange = ranges[ranges.length - 1]
     if (
       !lastPushedRange ||
@@ -55,7 +71,6 @@ export const getPastWeekRanges = (numberOfWeeksToGenerate, startDate) => {
 
     if (dateMarker <= 0) {
       if (currentDate.getMonth() === 0) {
-        console.log(currentDate)
         currentDate.setFullYear(currentDate.getFullYear() - 1, 11, 28)
         dateMarker = currentDate.getDate() + currentDate.getDay()
       } else {
@@ -105,4 +120,8 @@ export const getFutureWeekRanges = (numberOfWeeksToGenerate, startDate) => {
     numberOfDays = numberOfDays - 7
   }
   return ranges
+}
+
+export function randomIntFromInterval(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }

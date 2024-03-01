@@ -2,7 +2,7 @@
 
 export const groupShiftsByAssignee = (shifts = []) => {
   const res = shifts.reduce((acc, current) => {
-    const assigneeId = current.assignee._id
+    const assigneeId = current.assignee?._id || Math.random()
     if (acc[assigneeId]) acc[assigneeId] = [...acc[assigneeId], current]
     else acc[assigneeId] = [current]
     return acc

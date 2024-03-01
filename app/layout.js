@@ -2,6 +2,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import GoogleOAuthProvider from "./_providers/GoogleAuth"
 import LoadingProvider from "./_providers/LoadingProvider"
+import { Toaster } from "react-hot-toast"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
         <GoogleOAuthProvider>
           <LoadingProvider>{children}</LoadingProvider>
         </GoogleOAuthProvider>
+        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   )
