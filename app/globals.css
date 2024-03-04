@@ -9,6 +9,10 @@
   @apply text-center text-sm not-italic font-medium leading-5
 }
 
+.custom-h1 {
+  @apply text-[#292D32] mb-4 mt-2 text-xl not-italic font-medium leading-7 md:text-2xl;
+}
+
 .home-bg {
   background-image: url("/img/background.png");
   background-repeat: no-repeat;

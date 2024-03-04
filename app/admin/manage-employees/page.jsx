@@ -8,7 +8,7 @@ function page() {
   return (
     <section className="p-6 h-screen">
       <div className="flex items-center justify-between">
-        <h1 className="text-[#292D32] mb-4 mt-2 text-xl not-italic font-medium leading-7 md:text-2xl ">
+        <h1 className="custom-h1 ">
           Manage Employees
         </h1>
 
