@@ -52,90 +52,100 @@ const SignupTable = () => {
         Recent Signups
       </h1>
 
-      <table className="min-w-full bg-gray-50 ">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="py-2 px-4">
-              <input type="checkbox" className="form-checkbox" />
-            </th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">
-              Employer
-            </th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">
-              Location
-            </th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">
-              Next Due
-            </th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">
-              Status
-            </th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin">
-              Actions
-            </th>
-            <th className="py-2 px-4 text-[#2252525] text-xs font-thin"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {employeeData.map((employee, rowIndex) => (
-            <tr key={rowIndex}  className="my-5 rounded-3xl">
-              <td className="py-2 px-4">
-                <input type="checkbox" className="form-checkbox" />
-              </td>
-              <td className="py-1 px-4 text-[#1D2433] flex text-sm not-italic font-normal leading-5">
-                <Image
-                  src={employee.image}
-                  alt={`avatar-${employee.name}`}
-                  height={24}
-                  width={24}
-                  className="pr-2 rounded-full"
-                />
-                {employee.name}
-              </td>
-              <td className="py-1 px-4 text-sm not-italic font-normal leading-5">
-                {employee.location}
-              </td>
-              <td className="py-1 px-4 text-sm not-italic font-normal leading-5">
-                {employee.nextDue}
-              </td>
+      <div className="bg-[#F1F3F9] rounded-t-md my-2 grid grid-cols-6 gap-2">
+        <div className="flex items-center justify-between py-2 px-4 text-[#2252525] text-xs font-thin">
+          
+          <div className=" py-2 px-4">
+          <input type="checkbox" className="form-checkbox " />
+          </div>
+          Employer
+        </div>
+        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
+          Location
+        </div>
+        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
+          Next Due
+        </div>
+        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
+          Status
+        </div>
+        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
+          Actions
+        </div>
+        <div className="py-2 px-4 text-[#2252525] text-xs font-thin"></div>
+      </div>
 
-              <td>
-                <div
-                  className={`text-center px-1 rounded-full m-1 text-sm not-italic font-normal w-fit ${getStatusColorClass(
-                    employee.status
-                  )}`}
-                >
-                  {employee.status}
+      {employeeData.map((employee, rowIndex) => (
+        <div
+          key={rowIndex}
+          className="grid grid-cols-5 bg-white shadow-xl rounded my-2 p-1"
+        >
+         
+
+          <div className=" flex items-center justify-center">
+            <input type="checkbox" className="form-checkbox mr-4" />
+            <Image
+              src={employee.image}
+              alt={`avatar-${employee.name}`}
+              height={24}
+              width={24}
+              className="rounded-full"
+            />
+            <div className="text-[#1D2433]  text-sm mx-2">
+              {employee.name}
+            </div>
+          </div>
+
+
+          <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
+            {employee.location}
+          </div>
+
+          <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
+            {employee.nextDue}
+          </div>
+          
+          <div>
+            <div
+              className={`text-center px-1 rounded-full m-1 text-sm not-italic font-normal w-fit ${getStatusColorClass(
+                employee.status
+              )}`}
+            >
+              {employee.status}
+            </div>
+          </div>
+
+          <div className=" flex space-x-1">
+          <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
+            <button className="bg-[#5BC62D] rounded text-white py-[8px] px-[10px]">
+              <div className="flex items-center">
+                <PenSvg />
+                <p className="ml-2">Edit</p>
+              </div>
+            </button>
+          </div>
+          <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
+            <button className="rounded text-[#B22A09] py-[8px] px-[10px]">
+              <div className="flex items-center">
+                <div className="h-[20px] w-[20px] ">
+                  <DeleteSvg />
                 </div>
-              </td>
-              <td className="py-1 px-4 text-sm not-italic font-normal leading-5">
-                <button className="bg-[#5BC62D] rounded text-white py-[8px] px-[10px]">
-                  <div className="flex items-center">
-                    <PenSvg />
-                    <p className="ml-2">Edit</p>
-                  </div>
-                </button>
-              </td>
-              <td className="py-1 px-4 text-sm not-italic font-normal leading-5">
-                <button className="rounded text-[#B22A09] py-[8px] px-[10px]">
-                  <div className="flex items-center">
-                    <div className="h-[20px] w-[20px] ">
-                      <DeleteSvg />
-                    </div>
+                <p className="ml-2">Request removal</p>
+              </div>
+            </button>
+          </div>
+          </div>
 
-                    <p className="ml-2">Request removal</p>
-                  </div>
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+         
+        </div>
+      ))}
     </div>
   );
 };
 
 export default SignupTable;
+
+// ... (PenSvg and DeleteSvg components remain unchanged)
 
 function PenSvg() {
   return (
