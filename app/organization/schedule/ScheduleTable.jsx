@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from "react"
+import React, { Fragment, useCallback, useMemo, useState } from "react"
 import AddShift from "./AddShiftBtn"
 import Image from "next/image"
 import { UsersFilter } from "../../_components/AppComps/FilterGroup"
@@ -8,6 +8,7 @@ import CopySvg from "../../_assets/svgs/Copy"
 import ScheduleTableLoadingSkeleton, {
   ScheduleTableFillers,
 } from "../../_components/Skeletons/ScheduleTableSkeleton"
+import Spinner from "../../_assets/svgs/Spinner"
 
 const ScheduleTable = ({
   employees = [],
@@ -45,7 +46,9 @@ const ScheduleTable = ({
                 <DayOfTheWeekTableHead
                   key={idx}
                   className={`${
-                    idx === allDays.length - 1 ? "" : "border-r border-r-info-800"
+                    idx === allDays.length - 1
+                      ? ""
+                      : "border-r border-r-info-800"
                   }`}
                   date={date}
                 />
@@ -100,7 +103,7 @@ function AssigneeRow({
   assignee = {},
   shiftsGroupedByDays = {},
   showAddShiftModal = () => {},
-  duplicateShift = () => {},
+  duplicateShift = async () => {},
   isPastWeek,
 }) {
   const shifts = useMemo(() => {
@@ -146,7 +149,7 @@ function AssigneeRow({
               isPastWeek={isPastWeek}
             />
           </Fragment>
-          {!assigneeShifts.length  && isPastWeek && (
+          {!assigneeShifts.length && isPastWeek && (
             <AddShift
               onClick={() =>
                 showAddShiftModal({
@@ -171,38 +174,57 @@ function AssigneeShiftsMapping({
   return (
     <>
       {shifts.map((item, idx) => (
-        <Fragment key={item?._id || idx}>
-          <div
-            style={{ backgroundColor: assignee.color }}
-            className="flex mx-auto gap-[4px] my-[10px] items-center w-max justify-center p-[4px] rounded-full "
-          >
-            <Image
-              className="rounded-full"
-              height={24}
-              width={24}
-              src={assignee.profileImage?.secure_url || placeholderImage}
-              alt="avatar"
-            />
-            {formatHourAsAmOrPm(new Date(item.startTime).getHours())}-
-            {formatHourAsAmOrPm(new Date(item.endTime).getHours())}
-            {isPastWeek && (
-              <button
-                name="duplicate shift"
-                onClick={() => {
-                  duplicateShift({
-                    assignee: assignee,
-                    shiftId: item._id,
-                  })
-                }}
-                className="flex items-center justify-center"
-              >
-                <CopySvg />
-              </button>
-            )}
-          </div>
-        </Fragment>
+        <Shift
+          key={item?._id || idx}
+          isPastWeek={isPastWeek}
+          shift={item}
+          duplicateShift={duplicateShift}
+          assignee={assignee}
+        />
       ))}
     </>
+  )
+}
+
+function Shift({
+  assignee = {},
+  duplicateShift = async () => {},
+  shift = {},
+  isPastWeek,
+}) {
+  const [isDuplicating, setIsDuplicating] = useState(false)
+
+  const onDuplicateClick = useCallback(async () => {
+    if (isDuplicating) return
+    setIsDuplicating(true)
+    await duplicateShift(shift?._id)
+    setIsDuplicating(false)
+  }, [duplicateShift, shift?._id, isDuplicating])
+  return (
+    <Fragment>
+      <div
+        style={{ backgroundColor: assignee.color }}
+        className="flex mx-auto gap-[4px] my-[10px] items-center w-max justify-center p-[4px] rounded-full "
+      >
+        <Image
+          className="rounded-full"
+          height={24}
+          width={24}
+          src={assignee.profileImage?.secure_url || placeholderImage}
+          alt="avatar"
+        />
+        {formatHourAsAmOrPm(new Date(shift.startTime).getHours())}-
+        {formatHourAsAmOrPm(new Date(shift.endTime).getHours())}
+        <button
+          disabled={isDuplicating}
+          name="duplicate shift"
+          onClick={onDuplicateClick}
+          className="flex items-center justify-center text-info-600"
+        >
+          {isDuplicating ? <Spinner /> : <CopySvg />}
+        </button>
+      </div>
+    </Fragment>
   )
 }
 

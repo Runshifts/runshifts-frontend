@@ -2,7 +2,6 @@
 import React, {
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from "react"
@@ -52,10 +51,11 @@ function Schedule() {
     updateAllShifts,
   } = useContext(DashboardContext)
 
-  const { duplicateWeek, inProgress } = useHandleShiftDuplication({
-    week: currentWeek,
-    updateShifts: updateAllShifts,
-  })
+  const { duplicateWeek, inProgress, duplicateSingleShift } =
+    useHandleShiftDuplication({
+      week: currentWeek,
+      updateShifts: updateAllShifts,
+    })
 
   const presentWeek = useMemo(
     () => ({
@@ -147,7 +147,9 @@ function Schedule() {
           showAddShiftModal={(dayOfTheWeek) =>
             handleAddShiftClick(dayOfTheWeek)
           }
-          duplicateShift={() => {}}
+          duplicateShift={async (shiftId) => {
+            await duplicateSingleShift(organization?._id, shiftId)
+          }}
         />
       </div>
       <div className="text-[#252525] min-h-[55dvh] flex flex-col items-start gap-y-[30px] my-4 p-4 shadow-[0px 2px 8px 0px rgba(0, 0, 0, 0.12)] bg-white rounded-lg shadow-xl">
