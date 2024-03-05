@@ -12,7 +12,6 @@ export default function DropDown({ dropdownContent, dropDownTrigger, styleTrigge
         e.stopPropagation()
         setShowDropDown((prev) => !prev)
       }}
-      onFocus={() => setShowDropDown(true)}
       className="relative"
     >
       {typeof dropDownTrigger === "function"

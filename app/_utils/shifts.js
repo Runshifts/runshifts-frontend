@@ -22,7 +22,8 @@ export const groupShiftsByHours = (shifts = []) => {
 
 export const groupShiftsByDayOfTheWeek = (shifts = []) => {
   return shifts.reduce((acc, curr) => {
-    const currentDay = new Date(curr.startTime).getDay()
+    let currentDay = new Date(curr.startTime).getDay()
+    if(currentDay === 0) currentDay = 7
     if (acc[currentDay]) acc[currentDay] = [...acc[currentDay], curr]
     else acc[currentDay] = [curr]
     return acc

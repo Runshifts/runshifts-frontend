@@ -17,24 +17,24 @@ export const DashboardContext = createContext({
   allShifts: [],
   todaysSnapshot: {},
   organization: null,
-  fetchOrganization: () => {},
-  fetchShifts: () => {},
+  fetchOrganization: () => { },
+  fetchShifts: () => { },
   todaysShifts: [],
   todaysSnapshot: {},
-  fetchShifts: () => {},
-  goToNextWeek: () => {},
-  goToPrevWeek: () => {},
+  fetchShifts: () => { },
+  goToNextWeek: () => { },
+  goToPrevWeek: () => { },
   currentWeek: {},
-  todaysSnapshot: () => {},
-  todaysShifts: () => {},
-  loadingShifts: () => {},
-  fetchingShiftsError: () => {},
+  todaysSnapshot: () => { },
+  todaysShifts: () => { },
+  loadingShifts: () => { },
+  fetchingShiftsError: () => { },
   tableGrouping: {},
   shiftsInCurrentWeek: [],
-  weekRanges: () => {},
-  jumpToWeek: () => {},
+  weekRanges: () => { },
+  jumpToWeek: () => { },
   indexOfThePresentWeek: 0,
-  updateAllShifts: () => {},
+  updateAllShifts: () => { },
 })
 
 export default function DashboardProvider({ children }) {
@@ -79,12 +79,14 @@ export default function DashboardProvider({ children }) {
   }, [todaysShifts])
 
   const listOfShiftsInCurrentWeek = useMemo(() => {
-    return allShifts.filter((shift) => {
-      return (
-        new Date(shift.startTime).getTime() >= currentWeek.start.getTime() &&
-        new Date(shift.startTime).getTime() <= currentWeek.end.getTime()
-      )
-    })
+    return allShifts
+      .filter((shift) => {
+        return (
+          new Date(shift.startTime).getTime() >= currentWeek.start.getTime() &&
+          (new Date(shift.startTime).getTime() <= currentWeek.end.getTime() ||
+           new Date(shift.startTime).toDateString() === currentWeek.end.toDateString())
+        )
+      })
   }, [allShifts, currentWeek.end, currentWeek.start])
 
   const updateAllShifts = useCallback((newShifts = []) => {
@@ -97,7 +99,7 @@ export default function DashboardProvider({ children }) {
       ]
     })
   }, [])
-  
+
   const fetchShifts = useCallback(
     async (date) => {
       if (!organization) return

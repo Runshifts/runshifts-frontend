@@ -21,7 +21,7 @@ const ScheduleTable = ({
   handleUserFilterSelect,
   selectedUser,
 }) => {
-  const daysOfTheWeek = Array.from({ length: 7 }, (_, index) => index + 8)
+  const daysOfTheWeek = Array.from({ length: 7 }, (_, index) => index + 1)
   const assigneesAndShifts = useMemo(() => {
     return Object.values(shiftsGroupedByAssignees)
   }, [shiftsGroupedByAssignees])
@@ -45,11 +45,10 @@ const ScheduleTable = ({
               {allDays.map((date, idx) => (
                 <DayOfTheWeekTableHead
                   key={idx}
-                  className={`${
-                    idx === allDays.length - 1
-                      ? ""
-                      : "border-r border-r-info-800"
-                  }`}
+                  className={`${idx === allDays.length - 1
+                    ? ""
+                    : "border-r border-r-info-800"
+                    }`}
                   date={date}
                 />
               ))}
@@ -71,20 +70,21 @@ const ScheduleTable = ({
                 ></td>
               ))}
             </tr>
-            {loading && (
-              <ScheduleTableLoadingSkeleton columns={daysOfTheWeek} />
-            )}
             {assigneesAndShifts.map((current, idx) => (
               <AssigneeRow
                 showAddShiftModal={showAddShiftModal}
                 duplicateShift={duplicateShift}
                 key={current.assignee?._id || idx}
                 allDays={allDays}
+                daysOfTheWeek={daysOfTheWeek}
                 assignee={current.assignee}
                 shiftsGroupedByDays={current.shifts}
                 isPastWeek={isPastWeek}
               />
             ))}
+            {loading && (
+              <ScheduleTableLoadingSkeleton columns={daysOfTheWeek} />
+            )}
             <ScheduleTableFillers
               allDays={allDays}
               show={
@@ -102,20 +102,12 @@ const ScheduleTable = ({
 function AssigneeRow({
   assignee = {},
   shiftsGroupedByDays = {},
-  showAddShiftModal = () => {},
-  duplicateShift = async () => {},
+  showAddShiftModal = () => { },
+  duplicateShift = async () => { },
   isPastWeek,
+  daysOfTheWeek,
+  allDays
 }) {
-  const shifts = useMemo(() => {
-    const shiftsModified = { ...shiftsGroupedByDays }
-    let day = 1
-    while (day <= 7) {
-      if (!shiftsModified[day]) shiftsModified[day] = []
-      day++
-    }
-    return Object.values(shiftsModified).map((val = []) => val)
-  }, [shiftsGroupedByDays])
-
   const assigneeModified = useMemo(
     () => ({
       ...assignee,
@@ -129,13 +121,16 @@ function AssigneeRow({
     [assignee]
   )
 
+  const shouldShowAddShiftButton = useCallback((day) => {
+    return (!shiftsGroupedByDays[day] || shiftsGroupedByDays[day].length === 0) && allDays[day - 1].getTime() >= Date.now() && isPastWeek === false ? true : false
+  }, [allDays, isPastWeek, shiftsGroupedByDays])
+
   return (
     <tr className="border-b border-b-gray-800 h-[52px] sticky z-1">
       <td className="p-[10px] left-0 bg-[#EFEDED] border-r-solid border-r border-r-gray-800">
         <AssigneePill assignee={assigneeModified} />
       </td>
-
-      {shifts.map((assigneeShifts, listIdx, all) => (
+      {daysOfTheWeek.map((day, listIdx, all) => (
         <td
           key={listIdx}
           className="border-x border-t border-gray-800"
@@ -145,15 +140,15 @@ function AssigneeRow({
             <AssigneeShiftsMapping
               assignee={assigneeModified}
               duplicateShift={duplicateShift}
-              shifts={assigneeShifts}
+              shifts={shiftsGroupedByDays[day] || []}
               isPastWeek={isPastWeek}
             />
           </Fragment>
-          {!assigneeShifts.length && isPastWeek && (
+          {shouldShowAddShiftButton(day) && (
             <AddShift
               onClick={() =>
                 showAddShiftModal({
-                  dayOfTheWeek: listIdx === 6 ? 0 : listIdx + 1,
+                  dayOfTheWeek: listIdx,
                   assignee: assigneeModified,
                 })
               }
@@ -167,16 +162,14 @@ function AssigneeRow({
 
 function AssigneeShiftsMapping({
   assignee = {},
-  duplicateShift = () => {},
+  duplicateShift = () => { },
   shifts = [],
-  isPastWeek,
 }) {
   return (
     <>
       {shifts.map((item, idx) => (
         <Shift
           key={item?._id || idx}
-          isPastWeek={isPastWeek}
           shift={item}
           duplicateShift={duplicateShift}
           assignee={assignee}
@@ -188,9 +181,8 @@ function AssigneeShiftsMapping({
 
 function Shift({
   assignee = {},
-  duplicateShift = async () => {},
+  duplicateShift = async () => { },
   shift = {},
-  isPastWeek,
 }) {
   const [isDuplicating, setIsDuplicating] = useState(false)
 

@@ -3,6 +3,10 @@ export const throwInvalidDateError = (date) => {
     throw new Error("Invalid Date!")
 }
 
+export const randomIntFromInterval = function (min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 export const getDateOrdinal = (date) => {
   const last = +String(date).slice(-2)
   if (last > 3 && last < 21) return "th"
@@ -28,6 +32,24 @@ export const formatDate = (date, options = {}) => {
     ...options,
   })
 }
+
+export function formatNumberToTwoDigitsMinimum(number) {
+  return number.toLocaleString(undefined, {
+    minimumIntegerDigits: 2,
+    useGrouping: false
+  })
+}
+
+export function msToHourMinSecond(ms) {
+  const roundAndFormat = num => formatNumberToTwoDigitsMinimum(Math.round(num))
+  let seconds = ms / 1000;
+  let hours = parseInt(seconds / 3600);
+  seconds = seconds % 3600;
+  let minutes = parseInt(seconds / 60);
+  seconds = seconds % 60;
+  return hours ? roundAndFormat(hours) + ":" : "" + roundAndFormat(minutes) + ":" + roundAndFormat(seconds)
+}
+
 
 export const getPreviousMonday = (date) => {
   let prevMonday = new Date(date)

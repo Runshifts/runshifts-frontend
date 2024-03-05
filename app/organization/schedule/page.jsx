@@ -1,10 +1,5 @@
 "use client"
-import React, {
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react"
+import React, { useCallback, useContext, useMemo, useState } from "react"
 import Export from "../../_components/AppComps/Export"
 import ScheduleTable from "./ScheduleTable"
 import ShiftAndOvertimeRequestsProvider, {
@@ -23,15 +18,11 @@ import DateRangePicker from "../../_components/AppComps/Datepicker"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import Modal from "../../_components/AppComps/Modal"
-import NewShiftForm from "./NewShiftForm"
+import NewShiftForm from "./NewShiftForm/NewShiftForm"
 import useHandleShiftDuplication from "../../_hooks/useHandleShiftDuplication"
 
 function Schedule() {
   const [newShiftDetails, setNewShiftDetails] = useState(null)
-
-  const handleAddShiftClick = useCallback((dayOfTheWeek) => {
-    setNewShiftDetails({})
-  }, [])
 
   const [selectedUser, setSelectedUser] = useState(null)
   const { shiftRequests, overtimeRequests, loadingShiftRequests } = useContext(
@@ -57,18 +48,30 @@ function Schedule() {
       updateShifts: updateAllShifts,
     })
 
-  const presentWeek = useMemo(
+  const handleAddShiftClick = useCallback(
+    ({ dayOfTheWeek, assignee }) => {
+      const shiftDate = new Date(currentWeek.start)
+      shiftDate.setDate(shiftDate.getDate() + dayOfTheWeek)
+      setNewShiftDetails({
+        assignee,
+        shiftDate,
+      })
+    },
+    [currentWeek.start]
+  )
+
+  const weekWithPresentDateInIt = useMemo(
     () => ({
       ...(weekRanges[indexOfThePresentWeek] || {
         start: getPreviousMonday(new Date(Date.now())),
         end: getNextSunday(new Date(Date.now())),
       }),
     }),
-    [indexOfThePresentWeek]
+    [indexOfThePresentWeek, weekRanges]
   )
   const isPastWeek = useMemo(() => {
-    return currentWeek.start.getTime() >= presentWeek.start.getTime()
-  }, [presentWeek.start, currentWeek.start])
+    return currentWeek.start.getTime() < weekWithPresentDateInIt.start.getTime()
+  }, [weekWithPresentDateInIt.start, currentWeek.start])
 
   const { filteredShifts, renderShiftFilters, setWeekFilter } =
     useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
@@ -106,7 +109,11 @@ function Schedule() {
   return (
     <section className="p-3 h-screen">
       <Modal open={newShiftDetails !== null}>
-        <NewShiftForm onCancel={() => setNewShiftDetails(null)} />
+        <NewShiftForm
+          newShiftDetails={newShiftDetails}
+          onCancel={() => setNewShiftDetails(null)}
+          handleNewShift={(newShift) => { updateAllShifts([newShift]) }}
+        />
       </Modal>
       <div className="flex items-start flex-col gap-6 pt-6 pb-4">
         <div className="flex items-center justify-between w-full">
@@ -144,9 +151,7 @@ function Schedule() {
           loading={loadingShifts}
           shiftsGroupedByAssignees={shiftsGroupedByAssigneesIntoDays}
           allDays={allDays}
-          showAddShiftModal={(dayOfTheWeek) =>
-            handleAddShiftClick(dayOfTheWeek)
-          }
+          showAddShiftModal={handleAddShiftClick}
           duplicateShift={async (shiftId) => {
             await duplicateSingleShift(organization?._id, shiftId)
           }}
