@@ -74,11 +74,13 @@ export function OvertimeRequest({ overtimeRequest = {} }) {
 
       <p className="text-info-500 bg-white font-bold text-[14px] leading-[145%]"></p>
 
-      {isStillValid ? (
-        <AcceptAndRejectButtons accept={() => {}} reject={() => {}} />
+      {isStillValid && !overtimeRequest.isAccepted && !overtimeRequest.isRejected ? (
+        <AcceptAndRejectButtons requestId={overtimeRequest._id} requestType={"overtimes"} />
       ) : (
         <span className="opacity-30">Expired</span>
       )}
+      {!isStillValid && overtimeRequest.isAccepted && <span className="opacity-30">Accepted</span>}
+      {!isStillValid && overtimeRequest.isRejected && <span className="opacity-30">Rejected</span>}
     </article>
   )
 }

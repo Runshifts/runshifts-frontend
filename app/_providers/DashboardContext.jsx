@@ -35,6 +35,7 @@ export const DashboardContext = createContext({
   jumpToWeek: () => { },
   indexOfThePresentWeek: 0,
   updateAllShifts: () => { },
+  handleUpdateSingleShift: () => { },
 })
 
 export default function DashboardProvider({ children }) {
@@ -84,7 +85,7 @@ export default function DashboardProvider({ children }) {
         return (
           new Date(shift.startTime).getTime() >= currentWeek.start.getTime() &&
           (new Date(shift.startTime).getTime() <= currentWeek.end.getTime() ||
-           new Date(shift.startTime).toDateString() === currentWeek.end.toDateString())
+            new Date(shift.startTime).toDateString() === currentWeek.end.toDateString())
         )
       })
   }, [allShifts, currentWeek.end, currentWeek.start])
@@ -99,6 +100,14 @@ export default function DashboardProvider({ children }) {
       ]
     })
   }, [])
+
+  const handleUpdateSingleShift = useCallback((update) => {
+    setAllShifts((prev) => {
+      return prev.map((shift) => shift._id !== update._id ? shift : update)
+    })
+  }, [])
+
+
 
   const fetchShifts = useCallback(
     async (date) => {
@@ -157,6 +166,7 @@ export default function DashboardProvider({ children }) {
         jumpToWeek,
         indexOfThePresentWeek,
         updateAllShifts,
+        handleUpdateSingleShift
       }}
     >
       {children}

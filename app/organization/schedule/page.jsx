@@ -2,7 +2,7 @@
 import React, { useCallback, useContext, useMemo, useState } from "react"
 import Export from "../../_components/AppComps/Export"
 import ScheduleTable from "./ScheduleTable"
-import ShiftAndOvertimeRequestsProvider, {
+import {
   ShiftAndOvertimeRequestsContext,
 } from "../../_providers/ShiftAndOvertimeRequestsProvider"
 import Heading from "../../_components/Headings"
@@ -21,7 +21,7 @@ import Modal from "../../_components/AppComps/Modal"
 import NewShiftForm from "./NewShiftForm/NewShiftForm"
 import useHandleShiftDuplication from "../../_hooks/useHandleShiftDuplication"
 
-function Schedule() {
+export default function Schedule() {
   const [newShiftDetails, setNewShiftDetails] = useState(null)
 
   const [selectedUser, setSelectedUser] = useState(null)
@@ -168,13 +168,5 @@ function Schedule() {
         />
       </div>
     </section>
-  )
-}
-
-export default function ProviderWrapper() {
-  return (
-    <ShiftAndOvertimeRequestsProvider>
-      <Schedule />
-    </ShiftAndOvertimeRequestsProvider>
   )
 }

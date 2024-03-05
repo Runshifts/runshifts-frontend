@@ -4,7 +4,6 @@ import { throwInvalidDateError } from "../_utils"
 
 export default function useCountdown(deadline) {
   throwInvalidDateError(deadline)
-  // Time is in seconds
   const [time, setTime] = useState(() =>
     Math.max(0, Math.floor((deadline.getTime() - Date.now()) / 1000))
   )
@@ -17,7 +16,9 @@ export default function useCountdown(deadline) {
 
   useEffect(() => {
     const id = setInterval(decrement, 1000)
-    return () => clearInterval(id)
+    return () => {
+      clearInterval(id)
+    }
   }, [decrement])
 
   const format = (num) => {
