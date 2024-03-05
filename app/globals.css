@@ -5,8 +5,12 @@
 .custom-button {
   @apply rounded-sm;
   @apply bg-[#5BC62D] text-[#ffffff];
-  @apply px-4 py-2;
+  @apply px-2 py-1;
   @apply text-center text-sm not-italic font-medium leading-5
+}
+
+.custom-h1 {
+  @apply text-[#292D32] mb-4 mt-2 text-xl not-italic font-medium leading-7 md:text-2xl;
 }
 
 .home-bg {

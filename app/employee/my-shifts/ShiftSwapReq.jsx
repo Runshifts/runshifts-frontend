@@ -13,7 +13,7 @@ function ShiftSwapReq() {
           Incoming Requests
         </p>
         <p className="text-sm not-italic font-semibold leading-5 text-[#36322F] mx-3 py-2">
-          Incoming Requests
+          Sent Requests
         </p>
       </div>
 
