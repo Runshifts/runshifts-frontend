@@ -127,7 +127,7 @@ function AssigneeRow({
 
   return (
     <tr className="border-b border-b-gray-800 h-[52px] sticky z-1">
-      <td className="p-[10px] left-0 bg-[#EFEDED] border-r-solid border-r border-r-gray-800">
+      <td className="p-[10px] sticky left-0 bg-[#EFEDED] outline-solid outline outline-gray-800/50">
         <AssigneePill assignee={assigneeModified} />
       </td>
       {daysOfTheWeek.map((day, listIdx, all) => (

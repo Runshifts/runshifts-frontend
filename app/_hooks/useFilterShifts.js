@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react"
+import { filterShiftsByWeek } from "../_utils/shifts"
 
 export default function useFilterShifts(shifts = []) {
   const [locationFilter, setLocationFilter] = useState(null)
@@ -7,7 +8,7 @@ export default function useFilterShifts(shifts = []) {
   const [roleFilter, setRoleFilter] = useState(null)
 
   const filteredShifts = useMemo(() => {
-    return shifts.filter((shift) => {
+    const filtered = shifts.filter((shift) => {
       return (
         (!locationFilter || shift.location?._id === locationFilter) &&
         (!departmentFilter ||
@@ -15,14 +16,11 @@ export default function useFilterShifts(shifts = []) {
             departmentFilter.toLowerCase()) &&
         (!roleFilter ||
           shift.assignee?.role?.name?.toLowerCase() ===
-            roleFilter.toLowerCase()) &&
-        (!weekFilter ||
-          (new Date(shift.startTime).getTime() >=
-            new Date(weekFilter.start).getTime() &&
-            new Date(shift.startTime).getTime() <=
-              new Date(weekFilter.end).getTime()))
+            roleFilter.toLowerCase())
       )
     })
+    if (weekFilter) return filterShiftsByWeek(filtered, weekFilter)
+    return filtered
   }, [shifts, departmentFilter, roleFilter, locationFilter, weekFilter])
 
   return {

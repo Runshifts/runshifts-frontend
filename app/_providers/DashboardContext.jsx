@@ -11,6 +11,7 @@ import useAxios from "../_hooks/useAxios"
 import DASHBOARD_URLS from "../_urls/dashboardURLs"
 import useGetWeekRanges from "../_hooks/useGetWeekRanges"
 import {
+  filterShiftsByWeek,
   groupShiftsByAssignee,
   groupShiftsByHoursWithDateKey,
 } from "../_utils/shifts"
@@ -20,25 +21,25 @@ export const DashboardContext = createContext({
   allShifts: [],
   todaysSnapshot: {},
   organization: null,
-  fetchOrganization: () => { },
-  fetchShifts: () => { },
+  fetchOrganization: () => {},
+  fetchShifts: () => {},
   todaysShifts: [],
   todaysSnapshot: {},
-  fetchShifts: () => { },
-  goToNextWeek: () => { },
-  goToPrevWeek: () => { },
+  fetchShifts: () => {},
+  goToNextWeek: () => {},
+  goToPrevWeek: () => {},
   currentWeek: {},
-  todaysSnapshot: () => { },
-  todaysShifts: () => { },
-  loadingShifts: () => { },
-  fetchingShiftsError: () => { },
+  todaysSnapshot: () => {},
+  todaysShifts: () => {},
+  loadingShifts: () => {},
+  fetchingShiftsError: () => {},
   tableGrouping: {},
   shiftsInCurrentWeek: [],
-  weekRanges: () => { },
-  jumpToWeek: () => { },
+  weekRanges: () => {},
+  jumpToWeek: () => {},
   indexOfThePresentWeek: 0,
-  updateAllShifts: () => { },
-  handleUpdateSingleShift: () => { },
+  updateAllShifts: () => {},
+  handleUpdateSingleShift: () => {},
 })
 
 export default function DashboardProvider({ children }) {
@@ -94,16 +95,19 @@ export default function DashboardProvider({ children }) {
     return groupingByAssignees
   }, [todaysShifts])
 
+  console.log(currentWeek)
   const listOfShiftsInCurrentWeek = useMemo(() => {
-    return allShifts.filter((shift) => {
-      return (
-        new Date(shift.startTime).getTime() >= currentWeek.start.getTime() &&
-        (new Date(shift.startTime).getTime() <= currentWeek.end.getTime() ||
-          new Date(shift.startTime).toDateString() ===
-          currentWeek.end.toDateString())
-      )
-    })
-  }, [allShifts, currentWeek.end, currentWeek.start])
+    return filterShiftsByWeek(allShifts, currentWeek)
+    // allShifts.filter((shift) => {
+    //   return (
+    //     new Date(shift.startTime).getTime() >= currentWeek.start.getTime() &&
+    //     (new Date(shift.startTime).getTime() <= currentWeek.end.getTime() ||
+    //       new Date(shift.startTime).toDateString() ===
+    //         currentWeek.end.toDateString())
+    //   )
+    // })
+  }, [allShifts, currentWeek])
+  // }, [allShifts, currentWeek.end, currentWeek.start])
 
   const updateAllShifts = useCallback((newShifts = []) => {
     setAllShifts((prev) => {

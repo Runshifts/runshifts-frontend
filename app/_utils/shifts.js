@@ -29,3 +29,14 @@ export const groupShiftsByDayOfTheWeek = (shifts = []) => {
     return acc
   }, {})
 }
+
+export const filterShiftsByWeek = (shifts, week) => {
+  return shifts.filter((shift) => {
+    return (
+      new Date(shift.startTime).getTime() >= week.start.getTime() &&
+      (new Date(shift.startTime).getTime() <= week.end.getTime() ||
+        new Date(shift.startTime).toDateString() ===
+        week.end.toDateString())
+    )
+  })
+}
