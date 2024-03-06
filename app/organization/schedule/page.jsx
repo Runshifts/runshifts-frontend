@@ -1,6 +1,6 @@
 "use client"
 import React, { useCallback, useContext, useMemo, useState } from "react"
-import Export from "../../_components/AppComps/Export"
+import AddShift from "../../_components/AppComps/Export"
 import ScheduleTable from "./ScheduleTable"
 import {
   ShiftAndOvertimeRequestsContext,
@@ -50,8 +50,8 @@ export default function Schedule() {
 
   const handleAddShiftClick = useCallback(
     ({ dayOfTheWeek, assignee }) => {
-      const shiftDate = new Date(currentWeek.start)
-      shiftDate.setDate(shiftDate.getDate() + dayOfTheWeek)
+      const shiftDate = typeof dayOfTheWeek === "number" ? new Date(currentWeek.start) : null
+      shiftDate?.setDate(shiftDate.getDate() + dayOfTheWeek)
       setNewShiftDetails({
         assignee,
         shiftDate,
@@ -118,9 +118,10 @@ export default function Schedule() {
       <div className="flex items-start flex-col gap-6 pt-6 pb-4">
         <div className="flex items-center justify-between w-full">
           <Heading as="h1">Schedule</Heading>
-          <Export
+          <AddShift
             loading={inProgress}
             duplicateWeek={() => duplicateWeek(organization?._id)}
+            showAddShiftModal={handleAddShiftClick}
           />
         </div>
         <ul className="flex list-none gap-2">

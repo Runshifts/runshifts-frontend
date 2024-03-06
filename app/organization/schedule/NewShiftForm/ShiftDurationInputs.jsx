@@ -16,7 +16,7 @@ export default function ShiftDurationInputs({ customShiftManagements = [], handl
   return (
     <>
       <fieldset className="flex flex-col gap-[4px]">
-        <FormLabelText>Radio group label</FormLabelText>
+        <FormLabelText>Shifts</FormLabelText>
         <div className="flex gap-2 md:gap-4 flex-wrap">
           {
             defaultShiftManageMents.map((shiftManagement, idx) => (
