@@ -12,7 +12,7 @@ function StaffList() {
 
             <div className='px-4'>
               <h1 className='font-xl font-bold py-2'>482</h1>
-              <p className='text-xs py-1'>Total number of staff</p>
+              <p className='text-xs py-1'>Total number of active employees</p>
             </div>
           </div>
 
