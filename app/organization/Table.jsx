@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { Fragment, useMemo } from "react"
 import Pill from "../_components/AppComps/Pill"
 import { formatHourAsAmOrPm } from "../_utils"
 
@@ -7,12 +7,13 @@ const ScrollingTimeTable = ({ groupedShifts, title }) => {
   const assigneesAndShifts = useMemo(() => {
     return Object.values(groupedShifts)
   }, [groupedShifts])
+
   return (
     <div className="rounded-lg overflow-x-auto">
       <table className="min-w-full bg-gray-[#E4E4E4] rounded-lg p-2">
         <thead>
           <tr>
-            <th className="text-center w-max text-[#42526E] font-bold py-2 sticky left-0 bg-[#E4E4E4] border-b-solid border-b border-b-[#757575] border-t-none border-l-none border-r-solid border-r border-r-[#757575]">
+            <th className="text-center w-max text-info-500 font-bold py-2 sticky left-0 bg-[#E4E4E4] border-b-solid border-b border-b-[#757575] border-t-none border-l-none border-r-solid border-r border-r-[#757575]">
               {title}
             </th>
             {hours.map((hour, index) => (
@@ -30,7 +31,7 @@ const ScrollingTimeTable = ({ groupedShifts, title }) => {
                   key={current.assignee._id}
                   className="sticky left-0 bg-[#E4E4E4] border-t-solid border-t border-t-[#757575] border-r-solid border-r border-r-[#757575]"
                 >
-                  <Pill className="font-bold text-[#42526E]">
+                  <Pill className="font-bold text-info-500">
                     {current.assignee?.firstName}
                   </Pill>
                 </td>
@@ -39,12 +40,11 @@ const ScrollingTimeTable = ({ groupedShifts, title }) => {
                     isLastItem={index === hours.length - 1}
                     key={index}
                   >
-                    {current.shifts[hour]?.map((item) => (
-                      <Pill
-                        key={item._id}
-                        colorClassName="bg-green-400"
-                        className="w-2 h-2"
-                      ></Pill>
+                    {current.shiftsStart[hour]?.map((item) => (
+                      <p key={item._id} className="text-[14px] text-info-500 leading-[20px] font-[600]">Start</p>
+                    ))}
+                    {current.shiftsEnd[hour]?.map((item) => (
+                      <p key={item._id} className="text-[14px] text-info-500 leading-[20px] font-[600]">End</p>
                     ))}
                   </TableData>
                 ))}
@@ -62,7 +62,7 @@ export default ScrollingTimeTable
 function TableHeading({ children, isLastItem }) {
   return (
     <th
-      className={`text-[#42526E] font-bold px-4 py-2 border px-4 py-2 border-b-solid border-b border-b-[#757575]  bg-[#E4E4E4] border-x-solid border-x border-x-[#757575]`}
+      className={`text-info-500 font-bold px-4 py-2 border px-4 py-2 border-b-solid border-b border-b-[#757575]  bg-[#E4E4E4] border-x-solid border-x border-x-[#757575]`}
       style={{ borderRight: isLastItem && "none" }}
     >
       {children}

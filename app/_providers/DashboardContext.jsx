@@ -10,7 +10,10 @@ import {
 import useAxios from "../_hooks/useAxios"
 import DASHBOARD_URLS from "../_urls/dashboardURLs"
 import useGetWeekRanges from "../_hooks/useGetWeekRanges"
-import { groupShiftsByAssignee, groupShiftsByHours } from "../_utils/shifts"
+import {
+  groupShiftsByAssignee,
+  groupShiftsByHoursWithDateKey,
+} from "../_utils/shifts"
 import { OrganizationContext } from "./OrganizationProvider"
 
 export const DashboardContext = createContext({
@@ -69,25 +72,37 @@ export default function DashboardProvider({ children }) {
   }, [allShifts])
 
   const todaysShiftsGroupedByAssigneesIntoHours = useMemo(() => {
-    const groupingByAssignees = groupShiftsByAssignee(todaysShifts)
+    const groupingByAssignees = groupShiftsByAssignee(
+      todaysShifts.filter(
+        (shift) => shift.isAccepted === true && shift.isDroppedOff === false
+      )
+    )
     for (const key in groupingByAssignees) {
+      if (groupingByAssignees[key].length === 0) continue
       groupingByAssignees[key] = {
         assignee: groupingByAssignees[key][0]?.assignee,
-        shifts: groupShiftsByHours(groupingByAssignees[key]),
+        shiftsStart: groupShiftsByHoursWithDateKey(
+          groupingByAssignees[key],
+          "startTime"
+        ),
+        shiftsEnd: groupShiftsByHoursWithDateKey(
+          groupingByAssignees[key],
+          "endTime"
+        ),
       }
     }
     return groupingByAssignees
   }, [todaysShifts])
 
   const listOfShiftsInCurrentWeek = useMemo(() => {
-    return allShifts
-      .filter((shift) => {
-        return (
-          new Date(shift.startTime).getTime() >= currentWeek.start.getTime() &&
-          (new Date(shift.startTime).getTime() <= currentWeek.end.getTime() ||
-            new Date(shift.startTime).toDateString() === currentWeek.end.toDateString())
-        )
-      })
+    return allShifts.filter((shift) => {
+      return (
+        new Date(shift.startTime).getTime() >= currentWeek.start.getTime() &&
+        (new Date(shift.startTime).getTime() <= currentWeek.end.getTime() ||
+          new Date(shift.startTime).toDateString() ===
+          currentWeek.end.toDateString())
+      )
+    })
   }, [allShifts, currentWeek.end, currentWeek.start])
 
   const updateAllShifts = useCallback((newShifts = []) => {
@@ -103,11 +118,9 @@ export default function DashboardProvider({ children }) {
 
   const handleUpdateSingleShift = useCallback((update) => {
     setAllShifts((prev) => {
-      return prev.map((shift) => shift._id !== update._id ? shift : update)
+      return prev.map((shift) => (shift._id !== update._id ? shift : update))
     })
   }, [])
-
-
 
   const fetchShifts = useCallback(
     async (date) => {
@@ -166,7 +179,7 @@ export default function DashboardProvider({ children }) {
         jumpToWeek,
         indexOfThePresentWeek,
         updateAllShifts,
-        handleUpdateSingleShift
+        handleUpdateSingleShift,
       }}
     >
       {children}

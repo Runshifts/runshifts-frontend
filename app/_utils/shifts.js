@@ -10,9 +10,9 @@ export const groupShiftsByAssignee = (shifts = []) => {
   return res
 }
 
-export const groupShiftsByHours = (shifts = []) => {
+export const groupShiftsByHoursWithDateKey = (shifts = [], dateKey) => {
   const res = shifts.reduce((acc, current) => {
-    const currentHour = new Date(current.startTime).getHours()
+    const currentHour = new Date(current[dateKey]).getHours()
     if (acc[currentHour]) acc[currentHour] = [...acc[currentHour], current]
     else acc[currentHour] = [current]
     return acc
