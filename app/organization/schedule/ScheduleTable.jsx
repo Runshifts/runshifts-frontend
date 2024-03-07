@@ -3,7 +3,11 @@ import AddShift from "./AddShiftBtn"
 import Image from "next/image"
 import { UsersFilter } from "../../_components/AppComps/FilterGroup"
 import placeholderImage from "../../_assets/img/user.png"
-import { formatHourAsAmOrPm, msToHourMinSecond, msToHours, randomIntFromInterval } from "../../_utils"
+import {
+  formatHourAsAmOrPm,
+  msToHours,
+  randomIntFromInterval,
+} from "../../_utils"
 import CopySvg from "../../_assets/svgs/Copy"
 import ScheduleTableLoadingSkeleton, {
   ScheduleTableFillers,
@@ -135,16 +139,25 @@ function AssigneeRow({
   )
 
   const hoursScheduledForTheWeek = useMemo(() => {
-    const sumOfMsScheduledInWeek =  Object.values(shiftsGroupedByDays).flat(2).reduce((acc, shift) => {
-      return acc + new Date(shift.endTime).getTime() - new Date(shift.startTime).getTime()
-    }, 0)
+    const sumOfMsScheduledInWeek = Object.values(shiftsGroupedByDays)
+      .flat(2)
+      .reduce((acc, shift) => {
+        return (
+          acc +
+          new Date(shift.endTime).getTime() -
+          new Date(shift.startTime).getTime()
+        )
+      }, 0)
     return msToHours(sumOfMsScheduledInWeek)
   }, [shiftsGroupedByDays])
 
   return (
     <tr className="border-b border-b-gray-800 h-[52px] sticky z-1">
       <td className="p-[10px] sticky left-0 bg-[#EFEDED] outline-solid outline outline-gray-800/50">
-        <AssigneePill assignee={assigneeModified} hoursScheduledForTheWeek={hoursScheduledForTheWeek} />
+        <AssigneePill
+          assignee={assigneeModified}
+          hoursScheduledForTheWeek={hoursScheduledForTheWeek}
+        />
       </td>
       {daysOfTheWeek.map((day, listIdx, all) => (
         <td
@@ -180,6 +193,7 @@ function AssigneeShiftsMapping({
   assignee = {},
   duplicateShift = () => {},
   shifts = [],
+  isPastWeek,
 }) {
   return (
     <>
@@ -189,16 +203,18 @@ function AssigneeShiftsMapping({
           shift={item}
           duplicateShift={duplicateShift}
           assignee={assignee}
+          isPastWeek={isPastWeek}
         />
       ))}
     </>
   )
 }
 
-function Shift({ assignee = {}, duplicateShift = async () => {}, shift = {} }) {
+function Shift({ assignee = {}, duplicateShift = async () => {}, shift = {}, isPastWeek }) {
   const [isDuplicating, setIsDuplicating] = useState(false)
   const isPendingShift = useMemo(
-    () => shift.isAccepted && !shift.isDroppedOff,
+    () =>
+      shift.isAccepted === false && shift.isDroppedOff === false ? true : false,
     [shift?.isAccepted, shift?.isDroppedOff]
   )
 
@@ -212,9 +228,9 @@ function Shift({ assignee = {}, duplicateShift = async () => {}, shift = {} }) {
     <Fragment>
       <div
         style={{
-          backgroundColor: isPendingShift ? assignee.color : "#D7D3D1",
+          backgroundColor: isPendingShift ? "#D7D3D1" : assignee.color,
         }}
-        className="text-[10px] flex mx-auto gap-[4px] my-[10px] items-center w-max justify-center p-[4px] rounded-full "
+        className={`${isPendingShift ? "justify-evenly": "justify-center"} text-[10px] md:min-w-[118px] flex mx-auto gap-[4px] my-[10px] items-center w-max justify-center p-[4px] rounded-full`}
       >
         <Image
           className="rounded-full w-[24px] h-[24px]"
@@ -224,13 +240,13 @@ function Shift({ assignee = {}, duplicateShift = async () => {}, shift = {} }) {
           alt="avatar"
         />
         <p className="flex flex-col items-start">
-          <span>
+          <span className="font-600">
             {formatHourAsAmOrPm(new Date(shift.startTime).getHours())}-
             {formatHourAsAmOrPm(new Date(shift.endTime).getHours())}
           </span>
-          <span className="font-400">Pending</span>
+          {isPendingShift && <span className="font-400">Pending</span>}
         </p>
-        {!isPendingShift && (
+        {isPendingShift === false && (
           <button
             disabled={isDuplicating}
             name="duplicate shift"
@@ -246,7 +262,6 @@ function Shift({ assignee = {}, duplicateShift = async () => {}, shift = {} }) {
 }
 
 function AssigneePill({ assignee = {}, hoursScheduledForTheWeek }) {
-
   return (
     <div
       className="flex justify-start items-center gap-[4px] mx-auto w-full whitespace-nowrap max-w-[98px] text-ellipsis overflow-hidden py-[4px] px-[6px] text-info-600 rounded-[50px] bg-red-200"

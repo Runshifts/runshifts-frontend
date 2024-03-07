@@ -1,6 +1,6 @@
 "use client"
 import React, { useCallback, useContext, useMemo, useState } from "react"
-import AddShift from "../../_components/AppComps/Export"
+import CreateAndDuplicateShiftButtons from "../../_components/AppComps/CreateAndDuplicateShiftButtons"
 import ScheduleTable from "./ScheduleTable"
 import {
   ShiftAndOvertimeRequestsContext,
@@ -72,9 +72,8 @@ export default function Schedule() {
   const isPastWeek = useMemo(() => {
     return currentWeek.start.getTime() < weekWithPresentDateInIt.start.getTime()
   }, [weekWithPresentDateInIt.start, currentWeek.start])
-
   const { filteredShifts, renderShiftFilters, setWeekFilter } =
-    useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
+  useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
 
   const { allDays } = useMemo(() => {
     const start = getPreviousMonday(new Date(currentWeek.start))
@@ -112,14 +111,16 @@ export default function Schedule() {
         <NewShiftForm
           newShiftDetails={newShiftDetails}
           onCancel={() => setNewShiftDetails(null)}
-          handleNewShift={(newShift) => { updateAllShifts([newShift]) }}
+          handleNewShift={(newShift) => {
+            updateAllShifts([newShift])
+          }}
           currentWeek={currentWeek}
         />
       </Modal>
       <div className="flex items-start flex-col gap-6 pt-6 pb-4">
         <div className="flex items-center justify-between w-full">
           <Heading as="h1">Schedule</Heading>
-          <AddShift
+          <CreateAndDuplicateShiftButtons
             loading={inProgress}
             duplicateWeek={() => duplicateWeek(organization?._id)}
             showAddShiftModal={handleAddShiftClick}

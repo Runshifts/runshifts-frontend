@@ -2,7 +2,7 @@ import CopySvg from "../../_assets/svgs/Copy"
 import Spinner from "../../_assets/svgs/Spinner"
 import { PiPlusBold } from "react-icons/pi";
 
-function Export({ duplicateWeek = () => { }, loading, showAddShiftModal }) {
+function CreateAndDuplicateShiftButtons({ duplicateWeek = () => { }, loading, showAddShiftModal = () => {} }) {
   return (
     <section>
       <div className="flex items-center justify-center ">
@@ -10,7 +10,7 @@ function Export({ duplicateWeek = () => { }, loading, showAddShiftModal }) {
           <span className="w-[24px] h-[24px] border-[1.5px] border-solid border-white rounded-md flex text-white items-center justify-center">
             <PiPlusBold/>
           </span>
-          <span className="text-white px-2">Add shift</span>
+          <span className="text-white px-2">Create shift</span>
         </button>
         <button
           onClick={duplicateWeek}
@@ -36,7 +36,7 @@ function Export({ duplicateWeek = () => { }, loading, showAddShiftModal }) {
   )
 }
 
-export default Export
+export default CreateAndDuplicateShiftButtons
 
 function MoreSvg() {
   return (

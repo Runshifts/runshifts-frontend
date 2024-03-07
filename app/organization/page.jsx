@@ -4,7 +4,6 @@ import DateRangePicker from "../_components/AppComps/Datepicker"
 import Table from "./Table"
 import Snapshot from "./Snapshot"
 import Wages from "./Wages"
-import Export from "../_components/AppComps/Export"
 import { MobileFilter } from "../_components/AppComps/FilterGroup"
 import Heading from "../_components/Headings"
 import Calender from "./Calender"
@@ -37,7 +36,6 @@ export default function Dashboard() {
     <section className="p-3 min-h-screen">
       <div className="flex items-center justify-between py-3">
         <Heading className="capitalize">Welcome {user?.firstName}</Heading>
-        <Export />
       </div>
       <div className="py-4 flex gap-[8px] justify-between lg:justify-start items-center">
         <DateRangePicker
