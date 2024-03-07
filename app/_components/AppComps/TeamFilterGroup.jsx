@@ -4,20 +4,15 @@ function TrackerFilterGroup() {
   return (
     <section>
       <div className="flex items-center justify-start my-4">
-        {/* <div
-          className="bg-gray-100 text-gray-500 m-2 mx-2 h-10 w-32 rounded-md flex justify-between items-center"
-        > */}
-
         <input
           type="text"
           placeholder="Search members..."
-          className="bg-gray-100 px-2 py-2 mr-2 text-gray-500 rounded-md"
+          className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] px-2 py-2 h-10 mr-2 rounded"
           name="members"
         />
-        {/* </div> */}
         <div className="hidden md:flex">
           <select
-            className="bg-gray-100 text-gray-500 m-2 mx-2 h-10 w-32 rounded-md flex justify-between items-center"
+            className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] m-2 mx-2 h-10 w-32 rounded flex justify-between items-center"
             aria-label="Default select example"
           >
             <option>Location</option>
@@ -27,7 +22,7 @@ function TrackerFilterGroup() {
           </select>
 
           <select
-            className="bg-gray-100 text-gray-500 m-2  mx-2 h-10 w-32 rounded-md flex justify-between items-center"
+            className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] m-2  mx-2 h-10 w-32 rounded flex justify-between items-center"
             aria-label="Default select example"
           >
             <option>Department</option>
@@ -37,7 +32,7 @@ function TrackerFilterGroup() {
           </select>
 
           <select
-            className="bg-gray-100 text-gray-500 m-2  mx-2 h-10 w-32 rounded-md flex justify-between items-center"
+            className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] m-2  mx-2 h-10 w-32 rounded flex justify-between items-center"
             aria-label="Default select example"
           >
             <option>Position</option>
@@ -45,9 +40,19 @@ function TrackerFilterGroup() {
             <option value="2">Two</option>
             <option value="3">Three</option>
           </select>
+
+          <select
+            className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] m-2  mx-2 h-10 w-32 rounded flex justify-between items-center"
+            aria-label="Default select example"
+          >
+            <option>30 Days</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
         </div>
 
-        <div className="border py-2 px-1 w-fit rounded-md flex justify-between items-center md:hidden">
+        <div className="border py-2 px-1 w-fit rounded flex justify-between items-center md:hidden">
           <p className="px-2">Filter</p>
           <div className="px-2">
             <FilterSvg />

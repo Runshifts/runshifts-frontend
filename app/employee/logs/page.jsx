@@ -1,7 +1,7 @@
 import React from "react"
 import LogExport from "../../_components/AppComps/LogExport"
 import LogsFilterGroup from "../../_components/EmployeeComps/LogsFilterGroup"
-import LogsContent from "../../organization/logs/LogsContent"
+import LogsContent from "./LogsContent"
 
 function Logs() {
   return (

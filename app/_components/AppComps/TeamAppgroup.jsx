@@ -14,9 +14,9 @@ function TeamAppgroup() {
           </button>
         </Link>
 
-        <button className="hidden md:flex items-center justify-center border rounded-sm bg-gray-100 text-gray-600  text-sm font-semibold mx-2 px-2 py-1">
+        <button className="hidden md:flex items-center justify-center rounded bg-[#091E420A] text-gray-600  text-sm font-semibold mx-2 px-2 py-1">
           <ImportSvg />
-          <p className="px-2">Import from csv</p>
+          <p className="px-2 text-xs text-[#42526E]">Import from csv</p>
         </button>
         <MoreSvg />
       </div>

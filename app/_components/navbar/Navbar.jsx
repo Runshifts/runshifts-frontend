@@ -161,45 +161,44 @@ function Navbar({ onToggle, onImageClick }) {
           </div>
 
           <div className="flex items-center justify-between">
-            <form>
-            <div className="relative">
-  <div className="md:absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-    <SearchIcon />
-  </div>
-  <input
-    type="search"
-    name="name"
-    id="default-search"
-    className="hidden md:block cursor-pointer w-full px-4 py-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
-    placeholder="Search"
-    required
-  />
-</div>
-
+            <form className="p-2">
+              <div className="relative">
+                <div className="md:absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <SearchIcon />
+                </div>
+                <input
+                  type="search"
+                  name="name"
+                  id="default-search"
+                  className="hidden md:block cursor-pointer w-full px-4 py-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                  placeholder="Search"
+                  required
+                />
+              </div>
             </form>
 
-            <div className="px-2 cursor-pointer">
-              <Link href={'/organization/notification'}>
-              <BellSvg />
+            <div className="p-2 cursor-pointer">
+              <Link href={"/organization/notification"}>
+                <BellSvg />
               </Link>
             </div>
 
-            <div className="hidden md:block cursor-pointer">
+            <div className="hidden md:block p-2 cursor-pointer">
               <HeadphoneSvg />
             </div>
 
-            <div className="hidden md:block mx-2 cursor-pointer">
-              <Link href={'/organization/settings'}>
-              <SettingsSvg />
+            <div className="hidden md:block p-2 cursor-pointer">
+              <Link href={"/organization/settings"}>
+                <SettingsSvg />
               </Link>
             </div>
 
-            <div className="px-2">
+            <div className="p-2">
               <Image
                 onClick={handleImageClick}
                 style={{ cursor: "pointer" }}
-                height={40}
-                width={40}
+                height={32}
+                width={32}
                 src={profileAvatar}
                 alt="dp"
               />
