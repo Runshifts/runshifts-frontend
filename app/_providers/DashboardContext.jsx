@@ -95,19 +95,9 @@ export default function DashboardProvider({ children }) {
     return groupingByAssignees
   }, [todaysShifts])
 
-  console.log(currentWeek)
   const listOfShiftsInCurrentWeek = useMemo(() => {
     return filterShiftsByWeek(allShifts, currentWeek)
-    // allShifts.filter((shift) => {
-    //   return (
-    //     new Date(shift.startTime).getTime() >= currentWeek.start.getTime() &&
-    //     (new Date(shift.startTime).getTime() <= currentWeek.end.getTime() ||
-    //       new Date(shift.startTime).toDateString() ===
-    //         currentWeek.end.toDateString())
-    //   )
-    // })
   }, [allShifts, currentWeek])
-  // }, [allShifts, currentWeek.end, currentWeek.start])
 
   const updateAllShifts = useCallback((newShifts = []) => {
     setAllShifts((prev) => {

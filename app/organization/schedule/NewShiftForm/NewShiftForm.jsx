@@ -19,13 +19,15 @@ const getInitialState = () => ({
   endTime: null,
   note: "",
   isGeofencingEnabled: false,
-  assignee: null
+  assignee: null,
+  date: null,
 })
 
 export default function NewShiftForm({
   onCancel,
   newShiftDetails,
   handleNewShift,
+  currentWeek,
 }) {
   const fetchData = useAxios()
   const [loading, setLoading] = useState(false)
@@ -38,6 +40,33 @@ export default function NewShiftForm({
     () => newShiftDetails?.shiftDate,
     [newShiftDetails?.shiftDate]
   )
+
+  const updateDateOfShift = useCallback(
+    (date) => {
+      const update = {
+        date,
+        startTime: shiftData.startTime ? new Date(date) : shiftData.startTime,
+        endTime: shiftData.endTime ? new Date(date) : shiftData.endTime,
+      }
+      if (update.startTime)
+        update.startTime.setHours(
+          shiftData.startTime.getHours(),
+          shiftData.startTime.getMinutes(),
+          shiftData.startTime.getSeconds(),
+          shiftData.startTime.getMilliseconds()
+        )
+      if (update.endTime)
+        update.endTime.setHours(
+          shiftData.endTime.getHours(),
+          shiftData.endTime.getMinutes(),
+          shiftData.endTime.getSeconds(),
+          shiftData.endTime.getMilliseconds()
+        )
+      setShiftData((prev) => ({ ...prev, ...update }))
+    },
+    [shiftData]
+  )
+
   const handleScheduleSelection = useCallback(
     (selected) => {
       const shiftManagement = shiftManagements.find(
@@ -45,18 +74,22 @@ export default function NewShiftForm({
           it._id === selected ||
           it.name.toLowerCase() === selected.toLowerCase()
       )
-      if (!shiftManagement || !shiftDurationDate) return null
+      if (!shiftManagement || (!shiftDurationDate && !shiftData.date))
+        return null
       const startTime = new Date(shiftManagement.startTime)
+      const dateOfShift = new Date(
+        shiftDurationDate || new Date(shiftData.date)
+      )
       startTime.setFullYear(
-        shiftDurationDate.getFullYear(),
-        shiftDurationDate.getMonth(),
-        shiftDurationDate.getDate()
+        dateOfShift.getFullYear(),
+        dateOfShift.getMonth(),
+        dateOfShift.getDate()
       )
       const endTime = new Date(shiftManagement.endTime)
       endTime.setFullYear(
-        shiftDurationDate.getFullYear(),
-        shiftDurationDate.getMonth(),
-        shiftDurationDate.getDate()
+        dateOfShift.getFullYear(),
+        dateOfShift.getMonth(),
+        dateOfShift.getDate()
       )
       setShiftData((prev) => ({
         ...prev,
@@ -64,8 +97,9 @@ export default function NewShiftForm({
         startTime,
         endTime,
       }))
+      return true
     },
-    [shiftManagements, shiftDurationDate]
+    [shiftManagements, shiftDurationDate, shiftData.date]
   )
 
   const handleCancel = useCallback(() => {
@@ -78,11 +112,17 @@ export default function NewShiftForm({
       e.preventDefault()
       if (!shiftData.location)
         return toast.error("Please select a location for this shift")
+      if (shiftData.date && !shiftData.assignee)
+        return toast.error("Please select an employee for this shift")
       if (!shiftData.startTime || !shiftData.endTime)
         return toast.error("Please select a schedule for this shift")
       setLoading(true)
       const res = await fetchData(
-        `/shifts/${organization?._id}/locations/${shiftData.location?._id}/users/${newShiftDetails?.assignee?._id}/${shiftData.schedule}`,
+        `/shifts/${organization?._id}/locations/${
+          shiftData.location?._id
+        }/users/${newShiftDetails?.assignee?._id || shiftData.assignee?._id}/${
+          shiftData.schedule
+        }`,
         "post",
         {
           date: shiftData.startTime,
@@ -131,8 +171,10 @@ export default function NewShiftForm({
             label="Position"
             inputProps={{
               placeholder: "Choose position",
-              readOnly: !newShiftDetails.assignee ? false : true,
-              value: newShiftDetails.assignee?.role,
+              readOnly: true,
+              value: shiftData.assignee
+                ? shiftData.assignee?.role?.name || ""
+                : newShiftDetails.assignee?.role?.name || "",
             }}
           />
           <FormInputAndLabel
@@ -151,6 +193,10 @@ export default function NewShiftForm({
           handleScheduleSelection={handleScheduleSelection}
           startTime={shiftData.startTime}
           endTime={shiftData.endTime}
+          showDateInput={!newShiftDetails.shiftDate}
+          handleDateSelection={updateDateOfShift}
+          selectedDate={shiftData.date}
+          currentWeek={currentWeek}
         />
         <div className="w-full">
           <FormInputAndLabel
@@ -214,7 +260,18 @@ function EmployeeInput({ defaultAssignee, selected, handleSelect }) {
     []
   )
 
-  if (defaultAssignee) return <InputDisplay />
+  if (defaultAssignee)
+    return (
+      <InputDisplay
+        value={
+          `${defaultAssignee?.firstName || ""} ${
+            defaultAssignee?.lastName || ""
+          }`.trim() ||
+          defaultAssignee?.email ||
+          ""
+        }
+      />
+    )
   return (
     <DropDown
       dropDownTrigger={
@@ -230,6 +287,7 @@ function EmployeeInput({ defaultAssignee, selected, handleSelect }) {
         <>
           {employees.map((emp) => (
             <Option
+              key={emp._id}
               onClick={() => handleSelect(emp)}
               isSelected={selected?._id === emp._id}
             >
@@ -238,7 +296,6 @@ function EmployeeInput({ defaultAssignee, selected, handleSelect }) {
                 ""}
             </Option>
           ))}
-          /
         </>
       }
     />

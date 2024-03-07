@@ -17,6 +17,10 @@ export const getDateOrdinal = (date) => {
   return "th"
 }
 
+export function msToHours(milliseconds) {
+  return milliseconds / (1000 * 60 * 60);
+}
+
 export const getAmOrPm = (hour) => {
   return hour < 12 ? "am" : "pm"
 }

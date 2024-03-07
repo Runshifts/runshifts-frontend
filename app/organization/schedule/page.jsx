@@ -113,6 +113,7 @@ export default function Schedule() {
           newShiftDetails={newShiftDetails}
           onCancel={() => setNewShiftDetails(null)}
           handleNewShift={(newShift) => { updateAllShifts([newShift]) }}
+          currentWeek={currentWeek}
         />
       </Modal>
       <div className="flex items-start flex-col gap-6 pt-6 pb-4">
