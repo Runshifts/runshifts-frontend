@@ -1,9 +1,16 @@
-import { getAmOrPm } from "../../_utils";
-import { AcceptAndRejectButtons, UserDisplay, formatRequestStartDate } from "./ShiftRequest";
-import { useMemo } from "react";
-import { CardSkeletonLoader } from "../../_components/Skeletons/CardSkeleton";
+import { getAmOrPm } from "../../_utils"
+import {
+  AcceptAndRejectButtons,
+  UserDisplay,
+  formatRequestStartDate,
+} from "./ShiftRequest"
+import { useMemo } from "react"
+import { CardSkeletonLoader } from "../../_components/Skeletons/CardSkeleton"
 
-export default function OvertimeRequestsSection({ overtimeRequests = [], loading }){
+export default function OvertimeRequestsSection({
+  overtimeRequests = [],
+  loading,
+}) {
   return (
     <section className="w-full">
       <h1 className="font-[600] text-[#292D32] text-4 leading-normal mb-[8px]">
@@ -21,7 +28,6 @@ export default function OvertimeRequestsSection({ overtimeRequests = [], loading
     </section>
   )
 }
-
 
 export function OvertimeRequest({ overtimeRequest = {} }) {
   const overtimeStart = useMemo(
@@ -60,27 +66,40 @@ export function OvertimeRequest({ overtimeRequest = {} }) {
         <p className="font-[600] leading-[20px] text-[10px] text-gray-900">
           Overtime details
         </p>
-        <div className="bg-white px-[4px]">
-          <p className="capitalize leading-[20px] text-[12px] text-gray-800 font-[500]">
-            {formatRequestStartDate(overtimeStart)}
-          </p>
-          <p className="uppercase tracking-loose leading-[20px] text-[10px] text-gray-600 font-[500]">
-            {start}
-            {getAmOrPm(overtimeStart.getHours())} - {end}
-            {getAmOrPm(overtimeEnd.getHours())}
-          </p>
-        </div>
+        {isStillValid &&
+          overtimeRequest.isAccepted === false &&
+          !overtimeRequest.isRejected && (
+            <div className="bg-white px-[4px]">
+              <p className="capitalize leading-[20px] text-[12px] text-gray-800 font-[500]">
+                {formatRequestStartDate(overtimeStart)}
+              </p>
+              <p className="uppercase tracking-loose leading-[20px] text-[10px] text-gray-600 font-[500]">
+                {start}
+                {getAmOrPm(overtimeStart.getHours())} - {end}
+                {getAmOrPm(overtimeEnd.getHours())}
+              </p>
+            </div>
+          )}
       </div>
 
       <p className="text-info-500 bg-white font-bold text-[14px] leading-[145%]"></p>
 
-      {isStillValid && !overtimeRequest.isAccepted && !overtimeRequest.isRejected ? (
-        <AcceptAndRejectButtons requestId={overtimeRequest._id} requestType={"overtimes"} />
+      {isStillValid &&
+      overtimeRequest.isAccepted === false &&
+      !overtimeRequest.isRejected ? (
+        <AcceptAndRejectButtons
+          requestId={overtimeRequest._id}
+          requestType={"overtimes"}
+        />
       ) : (
         <span className="opacity-30">Expired</span>
       )}
-      {!isStillValid && overtimeRequest.isAccepted && <span className="opacity-30">Accepted</span>}
-      {!isStillValid && overtimeRequest.isRejected && <span className="opacity-30">Rejected</span>}
+      {!isStillValid && overtimeRequest.isAccepted && (
+        <span className="opacity-30">Accepted</span>
+      )}
+      {!isStillValid && overtimeRequest.isRejected && (
+        <span className="opacity-30">Rejected</span>
+      )}
     </article>
   )
 }

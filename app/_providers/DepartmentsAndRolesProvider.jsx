@@ -13,40 +13,51 @@ export default function DepartmentsAndRolesProvider({
   const [departments, setDepartments] = useState([])
   const [roles, setRoles] = useState([])
 
-  const getCachedDepartments = useCallback((organizationIndustry) => {
-    let cachedDepartments = localStorage.getItem(
-      `${organizationIndustry}_departments`
-    )
-    if (cachedDepartments) {
-      cachedDepartments = JSON.parse(cachedDepartments)
-      if (cachedDepartments.length !== departments.length) {
-        setDepartments(cachedDepartments)
-        return true
+  const getCachedDepartments = useCallback(
+    (organizationIndustry) => {
+      let cachedDepartments = localStorage.getItem(
+        `${organizationIndustry}_departments`
+      )
+      if (cachedDepartments) {
+        cachedDepartments = JSON.parse(cachedDepartments)
+        if (cachedDepartments.length !== departments.length) {
+          setDepartments(cachedDepartments)
+          return true
+        }
       }
-    }
-    return false
-  }, [departments])
+      return false
+    },
+    [departments]
+  )
 
-  const getCachedRoles = useCallback((organizationIndustry) => {
-    let cachedRoles = localStorage.getItem(`${organizationIndustry}_roles`)
-    if (cachedRoles) {
-      cachedRoles = JSON.parse(cachedRoles)
-      if (cachedRoles.length !== roles.length) {
-        setRoles(cachedRoles)
-        return true
+  const getCachedRoles = useCallback(
+    (organizationIndustry) => {
+      let cachedRoles = localStorage.getItem(`${organizationIndustry}_roles`)
+      if (cachedRoles) {
+        cachedRoles = JSON.parse(cachedRoles)
+        if (cachedRoles.length !== roles.length) {
+          setRoles(cachedRoles)
+          return true
+        }
       }
-    }
-    return false
-  }, [roles])
-
-  const fetchDepartmentsAndRoles = useCallback(async () => {
+      return false
+    },
+    [roles]
+  )
+  const fetchDepartmentsAndRoles = useCallback(async (organizationIndustry) => {
     if (!organizationIndustry) return
     const hasCachedDepartments = getCachedDepartments(organizationIndustry)
     const hasCachedRoles = getCachedRoles(organizationIndustry)
-
     const [departmentsResponse, rolesResponse] = await Promise.all([
-      !hasCachedDepartments ? await fetchData(`industries/${organizationIndustry}/departments`, "get") : {},
-      !hasCachedRoles ? await fetchData(`industries/${organizationIndustry}/roles`, "get") : {},
+      !hasCachedDepartments
+        ? await fetchData(
+            `/industries/${organizationIndustry.toLowerCase()}/departments`,
+            "get"
+          )
+        : {},
+      !hasCachedRoles
+        ? await fetchData(`/industries/${organizationIndustry.toLowerCase()}/roles`, "get")
+        : {},
     ])
     if (departmentsResponse.statusCode === 200) {
       setDepartments(departmentsResponse.results)
@@ -62,12 +73,11 @@ export default function DepartmentsAndRolesProvider({
         JSON.stringify(rolesResponse.results)
       )
     }
-  }, [organizationIndustry])
+  }, [])
 
   useEffect(() => {
-    fetchDepartmentsAndRoles()
-  }, [fetchDepartmentsAndRoles])
-
+    fetchDepartmentsAndRoles(organizationIndustry)
+  }, [fetchDepartmentsAndRoles, organizationIndustry])
 
   return (
     <DepartmentsAndRolesContext.Provider value={{ roles, departments }}>

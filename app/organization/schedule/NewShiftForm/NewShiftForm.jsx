@@ -4,13 +4,17 @@ import { OrganizationContext } from "../../../_providers/OrganizationProvider"
 import FormLocationInput from "./FormLocationInput"
 import FormRadio from "./FormRadio"
 import ShiftDurationInputs from "./ShiftDurationInputs"
-import FormInputAndLabel from "./FormInputAndLabel"
+import FormInputAndLabel, {
+  FormMultipleSelectInputAndLabel,
+} from "./FormInputAndLabel"
 import { msToHourMinSecond } from "../../../_utils"
 import toast from "react-hot-toast"
 import useAxios from "../../../_hooks/useAxios"
 import Spinner from "../../../_assets/svgs/Spinner"
 import DropDown from "../../../_components/AppComps/Dropdown"
 import { Option } from "../../../_components/AppComps/Select"
+import { DepartmentsAndRolesContext } from "../../../_providers/DepartmentsAndRolesProvider"
+import useListenForMultipleShiftCreation from "../../../_hooks/useListenForShiftCreationResponse"
 
 const getInitialState = () => ({
   location: null,
@@ -19,7 +23,7 @@ const getInitialState = () => ({
   endTime: null,
   note: "",
   isGeofencingEnabled: false,
-  assignee: null,
+  assignees: [],
   date: null,
 })
 
@@ -30,6 +34,7 @@ export default function NewShiftForm({
   currentWeek,
 }) {
   const fetchData = useAxios()
+  useListenForMultipleShiftCreation()
   const [loading, setLoading] = useState(false)
   const [shiftData, setShiftData] = useState(() => getInitialState())
   const { organization } = useContext(OrganizationContext)
@@ -112,33 +117,63 @@ export default function NewShiftForm({
       e.preventDefault()
       if (!shiftData.location)
         return toast.error("Please select a location for this shift")
-      if (shiftData.date && !shiftData.assignee)
+      if (shiftData.date && shiftData.assignees.length === 0)
         return toast.error("Please select an employee for this shift")
       if (!shiftData.startTime || !shiftData.endTime)
         return toast.error("Please select a schedule for this shift")
       setLoading(true)
-      const res = await fetchData(
-        `/shifts/${organization?._id}/locations/${
-          shiftData.location?._id
-        }/users/${newShiftDetails?.assignee?._id || shiftData.assignee?._id}/${
-          shiftData.schedule
-        }`,
-        "post",
-        {
-          date: shiftData.startTime,
-          isGeofencingEnabled: shiftData.isGeofencingEnabled,
-          note: shiftData.note,
-        }
-      )
+      const url =
+        shiftData.assignees.length > 0
+          ? `/shifts/${organization?._id}/locations/${shiftData.location?._id}/${shiftData.schedule}`
+          : `/shifts/${organization?._id}/locations/${shiftData.location?._id}/users/${newShiftDetails?.assignee?._id}/${shiftData.schedule}`
+      const res = await fetchData(url, "post", {
+        date: shiftData.startTime,
+        isGeofencingEnabled: shiftData.isGeofencingEnabled,
+        note: shiftData.note,
+        users: shiftData.assignees,
+      })
       if (res.statusCode === 201) {
-        toast.success("Shift created successfully")
-        handleNewShift(res.shift)
+        toast.success(res.message || "Shift(s) created successfully")
+        res.shift && handleNewShift(res.shift)
         setShiftData(getInitialState())
         handleCancel()
       } else toast.error(res.message || "Something went wrong")
       setLoading(false)
     },
     [shiftData, fetchData, newShiftDetails?.assignee?._id, handleNewShift]
+  )
+
+  const handleSelectEmployee = useCallback(
+    (assignee) =>
+      setShiftData((prev) => ({
+        ...prev,
+        assignees: [...prev.assignees, assignee],
+      })),
+    []
+  )
+
+  const handleRemoveEmployee = useCallback(
+    (assignee) =>
+      setShiftData((prev) => ({
+        ...prev,
+        assignees: shiftData.assignees.filter((it) => it._id !== assignee._id),
+      })),
+    [shiftData.assignees]
+  )
+
+  const [selectedPositions, setSelectedPositions] = useState([])
+
+  const handleSelectPosition = useCallback(
+    (position) => setSelectedPositions((prev) => [...prev, position]),
+    []
+  )
+
+  const handleRemovePosition = useCallback(
+    (position) =>
+      setSelectedPositions((prev) =>
+        prev.filter((it) => it._id !== position._id)
+      ),
+    []
   )
 
   if (newShiftDetails === null) return null
@@ -159,23 +194,19 @@ export default function NewShiftForm({
             }
           />
           <EmployeeInput
-            selected={shiftData.assignee}
-            handleSelect={(assignee) =>
-              setShiftData((prev) => ({ ...prev, assignee }))
-            }
+            selectedUsers={shiftData.assignees}
+            handleSelect={handleSelectEmployee}
+            deselectUser={handleRemoveEmployee}
             defaultAssignee={newShiftDetails.assignee}
+            selectedPositions={selectedPositions}
           />
         </div>
         <div className="grid grid-cols-2 w-full gap-[16px]">
-          <FormInputAndLabel
-            label="Position"
-            inputProps={{
-              placeholder: "Choose position",
-              readOnly: true,
-              value: shiftData.assignee
-                ? shiftData.assignee?.role?.name || ""
-                : newShiftDetails.assignee?.role?.name || "",
-            }}
+          <PositionInput
+            selectedPositions={selectedPositions}
+            handleSelect={handleSelectPosition}
+            deselectPosition={handleRemovePosition}
+            defaultAssignee={newShiftDetails.assignee}
           />
           <FormInputAndLabel
             label="Unpaid break"
@@ -242,7 +273,13 @@ export default function NewShiftForm({
   )
 }
 
-function EmployeeInput({ defaultAssignee, selected, handleSelect }) {
+function EmployeeInput({
+  defaultAssignee,
+  selectedUsers,
+  handleSelect,
+  deselectUser,
+  selectedPositions,
+}) {
   const { employees } = useContext(OrganizationContext)
 
   const InputDisplay = useCallback(
@@ -258,6 +295,18 @@ function EmployeeInput({ defaultAssignee, selected, handleSelect }) {
       />
     ),
     []
+  )
+  const availableUserOptions = useMemo(
+    () =>
+      employees.filter(
+        (emp) =>
+          JSON.stringify(selectedUsers).includes(emp._id) === false &&
+          (selectedPositions.length === 0 ||
+            JSON.stringify(selectedPositions)
+              .toLowerCase()
+              .includes(emp.role?.name?.toLowerCase()) === true)
+      ),
+    [employees, selectedUsers, selectedPositions]
   )
 
   if (defaultAssignee)
@@ -275,25 +324,75 @@ function EmployeeInput({ defaultAssignee, selected, handleSelect }) {
   return (
     <DropDown
       dropDownTrigger={
-        <InputDisplay
-          value={
-            `${selected?.firstName || ""} ${selected?.lastName || ""}`.trim() ||
-            selected?.email ||
-            ""
+        <FormMultipleSelectInputAndLabel
+          label="Select employee"
+          placeholder="Select employee"
+          selectedOptions={selectedUsers}
+          handleDeselect={deselectUser}
+          getDisplayValue={(option) =>
+            option.firstName || option.lastName || option.email
           }
         />
       }
       dropdownContent={
         <>
-          {employees.map((emp) => (
-            <Option
-              key={emp._id}
-              onClick={() => handleSelect(emp)}
-              isSelected={selected?._id === emp._id}
-            >
-              {`${emp.firstName || ""} ${emp.lastName || ""}`.trim() ||
-                emp.email ||
-                ""}
+          {availableUserOptions.map((emp) => (
+            <Option key={emp._id} onClick={() => handleSelect(emp)}>
+              {emp.firstName || emp.lastName || emp.email || ""}
+            </Option>
+          ))}
+        </>
+      }
+    />
+  )
+}
+
+function PositionInput({
+  defaultAssignee,
+  selectedPositions = [],
+  handleSelect,
+  deselectPosition,
+}) {
+  const { roles } = useContext(DepartmentsAndRolesContext)
+  const availableRoleOptions = useMemo(
+    () =>
+      roles.filter(
+        (role) =>
+          JSON.stringify(selectedPositions)?.includes(role._id) === false
+      ),
+    [roles, selectedPositions]
+  )
+
+  if (defaultAssignee)
+    return (
+      <FormInputAndLabel
+        label="Position"
+        inputProps={{
+          placeholder: "Choose position",
+          readOnly: true,
+          value: defaultAssignee?.role?.name || "",
+        }}
+      />
+    )
+  return (
+    <DropDown
+      disabled={availableRoleOptions.length === 0}
+      dropDownTrigger={
+        <FormMultipleSelectInputAndLabel
+          label="Choose Position"
+          placeholder={
+            roles.length > 0 ? "Choose Position" : "No positions available"
+          }
+          selectedOptions={selectedPositions}
+          handleDeselect={deselectPosition}
+          getDisplayValue={(option) => option.name}
+        />
+      }
+      dropdownContent={
+        <>
+          {availableRoleOptions.map((role) => (
+            <Option key={role._id} onClick={() => handleSelect(role)}>
+              {role.name}
             </Option>
           ))}
         </>

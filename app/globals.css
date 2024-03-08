@@ -6,7 +6,7 @@
   @apply rounded-sm;
   @apply bg-[#5BC62D] text-[#ffffff];
   @apply px-2 py-1;
-  @apply text-center text-sm not-italic font-medium leading-5
+  @apply text-center text-sm not-italic font-medium leading-5;
 }
 
 .custom-h1 {
@@ -76,7 +76,6 @@
   background-image: url("/img/hijab.png");
   background-repeat: no-repeat;
 }
-
 
 .centered {
   display: flex;
@@ -149,3 +148,15 @@
   }
 }
 
+.scrollbar-minimized::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #88888817;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f11c;
+}

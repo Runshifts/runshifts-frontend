@@ -5,7 +5,7 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/flowbite-react/lib/**/*.js",
-    ],
+  ],
   theme: {
     extend: {
       backgroundImage: {
@@ -70,7 +70,7 @@ module.exports = {
           100: "#EFEDED",
         },
         black: "#000",
-        white: "#fff"
+        white: "#fff",
       },
     },
   },

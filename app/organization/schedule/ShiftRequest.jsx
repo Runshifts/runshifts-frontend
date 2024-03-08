@@ -40,7 +40,9 @@ export function ShiftRequest({ shiftRequest = {} }) {
       </div>
 
       <p className="text-info-500 font-bold text-[14px] leading-[145%]">
-        {isStillValid ? (
+        {isStillValid &&
+        !shiftRequest.isAccepted &&
+        !shiftRequest.isRejected ? (
           <>
             {+days && `${days} days, `}
             {+hours ? `${hours}:` : "00:"}
@@ -48,12 +50,17 @@ export function ShiftRequest({ shiftRequest = {} }) {
             {seconds} Left
           </>
         ) : (
-          <span className="opacity-30 font-[500] text-4">Expired</span>
+          !shiftRequest.isAccepted && (
+            <span className="opacity-30 font-[500] text-4">Expired</span>
+          )
         )}
       </p>
 
       {isStillValid && !shiftRequest.isAccepted && !shiftRequest.isRejected ? (
-        <AcceptAndRejectButtons requestId={shiftRequest._id} requestType={"shifts"} />
+        <AcceptAndRejectButtons
+          requestId={shiftRequest._id}
+          requestType={"shifts"}
+        />
       ) : null}
       {shiftRequest.isAccepted && <span className="opacity-30">Accepted</span>}
       {shiftRequest.isRejected && <span className="opacity-30">Rejected</span>}
@@ -87,36 +94,45 @@ export function UserDisplay({ image, firstName, lastName }) {
 }
 
 export function AcceptAndRejectButtons({ requestId, requestType }) {
-
   const [loading, setLoading] = useState("")
   const { handleUpdatedRequest } = useContext(ShiftAndOvertimeRequestsContext)
   const { handleUpdateSingleShift } = useContext(DashboardContext)
 
   const { organization } = useContext(OrganizationContext)
   const URLS = useMemo(() => {
-    return ({
-      shifts: (decision) => `/shifts/${organization?._id}/applications/${requestId}?action=${decision}`,
-      overtimes: (decision) => `/overtimes/${organization?._id}/${requestId}?action=${decision}`,
-    })
-  }, [
-    organization?._id, requestId,
-  ])
+    return {
+      shifts: (decision) =>
+        `/shifts/${organization?._id}/applications/${requestId}?action=${decision}`,
+      overtimes: (decision) =>
+        `/overtimes/${organization?._id}/${requestId}?action=${decision}`,
+    }
+  }, [organization?._id, requestId])
 
   const fetchData = useAxios()
 
-  const handleDecision = useCallback(async (decision) => {
-    if(loading) return 
-    setLoading(decision)
-    const res = await fetchData(URLS[requestType](decision), "get")
-    if (res.statusCode === 200) {
-      toast.success(res.message)
-      if (requestType === "shifts") {
-        handleUpdatedRequest(res.application, "shift")
-        handleUpdateSingleShift(res.shift)
-      } else handleUpdatedRequest(res.request, "overtime")
-    } else toast.error(res.message || "Something went wrong.")
-    setLoading("")
-  }, [fetchData, URLS, requestType, handleUpdatedRequest, handleUpdateSingleShift, loading])
+  const handleDecision = useCallback(
+    async (decision) => {
+      if (loading) return
+      setLoading(decision)
+      const res = await fetchData(URLS[requestType](decision), "get")
+      if (res.statusCode === 200) {
+        toast.success(res.message)
+        if (requestType === "shifts") {
+          handleUpdatedRequest(res.application, "shift")
+          handleUpdateSingleShift(res.shift)
+        } else handleUpdatedRequest(res.request, "overtime")
+      } else toast.error(res.message || "Something went wrong.")
+      setLoading("")
+    },
+    [
+      fetchData,
+      URLS,
+      requestType,
+      handleUpdatedRequest,
+      handleUpdateSingleShift,
+      loading,
+    ]
+  )
 
   return (
     <div className="flex gap-x-[8px] items-end">
@@ -124,12 +140,15 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
         onClick={() => handleDecision("accept")}
         className="bg-primary-600 text-white font-[500] px-3 py-[2px] leading-[20px] flex items-center justify-center gap-2"
       >
-       {loading === "accept" && <Spinner/>} {loading === "accept" ? "Accepting..." :"Accept"}
+        {loading === "accept" && <Spinner />}{" "}
+        {loading === "accept" ? "Accepting..." : "Accept"}
       </button>
-      <button 
+      <button
         onClick={() => handleDecision("reject")}
-        className="text-danger-600 font-[500] text-[14px] flex items-center justify-center gap-2">
-        {loading === "reject" && <Spinner />} {loading === "reject" ? "Rejecting..." : "Reject"}
+        className="text-danger-600 font-[500] text-[14px] flex items-center justify-center gap-2"
+      >
+        {loading === "reject" && <Spinner />}{" "}
+        {loading === "reject" ? "Rejecting..." : "Reject"}
       </button>
     </div>
   )
