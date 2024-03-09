@@ -4,20 +4,17 @@ function TrackerFilterGroup() {
   return (
     <section>
       <div className="flex items-center justify-start my-4">
-        {/* <div
-          className="bg-gray-100 text-gray-500 m-2 mx-2 h-10 w-32 rounded-md flex justify-between items-center"
-        > */}
 
         <input
           type="text"
           placeholder="Search logs..."
-          className="bg-gray-100 px-2 py-2 mr-2 text-[#7A869A] rounded-md"
+          className="bg-[#F4F5F7] border-none px-2 py-2 mr-2 text-xs text-[#7A869A] rounded-md"
           name="logs"
         />
-        {/* </div> */}
+        
         <div className="hidden md:flex items-center">
           <select
-            className="bg-gray-100 text-[#7A869A] m-2 mx-2 h-10 w-32 rounded-md flex justify-between items-center"
+            className="bg-[#F4F5F7] border-none text-[#7A869A] text-xs m-2 mx-2 h-10 w-32 rounded-md flex justify-between items-center"
             aria-label="Default select example"
           >
             <option>Location</option>
@@ -26,15 +23,20 @@ function TrackerFilterGroup() {
             <option value="3">Three</option>
           </select>
 
-          <div className=" py-2 px-1 bg-gray-100 text-[#7A869A] rounded-md flex h-10 w-32  justify-center items-center">
+          <div className="py-1 px-1 bg-[#F4F5F7] text-xs text-[#7A869A] rounded-md flex h-10 w-32  justify-center items-center">
           <p className="px-2">Date</p>
           <div className="px-2">
             <DateSvg />
           </div>
         </div>
+
+        <div className="py-1 px-1 ml-2 text-xs text-[#7A869A] flex h-10 w-32 justify-center items-center">
+        <CheckedSvg />
+        <p className="px-2">Shared Logs</p>
+        </div>
         </div>
 
-        <div className="text-[#7A869A] border mr-3 py-2 px-1 w-24 rounded-md flex justify-between items-center md:hidden">
+        <div className="text-[#7A869A] text-xs border mr-3 py-2 px-1 w-24 rounded-md flex justify-between items-center md:hidden">
           <p className="px-2">Filter</p>
           <div className="px-2">
             <FilterSvg />
@@ -79,4 +81,14 @@ function DateSvg() {
 </svg>
 
     )
+}
+
+function CheckedSvg() {
+  return(
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="#5B7198"/>
+<path d="M10.5799 15.58C10.3799 15.58 10.1899 15.5 10.0499 15.36L7.21994 12.53C6.92994 12.24 6.92994 11.76 7.21994 11.47C7.50994 11.18 7.98994 11.18 8.27994 11.47L10.5799 13.77L15.7199 8.62998C16.0099 8.33998 16.4899 8.33998 16.7799 8.62998C17.0699 8.91998 17.0699 9.39998 16.7799 9.68998L11.1099 15.36C10.9699 15.5 10.7799 15.58 10.5799 15.58Z" fill="#5B7198"/>
+</svg>
+
+  )
 }

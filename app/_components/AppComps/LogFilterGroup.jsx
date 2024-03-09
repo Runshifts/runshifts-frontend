@@ -1,6 +1,7 @@
 import React from "react"
+import Calendar from "./Calendar";
 
-function TrackerFilterGroup() {
+function LogsFilterGroup() {
   return (
     <section>
       <div className="flex items-center justify-start my-4">
@@ -41,15 +42,9 @@ function TrackerFilterGroup() {
             <option value="3">Three</option>
           </select>
 
-          <select
-            className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] m-2  mx-2 h-10 w-32 rounded flex justify-between items-center"
-            aria-label="Default select example"
-          >
-            <option>30 Days</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
+          <div>
+          <Calendar onClose={() => setCalendarOpen(true)} />
+        </div>
         </div>
 
         <div className="border py-2 px-1 w-fit rounded flex justify-between items-center md:hidden">
@@ -63,7 +58,7 @@ function TrackerFilterGroup() {
   )
 }
 
-export default TrackerFilterGroup
+export default LogsFilterGroup
 
 function FilterSvg() {
   return (

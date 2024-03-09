@@ -9,7 +9,7 @@ function Team() {
   return (
     <section className="mx-2 p-3 h-screen">
       <div className="flex items-center justify-between py-3">
-        <h1 className="text-[#292D32] font-semibold  md:text-2xl ">Team</h1>
+        <h1 className="custom-h1">Team</h1>
         <TeamAppgroup />
       </div>
 

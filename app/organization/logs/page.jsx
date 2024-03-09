@@ -1,6 +1,6 @@
 import React from "react"
 import LogExport from "../../_components/AppComps/LogExport"
-import TeamFilterGroup from "../../_components/AppComps/TeamFilterGroup"
+import LogFilterGroup from "../../_components/AppComps/LogFilterGroup"
 import LogsContent from "./LogsContent"
 
 function Logs() {
@@ -11,7 +11,7 @@ function Logs() {
         <LogExport />
       </div>
 
-      <TeamFilterGroup />
+      <LogFilterGroup />
 
       <div className="">
         <LogsContent />

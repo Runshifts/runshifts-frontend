@@ -32,35 +32,38 @@ const PayrollTable = () => {
               <td className="py-2 px-4">
                 <input type="checkbox" className="form-checkbox" />
               </td>
-              <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
+              <td className="py-1 px-2 mr-16 flex items-center justify-start text-sm text-[#1D2433] font-medium">
                 <Image src={Avatar} alt="avatar" height={24} width={24} className="pr-2" />
+                <p className="text-xs ">
                 {employee}
+                </p>
+               
               </td>
               <td className="py-1 px-4 text-sm  text-[#252525] font-medium">
                 <input
                   type="text"
-                  className="border-none w-full text-[#449522] focus:outline-none"
+                  className="border-none text-xs w-full text-[#449522] focus:outline-none"
                   value="245,343"
                 />
               </td>
               <td className="py-1 px-4 text-sm text-[#252525] font-medium">
                 <input
                   type="text"
-                  className="border-none w-full text-[#449522] focus:outline-none"
+                  className="border-none text-xs w-full text-[#449522] focus:outline-none"
                   value="245,343"
                 />
               </td>
               <td className="py-1 px-4 text-sm text-[#252525] font-medium">
                 <input
                   type="text"
-                  className="border-none w-full text-[#449522] focus:outline-none"
+                  className="border-none text-xs w-full text-[#449522] focus:outline-none"
                   value="245,343"
                 />
               </td>
               <td className="py-1 px-4 text-sm text-[#252525] font-medium ">
                 <input
                   type="text"
-                  className="border-none w-full text-[#252525] focus:outline-none"
+                  className="border-none text-xs w-full text-[#252525] focus:outline-none"
                   value="-"
                 />
               </td>

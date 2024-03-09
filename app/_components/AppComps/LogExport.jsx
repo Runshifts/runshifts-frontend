@@ -6,7 +6,7 @@ function LogExportGroup() {
       <div className="flex items-center justify-center ">
         <button className="flex items-center justify-center border rounded-sm bg-gray-100 text-gray-600  text-sm font-semibold mx-2 px-2 py-1">
           <ExportSvg />
-          <p className="px-2">Export as csv</p>
+          <p className="px-2 text-[#42526E] text-xs">Export as csv</p>
         </button>
         <MoreSvg />
       </div>
