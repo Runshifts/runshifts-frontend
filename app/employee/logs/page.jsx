@@ -1,8 +1,8 @@
 import React from "react"
 import LogExport from "../../_components/AppComps/LogExport"
 import LogsFilterGroup from "../../_components/EmployeeComps/LogsFilterGroup"
-import LogsContent from "../../organization/logs/LogsContent"
-
+import LogsContent from "./LogsContent"
+import ShareModal from './ShareModal'
 function Logs() {
   return (
     <section className="mx-auto p-3 h-screen">

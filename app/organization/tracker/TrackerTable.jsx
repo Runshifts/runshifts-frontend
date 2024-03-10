@@ -1,22 +1,21 @@
-"use client"
-import React, {useState} from "react";
+"use client";
+import React, { useState } from "react";
 import Avatar from "./Ellipse.svg";
 import { IoEyeOutline } from "react-icons/io5";
-import Breakdown from './Breakdown'
+import Breakdown from "./Breakdown";
 import Image from "next/image";
 
-
 const Tracker = (props) => {
-    const [isSmallModalOpen, setIsSmallModalOpen] = useState(false);
-    const [isLargeModalOpen, setIsLargeModalOpen] = useState(false);
-  
-    const toggleSmallModal = () => {
-      setIsSmallModalOpen(!isSmallModalOpen);
-    };
-  
-    const toggleLargeModal = () => {
-      setIsLargeModalOpen(!isLargeModalOpen);
-    };
+  const [isSmallModalOpen, setIsSmallModalOpen] = useState(false);
+  const [isLargeModalOpen, setIsLargeModalOpen] = useState(false);
+
+  const toggleSmallModal = () => {
+    setIsSmallModalOpen(!isSmallModalOpen);
+  };
+
+  const toggleLargeModal = () => {
+    setIsLargeModalOpen(!isLargeModalOpen);
+  };
 
   const employeeNames1 = [
     "Charlse Jenkings",
@@ -29,151 +28,228 @@ const Tracker = (props) => {
   const employeeNames3 = ["Charlse Jenkings", "Otto Chris", "Bernard Oslo"];
 
   return (
-    <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
-
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
       <div>
-      <h1 className='font-semibold text-sm text-[#252525] pt-1 pb-3'>
-        Employees currently clocked in
-      </h1>
-      <div className="rounded-lg shadow-lg">
-        <table className="min-w-full bg-gray-50">
-        <thead className="bg-gray-100">
-            <tr>
-              <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">Employee</th>
-              <th className="py-2 px-4 text-[#2252525] font-thin"></th>
-            </tr>
-          </thead>
-        <tbody>
-            {employeeNames1.map((employee, rowIndex) => (
-              <tr key={rowIndex}>
-                <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                  <Image height={50} width={50} src={Avatar} alt="avatar" className="pr-2" />
-                  {employee}
-                </td>
-                <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                  <button onClick={toggleSmallModal}>
-                    <MoreSvg />
-                  </button>
-                </td>
+        <h1 className="font-semibold text-sm text-[#252525] pt-1 pb-3">
+          Employees currently clocked in
+        </h1>
+        <div className="rounded-lg shadow-lg">
+          <table className="min-w-full bg-gray-50">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">
+                  Employee
+                </th>
+                <th className="py-2 px-4 text-[#2252525] font-thin"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Small Modal */}
-      {isSmallModalOpen && (
-        <div className="fixed inset-y-4 flex items-center justify-center">
-          <div className="bg-white shadow-lg p-2 rounded-md ">
-          {/* <button className='right-0 top-0 text-xs px-2' onClick={toggleSmallModal}>X</button> */}
-            <button className='flex items-center justify-center' onClick={toggleLargeModal}>
-            <IoEyeOutline />
-            <p className='text-xs px-2'>See employee breakdown</p>
-            </button>
-          </div>
+            </thead>
+            <tbody>
+              {employeeNames1.map((employee, rowIndex) => (
+                <tr key={rowIndex}>
+                  <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
+                    <Image
+                      height={50}
+                      width={50}
+                      src={Avatar}
+                      alt="avatar"
+                      className="pr-2"
+                    />
+                    {employee}
+                  </td>
+                  <td className="py-1 px-4 text-sm text-[#252525] font-medium">
+                    <button onClick={toggleSmallModal}>
+                      <MoreSvg />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
 
-      {/* Large Modal */}
-      {isLargeModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        {/* Small Modal */}
+        {isSmallModalOpen && (
+          <div className="fixed inset-y-4 flex items-center justify-center">
+            <div className="bg-white shadow-lg p-2 rounded-md ">
+              {/* <button className='right-0 top-0 text-xs px-2' onClick={toggleSmallModal}>X</button> */}
+              <button
+                className="flex items-center justify-center"
+                onClick={toggleLargeModal}
+              >
+                <IoEyeOutline />
+                <p className="text-xs px-2">See employee breakdown</p>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Large Modal */}
+        {isLargeModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <Breakdown />
             {/* <button onClick={toggleLargeModal}>Go back</button> */}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <h1 className="font-semibold text-sm text-[#252525] pt-1 pb-3">
+          Employees with time off
+        </h1>
+        <div className="rounded-lg shadow-lg">
+          <table className="min-w-full bg-gray-50 ">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">
+                  Employee
+                </th>
+                <th className="py-2 px-4 text-[#2252525] font-thin"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {employeeNames2.map((employee, rowIndex) => (
+                <tr key={rowIndex}>
+                  <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
+                    <Image
+                      height={50}
+                      width={50}
+                      src={Avatar}
+                      alt="avatar"
+                      className="pr-2"
+                    />
+                    {employee}
+                  </td>
+                  <td className="py-1 px-4 text-sm text-[#252525] font-medium">
+                    {/* <Link to='/timesheetReview'> */}
+                    <MoreSvg />
+                    {/* <Link>            */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
-    </div>
-      
-      <div>
-        <h1 className='font-semibold text-sm text-[#252525] pt-1 pb-3'>
-            Employees with time off 
-        </h1>
-      <div className="rounded-lg shadow-lg">
-        <table className="min-w-full bg-gray-50 ">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">Employee</th>
-              <th className="py-2 px-4 text-[#2252525] font-thin"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {employeeNames2.map((employee, rowIndex) => (
-              <tr key={rowIndex}>
-                <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                  <Image height={50} width={50} src={Avatar} alt="avatar" className="pr-2" />
-                  {employee}
-                </td>
-                <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                  {/* <Link to='/timesheetReview'> */}
-                  <MoreSvg />
-                  {/* <Link>            */}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
       </div>
 
       <div>
-        <h1 className='font-semibold text-sm text-[#252525] pt-1 pb-3'>
-            Employees currently on break
+        <h1 className="font-semibold text-sm text-[#252525] pt-1 pb-3">
+          Employees currently on break
         </h1>
-      <div className="rounded-lg shadow-lg">
-        <table className="min-w-full bg-gray-50 ">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">Employee</th>
-              <th className="py-2 px-4 text-[#2252525] font-thin"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {employeeNames3.map((employee, rowIndex) => (
-              <tr key={rowIndex}>
-                <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                  <Image height={50} width={50} src={Avatar} alt="avatar" className="pr-2" />
-                  {employee}
-                </td>
-                <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                  {/* <Link to='/timesheetReview'> */}
-                  <MoreSvg />
-                  {/* <Link>            */}
-                </td>
+        <div className="rounded-lg shadow-lg">
+          <table className="min-w-full bg-gray-50 ">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">
+                  Employee
+                </th>
+                <th className="py-2 px-4 text-[#2252525] font-thin"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {employeeNames3.map((employee, rowIndex) => (
+                <tr key={rowIndex}>
+                  <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
+                    <Image
+                      height={50}
+                      width={50}
+                      src={Avatar}
+                      alt="avatar"
+                      className="pr-2"
+                    />
+                    {employee}
+                  </td>
+                  <td className="py-1 px-4 text-sm text-[#252525] font-medium">
+                    {/* <Link to='/timesheetReview'> */}
+                    <MoreSvg />
+                    {/* <Link>            */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div>
-        <h1 className='font-semibold text-sm text-[#252525] pt-1 pb-3'>
-            Employees clocked out
+        <h1 className="font-semibold text-sm text-[#252525] pt-1 pb-3">
+          Employees clocked out
         </h1>
-      <div className="rounded-lg shadow-lg">
-        <table className="min-w-full bg-gray-50 ">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">Employee</th>
-              <th className="py-2 px-4 text-[#2252525] font-thin"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {employeeNames2.map((employee, rowIndex) => (
-              <tr key={rowIndex}>
-                <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                  <Image height={50} width={50} src={Avatar} alt="avatar" className="pr-2" />
-                  {employee}
-                </td>
-                <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                  {/* <Link to='/timesheetReview'> */}
-                  <MoreSvg />
-                  {/* <Link>            */}
-                </td>
+        <div className="rounded-lg shadow-lg">
+          <table className="min-w-full bg-gray-50 ">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">
+                  Employee
+                </th>
+                <th className="py-2 px-4 text-[#2252525] font-thin"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {employeeNames2.map((employee, rowIndex) => (
+                <tr key={rowIndex}>
+                  <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
+                    <Image
+                      height={50}
+                      width={50}
+                      src={Avatar}
+                      alt="avatar"
+                      className="pr-2"
+                    />
+                    {employee}
+                  </td>
+                  <td className="py-1 px-4 text-sm text-[#252525] font-medium">
+                    {/* <Link to='/timesheetReview'> */}
+                    <MoreSvg />
+                    {/* <Link>            */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      <div>
+        <h1 className="font-semibold text-sm text-[#252525] pt-1 pb-3">
+          incoming shift
+        </h1>
+        <div className="rounded-lg shadow-lg">
+          <table className="min-w-full bg-gray-50 ">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">
+                  Employee
+                </th>
+                <th className="py-2 px-4 text-start text-sm text-[#2252525] font-thin">
+                  Start Time
+                </th>
+                <th className="py-2 px-4 text-[#2252525] font-thin">-</th>
+              </tr>
+            </thead>
+            <tbody>
+              {employeeNames3.map((employee, rowIndex) => (
+                <tr key={rowIndex} className="">
+                  <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
+                    <Image
+                      height={50}
+                      width={50}
+                      src={Avatar}
+                      alt="avatar"
+                      className="pr-2"
+                    />
+                    {employee}
+                  </td>
+                  <td className="py-1 px-4 text-sm text-[#252525] font-medium">
+                    09:00 AM
+                  </td>
+                  <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
+                    <MoreSvg />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

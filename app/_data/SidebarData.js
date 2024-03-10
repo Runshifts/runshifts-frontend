@@ -7,7 +7,7 @@ import earnings from '../_assets/sidebarImg/earning.svg'
 import timesheet from '../_assets/sidebarImg/timesheet.png'
 import team from '../_assets/sidebarImg/team.svg'
 import report from '../_assets/sidebarImg/report.svg'
-
+import knowledge from '../_assets/adminIcons/knowledge.svg'
 
 export const SidebarData = [
     {
@@ -55,5 +55,9 @@ export const SidebarData = [
         path: '/organization/reports',
         icon: report,
     },
-
+    {
+        title: 'Knowledge Base',
+        path: '/admin/knowledge-base',
+        icon: knowledge,
+    },
 ]
