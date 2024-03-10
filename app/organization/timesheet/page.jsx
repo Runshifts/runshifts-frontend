@@ -1,6 +1,6 @@
-import React from 'react'
+"use client"
 import ApproveAll from '../../_components/AppComps/ApproveAll'
-import FilterGroup from '../../_components/AppComps/FilterGroup'
+// import FilterGroup from '../../_components/AppComps/FilterGroup'
 import TimesheetTable from './TimesheetTable'
 
 function Timesheet() {
@@ -13,7 +13,7 @@ function Timesheet() {
         <ApproveAll />       
         </div>
         
-        <FilterGroup />
+        {/* <FilterGroup /> */}
 
         <TimesheetTable />
     </section>
