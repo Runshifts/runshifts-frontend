@@ -123,7 +123,7 @@ function DateSelectInput({ show, handleDateSelection, selectedDate, currentWeek 
     let currentDay = new Date(Date.now()).getDay()
     const weekStart = new Date(currentWeek.start)
     let today = new Date(weekStart)
-    if(weekStart.getTime() <= Date.now()) today.setDate(today.getDate() + currentDay - 1)
+    if(weekStart.getTime() <= Date.now()) today.setDate(today.getDate() + (currentDay > 0 ? currentDay : 7) - 1)
     const nextSunday = getNextSunday(today)
     const options = [today]
     while (true) {

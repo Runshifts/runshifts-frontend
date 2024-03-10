@@ -15,6 +15,7 @@ import DropDown from "../../../_components/AppComps/Dropdown"
 import { Option } from "../../../_components/AppComps/Select"
 import { DepartmentsAndRolesContext } from "../../../_providers/DepartmentsAndRolesProvider"
 import useListenForMultipleShiftCreation from "../../../_hooks/useListenForShiftCreationResponse"
+import Modal from "../../../_components/AppComps/Modal"
 
 const getInitialState = () => ({
   location: null,
@@ -27,7 +28,26 @@ const getInitialState = () => ({
   date: null,
 })
 
-export default function NewShiftForm({
+export default function Form({
+  show = false,
+  newShiftDetails,
+  onCancel = () => {},
+  handleNewShift,
+  currentWeek,
+}) {
+  return (
+    <Modal open={show}>
+      <NewShiftForm
+        newShiftDetails={newShiftDetails}
+        onCancel={onCancel}
+        handleNewShift={handleNewShift}
+        currentWeek={currentWeek}
+      />
+    </Modal>
+  )
+}
+
+function NewShiftForm({
   onCancel,
   newShiftDetails,
   handleNewShift,
@@ -44,6 +64,11 @@ export default function NewShiftForm({
   const shiftDurationDate = useMemo(
     () => newShiftDetails?.shiftDate,
     [newShiftDetails?.shiftDate]
+  )
+
+  const isMultipleCreateMode = useMemo(
+    () => newShiftDetails?.createMultiple === true,
+    [newShiftDetails?.createMultiple]
   )
 
   const updateDateOfShift = useCallback(
@@ -117,13 +142,13 @@ export default function NewShiftForm({
       e.preventDefault()
       if (!shiftData.location)
         return toast.error("Please select a location for this shift")
-      if (shiftData.date && shiftData.assignees.length === 0)
+      if (isMultipleCreateMode && shiftData.assignees.length === 0)
         return toast.error("Please select an employee for this shift")
       if (!shiftData.startTime || !shiftData.endTime)
         return toast.error("Please select a schedule for this shift")
       setLoading(true)
       const url =
-        shiftData.assignees.length > 0
+        isMultipleCreateMode > 0
           ? `/shifts/${organization?._id}/locations/${shiftData.location?._id}/${shiftData.schedule}`
           : `/shifts/${organization?._id}/locations/${shiftData.location?._id}/users/${newShiftDetails?.assignee?._id}/${shiftData.schedule}`
       const res = await fetchData(url, "post", {
@@ -140,7 +165,13 @@ export default function NewShiftForm({
       } else toast.error(res.message || "Something went wrong")
       setLoading(false)
     },
-    [shiftData, fetchData, newShiftDetails?.assignee?._id, handleNewShift]
+    [
+      shiftData,
+      fetchData,
+      newShiftDetails?.assignee?._id,
+      handleNewShift,
+      isMultipleCreateMode,
+    ]
   )
 
   const handleSelectEmployee = useCallback(

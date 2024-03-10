@@ -2,9 +2,7 @@
 import React, { useCallback, useContext, useMemo, useState } from "react"
 import CreateAndDuplicateShiftButtons from "../../_components/AppComps/CreateAndDuplicateShiftButtons"
 import ScheduleTable from "./ScheduleTable"
-import {
-  ShiftAndOvertimeRequestsContext,
-} from "../../_providers/ShiftAndOvertimeRequestsProvider"
+import { ShiftAndOvertimeRequestsContext } from "../../_providers/ShiftAndOvertimeRequestsProvider"
 import Heading from "../../_components/Headings"
 import ShiftRequestsSection from "./ShiftRequestsSection"
 import OvertimeRequestsSection from "./OvertimeRequestsSection"
@@ -17,7 +15,6 @@ import {
 import DateRangePicker from "../../_components/AppComps/Datepicker"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
-import Modal from "../../_components/AppComps/Modal"
 import NewShiftForm from "./NewShiftForm/NewShiftForm"
 import useHandleShiftDuplication from "../../_hooks/useHandleShiftDuplication"
 
@@ -49,12 +46,14 @@ export default function Schedule() {
     })
 
   const handleAddShiftClick = useCallback(
-    ({ dayOfTheWeek, assignee }) => {
-      const shiftDate = typeof dayOfTheWeek === "number" ? new Date(currentWeek.start) : null
+    ({ dayOfTheWeek, assignee, createMultiple }) => {
+      const shiftDate =
+        typeof dayOfTheWeek === "number" ? new Date(currentWeek.start) : null
       shiftDate?.setDate(shiftDate.getDate() + dayOfTheWeek)
       setNewShiftDetails({
         assignee,
         shiftDate,
+        createMultiple,
       })
     },
     [currentWeek.start]
@@ -73,7 +72,7 @@ export default function Schedule() {
     return currentWeek.start.getTime() < weekWithPresentDateInIt.start.getTime()
   }, [weekWithPresentDateInIt.start, currentWeek.start])
   const { filteredShifts, renderShiftFilters, setWeekFilter } =
-  useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
+    useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
 
   const { allDays } = useMemo(() => {
     const start = getPreviousMonday(new Date(currentWeek.start))
@@ -107,8 +106,9 @@ export default function Schedule() {
 
   return (
     <section className="p-3 h-screen">
-      <Modal open={newShiftDetails !== null}>
+      <>
         <NewShiftForm
+          show={newShiftDetails !== null}
           newShiftDetails={newShiftDetails}
           onCancel={() => setNewShiftDetails(null)}
           handleNewShift={(newShift) => {
@@ -116,7 +116,7 @@ export default function Schedule() {
           }}
           currentWeek={currentWeek}
         />
-      </Modal>
+      </>
       <div className="flex items-start flex-col gap-6 pt-6 pb-4">
         <div className="flex items-center justify-between w-full">
           <Heading as="h1">Schedule</Heading>
