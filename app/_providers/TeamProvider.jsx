@@ -12,6 +12,7 @@ export const TeamContext = createContext({
   },
   hasInitialized: false,
   initialize: () => {},
+  loading: false,
 })
 
 export default function TeamProvider({
@@ -21,6 +22,7 @@ export default function TeamProvider({
 }) {
   const fetchData = useAxios()
   const [hasInitialized, setHasInitialized] = useState(false)
+  const [loading, setLoading] = useState(hasInitialized === false)
   const [teamMembers, setTeamMembers] = useState([])
   const [recentlyViewedTeamMembers, setRecentlyViewedTeamMembers] = useState([])
   const [teamStats, setTeamStats] = useState({
@@ -30,6 +32,7 @@ export default function TeamProvider({
 
   const initialize = useCallback(async () => {
     if (!organizationId) return
+    setLoading(true)
     const res = await fetchData(`/organizations/${organizationId}/team`)
     console.log(res)
     setTeamStats({
@@ -39,6 +42,7 @@ export default function TeamProvider({
     setTeamMembers(res.teamMembers)
     setRecentlyViewedTeamMembers(res.recentlyViewedTeamMembers)
     setHasInitialized(true)
+    setLoading(false)
   }, [organizationId])
 
   useEffect(() => {
@@ -53,6 +57,7 @@ export default function TeamProvider({
         recentlyViewedTeamMembers,
         teamStats,
         hasInitialized,
+        loading
       }}
     >
       {children}

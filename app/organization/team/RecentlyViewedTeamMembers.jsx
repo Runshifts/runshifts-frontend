@@ -2,18 +2,22 @@ import React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import placeholderImage from "../../_assets/img/user.png"
+import { RecentlyViewedTeamMembersSkeleton } from "../../_components/Skeletons/TeamMembersSkeleton"
 
-export default function RecentlyViewedTeamMembers({ users = [] }) {
+export default function RecentlyViewedTeamMembers({ users = [], loading }) {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="text-[16px] text-[#292D32] font-[600]">Recently viewed</h2>
-      <div className="overflow-x-auto">
-        <div className="flex gap-[16px] p-[2px]">
-          {users.map((user) => (
-            <RecentlyViewedTeamMember key={user._id} user={user} />
-          ))}
+      {loading && <RecentlyViewedTeamMembersSkeleton />}
+      {!loading && (
+        <div className="overflow-x-auto">
+          <div className="flex gap-[16px] p-[2px]">
+            {users.map((user) => (
+              <RecentlyViewedTeamMember key={user._id} user={user} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   )
 }
@@ -29,9 +33,9 @@ function RecentlyViewedTeamMember({ user = {} }) {
         className="w-[50px] h-[50px] rounded-full bg-green-300"
       />
 
-      <h1 className="text-[16px] text-[#1D2433]">
+      <h3 className="text-[16px] text-[#1D2433]">
         {(user.firstName + " " + user.lastName).trim() || user.fullName}
-      </h1>
+      </h3>
       <p className="text-gray-800 text-[12px]">{user.role?.name}</p>
       <Link
         href="#"

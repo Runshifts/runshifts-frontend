@@ -2,18 +2,22 @@ import React from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
 import Link from "next/link"
+import TeamMembersSkeleton from "../../_components/Skeletons/TeamMembersSkeleton"
 
-export default function AllTeamMembers({ users = [] }) {
+export default function AllTeamMembers({ users = [], loading }) {
   return (
     <section className="flex flex-col gap-4">
-      <h1 className="text-[16px] text-[#292D32] font-[600]">
+      <h2 className="text-[16px] text-[#292D32] font-[600]">
         All team members
-      </h1>
-      <div className="flex flex-wrap p-[2px] gap-4">
-        {users.map((user) => (
-          <TeamMember user={user} key={user._id} />
-        ))}
-      </div>
+      </h2>
+      {loading && <TeamMembersSkeleton />}
+      {!loading && (
+        <div className="flex flex-wrap p-[2px] gap-4">
+          {users.map((user) => (
+            <TeamMember user={user} key={user._id} />
+          ))}
+        </div>
+      )}
     </section>
   )
 }
@@ -30,9 +34,9 @@ function TeamMember({ user }) {
       />
       <div className="flex justify-between grow ">
         <div className="">
-          <h1 className="text-[16px] text-[#1D2433]">
+          <h3 className="text-[16px] text-[#1D2433]">
             {(user.firstName + " " + user.lastName).trim() || user.fullName}
-          </h1>
+          </h3>
           <p className="text-gray-800 text-[12px]">{user.role?.name}</p>
         </div>
         <Link

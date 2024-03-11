@@ -1,20 +1,39 @@
 import PeopleGroupIcon from "../../_assets/svgs/PeopleGroup"
 import WatchIcon from "../../_assets/svgs/WatchIcon"
+import StatisticsCardSkeleton from "../../_components/Skeletons/StatisticsCardSkeleton"
 
-function StaffList({ totalCountOfActiveEmployees, totalNumberOfWorkedHours }) {
+function StaffList({
+  totalCountOfActiveEmployees,
+  totalNumberOfWorkedHours,
+  loading,
+}) {
   return (
     <>
       <div className="text-[#252525] grid grid-cols-1 gap-4 md:grid-cols-2">
-        <StatisticsCard
-          title={totalCountOfActiveEmployees}
-          text="Total number of active employees"
-          icon={<PeopleGroupIcon />}
-        />
-        <StatisticsCard
-          title={(totalNumberOfWorkedHours)?.toLocaleString()}
-          text="Total number of worked hours"
-          icon={<WatchIcon />}
-        />
+        {loading && (
+          <>
+            <StatisticsCardSkeleton mainBg="#FFEECC" iconBg="#FFDD99" />
+            <StatisticsCardSkeleton mainBg="#FFEECC" iconBg="#FFDD99" />
+          </>
+        )}
+        {!loading && (
+          <>
+            <StatisticsCard
+              title={totalCountOfActiveEmployees}
+              text="Total number of active employees"
+              icon={<PeopleGroupIcon />}
+              mainBg="#FFEECC"
+              iconBg="#FFDD99"
+            />
+            <StatisticsCard
+              title={totalNumberOfWorkedHours?.toLocaleString()}
+              text="Total number of worked hours"
+              icon={<WatchIcon />}
+              mainBg="#FFEECC"
+              iconBg="#FFDD99"
+            />
+          </>
+        )}
       </div>
     </>
   )
@@ -22,14 +41,14 @@ function StaffList({ totalCountOfActiveEmployees, totalNumberOfWorkedHours }) {
 
 export default StaffList
 
-function StatisticsCard({ title, text, icon, mainBg, iconBG }) {
+function StatisticsCard({ title, text, icon, mainBg, iconBg }) {
   return (
     <div
       style={{ backgroundColor: mainBg }}
       className="bg-[#FFEECC] p-[28px] flex flex-wrap justify-center items-center gap-[16px] md:gap-[24px] md:justify-start rounded-lg"
     >
       <div
-        style={{ backgroundColor: iconBG }}
+        style={{ backgroundColor: iconBg }}
         className="bg-[#FFDD99] p-[11px] rounded-full"
       >
         {icon}

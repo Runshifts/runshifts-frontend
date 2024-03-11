@@ -1,5 +1,5 @@
 "use client"
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import TeamFilterGroup from "../../_components/AppComps/TeamFilterGroup"
 import TeamStatistics from "./TeamStatistics"
 import RecentlyViewedTeamMembers from "./RecentlyViewedTeamMembers"
@@ -14,12 +14,17 @@ function Team() {
     hasInitialized,
     initialize,
     teamStats,
+    loading,
   } = useContext(TeamContext)
 
   useEffect(() => {
     if (!hasInitialized) initialize()
   }, [hasInitialized, initialize])
-console.log(teamStats)
+
+  const filteredTeamMembers = useMemo(() => {
+    return teamMembers
+    // return teamMembers.filter(it => JSON.stringify())
+  }, [teamMembers])
   return (
     <section className="mx-2 p-3 h-screen flex flex-col gap-4">
       <div className="flex items-center justify-between py-3">
@@ -32,9 +37,13 @@ console.log(teamStats)
       <TeamStatistics
         totalCountOfActiveEmployees={teamStats.totalNumOfActiveEmployees}
         totalNumberOfWorkedHours={teamStats.totalNumOfWorkedHours}
+        loading={loading}
       />
-      <RecentlyViewedTeamMembers users={recentlyViewedTeamMembers} />
-      <AllTeamMembers users={teamMembers} />
+      <RecentlyViewedTeamMembers
+        loading={loading}
+        users={recentlyViewedTeamMembers}
+      />
+      <AllTeamMembers loading={loading} users={filteredTeamMembers} />
     </section>
   )
 }
