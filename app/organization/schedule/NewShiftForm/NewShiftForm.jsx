@@ -245,7 +245,7 @@ function NewShiftForm({
               placeholder: "00:00",
               readOnly: true,
               value: msToHourMinSecond(
-                organization?.breakDurationInMilliseconds
+                organization?.allottedBreakTimeInMilliseconds
               ),
             }}
           />
