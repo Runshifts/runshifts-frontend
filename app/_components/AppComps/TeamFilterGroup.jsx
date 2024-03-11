@@ -3,7 +3,7 @@ import React from "react"
 function TrackerFilterGroup() {
   return (
     <section>
-      <div className="flex items-center justify-start my-4">
+      <div className="flex items-center justify-start">
         <input
           type="text"
           placeholder="Search members..."
