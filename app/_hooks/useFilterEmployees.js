@@ -3,10 +3,12 @@ import { useMemo, useState } from "react"
 export default function useFilterEmployees(employees = []) {
   const [departmentFilter, setDepartmentFilter] = useState(null)
   const [roleFilter, setRoleFilter] = useState(null)
+  const [locationFilter, setLocationFilter] = useState(null)
 
   const filteredEmployees = useMemo(() => {
     return employees.filter((employee) => {
       return (
+        (!locationFilter || employee.location?._id === locationFilter) &&
         (!departmentFilter ||
           employee.assignee?.department?.name?.toLowerCase() ===
             departmentFilter.toLowerCase()) &&
@@ -15,13 +17,15 @@ export default function useFilterEmployees(employees = []) {
             roleFilter.toLowerCase())
       )
     })
-  }, [employees, departmentFilter, roleFilter])
+  }, [employees, departmentFilter, roleFilter, locationFilter])
 
   return {
     filteredEmployees,
     setDepartmentFilter,
     setRoleFilter,
+    setLocationFilter,
     departmentFilter,
     roleFilter,
+    locationFilter
   }
 }

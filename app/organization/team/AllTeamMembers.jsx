@@ -29,10 +29,10 @@ function TeamMember({ user }) {
         height={50}
         width={50}
         src={user.profileImage?.secure_url || placeholderImage}
-        alt={user.firstName || user.lastName || user.fullName}
+        alt={user.firstName || user.lastName || user.fullName || ""}
         className="w-[50px] h-[50px] rounded-full"
       />
-      <div className="flex justify-between grow ">
+      <div className="flex justify-between items-center grow ">
         <div className="">
           <h3 className="text-[16px] text-[#1D2433]">
             {(user.firstName + " " + user.lastName).trim() || user.fullName}

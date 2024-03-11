@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useEffect, useState } from "react"
 import useAxios from "../_hooks/useAxios"
+import { getPastNumOfDays } from "../_utils"
 
 export const TeamContext = createContext({
   teamMembers: [],
@@ -13,6 +14,8 @@ export const TeamContext = createContext({
   hasInitialized: false,
   initialize: () => {},
   loading: false,
+  fetchStatsForDuration: () => {},
+  loadingStats: false,
 })
 
 export default function TeamProvider({
@@ -23,8 +26,12 @@ export default function TeamProvider({
   const fetchData = useAxios()
   const [hasInitialized, setHasInitialized] = useState(false)
   const [loading, setLoading] = useState(hasInitialized === false)
+  const [loadingStats, setLoadingStats] = useState(false)
   const [teamMembers, setTeamMembers] = useState([])
   const [recentlyViewedTeamMembers, setRecentlyViewedTeamMembers] = useState([])
+  const [totalNumOfHoursWorkedStore, setTotalNumOfHoursWorkedStore] = useState(
+    {}
+  )
   const [teamStats, setTeamStats] = useState({
     totalNumOfActiveEmployees: null,
     totalNumOfWorkedHours: null,
@@ -34,20 +41,55 @@ export default function TeamProvider({
     if (!organizationId) return
     setLoading(true)
     const res = await fetchData(`/organizations/${organizationId}/team`)
-    console.log(res)
-    setTeamStats({
-      totalNumOfActiveEmployees: res.totalNumberOfActiveStaff,
-      totalNumOfWorkedHours: res.totalHoursWorked,
-    })
-    setTeamMembers(res.teamMembers)
-    setRecentlyViewedTeamMembers(res.recentlyViewedTeamMembers)
-    setHasInitialized(true)
+    if (res.statusCode === 200) {
+      setTeamStats({
+        totalNumOfActiveEmployees: res.totalNumberOfActiveStaff,
+        totalNumOfWorkedHours: res.totalHoursWorked,
+      })
+      setTotalNumOfHoursWorkedStore((prev) => ({
+        ...prev,
+        [getPastNumOfDays(7).toLocaleDateString()]: res.totalHoursWorked,
+      }))
+      setTeamMembers(res.teamMembers)
+      setRecentlyViewedTeamMembers(res.recentlyViewedTeamMembers)
+      setHasInitialized(true)
+    }
     setLoading(false)
   }, [organizationId])
 
   useEffect(() => {
     shouldAutoInitialize && initialize()
   }, [shouldAutoInitialize, initialize])
+
+  const fetchStatsForDuration = useCallback(
+    async (fromDate) => {
+      if (!organizationId || loadingStats) return
+      if (totalNumOfHoursWorkedStore[fromDate.toLocaleDateString()] >= 0) {
+        setTeamStats((prev) => ({
+          ...prev,
+          totalNumOfWorkedHours:
+            totalNumOfHoursWorkedStore[fromDate.toLocaleDateString()],
+        }))
+        return
+      }
+      setLoadingStats(true)
+      const res = await fetchData(
+        `/organizations/${organizationId}/team/stats?fromDate=${fromDate}`
+      )
+      if (res.statusCode === 200) {
+        setTotalNumOfHoursWorkedStore((prev) => ({
+          ...prev,
+          [fromDate.toLocaleDateString()]: res.totalHoursWorked,
+        }))
+        setTeamStats((prev) => ({
+          ...prev,
+          totalNumOfWorkedHours: res.totalHoursWorked,
+        }))
+      }
+      setLoadingStats(false)
+    },
+    [loadingStats, organizationId, totalNumOfHoursWorkedStore]
+  )
 
   return (
     <TeamContext.Provider
@@ -57,7 +99,9 @@ export default function TeamProvider({
         recentlyViewedTeamMembers,
         teamStats,
         hasInitialized,
-        loading
+        loading,
+        loadingStats,
+        fetchStatsForDuration,
       }}
     >
       {children}

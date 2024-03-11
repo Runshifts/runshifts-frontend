@@ -73,6 +73,13 @@ export const getNextSunday = (date) => {
   return nextSunday
 }
 
+export const getPastNumOfDays = (num) => {
+  const today = new Date(Date.now())
+  if (!num) return today
+  today.setDate(today.getDate() - num)
+  return today
+}
+
 export const getWeekThatDateFallsIn = (date) => {
   let starterDate = getPreviousMonday(date)
   throwInvalidDateError(starterDate)

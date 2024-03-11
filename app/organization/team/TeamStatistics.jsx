@@ -1,4 +1,5 @@
 import PeopleGroupIcon from "../../_assets/svgs/PeopleGroup"
+import Spinner from "../../_assets/svgs/Spinner"
 import WatchIcon from "../../_assets/svgs/WatchIcon"
 import StatisticsCardSkeleton from "../../_components/Skeletons/StatisticsCardSkeleton"
 
@@ -6,6 +7,7 @@ function StaffList({
   totalCountOfActiveEmployees,
   totalNumberOfWorkedHours,
   loading,
+  loadingStats,
 }) {
   return (
     <>
@@ -26,7 +28,13 @@ function StaffList({
               iconBg="#FFDD99"
             />
             <StatisticsCard
-              title={totalNumberOfWorkedHours?.toLocaleString()}
+              title={
+                loadingStats ? (
+                  <Spinner />
+                ) : (
+                  totalNumberOfWorkedHours?.toLocaleString()
+                )
+              }
               text="Total number of worked hours"
               icon={<WatchIcon />}
               mainBg="#FFEECC"

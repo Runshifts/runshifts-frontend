@@ -6,9 +6,20 @@ import AllTeamMembers from "./AllTeamMembers"
 import TeamAppgroup from "../../_components/AppComps/TeamAppgroup"
 import { TeamContext } from "../../_providers/TeamProvider"
 import useRenderEmployeesFilters from "../../_hooks/useRenderEmployeesFilter"
-import SelectTrigger from "../../_components/AppComps/Select"
+import SelectTrigger, { Option } from "../../_components/AppComps/Select"
 import DropDown from "../../_components/AppComps/Dropdown"
 import FilterSvg from "../../_assets/svgs/FilterSvg"
+import { getPastNumOfDays } from "../../_utils"
+
+const durationOptions = [
+  { displayValue: "7 days", fromDate: getPastNumOfDays(7) },
+  { displayValue: "14 days", fromDate: getPastNumOfDays(14) },
+  { displayValue: "30 days", fromDate: getPastNumOfDays(30) },
+  { displayValue: "3 Months", fromDate: getPastNumOfDays(90) },
+  { displayValue: "12 Months", fromDate: getPastNumOfDays(365) },
+  { displayValue: "2 Years", fromDate: getPastNumOfDays(730) },
+  { displayValue: "5 Years", fromDate: getPastNumOfDays(1825) },
+]
 
 function Team() {
   const {
@@ -18,6 +29,8 @@ function Team() {
     initialize,
     teamStats,
     loading,
+    loadingStats,
+    fetchStatsForDuration,
   } = useContext(TeamContext)
 
   useEffect(() => {
@@ -25,6 +38,10 @@ function Team() {
   }, [hasInitialized, initialize])
 
   const [search, setSearch] = useState("")
+  const [durationFilter, setDurationFilter] = useState(() => ({
+    displayValue: "7 days",
+    fromDate: getPastNumOfDays(7),
+  }))
   const filteredTeamMembers = useMemo(() => {
     return search.length === 0
       ? teamMembers
@@ -54,18 +71,32 @@ function Team() {
           name="members"
         />
         <ul className="hidden md:flex gap-2">
-          <DropDown
-            dropDownTrigger={
-              <SelectTrigger shouldApplyStyles>Location</SelectTrigger>
-            }
-            dropdownContent={<></>}
-          />
           {renderEmployeeFilters({})}
           <DropDown
             dropDownTrigger={
-              <SelectTrigger shouldApplyStyles>Duration</SelectTrigger>
+              <SelectTrigger shouldApplyStyles>
+                {durationFilter.displayValue}
+              </SelectTrigger>
             }
-            dropdownContent={<></>}
+            dropdownContent={
+              <>
+                {durationOptions.map((opt) => (
+                  <Option
+                    key={opt.displayValue}
+                    onClick={() => {
+                      fetchStatsForDuration(opt.fromDate)
+                      setDurationFilter(opt)
+                    }}
+                    isSelected={
+                      durationFilter.fromDate.toLocaleDateString() ===
+                      opt.fromDate.toLocaleDateString()
+                    }
+                  >
+                    {opt.displayValue}
+                  </Option>
+                ))}
+              </>
+            }
           />
         </ul>
 
@@ -81,11 +112,14 @@ function Team() {
         totalCountOfActiveEmployees={teamStats.totalNumOfActiveEmployees}
         totalNumberOfWorkedHours={teamStats.totalNumOfWorkedHours}
         loading={loading}
+        loadingStats={loadingStats}
       />
-      <RecentlyViewedTeamMembers
-        loading={loading}
-        users={recentlyViewedTeamMembers}
-      />
+      {(recentlyViewedTeamMembers.length > 0 || loading) && (
+        <RecentlyViewedTeamMembers
+          loading={loading}
+          users={recentlyViewedTeamMembers}
+        />
+      )}
       <AllTeamMembers loading={loading} users={filteredEmployees} />
     </section>
   )
