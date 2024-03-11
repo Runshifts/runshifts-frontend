@@ -6,6 +6,7 @@ import DASHBOARD_URLS from "../_urls/dashboardURLs"
 import LocationsProvider from "../_providers/LocationsProvider"
 import DepartmentsAndRolesProvider from "./DepartmentsAndRolesProvider"
 import ShiftsManagementProvider from "./ShiftManagementContext"
+import { useRouter } from "next/navigation"
 
 export const OrganizationContext = createContext({
   employees: [],
@@ -13,6 +14,7 @@ export const OrganizationContext = createContext({
 })
 
 export default function OrganizationProvider({ children }) {
+  const router = useRouter()
   const fetchData = useAxios()
   const [initRetries, setInitRetries] = useState(0)
   const [organization, setOrganization] = useState(null)
@@ -26,8 +28,11 @@ export default function OrganizationProvider({ children }) {
     if (res.statusCode === 200) {
       setOrganization(res.organization)
       setIsFetchingOrganization(false)
-    } else setInitRetries((prev) => prev + 1)
-  }, [])
+    } else {
+      setInitRetries((prev) => prev + 1)
+      if(res.statusCode === 404) router.push("/welcome")
+    }
+  }, [router])
 
   const fetchEmployees = useCallback(async () => {
     if(!organization) return

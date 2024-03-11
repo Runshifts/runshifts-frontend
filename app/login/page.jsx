@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useCallback, useContext, useState } from "react"
-import { useRouter } from "next/navigation"
+import React, { useCallback, useContext, useState, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import SocialProviders from "../_components/Auth/SocialProviders"
 import { LoadingContext } from "../_providers/LoadingProvider"
 import FormCard from "../_components/Auth/FormCard"
@@ -9,6 +9,7 @@ import Link from "next/link"
 import useAxios from "../_hooks/useAxios"
 
 const LoginForm = () => {
+  const searchParams = useSearchParams()
   const { loading, updateLoading } = useContext(LoadingContext)
   const fetchData = useAxios()
   const router = useRouter()
@@ -113,7 +114,7 @@ const LoginForm = () => {
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
-              <SocialProviders redirectPath="login" />
+              <SocialProviders accountType={searchParams.get("type")} redirectPath="login" />
             </form>
           </FormCard>
         </div>
@@ -122,4 +123,10 @@ const LoginForm = () => {
   )
 }
 
-export default LoginForm
+export default function Page(){
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  )
+}
