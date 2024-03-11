@@ -122,24 +122,15 @@
 // export default Navbar;
 
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import NavIcon from "./Nav-icon.svg";
 import NavLogo from "./runshifts-logo.svg";
-import profileAvatar from "./dp.png";
 import Image from "next/image";
 import Link from "next/link";
-import Optioncard from "/app/organization/userprofile/Optioncard.jsx";
+import DropDown from "../navbar/Dropdown";
 
-function Navbar({ onToggle, onImageClick }) {
-  const [showCard, setShowCard] = useState(false);
-
-  const handleImageClick = () => {
-    setShowCard(true);
-  };
-
-  const handleCloseCard = () => {
-    setShowCard(false);
-  };
+function Navbar({ onToggle }) {
+ 
   return (
     <>
       <section>
@@ -192,18 +183,7 @@ function Navbar({ onToggle, onImageClick }) {
                 <SettingsSvg />
               </Link>
             </div>
-
-            <div className="p-2">
-              <Image
-                onClick={handleImageClick}
-                style={{ cursor: "pointer" }}
-                height={32}
-                width={32}
-                src={profileAvatar}
-                alt="dp"
-              />
-            </div>
-            {showCard && <Optioncard onClose={handleCloseCard} />}
+            <DropDown />
           </div>
         </div>
       </section>

@@ -1,5 +1,5 @@
 import React from "react"
-import Calendar from "./Calendar";
+import Calendar from "../../organization/tracker/Calendar";
 
 function LogsFilterGroup() {
   return (
