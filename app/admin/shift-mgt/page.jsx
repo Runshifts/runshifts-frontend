@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../_components/AdminComps/Button";
+import Button from "../../_components/AppComps/Button";
 
 function page() {
   return (

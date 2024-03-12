@@ -1,5 +1,7 @@
 import React from "react";
-import Button from "../../_components/AdminComps/Button";
+import Button from "../../_components/AppComps/Button";
+import AllArticles from "./AllArticles";
+import Link from "next/link";
 
 function page() {
   return (
@@ -7,12 +9,14 @@ function page() {
       <div className="flex items-center justify-between">
         <h1 className="custom-h1 ">Knowledge base</h1>
 
-        <Button>
-          <div className="flex items-center justify-center">
-            <PlusSvg />
-            <p>Add new user</p>
-          </div>
-        </Button>
+        <Link href={"/admin/knowledge-base/create"}>
+          <Button>
+            <div className="flex items-center justify-center">
+              <PlusSvg />
+              <p>Add new article</p>
+            </div>
+          </Button>
+        </Link>
       </div>
 
       <select
@@ -24,6 +28,10 @@ function page() {
         <option value="2">Two</option>
         <option value="3">Three</option>
       </select>
+
+      <div>
+        <AllArticles />
+      </div>
     </section>
   );
 }
