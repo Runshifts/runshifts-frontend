@@ -20,12 +20,16 @@ export const TeamContext = createContext({
   updateTeamMembers: () => {},
   removeArchivedTeamMember: () => {},
   removeArchivedRecentlyViewed: () => {},
+  incrementActiveTeamMembersCount: () => {},
+  decrementActiveTeamMembersCount: () => {},
 })
 
 export default function TeamProvider({
   children,
   organizationId,
   shouldAutoInitialize,
+  updateEmployees = () => {},
+  removeEmployee = () => {}
 }) {
   const fetchData = useAxios()
   const [hasInitialized, setHasInitialized] = useState(false)
@@ -111,7 +115,9 @@ export default function TeamProvider({
         (upd) => JSON.stringify(prev).includes(upd._id) === false
       ),
     ])
-  }, [])
+    updateEmployees(update)
+  }, [updateEmployees])
+
   const removeArchivedRecentlyViewed = useCallback((user) => {
     setRecentlyViewedTeamMembers((prev) =>
       prev.filter((it) => it._id !== user?._id)
@@ -120,7 +126,8 @@ export default function TeamProvider({
 
   const removeArchivedTeamMember = useCallback((user) => {
     setTeamMembers((prev) => prev.filter((it) => it._id !== user?._id))
-  }, [])
+    removeEmployee(user)
+  }, [removeEmployee])
 
   return (
     <TeamContext.Provider
@@ -137,6 +144,16 @@ export default function TeamProvider({
         updateTeamMembers,
         removeArchivedRecentlyViewed,
         removeArchivedTeamMember,
+        incrementActiveTeamMembersCount: () =>
+          setTeamStats((prev) => ({
+            ...prev,
+            totalNumOfActiveEmployees: prev.totalNumOfActiveEmployees + 1,
+          })),
+        decrementActiveTeamMembersCount: () =>
+          setTeamStats((prev) => ({
+            ...prev,
+            totalNumOfActiveEmployees: prev.totalNumOfActiveEmployees - 1,
+          })),
       }}
     >
       {children}

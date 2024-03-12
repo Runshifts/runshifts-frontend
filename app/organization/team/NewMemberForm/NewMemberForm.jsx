@@ -7,7 +7,7 @@ import RoleOrDepartmentInput from "./RoleOrDepartmentInput"
 import FormLocationInput from "../../schedule/NewShiftForm/FormLocationInput"
 import { useCallback, useMemo, useState } from "react"
 import DateInput from "../../../_components/AppComps/DateInput"
-import toast from "react-hot-toast"
+import toast, { CheckmarkIcon } from "react-hot-toast"
 import useAxios from "../../../_hooks/useAxios"
 import Spinner from "../../../_assets/svgs/Spinner"
 
@@ -112,6 +112,10 @@ const NewMemberForm = ({
       const res = await fetchData(url, method, body)
       if (res.statusCode === 200 || res.statusCode === 201) {
         handleUserResponse(res.teamMember)
+        toast.success(
+          isEditMode ? "Edited successfully!" : "Team Member added!",
+          { className: "!bg-primary-400 !text-white" }
+        )
         onCancel()
       } else toast.error(res.message)
       setLoading((prev) => ({ ...prev, submit: false }))
@@ -339,6 +343,7 @@ function ImageInputSection({ preview, onChange }) {
       <input
         type="file"
         className="sr-only"
+        accept="image/*"
         onChange={(e) => {
           typeof preview === "string" && URL.revokeObjectURL(preview)
           onChange(e.target.files?.[0])

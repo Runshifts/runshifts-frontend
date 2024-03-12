@@ -46,6 +46,18 @@ export default function OrganizationProvider({ children }) {
     }
   }, [organization?._id])
 
+  const updateEmployees = useCallback((update = []) => {
+    setEmployees((prev) => [
+      ...prev,
+      ...update.filter(
+        (upd) => JSON.stringify(prev).includes(upd._id) === false
+      ),
+    ])
+  }, [])
+  const removeEmployee = useCallback((employee) => {
+    setEmployees((prev) => prev.filter((it) => it._id !== employee?._id))
+  }, [])
+
   useEffect(() => {
     if (initRetries <= 10) {
       fetchOrganization()
@@ -60,6 +72,7 @@ export default function OrganizationProvider({ children }) {
         fetchOrganization,
         isFetchingOrganization,
         employees,
+        updateEmployees,
       }}
     >
       <LocationsProvider organizationId={organization?._id}>
@@ -70,6 +83,8 @@ export default function OrganizationProvider({ children }) {
             <TeamProvider
               shouldAutoInitialize={false}
               organizationId={organization?._id}
+              updateEmployees={updateEmployees}
+              removeEmployee={removeEmployee}
             >
               {children}
             </TeamProvider>

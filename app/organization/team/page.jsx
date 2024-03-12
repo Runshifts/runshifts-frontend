@@ -46,7 +46,9 @@ function Team() {
     updateRecentlyViewed,
     updateTeamMembers,
     removeArchivedTeamMember,
-    removeArchivedRecentlyViewed
+    removeArchivedRecentlyViewed,
+    incrementActiveTeamMembersCount,
+    decrementActiveTeamMembersCount
   } = useContext(TeamContext)
 
   useEffect(() => {
@@ -62,7 +64,7 @@ function Team() {
     return search.length === 0
       ? teamMembers
       : teamMembers.filter((it) =>
-          JSON.stringify(Object.values(it))
+          JSON.stringify(Object.values(it).join(" "))
             .toLowerCase()
             .includes(search.toLowerCase())
         )
@@ -176,10 +178,12 @@ function Team() {
           onCancel={() => setTeamMemberFormData(null)}
           organizationId={organization?._id}
           handleUserResponse={(user) => {
-            updateRecentlyViewed([user])
+            teamMemberFormData.isEdit && updateRecentlyViewed([user])
+            teamMemberFormData.isNew && incrementActiveTeamMembersCount()
             updateTeamMembers([user])
           }}
           handleArchivedUser={(user) => {
+            decrementActiveTeamMembersCount()
             removeArchivedTeamMember(user)
             removeArchivedRecentlyViewed(user)
           }}
