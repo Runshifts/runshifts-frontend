@@ -1,135 +1,360 @@
-import React from "react"
-import profilepic from "/public/dashboardImgs/timesheet1.svg"
 import Image from "next/image"
 import Modal from "../../../_components/AppComps/Modal"
-import FormInputAndLabel from "../../schedule/NewShiftForm/FormInputAndLabel"
+import FormInputAndLabel, {
+  FormLabelText,
+} from "../../schedule/NewShiftForm/FormInputAndLabel"
+import RoleOrDepartmentInput from "./RoleOrDepartmentInput"
 import FormLocationInput from "../../schedule/NewShiftForm/FormLocationInput"
+import { useCallback, useMemo, useState } from "react"
+import DateInput from "../../../_components/AppComps/DateInput"
+import toast from "react-hot-toast"
+import useAxios from "../../../_hooks/useAxios"
+import Spinner from "../../../_assets/svgs/Spinner"
 
 export default function FormModal({
   show = false,
-  newShiftDetails,
   onCancel = () => {},
-  handleNewShift,
-  currentWeek,
+  teamMemberFormData,
+  organizationId,
+  handleUserResponse,
+  handleArchivedUser,
 }) {
+  if (!teamMemberFormData) return null
   return (
     <Modal open={show}>
       <NewMemberForm
-        newShiftDetails={newShiftDetails}
         onCancel={onCancel}
-        handleNewShift={handleNewShift}
-        currentWeek={currentWeek}
+        teamMemberFormData={teamMemberFormData}
+        organizationId={organizationId}
+        handleUserResponse={handleUserResponse}
+        handleArchivedUser={handleArchivedUser}
       />
     </Modal>
   )
 }
-const NewMemberForm = () => {
+const NewMemberForm = ({
+  teamMemberFormData,
+  onCancel,
+  organizationId,
+  handleUserResponse,
+  handleArchivedUser,
+}) => {
+  const [loading, setLoading] = useState({
+    submit: false,
+    archive: false,
+  })
+  const isEditMode = useMemo(
+    () => teamMemberFormData?.isEdit === true,
+    [teamMemberFormData?.isEdit]
+  )
+  const [formData, setFormData] = useState({
+    firstName: isEditMode ? teamMemberFormData?.user?.firstName : "",
+    lastName: isEditMode ? teamMemberFormData?.user?.lastName : "",
+    email: isEditMode ? teamMemberFormData?.user?.email : "",
+    location: isEditMode ? teamMemberFormData?.user?.location || null : null,
+    department: isEditMode
+      ? teamMemberFormData?.user?.department || null
+      : null,
+    role: isEditMode ? teamMemberFormData?.user?.roll || null : null,
+    hourlyEarnings: isEditMode
+      ? teamMemberFormData?.user?.hourlyRate || ""
+      : "",
+    rightToWorkExpiry: isEditMode
+      ? new Date(teamMemberFormData?.user?.rightToWorkExpiry || Date.now()) ||
+        null
+      : null,
+    profileImage: isEditMode
+      ? teamMemberFormData?.user?.profileImage || null
+      : null,
+  })
+
+  const handleChange = useCallback((e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  }, [])
+
+  const profileImagePreview = useMemo(() => {
+    if (formData.profileImage?.lastModifiedDate)
+      return URL.createObjectURL(formData.profileImage)
+    else if (formData.profileImage?.secure_url)
+      return formData.profileImage?.secure_url
+    return null
+  }, [formData.profileImage])
+
+  const fetchData = useAxios()
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault()
+      if (!formData.location) return toast.error("Please provide a location")
+      if (!formData.department)
+        return toast.error("Please provide a department")
+      if (!formData.role) return toast.error("Please provide a role")
+      if (!formData.profileImage)
+        return toast.error("Please provide a profile image")
+      if (!formData.rightToWorkExpiry)
+        return toast.error("Please input right to work date")
+      setLoading((prev) => ({ ...prev, submit: true }))
+      const body = new FormData()
+      if (formData.profileImage?.lastModifiedDate)
+        body.set("profileImage", formData.profileImage)
+      body.set("department", formData.department?._id)
+      body.set("locationId", formData.location?._id)
+      body.set("role", formData.role?._id)
+      body.set("department", formData.department?._id)
+      body.set("hourlyRate", formData.hourlyEarnings)
+      body.set("rightToWorkExpiry", formData.rightToWorkExpiry)
+      body.set("firstName", formData.firstName)
+      body.set("lastName", formData.lastName)
+      body.set("email", formData.email)
+      const url = isEditMode
+        ? `/users/employees/${organizationId}/${teamMemberFormData?.user?._id}`
+        : `/users/${organizationId}`
+      const method = isEditMode ? "put" : "post"
+      const res = await fetchData(url, method, body)
+      if (res.statusCode === 200 || res.statusCode === 201) {
+        handleUserResponse(res.teamMember)
+        onCancel()
+      } else toast.error(res.message)
+      setLoading((prev) => ({ ...prev, submit: false }))
+    },
+    [
+      formData,
+      teamMemberFormData,
+      isEditMode,
+      organizationId,
+      handleUserResponse,
+      onCancel,
+    ]
+  )
+
+  const [showArchiveConfirmation, setShowArchiveConfirmation] = useState(false)
+  const handleArchive = useCallback(async () => {
+    setLoading((prev) => ({ ...prev, archive: true }))
+    const res = await fetchData(
+      `/users/employees/${organizationId}/${teamMemberFormData?.user?._id}`,
+      "put",
+      { isArchived: true }
+    )
+    if (res.statusCode === 200) {
+      handleArchivedUser(res.teamMember)
+      onCancel()
+    } else toast.error(res.message)
+    setLoading((prev) => ({ ...prev, archive: false }))
+  }, [
+    teamMemberFormData.user?._id,
+    organizationId,
+    handleArchivedUser,
+    onCancel,
+  ])
+
   return (
-    <section className="w-[95dvw] py-[24px] px-[24px] md:px-[40px] max-w-[320px] bg-white rounded-[16px] gap-y-[14px] flex flex-col">
-      <div className="flex flex-col items-center justify-center">
-        <h3 className="text-center font-[600] text-[16px] text-[#1B1818] mb-[14px]">
-          New Team Member
-        </h3>
-        <Image src={profilepic} alt="profile pic" />
+    <section className="w-[95dvw] py-[24px] px-[24px] md:px-[35px] max-w-[320px] bg-white rounded-[16px] gap-y-[14px] flex flex-col">
+      <div className="flex flex-col gapp-[14px] items-center justify-center">
+        {!isEditMode && (
+          <h3 className="text-center font-[600] text-[16px] text-[#1B1818] mb-[14px]">
+            New Team Member
+          </h3>
+        )}
+        <ImageInputSection
+          preview={profileImagePreview}
+          onChange={(profileImage) =>
+            setFormData((prev) => ({ ...prev, profileImage }))
+          }
+        />
+        {isEditMode && (
+          <h3 className="text-center font-[600] text-[16px] text-[#1B1818] mb-[14px]">
+            Edit profile
+          </h3>
+        )}
       </div>
-      <form className="flex flex-col gap-y-4">
+      <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
         <FormInputAndLabel
           label="First name"
           inputProps={{
             placeholder: "John",
-            readOnly: true,
-            value: "",
+            value: formData.firstName,
+            name: "firstName",
+            type: "text",
+            onChange: handleChange,
+            required: true,
           }}
         />
         <FormInputAndLabel
           label="Last name"
           inputProps={{
             placeholder: "Doe",
-            readOnly: true,
-            value: "",
+            value: formData.lastName,
+            name: "lastName",
+            type: "text",
+            onChange: handleChange,
+            required: true,
           }}
         />
         <FormInputAndLabel
           label="Email"
           inputProps={{
             placeholder: "Johndoe@email.com",
-            readOnly: true,
-            value: "",
+            value: formData.email,
+            disabled: isEditMode,
+            name: "email",
+            type: "email",
+            onChange: handleChange,
+            required: true,
           }}
         />
         <FormLocationInput
-          currentLocation={null}
-          updateCurrentValue={() => {}}
+          currentLocation={formData.location}
+          updateCurrentValue={(location) =>
+            setFormData((prev) => ({ ...prev, location }))
+          }
         />
-        <FormInputAndLabel
-          label="Department"
-          inputProps={{
-            placeholder: "Department",
-            readOnly: true,
-            value: "",
-          }}
+        <RoleOrDepartmentInput
+          inputType="department"
+          handleSelect={(department) =>
+            setFormData((prev) => ({ ...prev, department }))
+          }
+          selectedOption={formData.department}
         />
-        <FormInputAndLabel
-          label="Role"
-          inputProps={{
-            placeholder: "Role",
-            readOnly: true,
-            value: "",
-          }}
+        <RoleOrDepartmentInput
+          inputType="role"
+          handleSelect={(role) => setFormData((prev) => ({ ...prev, role }))}
+          selectedOption={formData.role}
         />
         <FormInputAndLabel
           label="Hourly earnings"
           inputProps={{
             placeholder: "£123",
-            value: "",
+            value: `${formData.hourlyEarnings}`,
+            name: "hourlyEarnings",
+            type: "number",
+            onChange: handleChange,
+            required: true,
           }}
         />
-        <FormInputAndLabel
-          label="Right to work date"
-          inputProps={{
-            placeholder: "02 / 24",
-            readOnly: true,
-            value: "",
-          }}
+        <DateInput
+          label={<FormLabelText>Right to work date</FormLabelText>}
+          onChange={(rightToWorkExpiry) =>
+            setFormData((prev) => ({ ...prev, rightToWorkExpiry }))
+          }
+          value={formData.rightToWorkExpiry}
         />
-        <div className="flex gap-4">
-          <FormInputAndLabel
-            label="Total time worked"
-            inputProps={{
-              placeholder: "5000 hrs",
-              readOnly: true,
-              value: "",
-            }}
-          />
-          <FormInputAndLabel
-            label="Total earnings"
-            inputProps={{
-              placeholder: "£4,000,000",
-              readOnly: true,
-              value: "",
-            }}
-          />
-        </div>
-        <div className="flex flex-col gap-[8px]">
-          <button className="bg-primary-500 text-white flex-1 py-[8px] rounded-[3px]">
-            Submit
-          </button>
-          <button className="text-[#1E1E1E] text-[14px] px-[8px] py-[4px]">
-            Cancel
-          </button>
-        </div>
-        <div className="flex gap-[8px] flex-wrap">
-          <button className="bg-primary-500 text-white flex-1 py-[2px] px-[12px] rounded-[3px]">
-            Submit
-          </button>
-          <button className="bg-info-100 text-info-600 flex-1 py-[2px] px-[12px] rounded-[3px]">
-            Archive
-          </button>
-          <button className="text-[#1E1E1E] text-[14px] px-[8px] py-[4px] w-full">
-            Go Back
-          </button>
-        </div>
+        {teamMemberFormData.isEdit && (
+          <div className="flex gap-4">
+            <FormInputAndLabel
+              label="Total time worked"
+              inputProps={{
+                placeholder: "5000 hrs",
+                disabled: true,
+                value: `${teamMemberFormData.user?.totalTimeWorked} hrs`,
+              }}
+            />
+            <FormInputAndLabel
+              label="Total earnings"
+              inputProps={{
+                placeholder: "£4,000,000",
+                disabled: true,
+                value: `£${teamMemberFormData.user?.totalEarnings}`,
+              }}
+            />
+          </div>
+        )}
+        {teamMemberFormData.isNew && (
+          <div className="flex flex-col gap-[8px]">
+            <button
+              disabled={loading.submit}
+              type="submit"
+              className="bg-primary-500 disabled:bg-primary-300 disabled:cursor-not-allowed flex justify-center text-white flex-1 py-[8px] rounded-[3px]"
+            >
+              {loading.submit ? <Spinner /> : "Add new member"}
+            </button>
+            <button
+              type="button"
+              onClick={onCancel}
+              className="text-[#1E1E1E] text-[14px] px-[8px] py-[4px] font-[500]"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+        {teamMemberFormData.isEdit && (
+          <>
+            <div className="flex gap-[8px] flex-wrap">
+              <button
+                type="submit"
+                disabled={loading.submit}
+                className="bg-primary-500 flex justify-center disabled:bg-primary-300 disabled:cursor-not-allowed text-[14px] text-white flex-1 py-[2px] px-[12px] rounded-[3px]"
+              >
+                {loading.submit ? <Spinner /> : "Save changes"}
+              </button>
+              <button
+                type="button"
+                disabled={loading.archive}
+                onClick={() => setShowArchiveConfirmation(true)}
+                className="bg-info-100 text-[14px] flex justify-center text-info-600 flex-1 py-[2px] px-[12px] rounded-[3px]"
+              >
+                {loading.archive ? <Spinner /> : "Archive"}
+              </button>
+              <button
+                type="button"
+                onClick={onCancel}
+                className="text-[#1E1E1E] text-[14px] text-[14px] px-[8px] font-[500] py-[4px] w-full"
+              >
+                Go Back
+              </button>
+            </div>
+            <Modal zIndex={10001} open={showArchiveConfirmation}>
+              <div
+                role="alert"
+                className="bg-white min-h-[92px] p-[10px] text-center w-[237px] rouded-[8px] flex flex-col gap-2 items-center justify-center rounded-[8px"
+              >
+                <p className="font-[500] text-gray-800 text-[12px]">
+                  Are you sure you want to remove this profile?
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleArchive}
+                    className="bg-danger-600 text-[14px] flex justify-center text-white flex-1 py-[2px] px-[12px] rounded-[3px]"
+                  >
+                    Yes
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowArchiveConfirmation(false)}
+                    className="text-[#1E1E1E] text-[14px] text-[14px] px-[8px] py-[4px] w-full"
+                  >
+                    Go Back
+                  </button>
+                </div>
+              </div>
+            </Modal>
+          </>
+        )}
       </form>
     </section>
+  )
+}
+
+function ImageInputSection({ preview, onChange }) {
+  return (
+    <label className="flex items-center justify-center object-cover text-center text-gray-700 w-[69px] h-[69px] bg-[#D9D9D9] rounded-full text-[10px] leading-[14.5px] font-[600]">
+      <input
+        type="file"
+        className="sr-only"
+        onChange={(e) => {
+          typeof preview === "string" && URL.revokeObjectURL(preview)
+          onChange(e.target.files?.[0])
+        }}
+      />
+      {typeof preview === "string" ? (
+        <Image
+          width={69}
+          height={69}
+          src={preview}
+          alt=""
+          className="w-full h-full rounded-full object-cover"
+        />
+      ) : (
+        <span className="inline-block p-1">Upload image</span>
+      )}
+    </label>
   )
 }

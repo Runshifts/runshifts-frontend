@@ -16,6 +16,10 @@ export const TeamContext = createContext({
   loading: false,
   fetchStatsForDuration: () => {},
   loadingStats: false,
+  updateRecentlyViewed: () => {},
+  updateTeamMembers: () => {},
+  removeArchivedTeamMember: () => {},
+  removeArchivedRecentlyViewed: () => {},
 })
 
 export default function TeamProvider({
@@ -91,6 +95,33 @@ export default function TeamProvider({
     [loadingStats, organizationId, totalNumOfHoursWorkedStore]
   )
 
+  const updateRecentlyViewed = useCallback((update = []) => {
+    setRecentlyViewedTeamMembers((prev) => [
+      ...prev,
+      ...update.filter(
+        (upd) => JSON.stringify(prev).includes(upd._id) === false
+      ),
+    ])
+  }, [])
+
+  const updateTeamMembers = useCallback((update = []) => {
+    setTeamMembers((prev) => [
+      ...prev,
+      ...update.filter(
+        (upd) => JSON.stringify(prev).includes(upd._id) === false
+      ),
+    ])
+  }, [])
+  const removeArchivedRecentlyViewed = useCallback((user) => {
+    setRecentlyViewedTeamMembers((prev) =>
+      prev.filter((it) => it._id !== user?._id)
+    )
+  }, [])
+
+  const removeArchivedTeamMember = useCallback((user) => {
+    setTeamMembers((prev) => prev.filter((it) => it._id !== user?._id))
+  }, [])
+
   return (
     <TeamContext.Provider
       value={{
@@ -102,6 +133,10 @@ export default function TeamProvider({
         loading,
         loadingStats,
         fetchStatsForDuration,
+        updateRecentlyViewed,
+        updateTeamMembers,
+        removeArchivedRecentlyViewed,
+        removeArchivedTeamMember,
       }}
     >
       {children}

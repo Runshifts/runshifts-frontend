@@ -1,5 +1,11 @@
 "use client"
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 import TeamStatistics from "./TeamStatistics"
 import RecentlyViewedTeamMembers from "./RecentlyViewedTeamMembers"
 import AllTeamMembers from "./AllTeamMembers"
@@ -11,6 +17,8 @@ import DropDown from "../../_components/AppComps/Dropdown"
 import FilterSvg from "../../_assets/svgs/FilterSvg"
 import { getPastNumOfDays } from "../../_utils"
 import NewMemberForm from "./NewMemberForm/NewMemberForm"
+import useAxios from "../../_hooks/useAxios"
+import { OrganizationContext } from "../../_providers/OrganizationProvider"
 
 const durationOptions = [
   { displayValue: "7 days", fromDate: getPastNumOfDays(7) },
@@ -23,6 +31,9 @@ const durationOptions = [
 ]
 
 function Team() {
+  const fetchData = useAxios()
+  const { organization } = useContext(OrganizationContext)
+
   const {
     teamMembers,
     recentlyViewedTeamMembers,
@@ -32,6 +43,10 @@ function Team() {
     loading,
     loadingStats,
     fetchStatsForDuration,
+    updateRecentlyViewed,
+    updateTeamMembers,
+    removeArchivedTeamMember,
+    removeArchivedRecentlyViewed
   } = useContext(TeamContext)
 
   useEffect(() => {
@@ -56,12 +71,37 @@ function Team() {
   const { filteredEmployees, renderEmployeeFilters } =
     useRenderEmployeesFilters(filteredTeamMembers)
 
+  const [teamMemberFormData, setTeamMemberFormData] = useState(null)
+
+  const handleViewTeamMember = useCallback(
+    async (teamMemberId) => {
+      const res = await fetchData(
+        `/users/employees/${organization?._id}/${teamMemberId}`,
+        "put",
+        { lastViewedByEmployerAt: new Date(Date.now()) }
+      )
+      if (res.statusCode === 200) {
+        updateRecentlyViewed([res.teamMember])
+        setTeamMemberFormData({
+          isEdit: true,
+          isNew: false,
+          user: res.teamMember,
+        })
+      }
+    },
+    [organization?._id]
+  )
+
   return (
     <>
       <section className="mx-2 p-3 h-screen flex flex-col gap-4">
         <div className="flex items-center justify-between py-3">
           <h1 className="custom-h1">Team</h1>
-          <TeamAppgroup />
+          <TeamAppgroup
+            openNewMemberModal={() =>
+              setTeamMemberFormData({ isNew: true, isEdit: false })
+            }
+          />
         </div>
         <div className="flex gap-2 items-center justify-start">
           <input
@@ -120,14 +160,29 @@ function Team() {
           <RecentlyViewedTeamMembers
             loading={loading}
             users={recentlyViewedTeamMembers}
+            viewTeamMember={handleViewTeamMember}
           />
         )}
-        <AllTeamMembers loading={loading} users={filteredEmployees} />
+        <AllTeamMembers
+          viewTeamMember={handleViewTeamMember}
+          loading={loading}
+          users={filteredEmployees}
+        />
       </section>
       <>
         <NewMemberForm
-          show={true}
-          onCancel={() => {}}
+          show={teamMemberFormData !== null}
+          teamMemberFormData={teamMemberFormData}
+          onCancel={() => setTeamMemberFormData(null)}
+          organizationId={organization?._id}
+          handleUserResponse={(user) => {
+            updateRecentlyViewed([user])
+            updateTeamMembers([user])
+          }}
+          handleArchivedUser={(user) => {
+            removeArchivedTeamMember(user)
+            removeArchivedRecentlyViewed(user)
+          }}
         />
       </>
     </>

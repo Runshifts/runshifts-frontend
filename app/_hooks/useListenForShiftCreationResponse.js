@@ -9,7 +9,6 @@ export default function useListenForMultipleShiftCreation() {
     let toastId
     socket.on("create_multiple_shifts_success", (data) => {
       toast.remove(toastId)
-      console.log(data, "dsodf")
       updateAllShifts(data.shifts)
       toastId = toast.success(data.message)
     })
