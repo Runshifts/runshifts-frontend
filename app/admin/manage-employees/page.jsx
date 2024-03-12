@@ -104,7 +104,7 @@ function MoreSvg() {
         height="24"
         transform="translate(0.5)"
         fill="white"
-        fill-opacity="0.01"
+        fillOpacity="0.01"
       />
       <path
         d="M5.5 14C6.60457 14 7.5 13.1046 7.5 12C7.5 10.8954 6.60457 10 5.5 10C4.39543 10 3.5 10.8954 3.5 12C3.5 13.1046 4.39543 14 5.5 14Z"
@@ -119,5 +119,5 @@ function MoreSvg() {
         fill="#42526E"
       />
     </svg>
-  );
+  )
 }
