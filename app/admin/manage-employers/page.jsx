@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "@/app/_components/AdminComps/Button";
-import ManageEmployersFilterGroup from "@/app/_components/AdminComps/ManageEmployersFilterGroup";
+import Button from "../../_components/AppComps/Button";
+import ManageEmployersFilterGroup from "../../_components/AdminComps/ManageEmployersFilterGroup";
 import TotalCards from "./TotalCards";
 import SignupTable from "./SignupTable";
 

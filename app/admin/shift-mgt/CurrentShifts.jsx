@@ -10,6 +10,7 @@ const AllEmployeesTable = () => {
       empName: "John Doe",
       status: "Active",
       image: Avatar,
+      date: '14 Jan 2024'
     },
     {
       orgName: "WeCanStores",
@@ -17,6 +18,7 @@ const AllEmployeesTable = () => {
       empName: "Jonah Ford",
       status: "Suspended",
       image: Avatar,
+      date: '14 Jan 2024'
     },
     {
       orgName: "WeCanStores",
@@ -24,6 +26,8 @@ const AllEmployeesTable = () => {
       empName: "John Doe",
       status: "Active",
       image: Avatar,
+      date: '14 Jan 2024'
+
     },
     {
       orgName: "BMaritime Global Service",
@@ -31,18 +35,20 @@ const AllEmployeesTable = () => {
       empName: "Jonah Ford ",
       status: "Active",
       image: Avatar,
+      date: '14 Jan 2024'
+
     },
   ];
 
   return (
-    <div className="overflow-x-auto md:overflow-hidden">
+    <div className=" overflow-x-auto">
          <h1 className="text-gray-900 text-base not-italic font-semibold">
-        All employees
+        Current shifts
       </h1>
       {employeeData.map((employee, index) => (
         <div
           key={index}
-          className="grid grid-cols-4 place-content-center place-items-center bg-white shadow-xl rounded my-2 p-1"
+          className="grid grid-cols-5 bg-white shadow-xl rounded my-2 p-1"
         >
           
           <div className="mx-auto flex items-center justify-center">
@@ -54,7 +60,7 @@ const AllEmployeesTable = () => {
               width={24}
               className="rounded-full"
             />
-            <div className="text-[#1D2433] text-xs mx-2 font-normal leading-5 tracking-normal text-left">
+            <div className="text-[#1D2433]  text-sm mx-2">
               {employee.empName}
             </div>
           </div>
@@ -62,6 +68,8 @@ const AllEmployeesTable = () => {
           <div className="text-[#1D2433] text-sm mx-6">{employee.orgName}</div>
 
           <div className="text-[#1D2433] text-sm mx-6">{employee.location}</div>
+
+          <div className="text-[#1D2433] text-sm mx-6">{employee.date}</div>
 
           <div className="ml-auto flex space-x-2">
             <button className="bg-[#5BC62D] rounded text-white py-[8px] px-[10px]">
