@@ -1,53 +1,5 @@
-"use client";
-import React, { useState } from "react";
-import Calendar from "./Calendar";
 
-function TrackerFilterGroup() {
-  const [isCalendarOpen, setCalendarOpen] = useState(false);
-
-  const handleCalendarToggle = () => {
-    setCalendarOpen(!isCalendarOpen);
-  };
-
-  return (
-    <section>
-      <div className="hidden md:flex items-center justify-start my-6">
-        <input
-          type="text"
-          placeholder="Search members..."
-          className="bg-[#F4F5F7] border-none px-2 py-2 mx-2 h-10 text-[#7A869A] text-xs rounded cursor-pointer"
-          name="members"
-        />
-        <select
-          className="bg-[#F4F5F7] border-none text-[#7A869A] text-xs m-2 mx-2 h-10 w-32 rounded flex justify-between items-center cursor-pointer"
-          aria-label="Default select example"
-        >
-          <option>Location</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
-
-        <select
-          className="bg-[#F4F5F7] border-none text-[#7A869A] text-xs m-2  mx-2 h-10 w-32 rounded flex justify-between items-center cursor-pointer"
-          aria-label="Default select example"
-        >
-          <option>Department</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
-        <div>
-          <Calendar onClose={() => setCalendarOpen(true)} />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export default TrackerFilterGroup;
-
-function DateSvg() {
+export default function Calender() {
   return (
     <svg
       width="20"
@@ -77,5 +29,5 @@ function DateSvg() {
         fill="#7A869A"
       />
     </svg>
-  );
+  )
 }

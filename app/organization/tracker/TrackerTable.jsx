@@ -1,14 +1,21 @@
 "use client"
 import React, { useState } from "react"
-import Avatar from "./Ellipse.svg"
+import placeholderImage from "../../_assets/img/user.png"
 import { IoEyeOutline } from "react-icons/io5"
 import Breakdown, { BREAKDOWN_VARIANTS } from "./Breakdown"
 import Image from "next/image"
 import MoreSvg from "../../_assets/svgs/More"
 import Tooltip from "../../_components/AppComps/TooltipModal"
 import Modal from "../../_components/AppComps/Modal"
+import TrackerTableSkeleton from "../../_components/Skeletons/TrackerSkeletons"
 
-const Tracker = (props) => {
+const Tracker = ({
+  clockedInShifts = [],
+  clockedOutShifts = [],
+  usedBreakShifts = [],
+  isCurrentDate,
+  loading,
+}) => {
   const employeeNames1 = [
     "Charlse Jenkings",
     "Otto Chris",
@@ -17,17 +24,24 @@ const Tracker = (props) => {
   ]
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 py-[30px]">
-      <TrackerSection heading="Employees currently clocked In">
-        <TrackerTable headings={["Employees", ""]}>
-          {employeeNames1.map((employee, rowIndex) => (
-            <EmployeeRow
-              key={employee}
-              isOdd={rowIndex % 2}
-              breakdownVariant={BREAKDOWN_VARIANTS.CLOCKED_IN}
-            />
-          ))}
-        </TrackerTable>
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <TrackerSection
+        heading={`Employees ${isCurrentDate ? "currently" : "who"} clocked In`}
+      >
+        {!loading && (
+          <TrackerTable headings={["Employees", ""]}>
+            {clockedInShifts.map((shift, rowIndex) => (
+              <EmployeeRow
+                key={shift._id}
+                isOdd={rowIndex % 2}
+                breakdownVariant={BREAKDOWN_VARIANTS.CLOCKED_IN}
+                employee={shift.assignee}
+                shiftOrTimeOff={shift}
+              />
+            ))}
+          </TrackerTable>
+        )}
+        {loading && <TrackerTableSkeleton headings={["Employees", ""]} />}
       </TrackerSection>
 
       <TrackerSection heading="Employees with time off">
@@ -42,28 +56,44 @@ const Tracker = (props) => {
         </TrackerTable>
       </TrackerSection>
 
-      <TrackerSection heading="Employees currently on break">
-        <TrackerTable headings={["Employees", ""]}>
-          {employeeNames1.map((employee, rowIndex) => (
-            <EmployeeRow
-              key={employee}
-              isOdd={rowIndex % 2}
-              breakdownVariant={BREAKDOWN_VARIANTS.ON_BREAK}
-            />
-          ))}
-        </TrackerTable>
+      <TrackerSection
+        heading={`Employees ${
+          isCurrentDate ? "currently on" : "with used"
+        } break`}
+      >
+        {!loading && (
+          <TrackerTable headings={["Employees", ""]}>
+            {usedBreakShifts.map((shift, rowIndex) => (
+              <EmployeeRow
+                key={shift._id}
+                isOdd={rowIndex % 2}
+                breakdownVariant={BREAKDOWN_VARIANTS.ON_BREAK}
+                employee={shift.assignee}
+                shiftOrTimeOff={shift}
+              />
+            ))}
+          </TrackerTable>
+        )}
+        {loading && <TrackerTableSkeleton headings={["Employees", ""]} />}
       </TrackerSection>
 
-      <TrackerSection heading="Employees clocked out">
-        <TrackerTable headings={["Employees", ""]}>
-          {employeeNames1.map((employee, rowIndex) => (
-            <EmployeeRow
-              key={employee}
-              isOdd={rowIndex % 2}
-              breakdownVariant={BREAKDOWN_VARIANTS.CLOCKED_OUT}
-            />
-          ))}
-        </TrackerTable>
+      <TrackerSection
+        heading={`Employees ${isCurrentDate ? "" : "who"} clocked out`}
+      >
+        {!loading && (
+          <TrackerTable headings={["Employees", ""]}>
+            {clockedOutShifts.map((shift, rowIndex) => (
+              <EmployeeRow
+                key={shift._id}
+                isOdd={rowIndex % 2}
+                breakdownVariant={BREAKDOWN_VARIANTS.CLOCKED_OUT}
+                employee={shift.assignee}
+                shiftOrTimeOff={shift}
+              />
+            ))}
+          </TrackerTable>
+        )}
+        {loading && <TrackerTableSkeleton headings={["Employees", ""]} />}
       </TrackerSection>
       <TrackerSection heading="Incoming shift requests">
         <TrackerTable headings={["Employees", "Shift time", ""]}>
@@ -88,6 +118,7 @@ function EmployeeRow({
   isOdd,
   additionalTableData = [],
   breakdownVariant = "clocked-in",
+  shiftOrTimeOff = {},
 }) {
   const [showBreakDown, setShowBreakDown] = useState(false)
 
@@ -98,11 +129,13 @@ function EmployeeRow({
           <Image
             height={24}
             width={24}
-            src={Avatar}
-            alt="avatar"
-            className="w-[24px] h-[24px] object-cover"
+            src={employee?.profileImage?.secure_url || placeholderImage}
+            alt=""
+            className="w-[24px] h-[24px] object-cover rounded-full"
           />
-          {"employee"}
+          {((employee?.firstName + " " + employee?.lastName).trim() ||
+            employee?.fullName ||
+            employee?.email).replaceAll("undefined", "-")}
         </span>
       </td>
       {additionalTableData.map((content) => (
@@ -134,6 +167,8 @@ function EmployeeRow({
         onClose={() => setShowBreakDown(false)}
       >
         <Breakdown
+          employee={employee}
+          shiftOrTimeOff={shiftOrTimeOff}
           handleClose={() => setShowBreakDown(false)}
           variant={breakdownVariant}
         />
@@ -159,10 +194,11 @@ function TrackerTable({ headings = [], children }) {
     <table className="min-w-full rounded-lg shadow-lg">
       <thead className="bg-[#F8F9FC]">
         <tr>
-          {headings.map((heading) => (
+          {headings.map((heading, idx) => (
             <th
               key={heading}
-              className="px-2 py-[13px] text-start text-sm text-[#1D2433] font-thin"
+              style={{ width: idx > 0 ? "24px" : "auto" }}
+              className="px-2 py-[13px] text-start text-sm text-[#1D2433] font-thin whitespace-nowrap"
             >
               {heading}
             </th>

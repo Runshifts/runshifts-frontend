@@ -1,5 +1,4 @@
 import React from "react"
-import Link from "next/link"
 import Image from "next/image"
 import placeholderImage from "../../_assets/img/user.png"
 import { RecentlyViewedTeamMembersSkeleton } from "../../_components/Skeletons/TeamMembersSkeleton"

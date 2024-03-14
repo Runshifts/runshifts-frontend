@@ -32,9 +32,6 @@ export default function DateInput({
     language: "en",
     disabledDates: [],
     weekDays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-    inputNameProp: "date",
-    inputIdProp: "date",
-    inputPlaceholderProp: "Select Date",
     inputDateFormatProp: {
       month: "numeric",
       year: "numeric",

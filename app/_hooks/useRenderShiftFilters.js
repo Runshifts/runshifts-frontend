@@ -25,13 +25,17 @@ export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
   const { departments, roles } = useContext(DepartmentsAndRolesContext)
 
   const renderShiftFilters = useCallback(
-    ({
-      ComponentToRender,
-      onWeekFilterSelect,
-      onRoleFilterSelect,
-      onDepartmentFilterSelect,
-      onLocationFilterSelect,
-    }) => {
+    (props = {}) => {
+      const {
+        ComponentToRender,
+        onWeekFilterSelect,
+        onRoleFilterSelect,
+        onDepartmentFilterSelect,
+        onLocationFilterSelect,
+        showRoleFilter = true,
+        showDepartmentFilter = true,
+        showLocationFilter = true,
+      } = props
       if (typeof ComponentToRender === "function")
         return (
           <ComponentToRender
@@ -53,56 +57,64 @@ export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
         )
       return (
         <>
-          <li>
-            <LocationFilter
-              updateCurrentValue={(newFilterValue, idx) => {
-                setLocationFilter(newFilterValue)
-                newFilterValue !== null &&
-                  typeof onLocationFilterSelect === "function" &&
-                  onLocationFilterSelect(newFilterValue, idx)
-              }}
-              currentValue={locationFilter}
-              options={locations}
-            />
-          </li>
-          <li>
-            <DepartmentsOrRolesFilter
-              updateCurrentValue={(newFilterValue, idx) => {
-                setDepartmentFilter(newFilterValue)
-                newFilterValue !== null &&
-                  typeof onDepartmentFilterSelect === "function" &&
-                  onDepartmentFilterSelect(newFilterValue, idx)
-              }}
-              currentValue={departmentFilter}
-              name="Departments"
-              options={departments}
-            />
-          </li>
-          <li>
-            <WeekFilter
-              options={weekRanges}
-              updateCurrentValue={(newFilterValue, idx) => {
-                setWeekFilter(newFilterValue)
-                newFilterValue !== null &&
-                  typeof onWeekFilterSelect === "function" &&
-                  onWeekFilterSelect(newFilterValue, idx)
-              }}
-              currentValue={weekFilter}
-            />
-          </li>
-          <li>
-            <DepartmentsOrRolesFilter
-              updateCurrentValue={(newFilterValue, idx) => {
-                setRoleFilter(newFilterValue)
-                newFilterValue !== null &&
-                  typeof onRoleFilterSelect === "function" &&
-                  onRoleFilterSelect(newFilterValue, idx)
-              }}
-              currentValue={roleFilter}
-              name="Roles"
-              options={roles}
-            />
-          </li>
+          {showLocationFilter && (
+            <li>
+              <LocationFilter
+                updateCurrentValue={(newFilterValue, idx) => {
+                  setLocationFilter(newFilterValue)
+                  newFilterValue !== null &&
+                    typeof onLocationFilterSelect === "function" &&
+                    onLocationFilterSelect(newFilterValue, idx)
+                }}
+                currentValue={locationFilter}
+                options={locations}
+              />
+            </li>
+          )}
+          {showDepartmentFilter && (
+            <li>
+              <DepartmentsOrRolesFilter
+                updateCurrentValue={(newFilterValue, idx) => {
+                  setDepartmentFilter(newFilterValue)
+                  newFilterValue !== null &&
+                    typeof onDepartmentFilterSelect === "function" &&
+                    onDepartmentFilterSelect(newFilterValue, idx)
+                }}
+                currentValue={departmentFilter}
+                name="Departments"
+                options={departments}
+              />
+            </li>
+          )}
+          {weekRanges.length > 0 && (
+            <li>
+              <WeekFilter
+                options={weekRanges}
+                updateCurrentValue={(newFilterValue, idx) => {
+                  setWeekFilter(newFilterValue)
+                  newFilterValue !== null &&
+                    typeof onWeekFilterSelect === "function" &&
+                    onWeekFilterSelect(newFilterValue, idx)
+                }}
+                currentValue={weekFilter}
+              />
+            </li>
+          )}
+          {showRoleFilter && (
+            <li>
+              <DepartmentsOrRolesFilter
+                updateCurrentValue={(newFilterValue, idx) => {
+                  setRoleFilter(newFilterValue)
+                  newFilterValue !== null &&
+                    typeof onRoleFilterSelect === "function" &&
+                    onRoleFilterSelect(newFilterValue, idx)
+                }}
+                currentValue={roleFilter}
+                name="Roles"
+                options={roles}
+              />
+            </li>
+          )}
         </>
       )
     },

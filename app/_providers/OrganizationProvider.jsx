@@ -6,6 +6,7 @@ import DASHBOARD_URLS from "../_urls/dashboardURLs"
 import LocationsProvider from "../_providers/LocationsProvider"
 import DepartmentsAndRolesProvider from "./DepartmentsAndRolesProvider"
 import ShiftsManagementProvider from "./ShiftManagementContext"
+import TrackerProvider from "./TrackerProvider"
 import TeamProvider from "./TeamProvider"
 import { useRouter } from "next/navigation"
 
@@ -86,7 +87,12 @@ export default function OrganizationProvider({ children }) {
               updateEmployees={updateEmployees}
               removeEmployee={removeEmployee}
             >
-              {children}
+              <TrackerProvider
+                shouldAutoInitialize={false}
+                organizationId={organization?._id}
+              >
+                {children}
+              </TrackerProvider>
             </TeamProvider>
           </ShiftsManagementProvider>
         </DepartmentsAndRolesProvider>

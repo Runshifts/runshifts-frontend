@@ -19,6 +19,8 @@ import { getPastNumOfDays } from "../../_utils"
 import NewMemberForm from "./NewMemberForm/NewMemberForm"
 import useAxios from "../../_hooks/useAxios"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
+import PageSearchInput from "../../_components/AppComps/PageSearchInput"
+import Heading from "../../_components/Headings"
 
 const durationOptions = [
   { displayValue: "7 days", fromDate: getPastNumOfDays(7) },
@@ -48,7 +50,7 @@ function Team() {
     removeArchivedTeamMember,
     removeArchivedRecentlyViewed,
     incrementActiveTeamMembersCount,
-    decrementActiveTeamMembersCount
+    decrementActiveTeamMembersCount,
   } = useContext(TeamContext)
 
   useEffect(() => {
@@ -96,9 +98,9 @@ function Team() {
 
   return (
     <>
-      <section className="mx-2 p-3 h-screen flex flex-col gap-4">
+      <section className="mx-2 px-3 pb-3 h-screen flex flex-col gap-4">
         <div className="flex items-center justify-between py-3">
-          <h1 className="custom-h1">Team</h1>
+          <Heading as="h1">Team</Heading>
           <TeamAppgroup
             openNewMemberModal={() =>
               setTeamMemberFormData({ isNew: true, isEdit: false })
@@ -106,12 +108,11 @@ function Team() {
           />
         </div>
         <div className="flex gap-2 items-center justify-start">
-          <input
+          <PageSearchInput
             type="text"
             placeholder="Search members..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-[#F4F5F7] focus:outline-none border-none focus:shadow-none text-[14px] placeholder:text-inherit text-[#7A869A] px-2 py-[4px] rounded-[3px]"
             name="members"
           />
           <ul className="hidden md:flex gap-2">
