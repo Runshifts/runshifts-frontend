@@ -6,6 +6,7 @@ import profileAvatar from "../../_components/navbar/dp.png";
 import Uploadimage from "./Uploadimage";
 import { PiWarningCircleFill } from "react-icons/pi";
 import Activate2Fa from "./activate2fa/page";
+import Link from "next/link";
 
 
 const UserProfile = () => {
@@ -29,7 +30,7 @@ const UserProfile = () => {
 
   return (
     <div className="max-w-md bg-white p-8 ">
-      <h1 className="text-2xl not-italic font-medium leading-7">User profile</h1>
+      <h1 className="custom-h1">User profile</h1>
       <div className="px-2">
         <Image
           style={{ cursor: "pointer" }}
@@ -39,7 +40,9 @@ const UserProfile = () => {
           alt="dp"
         />
       </div>
-      <Uploadimage />
+
+<input class="block w-full my-5 text-xs text-[#42526E] border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file" />
+
       <div className="mb-4 flex space-x-2">
         <div className="w-1/2">
           <label
@@ -200,15 +203,19 @@ const UserProfile = () => {
       </div>
     </div>
 
-    <div className="flex bg-[#DEEBFF] p-4 items-start justify-center">
+<Link href='/organization/userprofile/activate2fa'>
+<div className="flex bg-[#DEEBFF] p-4 items-start justify-center">
       <div className="text-[#0747A6] mr-5">
-      <PiWarningCircleFill />
+      <PiWarningCircleFill className=" h-[24px] w-[24px]" />
       </div>
       <div>
         <p className="text-base not-italic font-thin leading-5">Google Authenticator</p>
-        <p className="text-[#172B4D] text-sm not-italic font-normal leading-5">You have linked your account to Google Authenticator.</p>
+        <p className="text-[#172B4D] text-xs not-italic font-normal leading-5">You have linked your account to Google Authenticator.</p>
       </div>
     </div>
+</Link>
+   
+
     </div>
     
   );

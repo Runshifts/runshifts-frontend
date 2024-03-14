@@ -1,4 +1,3 @@
-// Dropdown.js
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -34,7 +33,7 @@ const Dropdown = () => {
         >
           <div className="py-1" role="none">
             <Link
-              href="/edit-profile"
+              href="/organization/userprofile"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >

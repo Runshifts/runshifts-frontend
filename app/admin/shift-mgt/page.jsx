@@ -8,7 +8,7 @@ function page() {
     <section className="p-6 h-screen">
       <h1 className="custom-h1">Shift Management</h1>
 
-      <div>
+      <div className='flex flex-row'>
         <select
           className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] mr-2 h-10 rounded-md md:text-sm "
           aria-label="Default select example"
