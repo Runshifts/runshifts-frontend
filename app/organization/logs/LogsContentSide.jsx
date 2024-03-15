@@ -1,3 +1,4 @@
+'use client'
 import React from "react"
 import Avatar from "../../../public/dashboardImgs/marketer.svg";
 import Image from "next/image"

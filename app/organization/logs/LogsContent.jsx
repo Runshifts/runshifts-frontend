@@ -1,3 +1,4 @@
+'use client'
 import React from "react"
 import { LogsData } from "../../_data/LogsData"
 import LogsContentSide from "./LogsContentSide"

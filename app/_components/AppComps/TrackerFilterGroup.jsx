@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Calendar from "../../organization/tracker/Calendar";
+import Calendar from "./Calendar";
 
 function TrackerFilterGroup() {
   const [isCalendarOpen, setCalendarOpen] = useState(false);

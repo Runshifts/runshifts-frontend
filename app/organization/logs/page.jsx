@@ -1,3 +1,4 @@
+'use client'
 import React from "react"
 import LogExport from "../../_components/AppComps/LogExport"
 import LogFilterGroup from "../../_components/AppComps/LogFilterGroup"
