@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import { IoEyeOutline } from "react-icons/io5"
 import Breakdown, { BREAKDOWN_VARIANTS } from "./Breakdown"
@@ -10,11 +10,10 @@ import Modal from "../../_components/AppComps/Modal"
 import TrackerTableSkeleton from "../../_components/Skeletons/TrackerSkeletons"
 
 const Tracker = ({
-  clockedInShifts = [],
-  clockedOutShifts = [],
-  usedBreakShifts = [],
   isCurrentDate,
   loading,
+  filteredShifts,
+  incomingShiftRequests = [],
 }) => {
   const employeeNames1 = [
     "Charlse Jenkings",
@@ -22,7 +21,27 @@ const Tracker = ({
     "Ariana Woods",
     "Bernard Oslo",
   ]
-
+  const clockedInShifts = useMemo(
+    () =>
+      filteredShifts.filter(
+        (shift) => shift.filter === BREAKDOWN_VARIANTS.CLOCKED_IN
+      ),
+    [filteredShifts]
+  )
+  const clockedOutShifts = useMemo(
+    () =>
+      filteredShifts.filter(
+        (shift) => shift.filter === BREAKDOWN_VARIANTS.CLOCKED_OUT
+      ),
+    [filteredShifts]
+  )
+  const usedBreakShifts = useMemo(
+    () =>
+      filteredShifts.filter(
+        (shift) => shift.filter === BREAKDOWN_VARIANTS.ON_BREAK
+      ),
+    [filteredShifts]
+  )
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <TrackerSection
@@ -97,11 +116,13 @@ const Tracker = ({
       </TrackerSection>
       <TrackerSection heading="Incoming shift requests">
         <TrackerTable headings={["Employees", "Shift time", ""]}>
-          {employeeNames1.map((employee, rowIndex) => (
+          {incomingShiftRequests.map((shiftRequest, rowIndex) => (
             <EmployeeRow
-              key={employee}
+              key={shiftRequest._id}
               isOdd={rowIndex % 2}
               additionalTableData={["09:00 AM"]}
+              employee={shiftRequest.requester}
+              shiftOrTimeOff={shiftRequest.shift}
               breakdownVariant={BREAKDOWN_VARIANTS.INCOMING_SHIFT_REQUEST}
             />
           ))}
@@ -133,9 +154,11 @@ function EmployeeRow({
             alt=""
             className="w-[24px] h-[24px] object-cover rounded-full"
           />
-          {((employee?.firstName + " " + employee?.lastName).trim() ||
+          {(
+            (employee?.firstName + " " + employee?.lastName).trim() ||
             employee?.fullName ||
-            employee?.email)?.replaceAll("undefined", "-")}
+            employee?.email
+          )?.replaceAll("undefined", "-")}
         </span>
       </td>
       {additionalTableData.map((content) => (
