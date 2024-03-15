@@ -7,6 +7,7 @@ import Calender from "../../_assets/svgs/CalenderIcon"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import PageSearchInput from "../../_components/AppComps/PageSearchInput"
 import Heading from "../../_components/Headings"
+import { BREAKDOWN_VARIANTS } from "./Breakdown"
 
 const DateInputOptions = {
   datepickerClassNames: "",
@@ -21,7 +22,7 @@ const DateInputOptions = {
     text: "",
     disabledText: "opacity-10",
     input:
-      "focus:outline-none  text-[#7A869A] p-0 border-0 focus:border-0 bg-transparent focus:ring-0 ring-0 text-[14px] leading-[20px]",
+      "focus:outline-none  text-[#7A869A] p-0 border-0 focus:border-0 bg-transparent focus:ring-0 ring-0 text-[14px] leading-[20px] relative z-1 w-full cursor-pointer bg-[#F4F5F7] text-[#7A869A]  py-[4px] px-[8px]",
     inputIcon: "hidden",
     selected:
       "bg-transparent border-b-2 border-b-solid border-b-blue-600 font-bold !text-blue-600 text-center rounded-[0]",
@@ -43,7 +44,6 @@ function Tracker() {
     hasInitialized,
     dateFilter,
     updateDateFilter,
-    allShifts,
     shiftsInSelectedDate,
   } = useContext(TrackerContext)
 
@@ -51,7 +51,27 @@ function Tracker() {
     if (hasInitialized === false) initialize()
   }, [initialize, hasInitialized])
 
-  const { renderShiftFilters } = useRenderShiftFilters([])
+  const { renderShiftFilters, filteredShifts } = useRenderShiftFilters(
+    [
+      ...shiftsInSelectedDate.clockedIn.map((it) => ({
+        ...it,
+        filter: BREAKDOWN_VARIANTS.CLOCKED_IN,
+      })),
+      ...shiftsInSelectedDate.clockedOut.map((it) => ({
+        ...it,
+        filter: BREAKDOWN_VARIANTS.CLOCKED_OUT,
+      })),
+      ...shiftsInSelectedDate.usedBreak.map((it) => ({
+        ...it,
+        filter: BREAKDOWN_VARIANTS.ON_BREAK,
+      })),
+    ].filter((shift) =>
+      `${shift.assignee?.firstName} ${shift.assignee?.lastName} ${shift.assignee?.fullName} ${shift.assignee?.email}`
+        .trim()
+        .toLowerCase()
+        .includes(search.trim().toLowerCase())
+    )
+  )
 
   return (
     <section className="mx-2 h-screen flex flex-col gap-4">
@@ -66,23 +86,29 @@ function Tracker() {
             name="members"
           />
           {renderShiftFilters({ showRoleFilter: false })}
-          <div className="flex bg-[#F4F5F7] text-[#7A869A] items-center py-[4px] px-[8px] max-w-[120px] rounded-[3px]">
+          <div className="flex items-center max-w-[120px] rounded-[3px] relative">
             <DateInput
               onClose={() => setCalendarOpen(true)}
               value={dateFilter}
               onChange={updateDateFilter}
               options={DateInputOptions}
             />
-            <span className="grow">
+            <span className="absolute z-[0] right-[8px]">
               <Calender />
             </span>
           </div>
         </ul>
       </div>
       <TrackerTable
-        clockedInShifts={shiftsInSelectedDate.clockedIn}
-        clockedOutShifts={shiftsInSelectedDate.clockedOut}
-        usedBreakShifts={shiftsInSelectedDate.usedBreak}
+        clockedInShifts={filteredShifts.filter(
+          (shift) => shift.filter === BREAKDOWN_VARIANTS.CLOCKED_IN
+        )}
+        clockedOutShifts={filteredShifts.filter(
+          (shift) => shift.filter === BREAKDOWN_VARIANTS.CLOCKED_OUT
+        )}
+        usedBreakShifts={filteredShifts.filter(
+          (shift) => shift.filter === BREAKDOWN_VARIANTS.ON_BREAK
+        )}
         isCurrentDate={dateFilter.toDateString() === new Date().toDateString()}
         loading={loading}
       />

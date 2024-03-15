@@ -50,7 +50,7 @@ const Breakdown = ({
               (employee?.firstName + " " + employee?.lastName).trim() ||
               employee?.fullName ||
               employee?.email
-            ).replaceAll("undefined", "-"),
+            )?.replaceAll("undefined", "-"),
             disabled: true,
           }}
         />

@@ -10,11 +10,16 @@ export default function useFilterShifts(shifts = []) {
   const filteredShifts = useMemo(() => {
     const filtered = shifts.filter((shift) => {
       return (
-        (!locationFilter || shift.location?._id === locationFilter) &&
+        (!locationFilter ||
+          (shift.location && shift.location === locationFilter) ||
+          shift.location?._id === locationFilter) &&
         (!departmentFilter ||
+          (shift.assignee?.department &&
+            shift.assignee?.department === departmentFilter?._id) ||
           shift.assignee?.department?.name?.toLowerCase() ===
             departmentFilter.toLowerCase()) &&
         (!roleFilter ||
+          (shift.assignee?.role && shift.assignee?.role === roleFilter?._id) ||
           shift.assignee?.role?.name?.toLowerCase() ===
             roleFilter.toLowerCase())
       )

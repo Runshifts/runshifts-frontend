@@ -135,7 +135,7 @@ function EmployeeRow({
           />
           {((employee?.firstName + " " + employee?.lastName).trim() ||
             employee?.fullName ||
-            employee?.email).replaceAll("undefined", "-")}
+            employee?.email)?.replaceAll("undefined", "-")}
         </span>
       </td>
       {additionalTableData.map((content) => (
