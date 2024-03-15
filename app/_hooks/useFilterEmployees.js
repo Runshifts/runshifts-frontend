@@ -10,11 +10,10 @@ export default function useFilterEmployees(employees = []) {
       return (
         (!locationFilter || employee.location?._id === locationFilter) &&
         (!departmentFilter ||
-          employee.assignee?.department?.name?.toLowerCase() ===
+          employee?.department?.name?.toLowerCase() ===
             departmentFilter.toLowerCase()) &&
         (!roleFilter ||
-          employee.assignee?.role?.name?.toLowerCase() ===
-            roleFilter.toLowerCase())
+          employee?.role?.name?.toLowerCase() === roleFilter.toLowerCase())
       )
     })
   }, [employees, departmentFilter, roleFilter, locationFilter])
@@ -26,6 +25,6 @@ export default function useFilterEmployees(employees = []) {
     setLocationFilter,
     departmentFilter,
     roleFilter,
-    locationFilter
+    locationFilter,
   }
 }
