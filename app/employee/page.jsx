@@ -7,7 +7,7 @@ import MyActivities from "./MyActivities";
 function EmployeeDashboard() {
   return (
     <section className="p-3 h-screen">
-      <h1 className="text-[#292D32] font-semibold text-xl md:font-bold text-2xl ">
+      <h1 className="custom-h1">
         Welcome Ottobong
       </h1>
 

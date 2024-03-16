@@ -42,7 +42,7 @@ const AllEmployeesTable = () => {
 
   return (
     <div className=" overflow-x-auto">
-         <h1 className="text-gray-900 text-base not-italic font-semibold">
+         <h1 className="text-gray-900 text-base not-italic font-semibold mt-4 mb-2">
         Current shifts
       </h1>
       {employeeData.map((employee, index) => (

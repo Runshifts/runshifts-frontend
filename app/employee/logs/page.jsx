@@ -7,7 +7,7 @@ function Logs() {
   return (
     <section className="mx-auto p-3 h-screen">
       <div className="flex items-center justify-between py-3">
-        <h1 className="text-[#292D32] text-2xl not-italic font-medium leading-7 ">Logs</h1>
+        <h1 className="custom-h1">Logs</h1>
         <LogExport />
       </div>
 

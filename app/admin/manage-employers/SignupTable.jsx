@@ -56,7 +56,7 @@ const SignupTable = () => {
         <div className="ml-2">
           <input type="checkbox" className="form-checkbox " />
         </div>
-        <div className="flex items-center justify-start py-2 text-[#2252525] text-xs font-thin">
+        <div className="py-2 text-[#2252525] text-xs font-thin">
           Employer
         </div>
         <div className="py-2 text-[#2252525] text-xs font-thin">Location</div>
@@ -69,14 +69,14 @@ const SignupTable = () => {
       {employeeData.map((employee, rowIndex) => (
         <div
           key={rowIndex}
-          className="grid grid-cols-6 bg-white shadow-xl rounded my-2 p-1"
+          className="grid grid-cols-5  place-items-start place-content-center  bg-white shadow-xl rounded my-2 p-1"
         >
-          <div className="ml-2">
-            <input type="checkbox" className="form-checkbox " />
-          </div>
-        
+          
 
           <div className="flex items-start justify-start py-2 text-[#2252525] text-xs font-thin">
+          <div className="ml-2 mr-4">
+            <input type="checkbox" className="form-checkbox " />
+          </div>
             <Image
               src={employee.image}
               alt={`avatar-${employee.name}`}
