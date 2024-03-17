@@ -4,7 +4,7 @@ function page() {
   return (
     <section className="p-3 h-screen">
       <div className="flex justify-between items-center">
-        <h1 className="text-[#7A869A] font-medium leading-7 text-2xl mt-3 mb-2 md:font-bold">
+        <h1 className="custom-h1">
           Tracker
         </h1>
         <div className="bg-gray-100 p-2 rounded">

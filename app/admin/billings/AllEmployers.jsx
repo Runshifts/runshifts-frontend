@@ -1,43 +1,37 @@
 import React from "react";
-import Avatar from "../Ellipse.svg";
+import Avatar1 from "/app/admin/manage-employers/maritime.svg";
+import Avatar2 from "/app/admin/manage-employers/WeCanStores.svg";
 import Image from "next/image";
 
-const AllArticleTable = () => {
+const AllEmployeesTable = () => {
   const employeeData = [
     {
-      id: 22146,
-      articleName: "How to reset your password",
-      category: "Scheduling",
-      date: "26 Dec 2023",
+      name: "Maritime Global Service",
+      location: "Newcastle",
+      nextDue: "12 Feb 2024",
       status: "Active",
+      image: Avatar1,
     },
     {
-      id: 22146,
-      articleName: "How to reset your password",
-      category: "Tracker",
-      date: "26 Dec 2023",
-      status: "Draft",
+      name: "WeCanStores",
+      location: "Newcastle",
+      nextDue: "07 Jan 2024",
+      status: "Suspended",
+      image: Avatar2,
     },
     {
-      id: 22146,
-      articleName: "How to reset your password",
-      category: "User account",
-      date: "26 Dec 2023",
+      name: "WeCanStores",
+      location: "Manchesters",
+      nextDue: "12 Feb 2024",
       status: "Active",
+      image: Avatar2,
     },
     {
-      id: 22146,
-      articleName: "How to reset your password",
-      category: "Payment",
-      date: "26 Dec 2023 ",
-      status: "Draft",
-    },
-    {
-      id: 22146,
-      articleName: "How to reset your password",
-      category: "Scheduling",
-      date: "26 Dec 2023 ",
+      name: "Maritime Global Service",
+      location: "London",
+      nextDue: "12 Jan 2024",
       status: "Active",
+      image: Avatar1,
     },
   ];
 
@@ -45,81 +39,98 @@ const AllArticleTable = () => {
     switch (status) {
       case "Active":
         return "bg-[#CBF0BC] text-[#5BC62D]"; // Green background for Active status
-      case "Draft":
-        return "bg-[#F8F9FC] text-[#36322F] "; // Yellow background for Suspended status
+      case "Suspended":
+        return "bg-[#FFCD66] text-[#996700] "; // Yellow background for Suspended status
       default:
         return "";
     }
   };
 
   return (
-    <div className="rounded-lg  shadow-lg">
-      <h1 className="text-gray-900 text-base not-italic font-semibold">
-        All articles
+    <div className="rounded-lg overflow-x-auto shadow-lg">
+      <h1 className="text-gray-900 text-base not-italic font-semibold mt-4 mb-2">
+        All employers
       </h1>
 
-      <div className="bg-[#F1F3F9] rounded-t-md my-2 grid grid-cols-6 place-content-around place-items-center gap-2">
-        <div className="flex items-center justify-between py-2 px-4 text-[#2252525] text-xs font-thin">
-          <div className=" py-2 px-4">
-            <input type="checkbox" className="form-checkbox " />
-          </div>
-          ID
+      <div className="bg-[#F1F3F9] rounded-t-md my-2 grid grid-cols-7 gap-2">
+        <div className="ml-2">
+          <input type="checkbox" className="form-checkbox " />
         </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
-          Articles
+        <div className="py-2 text-[#2252525] text-xs font-thin">
+          Employer
         </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
-          Category
-        </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
-          Status
-        </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
-          Date Created
-        </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin"></div>
+        <div className="py-2 text-[#2252525] text-xs font-thin">Location</div>
+        <div className="py-2 text-[#2252525] text-xs font-thin">Next Due</div>
+        <div className="py-2 text-[#2252525] text-xs font-thin">Status</div>
+        <div className="py-2 text-[#2252525] text-xs font-thin">Actions</div>
+        <div className="py-2 text-[#2252525] text-xs font-thin"></div>
       </div>
 
       {employeeData.map((employee, rowIndex) => (
         <div
           key={rowIndex}
-          className="grid grid-cols-6 place-content-around place-items-center bg-white shadow-xl rounded my-2 p-1"
+          className="grid grid-cols-5  place-items-start place-content-center  bg-white shadow-xl rounded my-2 p-1"
         >
-          <div className=" flex items-center justify-center">
-            <input type="checkbox" className="form-checkbox mr-4" />
-            <div className="text-[#1D2433]  px-4 text-xs not-italic font-normal leading-5 tracking-normal text-left">{employee.id}</div>
+          
+
+          <div className="flex items-start justify-start py-2 text-[#2252525] text-xs font-thin">
+          <div className="ml-2 mr-4">
+            <input type="checkbox" className="form-checkbox " />
+          </div>
+            <Image
+              src={employee.image}
+              alt={`avatar-${employee.name}`}
+              height={24}
+              width={24}
+              className="rounded-full mr-1"
+            />
+            <div className="text-[#1D2433] text-xs font-normal leading-5 tracking-normal text-start">
+              {employee.name}
+            </div>
           </div>
 
-          <div className="text-[#1D2433]  px-4 text-xs not-italic font-normal leading-5 tracking-normal text-left">
-            {employee.articleName}
+          <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
+            {employee.location}
           </div>
 
-          <div className="text-[#1D2433]  px-4 text-xs not-italic font-normal leading-5 tracking-normal text-left">
-            {employee.category}
+          <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
+            {employee.nextDue}
           </div>
 
+          <div>
             <div
-              className={`px-4 text-xs not-italic font-normal leading-5 tracking-normal text-left w-fit ${getStatusColorClass(
+              className={`text-center px-1 rounded-full m-1 text-sm not-italic font-normal w-fit ${getStatusColorClass(
                 employee.status
               )}`}
             >
               {employee.status}
             </div>
+          </div>
 
-            <div className="text-[#1D2433] px-4 text-xs not-italic font-normal leading-5 tracking-normal text-left">
-              {employee.date}
-            </div>
-            <div>
-            <MoreSvg />
-            </div>
-            
+          <div className="flex space-x-1 items-center">
+            <button className="bg-[#5BC62D] rounded text-white py-[8px] px-[10px]">
+              <div className="flex items-center">
+                <PenSvg />
+                <p className="ml-2 text-xs">Edit</p>
+              </div>
+            </button>
+            <button className="rounded text-[#B22A09] py-[8px] px-[10px]">
+              <div className="flex items-center">
+                <div className="h-[20px] w-[20px]">
+                  <DeleteSvg />
+                </div>
+                <p className="ml-2 text-xs">Request removal</p>
+              </div>
+            </button>
+          </div>
         </div>
       ))}
     </div>
   );
 };
 
-export default AllArticleTable;
+export default AllEmployeesTable;
+
 
 function PenSvg() {
   return (
@@ -174,25 +185,6 @@ function DeleteSvg() {
       <path
         d="M10.6449 8.87329H7.31152C7.03819 8.87329 6.81152 8.64662 6.81152 8.37329C6.81152 8.09996 7.03819 7.87329 7.31152 7.87329H10.6449C10.9182 7.87329 11.1449 8.09996 11.1449 8.37329C11.1449 8.64662 10.9182 8.87329 10.6449 8.87329Z"
         fill="#B22A09"
-      />
-    </svg>
-  );
-}
-
-function MoreSvg({ onClick }) {
-  return (
-    <svg
-      width="21"
-      height="21"
-      viewBox="0 0 21 21"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      onClick={onClick}
-    >
-      <path
-        d="M10.9782 16.7467C10.5199 16.7467 10.1276 16.5836 9.80152 16.2575C9.47486 15.9308 9.31152 15.5383 9.31152 15.08C9.31152 14.6217 9.47486 14.2292 9.80152 13.9025C10.1276 13.5764 10.5199 13.4133 10.9782 13.4133C11.4365 13.4133 11.829 13.5764 12.1557 13.9025C12.4818 14.2292 12.6449 14.6217 12.6449 15.08C12.6449 15.5383 12.4818 15.9308 12.1557 16.2575C11.829 16.5836 11.4365 16.7467 10.9782 16.7467ZM10.9782 11.7467C10.5199 11.7467 10.1276 11.5833 9.80152 11.2567C9.47486 10.9306 9.31152 10.5383 9.31152 10.08C9.31152 9.62166 9.47486 9.22916 9.80152 8.9025C10.1276 8.57639 10.5199 8.41333 10.9782 8.41333C11.4365 8.41333 11.829 8.57639 12.1557 8.9025C12.4818 9.22916 12.6449 9.62166 12.6449 10.08C12.6449 10.5383 12.4818 10.9306 12.1557 11.2567C11.829 11.5833 11.4365 11.7467 10.9782 11.7467ZM10.9782 6.74666C10.5199 6.74666 10.1276 6.58333 9.80152 6.25666C9.47486 5.93055 9.31152 5.53833 9.31152 5.08C9.31152 4.62166 9.47486 4.22944 9.80152 3.90333C10.1276 3.57666 10.5199 3.41333 10.9782 3.41333C11.4365 3.41333 11.829 3.57666 12.1557 3.90333C12.4818 4.22944 12.6449 4.62166 12.6449 5.08C12.6449 5.53833 12.4818 5.93055 12.1557 6.25666C11.829 6.58333 11.4365 6.74666 10.9782 6.74666Z"
-        fill="#1D2433"
-        fill-opacity="0.8"
       />
     </svg>
   );

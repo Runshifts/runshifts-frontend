@@ -6,7 +6,7 @@ function page() {
   return (
     <section className="p-3 h-screen">
       <div className="flex justify-between items-center">
-        <h1 className="text-[#292D32] font-semibold text-2xl md:font-bold">
+        <h1 className="custom-h1">
           My Shifts
         </h1>
         <div>

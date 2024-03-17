@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import Calendar from "./Calendar";
 
 function LogsFilterGroup() {
@@ -41,10 +41,9 @@ function LogsFilterGroup() {
             <option value="2">Two</option>
             <option value="3">Three</option>
           </select>
-
-          <div>
-          <Calendar onClose={() => setCalendarOpen(true)} />
         </div>
+        <div>
+          <Calendar onClose={() => setCalendarOpen(true)} />
         </div>
 
         <div className="border py-2 px-1 w-fit rounded flex justify-between items-center md:hidden">
@@ -55,10 +54,10 @@ function LogsFilterGroup() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default LogsFilterGroup
+export default LogsFilterGroup;
 
 function FilterSvg() {
   return (
@@ -78,5 +77,5 @@ function FilterSvg() {
         fill="#ACB8CD"
       />
     </svg>
-  )
+  );
 }
