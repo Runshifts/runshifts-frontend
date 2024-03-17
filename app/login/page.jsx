@@ -92,7 +92,7 @@ const LoginForm = () => {
             <p className="text-[#645D5D] font-[400] text-base">
               Forgotten password?&nbsp;
               <Link
-                href="/login?type=employer"
+                href="/forgot-password"
                 className="font-[600] text-primary-500"
               >
                 Reset here
