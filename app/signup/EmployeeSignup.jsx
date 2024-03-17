@@ -90,7 +90,6 @@ function Signup() {
 
           <SubmitButton
             type="submit"
-            onClick={handleCreateAccount}
             isDisabled={loading}
             isLoading={loading}
             loadingText="Loading"

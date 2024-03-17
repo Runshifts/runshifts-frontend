@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useCallback } from "react"
 import AuthLayout from "../_components/Auth/Layout"
 import useAxios from "../_hooks/useAxios"
 import FormHeading from "../_components/Auth/Heading"
@@ -72,7 +72,6 @@ function Signup() {
 
           <SubmitButton
             type="submit"
-            onClick={handleCreateAccount}
             isDisabled={loading}
             isLoading={loading}
           >
