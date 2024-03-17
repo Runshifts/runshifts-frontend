@@ -25,19 +25,22 @@ function CalendarDayContainer({ children, loading }) {
   )
 }
 
-function CalenderShiftItem({ shift }) {
+function CalenderShiftItem({ shift, isPending }) {
   const { startHour, endHour } = useMemo(() => {
     return {
       startHour: new Date(shift.startTime).getHours(),
       endHour: new Date(shift.endTime).getHours(),
     }
-  }, [])
+  }, [shift?.startTime, shift?.endTime])
   return (
-    <Pill>
-      <span className="w-[50%] overflow-hidden text-ellipses">
-        {shift.assignee?.firstName}&nbsp;
+    <Pill style={{ backgroundColor: isPending ? "#D7D3D1" : shift.assignee?.color || "#FFC6C6" }}>
+      <span>
+        <span className="w-[50%] overflow-hidden text-ellipses">
+          {shift.assignee?.firstName}&nbsp;
+        </span>
+        {formatHourAsAmOrPm(startHour)}-{formatHourAsAmOrPm(endHour)}
       </span>
-      {formatHourAsAmOrPm(startHour)}-{formatHourAsAmOrPm(endHour)}
+      {isPending && <span className="text-[#303030] text-[8px] leading-normal block text-center">Pending</span>}
     </Pill>
   )
 }
@@ -49,7 +52,10 @@ function CalendarShiftDay({ shifts = [], loading }) {
     return (
       <ul className="w-full flex flex-col gap-y-2 items-center py-2 max-h-full overflow-auto">
         {shifts.map((shift) => (
-          <CalenderShiftItem shift={shift} key={shift._id} />
+          <CalenderShiftItem 
+            isPending={shift.isAccepted === false && shift.isDroppedOff === false} 
+            shift={shift} 
+            key={shift._id} />
         ))}
       </ul>
     )

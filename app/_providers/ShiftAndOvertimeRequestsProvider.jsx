@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import useAxios from "../_hooks/useAxios"
 import { OrganizationContext } from "./OrganizationProvider"
 
-export const ShiftAndOvertimeRequestsContext = createContext()
+export const ShiftAndOvertimeRequestsContext = createContext({})
 
 export default function ShiftAndOvertimeRequestsProvider({ children }) {
   const { organization } = useContext(OrganizationContext)
@@ -25,12 +25,17 @@ export default function ShiftAndOvertimeRequestsProvider({ children }) {
     setLoadingShiftRequests(false)
   }, [organization?._id, fetchData])
 
+  const handleUpdatedRequest = useCallback((request, type) => {
+    if (type === "shift") setShiftRequests(prev => prev.map(req => req._id !== request._id ? req : (request)))
+    if (type === "overtime") setOvertimeRequests(prev => prev.map(req => req._id !== request._id ? req : (request)))
+  }, [])
+
   useEffect(() => {
     fetchShiftAndOvertimeRequests()
   }, [fetchShiftAndOvertimeRequests])
 
   return (
-    <ShiftAndOvertimeRequestsContext.Provider value={{ shiftRequests, overtimeRequests, loadingShiftRequests }}>
+    <ShiftAndOvertimeRequestsContext.Provider value={{ shiftRequests, overtimeRequests, loadingShiftRequests, handleUpdatedRequest }}>
       {children}
     </ShiftAndOvertimeRequestsContext.Provider>
   )

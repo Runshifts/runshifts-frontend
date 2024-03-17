@@ -170,16 +170,16 @@ function CheckedSvg() {
         <path
           d="M10.4388 3.25488L4.80379 8.88987L2.24243 6.32851"
           stroke="#98E179"
-          stroke-width="1.63927"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.63927"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
         <path
           d="M10.4388 3.45947L4.80379 9.09446L2.24243 6.5331"
           stroke="#98E179"
-          stroke-width="1.63927"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.63927"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </g>
       <defs>
@@ -193,5 +193,5 @@ function CheckedSvg() {
         </clipPath>
       </defs>
     </svg>
-  );
+  )
 }

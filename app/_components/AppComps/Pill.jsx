@@ -1,6 +1,6 @@
-export default function Pill({ colorClassName, children, className }) {
+export default function Pill({ colorClassName, children, className, style }) {
   return (
-    <p className={`${colorClassName || " text-[#303030] bg-[#FFC6C6]"} ${className} p-[4px] text-center text-[10px] capitalize rounded-[50px] whitespace-nowrap`}>
+    <p style={style} className={`${colorClassName || "text-[#303030] bg-[#FFC6C6]"} ${className} py-[4px] px-[10px] text-center text-[0.625rem] leading-normal capitalize rounded-[50px] whitespace-`}>
       {children}
     </p>
   )

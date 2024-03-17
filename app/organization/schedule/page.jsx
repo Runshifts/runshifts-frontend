@@ -1,16 +1,8 @@
 "use client"
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react"
-import Export from "../../_components/AppComps/Export"
+import React, { useCallback, useContext, useMemo, useState } from "react"
+import CreateAndDuplicateShiftButtons from "../../_components/AppComps/CreateAndDuplicateShiftButtons"
 import ScheduleTable from "./ScheduleTable"
-import ShiftAndOvertimeRequestsProvider, {
-  ShiftAndOvertimeRequestsContext,
-} from "../../_providers/ShiftAndOvertimeRequestsProvider"
+import { ShiftAndOvertimeRequestsContext } from "../../_providers/ShiftAndOvertimeRequestsProvider"
 import Heading from "../../_components/Headings"
 import ShiftRequestsSection from "./ShiftRequestsSection"
 import OvertimeRequestsSection from "./OvertimeRequestsSection"
@@ -23,16 +15,11 @@ import {
 import DateRangePicker from "../../_components/AppComps/Datepicker"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
-import Modal from "../../_components/AppComps/Modal"
-import NewShiftForm from "./NewShiftForm"
+import NewShiftForm from "./NewShiftForm/NewShiftForm"
 import useHandleShiftDuplication from "../../_hooks/useHandleShiftDuplication"
 
-function Schedule() {
+export default function Schedule() {
   const [newShiftDetails, setNewShiftDetails] = useState(null)
-
-  const handleAddShiftClick = useCallback((dayOfTheWeek) => {
-    setNewShiftDetails({})
-  }, [])
 
   const [selectedUser, setSelectedUser] = useState(null)
   const { shiftRequests, overtimeRequests, loadingShiftRequests } = useContext(
@@ -52,24 +39,38 @@ function Schedule() {
     updateAllShifts,
   } = useContext(DashboardContext)
 
-  const { duplicateWeek, inProgress } = useHandleShiftDuplication({
-    week: currentWeek,
-    updateShifts: updateAllShifts,
-  })
+  const { duplicateWeek, inProgress, duplicateSingleShift } =
+    useHandleShiftDuplication({
+      week: currentWeek,
+      updateShifts: updateAllShifts,
+    })
 
-  const presentWeek = useMemo(
+  const handleAddShiftClick = useCallback(
+    ({ dayOfTheWeek, assignee, createMultiple }) => {
+      const shiftDate =
+        typeof dayOfTheWeek === "number" ? new Date(currentWeek.start) : null
+      shiftDate?.setDate(shiftDate.getDate() + dayOfTheWeek)
+      setNewShiftDetails({
+        assignee,
+        shiftDate,
+        createMultiple,
+      })
+    },
+    [currentWeek.start]
+  )
+
+  const weekWithPresentDateInIt = useMemo(
     () => ({
       ...(weekRanges[indexOfThePresentWeek] || {
         start: getPreviousMonday(new Date(Date.now())),
         end: getNextSunday(new Date(Date.now())),
       }),
     }),
-    [indexOfThePresentWeek]
+    [indexOfThePresentWeek, weekRanges]
   )
   const isPastWeek = useMemo(() => {
-    return currentWeek.start.getTime() >= presentWeek.start.getTime()
-  }, [presentWeek.start, currentWeek.start])
-
+    return currentWeek.start.getTime() < weekWithPresentDateInIt.start.getTime()
+  }, [weekWithPresentDateInIt.start, currentWeek.start])
   const { filteredShifts, renderShiftFilters, setWeekFilter } =
     useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
 
@@ -105,15 +106,24 @@ function Schedule() {
 
   return (
     <section className="p-3 h-screen">
-      <Modal open={newShiftDetails !== null}>
-        <NewShiftForm onCancel={() => setNewShiftDetails(null)} />
-      </Modal>
+      <>
+        <NewShiftForm
+          show={newShiftDetails !== null}
+          newShiftDetails={newShiftDetails}
+          onCancel={() => setNewShiftDetails(null)}
+          handleNewShift={(newShift) => {
+            updateAllShifts([newShift])
+          }}
+          currentWeek={currentWeek}
+        />
+      </>
       <div className="flex items-start flex-col gap-6 pt-6 pb-4">
         <div className="flex items-center justify-between w-full">
           <Heading as="h1">Schedule</Heading>
-          <Export
+          <CreateAndDuplicateShiftButtons
             loading={inProgress}
             duplicateWeek={() => duplicateWeek(organization?._id)}
+            showAddShiftModal={handleAddShiftClick}
           />
         </div>
         <ul className="flex list-none gap-2">
@@ -144,10 +154,10 @@ function Schedule() {
           loading={loadingShifts}
           shiftsGroupedByAssignees={shiftsGroupedByAssigneesIntoDays}
           allDays={allDays}
-          showAddShiftModal={(dayOfTheWeek) =>
-            handleAddShiftClick(dayOfTheWeek)
-          }
-          duplicateShift={() => {}}
+          showAddShiftModal={handleAddShiftClick}
+          duplicateShift={async (shiftId) => {
+            await duplicateSingleShift(organization?._id, shiftId)
+          }}
         />
       </div>
       <div className="text-[#252525] min-h-[55dvh] flex flex-col items-start gap-y-[30px] my-4 p-4 shadow-[0px 2px 8px 0px rgba(0, 0, 0, 0.12)] bg-white rounded-lg shadow-xl">
@@ -161,13 +171,5 @@ function Schedule() {
         />
       </div>
     </section>
-  )
-}
-
-export default function ProviderWrapper() {
-  return (
-    <ShiftAndOvertimeRequestsProvider>
-      <Schedule />
-    </ShiftAndOvertimeRequestsProvider>
   )
 }

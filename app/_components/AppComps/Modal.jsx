@@ -1,24 +1,41 @@
 "use client"
+import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 
-export default function Modal({ children, open = false, onClose = () => {} }) {
+export default function Modal({
+  children,
+  open = false,
+  onClose = () => {},
+  zIndex,
+}) {
   return (
     <>
       {createPortal(
-        <ModalElement children={children} open={open} onClose={onClose} />,
+        <ModalElement
+          zIndex={zIndex}
+          children={children}
+          open={open}
+          onClose={onClose}
+        />,
         document.getElementById("modal-container") || document.body
       )}
     </>
   )
 }
 
-export function ModalElement({ children, open = false, onClose = () => {} }) {
+export function ModalElement({
+  zIndex = 1000,
+  children,
+  open = false,
+  onClose = () => {},
+}) {
   return (
     <>
       <div
+        style={{ zIndex }}
         className={`${
           open ? "opacity-100 visible" : "opacity-0 invisible"
-        } z-[1000] flex justify-center items-center fixed inset-0 `}
+        } flex justify-center items-center fixed inset-0 `}
       >
         <div
           onClick={onClose}

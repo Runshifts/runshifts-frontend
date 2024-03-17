@@ -151,7 +151,7 @@ function Signup() {
                 <p className="text-gray-700 font-semibold text-sm pl-3 mt-5">
                   Already have an account?{" "}
                   <span className="text-[#7ED957]">
-                    <Link href="/login">Login here</Link>
+                    <Link href="/login?type=employer">Login here</Link>
                   </span>
                 </p>
               </form>

@@ -1,8 +1,14 @@
-import React, { useMemo } from "react"
+import React, { useCallback, useContext, useMemo, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
 import { getDateOrdinal } from "../../_utils"
 import useCountdown from "../../_hooks/useCountDown"
+import useAxios from "../../_hooks/useAxios"
+import { OrganizationContext } from "../../_providers/OrganizationProvider"
+import toast from "react-hot-toast"
+import { ShiftAndOvertimeRequestsContext } from "../../_providers/ShiftAndOvertimeRequestsProvider"
+import { DashboardContext } from "../../_providers/DashboardContext"
+import Spinner from "../../_assets/svgs/Spinner"
 
 export function ShiftRequest({ shiftRequest = {} }) {
   const shiftStart = useMemo(
@@ -34,7 +40,9 @@ export function ShiftRequest({ shiftRequest = {} }) {
       </div>
 
       <p className="text-info-500 font-bold text-[14px] leading-[145%]">
-        {isStillValid ? (
+        {isStillValid &&
+        !shiftRequest.isAccepted &&
+        !shiftRequest.isRejected ? (
           <>
             {+days && `${days} days, `}
             {+hours ? `${hours}:` : "00:"}
@@ -42,13 +50,20 @@ export function ShiftRequest({ shiftRequest = {} }) {
             {seconds} Left
           </>
         ) : (
-          <span className="opacity-30 font-[500] text-4">Expired</span>
+          !shiftRequest.isAccepted && (
+            <span className="opacity-30 font-[500] text-4">Expired</span>
+          )
         )}
       </p>
 
-      {isStillValid ? (
-        <AcceptAndRejectButtons accept={() => {}} reject={() => {}} />
+      {isStillValid && !shiftRequest.isAccepted && !shiftRequest.isRejected ? (
+        <AcceptAndRejectButtons
+          requestId={shiftRequest._id}
+          requestType={"shifts"}
+        />
       ) : null}
+      {shiftRequest.isAccepted && <span className="opacity-30">Accepted</span>}
+      {shiftRequest.isRejected && <span className="opacity-30">Rejected</span>}
     </article>
   )
 }
@@ -78,17 +93,62 @@ export function UserDisplay({ image, firstName, lastName }) {
   )
 }
 
-export function AcceptAndRejectButtons({ accept, reject }) {
+export function AcceptAndRejectButtons({ requestId, requestType }) {
+  const [loading, setLoading] = useState("")
+  const { handleUpdatedRequest } = useContext(ShiftAndOvertimeRequestsContext)
+  const { handleUpdateSingleShift } = useContext(DashboardContext)
+
+  const { organization } = useContext(OrganizationContext)
+  const URLS = useMemo(() => {
+    return {
+      shifts: (decision) =>
+        `/shifts/${organization?._id}/applications/${requestId}?action=${decision}`,
+      overtimes: (decision) =>
+        `/overtimes/${organization?._id}/${requestId}?action=${decision}`,
+    }
+  }, [organization?._id, requestId])
+
+  const fetchData = useAxios()
+
+  const handleDecision = useCallback(
+    async (decision) => {
+      if (loading) return
+      setLoading(decision)
+      const res = await fetchData(URLS[requestType](decision), "get")
+      if (res.statusCode === 200) {
+        toast.success(res.message)
+        if (requestType === "shifts") {
+          handleUpdatedRequest(res.application, "shift")
+          handleUpdateSingleShift(res.shift)
+        } else handleUpdatedRequest(res.request, "overtime")
+      } else toast.error(res.message || "Something went wrong.")
+      setLoading("")
+    },
+    [
+      fetchData,
+      URLS,
+      requestType,
+      handleUpdatedRequest,
+      handleUpdateSingleShift,
+      loading,
+    ]
+  )
+
   return (
     <div className="flex gap-x-[8px] items-end">
       <button
-        onClick={accept}
-        className="bg-primary-600 text-white font-[500] px-3 py-[2px] leading-[20px]"
+        onClick={() => handleDecision("accept")}
+        className="bg-primary-600 text-white font-[500] px-3 py-[2px] leading-[20px] flex items-center justify-center gap-2"
       >
-        Accept
+        {loading === "accept" && <Spinner />}{" "}
+        {loading === "accept" ? "Accepting..." : "Accept"}
       </button>
-      <button onClick={reject} className="text-danger-600 font-[500] text-[14px]">
-        Reject
+      <button
+        onClick={() => handleDecision("reject")}
+        className="text-danger-600 font-[500] text-[14px] flex items-center justify-center gap-2"
+      >
+        {loading === "reject" && <Spinner />}{" "}
+        {loading === "reject" ? "Rejecting..." : "Reject"}
       </button>
     </div>
   )

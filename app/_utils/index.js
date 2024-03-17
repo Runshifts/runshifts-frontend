@@ -1,5 +1,10 @@
 export const throwInvalidDateError = (date) => {
-  if (!date || date.toString() === "Invalid Date") throw new Error("Invalid Date!")
+  if (!date || date.toString() === "Invalid Date")
+    throw new Error("Invalid Date!")
+}
+
+export const randomIntFromInterval = function (min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 export const getDateOrdinal = (date) => {
@@ -10,6 +15,10 @@ export const getDateOrdinal = (date) => {
   if (remainder === 2) return "nd"
   if (remainder === 3) return "rd"
   return "th"
+}
+
+export function msToHours(milliseconds) {
+  return milliseconds / (1000 * 60 * 60);
 }
 
 export const getAmOrPm = (hour) => {
@@ -28,100 +37,101 @@ export const formatDate = (date, options = {}) => {
   })
 }
 
+export function formatNumberToTwoDigitsMinimum(number) {
+  return number.toLocaleString(undefined, {
+    minimumIntegerDigits: 2,
+    useGrouping: false
+  })
+}
+
+export function msToHourMinSecond(ms) {
+  const roundAndFormat = num => formatNumberToTwoDigitsMinimum(Math.round(num))
+  let seconds = ms / 1000;
+  let hours = parseInt(seconds / 3600);
+  seconds = seconds % 3600;
+  let minutes = parseInt(seconds / 60);
+  seconds = seconds % 60;
+  return hours ? roundAndFormat(hours) + ":" : "" + roundAndFormat(minutes) + ":" + roundAndFormat(seconds)
+}
+
+
 export const getPreviousMonday = (date) => {
   let prevMonday = new Date(date)
   throwInvalidDateError(prevMonday)
-  prevMonday.setDate(prevMonday.getDate() - prevMonday.getDay() + 1)
+  if (prevMonday.getDay() === 0) prevMonday.setDate(prevMonday.getDate() - 6)
+  else prevMonday.setDate(prevMonday.getDate() - prevMonday.getDay() + 1)
+  prevMonday.setHours(0, 0, 0, 0)
   return prevMonday
 }
 
 export const getNextSunday = (date) => {
   const nextSunday = new Date(date)
   throwInvalidDateError(nextSunday)
-  nextSunday.setDate(nextSunday.getDate() + (7 - nextSunday.getDay()))
+  if (nextSunday.getDay() !== 0)
+    nextSunday.setDate(nextSunday.getDate() + (7 - nextSunday.getDay()))
+  nextSunday.setHours(0, 0, 0, 0)
   return nextSunday
 }
 
-export const getPastWeekRanges = (numberOfWeeksToGenerate, startDate) => {
-  if (isNaN(Number(numberOfWeeksToGenerate)))
+export const getPastNumOfDays = (num) => {
+  const today = new Date(Date.now())
+  if (!num) return today
+  today.setDate(today.getDate() - num)
+  return today
+}
+
+export const getWeekThatDateFallsIn = (date) => {
+  let starterDate = getPreviousMonday(date)
+  throwInvalidDateError(starterDate)
+  let week = {}
+  while (true) {
+    week[starterDate.getDay()] = new Date(starterDate)
+    starterDate.setDate(starterDate.getDate() + 1)
+    if (week[0]) break
+  }
+  return week
+}
+
+export function getPastWeekRanges(numOfWeeks, startDate) {
+  if (isNaN(Number(numOfWeeks)))
     throw new Error("The first argument must be a number")
-  if (numberOfWeeksToGenerate > 100)
+  if (numOfWeeks > 100)
     throw new Error("Maximum allowed number of weeks in one call is 100")
   if (startDate) throwInvalidDateError(new Date(startDate))
-  const currentDate = new Date(startDate || Date.now())
-  let dateMarker = currentDate.getDate() - currentDate.getDay()
-  let numberOfDays = 7 * numberOfWeeksToGenerate
+  let date = new Date(startDate)
+  let numOfWeeksUsed = numOfWeeks
   let ranges = []
-  while (numberOfDays > 0) {
-    let newD = new Date(currentDate)
-    newD.setDate(dateMarker)
+  while (numOfWeeksUsed > 0) {
+    const weekRange = getWeekThatDateFallsIn(date)
     const range = {
-      start: getPreviousMonday(newD),
-      end: getNextSunday(newD),
+      start: weekRange[1],
+      end: weekRange[0],
     }
-    range.start.setHours(0, 0, 0, 0)
-    range.end.setHours(23, 59, 59)
-    const lastPushedRange = ranges[ranges.length - 1]
-    if (
-      !lastPushedRange ||
-      lastPushedRange.start.toDateString() !== range.start.toDateString()
-    )
-      ranges.push(range)
-    else numberOfDays += 7
-
-    if (dateMarker <= 0) {
-      if (currentDate.getMonth() === 0) {
-        currentDate.setFullYear(currentDate.getFullYear() - 1, 11, 28)
-        dateMarker = currentDate.getDate() + currentDate.getDay()
-      } else {
-        currentDate.setMonth(currentDate.getMonth() - 1, 28)
-        dateMarker = currentDate.getDate() - dateMarker
-      }
-    } else {
-      dateMarker = dateMarker - 7
-    }
-    numberOfDays = numberOfDays - 7
+    ranges.push(range)
+    numOfWeeksUsed = numOfWeeksUsed - 1
+    date.setDate(date.getDate() - 7)
   }
   return ranges.reverse()
 }
 
-export const getFutureWeekRanges = (numberOfWeeksToGenerate, startDate) => {
-  if (isNaN(Number(numberOfWeeksToGenerate)))
+export function getFutureWeekRanges(numOfWeeks, startDate) {
+  if (isNaN(Number(numOfWeeks)))
     throw new Error("The first argument must be a number")
-  if (numberOfWeeksToGenerate > 100)
+  if (numOfWeeks > 100)
     throw new Error("Maximum allowed number of weeks in one call is 100")
   if (startDate) throwInvalidDateError(new Date(startDate))
-  const currentDate = new Date(startDate || Date.now())
-  let dateMarker = currentDate.getDate() - currentDate.getDay()
-  let numberOfDays = 7 * numberOfWeeksToGenerate
+  let date = new Date(startDate)
+  let numOfWeeksUsed = numOfWeeks
   let ranges = []
-  while (numberOfDays > 0) {
-    let newD = new Date(currentDate)
-    newD.setDate(dateMarker)
+  while (numOfWeeksUsed > 0) {
+    date.setDate(date.getDate() + 7)
+    const weekRange = getWeekThatDateFallsIn(date)
     const range = {
-      start: getPreviousMonday(newD),
-      end: getNextSunday(newD),
+      start: weekRange[1],
+      end: weekRange[0],
     }
     ranges.push(range)
-    if (dateMarker <= 0) {
-      if (currentDate.getMonth() === 0) {
-        currentDate.setFullYear(
-          currentDate.getFullYear() + 1,
-          11,
-          currentDate.getDate() + currentDate.getDay()
-        )
-      } else {
-        currentDate.setMonth(currentDate.getMonth() + 1)
-      }
-      dateMarker = currentDate.getDate() + dateMarker
-    } else {
-      dateMarker = dateMarker + 7
-    }
-    numberOfDays = numberOfDays - 7
+    numOfWeeksUsed = numOfWeeksUsed - 1
   }
   return ranges
-}
-
-export function randomIntFromInterval(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
 }

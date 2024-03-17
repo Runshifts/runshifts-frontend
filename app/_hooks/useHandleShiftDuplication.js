@@ -35,6 +35,21 @@ export default function useHandleShiftDuplication({
     [fetchData, isDuplicationInProgress, week.start]
   )
 
+  const duplicateSingleShift = useCallback(
+    async (organizationId, shiftId) => {
+      if (!organizationId) throw new Error("Organization id must be provided!")
+      const res = await fetchData(
+        SCHEDULE_URLS.duplicateSingleShift(organizationId, shiftId),
+        "put"
+      )
+      if (res.statusCode === 200) {
+        toast.success(res.message)
+        updateShifts([res.duplicate])
+      } else toast.error("Unable to duplicate shift, Something went wrong")
+    },
+    [fetchData, toast]
+  )
+
   useEffect(() => {
     let toastId
     socket.on("weekly_duplication_success", (data) => {
@@ -58,5 +73,5 @@ export default function useHandleShiftDuplication({
     }
   }, [socket, updateShifts])
 
-  return { duplicateWeek, inProgress: isDuplicationInProgress }
+  return { duplicateWeek, duplicateSingleShift, inProgress: isDuplicationInProgress }
 }

@@ -16,8 +16,8 @@ export default function SelectTrigger({
       className={`${
         shouldApplyStyles
           ? `${
-              isOpen ? "border-solid border-black" : "border-transparent"
-            } border cursor-pointer relative bg-[#F4F5F7] text-[#7A869A] px-[8px] py-[4px] gap-[23px] text-[14px] leading-[20px] rounded-md flex justify-between items-center`
+              isOpen ? "border-black" : "border-transparent"
+            } border-solid border h-full border cursor-pointer relative bg-[#F4F5F7] text-[#7A869A] px-[8px] py-[4px] gap-[23px] text-[14px] leading-[20px] rounded-md flex justify-between items-center`
           : ""
       } ${props.className}`}
     >

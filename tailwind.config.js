@@ -71,7 +71,7 @@ module.exports = {
           100: "#EFEDED",
         },
         black: "#000",
-        white: "#fff"
+        white: "#fff",
       },
     },
   },

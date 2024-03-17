@@ -1,6 +1,6 @@
 "use client"
 import React, { Suspense } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useMemo } from "react"
 
 import EmployerSignup from "./EmployerSignup"
@@ -22,7 +22,6 @@ function SignupPagesWrappedInSuspense() {
   )
 }
 function SignupPages() {
-  const router = useRouter()
   const query = useSearchParams()
   const signupType = useMemo(() => {
     return query.get("type")
