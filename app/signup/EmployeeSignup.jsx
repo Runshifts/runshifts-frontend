@@ -12,6 +12,7 @@ import FormHeading from "../_components/Auth/Heading"
 import AuthInputAndLabel, { SubmitButton } from "../_components/Auth/Inputs"
 import Dropdown from "../_components/AppComps/Dropdown"
 import { Option } from "../_components/AppComps/Select"
+import TermsAndConditionsNotice from "../_components/Auth/TermsAndConditionsNotice"
 
 function Signup() {
   const fetchData = useAxios()
@@ -84,17 +85,7 @@ function Signup() {
               }}
               icon={<LuShieldCheck size={20} />}
             />
-
-            <p className="text-[#303030] leading-[150%] text-[13px] font-[400]">
-              By clicking create account, you accept our&nbsp;
-              <Link href="/terms" className="text-info-400 underline">
-                Terms
-              </Link>
-              &nbsp;&amp;&nbsp;
-              <Link href="/policy" className="text-info-400 underline">
-                Policy
-              </Link>
-            </p>
+            <TermsAndConditionsNotice />
           </div>
 
           <SubmitButton

@@ -59,7 +59,7 @@ export function SubmitButton({
           : "bg-primary-500 cursor-pointer"
       } text-white rounded-md w-full px-6 py-4`}
     >
-      {isLoading ? loadingText : children}
+      {isLoading ? loadingText || "Loading..." : children}
     </button>
   )
 }
