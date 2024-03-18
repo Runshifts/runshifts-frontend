@@ -1,6 +1,14 @@
+import StatisticsCardSkeleton from "../Skeletons/StatisticsCardSkeleton"
 
-
-export default function StatisticsCard({ title, text, icon, mainBg, iconBg }) {
+export default function StatisticsCard({
+  title,
+  text,
+  icon,
+  mainBg,
+  iconBg,
+  isLoading,
+}) {
+  if (isLoading) return <StatisticsCardSkeleton mainBg={mainBg} iconBg={iconBg} />
   return (
     <div
       style={{ backgroundColor: mainBg }}

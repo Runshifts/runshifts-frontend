@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google"
 import "../globals.css"
 import EmployeeGlobalLayout from "../_components/EmployeeGlobalLayouts"
-import EmployeeDashboardProvider from "../_providers/Employee/DashboardContext"
+import EmployeeDashboardProvider from "../_providers/Employee/EmployeeDashboardContext"
 import OrganizationProvider from "../_providers/OrganizationProvider"
 import LocationsProvider from "../_providers/LocationsProvider"
 import UserProvider from "../_providers/UserProvider"

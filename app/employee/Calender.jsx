@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react"
 import { daysOfTheWeek, formatHourAsAmOrPm } from "../_utils"
 import Pill from "../_components/AppComps/Pill"
 
-export default function Calendar({ shifts = {}, loading }) {
+export default function Calendar({ shifts = {}, loading, overtimes }) {
   const daysOfTheWeek = [1, 2, 3, 4, 5, 6, 7]
   return (
     <div className="flex gap-x-[8px] overflow-x-auto scrollbar-hide">
@@ -13,6 +13,7 @@ export default function Calendar({ shifts = {}, loading }) {
             loading={loading}
             day={day}
             shifts={shifts[day] || []}
+            overtimes={overtimes[day] || []}
           />
         </Fragment>
       ))}
@@ -54,7 +55,7 @@ function CalendarDayContainer({ children, loading }) {
   )
 }
 
-function CalendarShiftDay({ shifts = [], loading, day }) {
+function CalendarShiftDay({ shifts = [], loading, day, overtimes }) {
   const renderShifts = useCallback(() => {
     if (shifts.length === 0)
       return <p className=" text-xs text-[#303030] rounded-full">No shifts</p>
@@ -72,6 +73,19 @@ function CalendarShiftDay({ shifts = [], loading, day }) {
       </ul>
     )
   }, [shifts])
+  const renderOvertimes = useCallback(() => {
+    return (
+      <ul className="w-full flex flex-col gap-y-2 items-center py-2 max-h-full overflow-auto">
+        {overtimes.map((overtime) => (
+          <CalenderShiftItem
+            isPending={false}
+            shift={overtime}
+            key={overtime._id}
+          />
+        ))}
+      </ul>
+    )
+  }, [overtimes])
 
   return (
     <CalendarDayContainer loading={loading}>
@@ -84,6 +98,7 @@ function CalendarShiftDay({ shifts = [], loading, day }) {
         ) : (
           renderShifts()
         )}
+        {renderOvertimes()}
       </div>
     </CalendarDayContainer>
   )

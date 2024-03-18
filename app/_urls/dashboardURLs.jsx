@@ -5,5 +5,7 @@ const DASHBOARD_URLS = {
   weeklySchedule: (organizationId, date) =>
     `shifts/${organizationId}/weekly-schedule?date=${date}`,
   employees: (organizationId) => `/organizations/${organizationId}/employees`,
+  employeeActivity: (organizationId, userId) =>
+    `/users/${organizationId}/employees/${userId}/earnings`,
 }
 export default DASHBOARD_URLS

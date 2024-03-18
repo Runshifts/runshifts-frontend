@@ -4,7 +4,7 @@ import React from "react";
 
 function ShiftSwap() {
   return (
-    <div className="bg-white rounded-xl shadow-xl p-4 my-2">
+    <div className="bg-white p-4 my-2">
       <h1 className="font-semibold text-lg text-[#292D32] mx-3 py-2 ">
         Shift swap requests
       </h1>

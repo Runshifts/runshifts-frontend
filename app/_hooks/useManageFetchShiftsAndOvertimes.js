@@ -6,6 +6,7 @@ import { OrganizationContext } from "../_providers/OrganizationProvider"
 
 export default function useManageFetchShiftsAndOvertimes({
   updateAllShifts = () => {},
+  updateAllOvertimes = () => {},
   currentWeek = {},
 }) {
   const { organization } = useContext(OrganizationContext)
@@ -30,10 +31,11 @@ export default function useManageFetchShiftsAndOvertimes({
           [stringifiedDate]: res.schedule.shifts,
         }))
         updateAllShifts(res.schedule.shifts)
+        updateAllOvertimes(res.schedule.overtimes)
       } else setFetchingShiftsError(true)
       setLoadingShifts(false)
     },
-    [organization?._id, weeksFetched, updateAllShifts]
+    [organization?._id, weeksFetched, updateAllShifts, updateAllOvertimes]
   )
 
   useEffect(() => {

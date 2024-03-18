@@ -3,34 +3,48 @@ import { useState } from "react"
 import StatisticsCard from "../_components/AppComps/StatisticsCard"
 import Timer from "../_assets/svgs/Timer"
 
-function MyActivities() {
+function MyActivities({ activityData, isLoading }) {
   return (
     <div className="bg-white p-2 md:p-4 flex flex-col gap-[8px]">
       <h4 className="font-semibold text-base leading-[150%] text-[#292D32]">
         My activities
       </h4>
-
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatisticsCard
           text="Hours worked"
-          title="300"
+          title={Number(
+            activityData?.overtimeHours + activityData?.shiftHours
+          ).toLocaleString()}
           icon={<Timer />}
           mainBg="#E5F7DD"
           iconBg="#CBF0BC"
+          isLoading={isLoading || activityData === null}
         />
         <StatisticsCard
           text="Amount Earned"
-          title={<TextWithToggleableView text={"£193,923"} color="#2D6316" />}
+          title={
+            <TextWithToggleableView
+              text={`£${activityData?.totalEarnings}`}
+              color="#2D6316"
+            />
+          }
           icon={<RequestedSvg />}
           mainBg="#E5F7DD"
           iconBg="#CBF0BC"
+          isLoading={isLoading || activityData === null}
         />
         <StatisticsCard
           text="EWA Funds Available"
-          title={<TextWithToggleableView text={"£800"} color="#2D6316" />}
+          title={
+            <TextWithToggleableView
+              text={`£${activityData?.amountAvailableForEwa}`}
+              color="#2D6316"
+            />
+          }
           icon={<NextSvg />}
           mainBg="#E5F7DD"
           iconBg="#CBF0BC"
+          isLoading={isLoading || activityData === null}
         />
       </div>
     </div>
@@ -50,7 +64,6 @@ function TextWithToggleableView({ text, color, hideByDefault = false }) {
     </p>
   )
 }
-
 
 function RequestedSvg() {
   return (
