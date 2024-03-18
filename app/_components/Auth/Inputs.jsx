@@ -6,6 +6,7 @@ export default function AuthInputAndLabel({
   labelProps = {},
   labelText = "",
   icon,
+  endAdornment,
 }) {
   const [inputType, setInputType] = useState(() => inputProps.type)
   return (
@@ -13,7 +14,7 @@ export default function AuthInputAndLabel({
       <span className="first-letter:capitalize text-[#101928]">
         {labelText}
       </span>
-      <span className="relative pl-[34px] py-4 w-full border-[#D0D5DD] border rounded-lg focus:outline-none focus:shadow-outline overflow-hidden">
+      <span className={`${icon ? "pl-[34px]" : "pl-[8px]"} relative pl-[34px] py-4 w-full border-[#D0D5DD] border rounded-lg focus:outline-none focus:shadow-outline overflow-hidden`}>
         <span className="absolute inset-y-[50%] translate-y-[-50%] left-[16px] flex items-center pointer-events-none">
           {icon}
         </span>
@@ -22,19 +23,21 @@ export default function AuthInputAndLabel({
           type={inputType}
           className="w-full p-0 pl-[8px] border-0 ring-0 focus:ring-0 outline-none focus:outline-none"
         />
-        {inputProps.type === "password" && (
-          <button
-            type="button"
-            onClick={() =>
-              setInputType((prev) =>
-                prev === "password" ? "text" : "password"
-              )
-            }
-            className="absolute z-10 inset-y-[50%] translate-y-[-50%] right-[16px] flex items-center cursor-pointer"
-          >
-            <FaRegEyeSlash size={20} />
-          </button>
-        )}
+        <span className="absolute z-10 inset-y-[50%] translate-y-[-50%] right-[16px] flex items-center cursor-pointer">
+          {endAdornment}
+          {inputProps.type === "password" && (
+            <button
+              type="button"
+              onClick={() =>
+                setInputType((prev) =>
+                  prev === "password" ? "text" : "password"
+                )
+              }
+            >
+              <FaRegEyeSlash size={20} />
+            </button>
+          )}
+        </span>
       </span>
     </label>
   )
