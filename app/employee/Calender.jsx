@@ -5,7 +5,6 @@ import Pill from "../_components/AppComps/Pill"
 
 export default function Calendar({ shifts = {}, loading }) {
   const daysOfTheWeek = [1, 2, 3, 4, 5, 6, 7]
-  console.log(shifts)
   return (
     <div className="flex gap-x-[8px] overflow-x-auto scrollbar-hide">
       {daysOfTheWeek.map((day) => (
@@ -13,7 +12,7 @@ export default function Calendar({ shifts = {}, loading }) {
           <CalendarShiftDay
             loading={loading}
             day={day}
-            // shifts={shifts[day] || []}
+            shifts={shifts[day] || []}
           />
         </Fragment>
       ))}
@@ -37,16 +36,8 @@ function CalenderShiftItem({ shift, isPending }) {
       }}
     >
       <span>
-        <span className="w-[50%] overflow-hidden text-ellipses">
-          {shift.assignee?.firstName}&nbsp;
-        </span>
         {formatHourAsAmOrPm(startHour)}-{formatHourAsAmOrPm(endHour)}
       </span>
-      {isPending && (
-        <span className="text-[#303030] text-[8px] leading-normal block text-center">
-          Pending
-        </span>
-      )}
     </Pill>
   )
 }

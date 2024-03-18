@@ -7,6 +7,7 @@ import MyActivities from "./MyActivities"
 import Heading from "../_components/Headings"
 import { EmployeeDashboardContext } from "../_providers/Employee/DashboardContext"
 import { UserContext } from "../_providers/UserProvider"
+import { groupShiftsByDayOfTheWeek } from "../_utils/shifts"
 
 function EmployeeDashboard() {
   const { user } = useContext(UserContext)
@@ -19,11 +20,11 @@ function EmployeeDashboard() {
   } = useContext(EmployeeDashboardContext)
 
   const usersShifts = useMemo(() => {
-    return shiftsInCurrentWeek.filter(
-      (shift) => shift.assignee?._id === user?._id
+    return groupShiftsByDayOfTheWeek(
+      shiftsInCurrentWeek.filter((shift) => shift.assignee?._id === user?._id)
     )
   }, [shiftsInCurrentWeek, user?._id])
-  
+
   return (
     <section className="md:px-[21px] h-screen">
       <div className="flex flex-col gap-[24px] pt-6 pb-4">
