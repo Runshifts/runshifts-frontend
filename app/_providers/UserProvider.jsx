@@ -2,15 +2,16 @@
 
 import { createContext, useCallback, useEffect, useState } from "react"
 import useAxios from "../_hooks/useAxios"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 export const UserContext = createContext({
   user: null,
-  updateUser: () => {}
+  updateUser: () => {},
 })
 
 export default function UserProvider({ children }) {
   const router = useRouter()
+  const pathname = usePathname()
   const fetchData = useAxios()
   const [user, setUser] = useState(null)
 
@@ -32,6 +33,21 @@ export default function UserProvider({ children }) {
     if (!userInLocalStorage) fetchUser()
     else setUser(userInLocalStorage)
   }, [])
+
+  useEffect(() => {
+    if (user) {
+      if (
+        pathname.toLowerCase().startsWith("/employee") &&
+        user.type !== "employee"
+      )
+        router.push("/organization")
+      else if (
+        pathname.toLowerCase().startsWith("/organization") &&
+        user.type !== "employer"
+      )
+        router.push("/employee")
+    }
+  }, [user, pathname])
   return (
     <UserContext.Provider value={{ user, updateUser }}>
       {children}

@@ -8,7 +8,7 @@ import { MobileFilter } from "../_components/AppComps/FilterGroup"
 import Heading from "../_components/Headings"
 import Calender from "./Calender"
 import { DashboardContext } from "../_providers/Employer/DashboardContext"
-import { UserContext } from "../_providers/Employer/UserProvider"
+import { UserContext } from "../_providers/UserProvider"
 import { groupShiftsByDayOfTheWeek } from "../_utils/shifts"
 import useRenderShiftFilters from "../_hooks/useRenderShiftFilters"
 
