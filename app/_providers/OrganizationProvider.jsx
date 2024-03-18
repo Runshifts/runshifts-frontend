@@ -34,7 +34,6 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
   )
 
   const fetchOrganization = useCallback(async () => {
-    console.log(user)
     if(isEmployee && !user?.organization) return
     const res = await fetchData(
       DASHBOARD_URLS.organization(isEmployee ? user?.organization : null),
