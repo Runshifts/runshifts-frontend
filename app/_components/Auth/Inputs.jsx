@@ -60,7 +60,7 @@ export function SubmitButton({
         isLoading
           ? "bg-primary-500/50 cursor-not-allowed"
           : "bg-primary-500 cursor-pointer"
-      } text-white rounded-md w-full px-6 py-4`}
+      } text-white rounded-md font-[600] w-full px-6 py-4`}
     >
       {isLoading ? loadingText || "Loading..." : children}
     </button>

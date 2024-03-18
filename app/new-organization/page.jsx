@@ -14,7 +14,7 @@ const backgrounds = {
 
 function Welcome() {
   const router = useRouter()
-  const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState(3)
   return (
     <>
       <AuthLayout
@@ -40,7 +40,10 @@ function Welcome() {
               setCurrentStep(3)
             }}
           />
-          <StepThree isActive={currentStep === 3} />
+          <StepThree
+            isActive={currentStep === 3}
+            onSubmit={() => router.push("/welcome")}
+          />
         </div>
       </AuthLayout>
     </>
