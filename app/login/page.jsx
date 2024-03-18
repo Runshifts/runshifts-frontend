@@ -45,14 +45,17 @@ const LoginForm = () => {
         localStorage.setItem("token", res.token)
         localStorage.setItem("user", JSON.stringify(res.user))
         router.push(
-          res.user.type === "employer"
-            ? "/organization"
-            : "/employee"
+          res.user.type === "employer" ? "/organization" : "/employee"
         )
-      } else if (res.statusCode === 302) router.push("/verify-email")
-      else {
+      } else if (res.statusCode === 302) {
+        sessionStorage.setItem("email", formData.email)
+        router.push("/verify-email")
+      } else {
         console.error(res.message)
-        toast.error(`Error logging in: ${res.message || res.data}`, { position: "top-left", className: "mx-[8%]"})
+        toast.error(`Error logging in: ${res.message || res.data}`, {
+          position: "top-left",
+          className: "mx-[8%]",
+        })
       }
       updateLoading(false)
     },
