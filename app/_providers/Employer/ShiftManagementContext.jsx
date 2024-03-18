@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useCallback, useEffect, useMemo, useState } from "react"
-import useAxios from "../_hooks/useAxios"
+import useAxios from "../../_hooks/useAxios"
 
 export const ShiftsManagementContext = createContext()
 
@@ -10,7 +10,7 @@ export default function ShiftsManagementProvider({ children, organizationId }) {
   const [shiftManagements, setShiftsManagement] = useState([])
 
   const customShiftManagements = useMemo(() => {
-    return shiftManagements.filter(it => it.name.toLowerCase()=== "custom")
+    return shiftManagements.filter((it) => it.name.toLowerCase() === "custom")
   }, [shiftManagements])
 
   const fetchShiftsManagement = useCallback(async () => {
@@ -24,7 +24,9 @@ export default function ShiftsManagementProvider({ children, organizationId }) {
   }, [fetchShiftsManagement])
 
   return (
-    <ShiftsManagementContext.Provider value={{ shiftManagements, customShiftManagements }}>
+    <ShiftsManagementContext.Provider
+      value={{ shiftManagements, customShiftManagements }}
+    >
       {children}
     </ShiftsManagementContext.Provider>
   )

@@ -1,9 +1,9 @@
 import "../globals.css"
 import GlobalLayout from "../_components/GlobalLayout"
-import UserProvider from "../_providers/UserProvider"
+import UserProvider from "../_providers/Employer/UserProvider"
 import OrganizationProvider from "../_providers/OrganizationProvider"
-import DashboardProvider from "../_providers/DashboardContext"
-import ShiftAndOvertimeRequestsProvider from "../_providers/ShiftAndOvertimeRequestsProvider"
+import DashboardProvider from "../_providers/Employer/DashboardContext"
+import ShiftAndOvertimeRequestsProvider from "../_providers/Employer/ShiftAndOvertimeRequestsProvider"
 export const metadata = {
   title: "Runshifts | Organizations",
   description: "Organization Dashboard",

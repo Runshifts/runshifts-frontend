@@ -7,16 +7,16 @@ import {
   useMemo,
   useState,
 } from "react"
-import useAxios from "../_hooks/useAxios"
-import DASHBOARD_URLS from "../_urls/dashboardURLs"
-import useGetWeekRanges from "../_hooks/useGetWeekRanges"
-import useManageFetchShiftsAndOvertimes from "../_hooks/useManageFetchShiftsAndOvertimes"
+import useAxios from "../../_hooks/useAxios"
+import DASHBOARD_URLS from "../../_urls/dashboardURLs"
+import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
+import useManageFetchShiftsAndOvertimes from "../../_hooks/useManageFetchShiftsAndOvertimes"
 import {
   filterShiftsByWeek,
   groupShiftsByAssignee,
   groupShiftsByHoursWithDateKey,
-} from "../_utils/shifts"
-import { OrganizationContext } from "./OrganizationProvider"
+} from "../../_utils/shifts"
+import { OrganizationContext } from "../OrganizationProvider"
 
 export const DashboardContext = createContext({
   allShifts: [],
@@ -108,10 +108,11 @@ export default function DashboardProvider({ children }) {
     })
   }, [])
 
-  const { fetchShifts, fetchingShiftsError, loadingShifts } = useManageFetchShiftsAndOvertimes({
-    updateAllShifts,
-    currentWeek,
-  })
+  const { fetchShifts, fetchingShiftsError, loadingShifts } =
+    useManageFetchShiftsAndOvertimes({
+      updateAllShifts,
+      currentWeek,
+    })
 
   const handleUpdateSingleShift = useCallback((update) => {
     setAllShifts((prev) => {

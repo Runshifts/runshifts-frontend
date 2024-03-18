@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useCallback, useEffect, useState } from "react"
-import useAxios from "../_hooks/useAxios"
+import useAxios from "../../_hooks/useAxios"
 
 export const DepartmentsAndRolesContext = createContext()
 
@@ -56,7 +56,10 @@ export default function DepartmentsAndRolesProvider({
           )
         : {},
       !hasCachedRoles
-        ? await fetchData(`/industries/${organizationIndustry?.name.toLowerCase()}/roles`, "get")
+        ? await fetchData(
+            `/industries/${organizationIndustry?.name.toLowerCase()}/roles`,
+            "get"
+          )
         : {},
     ])
     if (departmentsResponse.statusCode === 200) {

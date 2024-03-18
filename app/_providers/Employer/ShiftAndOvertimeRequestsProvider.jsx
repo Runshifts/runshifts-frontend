@@ -1,8 +1,14 @@
 "use client"
 
-import { createContext, useCallback, useContext, useEffect, useState } from "react"
-import useAxios from "../_hooks/useAxios"
-import { OrganizationContext } from "./OrganizationProvider"
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
+import useAxios from "../../_hooks/useAxios"
+import { OrganizationContext } from "../OrganizationProvider"
 
 export const ShiftAndOvertimeRequestsContext = createContext({})
 
@@ -26,8 +32,14 @@ export default function ShiftAndOvertimeRequestsProvider({ children }) {
   }, [organization?._id, fetchData])
 
   const handleUpdatedRequest = useCallback((request, type) => {
-    if (type === "shift") setShiftRequests(prev => prev.map(req => req._id !== request._id ? req : (request)))
-    if (type === "overtime") setOvertimeRequests(prev => prev.map(req => req._id !== request._id ? req : (request)))
+    if (type === "shift")
+      setShiftRequests((prev) =>
+        prev.map((req) => (req._id !== request._id ? req : request))
+      )
+    if (type === "overtime")
+      setOvertimeRequests((prev) =>
+        prev.map((req) => (req._id !== request._id ? req : request))
+      )
   }, [])
 
   useEffect(() => {
@@ -35,7 +47,14 @@ export default function ShiftAndOvertimeRequestsProvider({ children }) {
   }, [fetchShiftAndOvertimeRequests])
 
   return (
-    <ShiftAndOvertimeRequestsContext.Provider value={{ shiftRequests, overtimeRequests, loadingShiftRequests, handleUpdatedRequest }}>
+    <ShiftAndOvertimeRequestsContext.Provider
+      value={{
+        shiftRequests,
+        overtimeRequests,
+        loadingShiftRequests,
+        handleUpdatedRequest,
+      }}
+    >
       {children}
     </ShiftAndOvertimeRequestsContext.Provider>
   )

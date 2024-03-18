@@ -4,7 +4,10 @@ import { createContext, useCallback, useEffect, useState } from "react"
 import useAxios from "../_hooks/useAxios"
 import { useRouter } from "next/navigation"
 
-export const UserContext = createContext()
+export const UserContext = createContext({
+  user: null,
+  updateUser: () => {}
+})
 
 export default function UserProvider({ children }) {
   const router = useRouter()
@@ -16,8 +19,7 @@ export default function UserProvider({ children }) {
     if (res.statusCode === 200) {
       setUser(res.user)
       localStorage.setItem("user", JSON.stringify(res.user))
-    }
-    else router.push("/login")
+    } else router.push("/login")
   }, [router, fetchData])
 
   const updateUser = useCallback((value) => {
