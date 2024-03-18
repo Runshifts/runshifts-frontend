@@ -3,6 +3,15 @@ export const throwInvalidDateError = (date) => {
     throw new Error("Invalid Date!")
 }
 
+export const daysOfTheWeek = {
+  1: "Monday",
+  2: "Tuesday",
+  3: "Wednesday",
+  4: "Thursday",
+  5: "Friday",
+  6: "Saturday",
+  7: "Sunday",
+}
 export const randomIntFromInterval = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
