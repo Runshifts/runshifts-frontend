@@ -2,11 +2,11 @@
 import React, { useCallback, useContext, useMemo, useState } from "react"
 import CreateAndDuplicateShiftButtons from "../../_components/AppComps/CreateAndDuplicateShiftButtons"
 import ScheduleTable from "./ScheduleTable"
-import { ShiftAndOvertimeRequestsContext } from "../../_providers/ShiftAndOvertimeRequestsProvider"
+import { ShiftAndOvertimeRequestsContext } from "../../_providers/Employer/ShiftAndOvertimeRequestsProvider"
 import Heading from "../../_components/Headings"
 import ShiftRequestsSection from "./ShiftRequestsSection"
 import OvertimeRequestsSection from "./OvertimeRequestsSection"
-import { DashboardContext } from "../../_providers/DashboardContext"
+import { DashboardContext } from "../../_providers/Employer/DashboardContext"
 import { getNextSunday, getPreviousMonday } from "../../_utils"
 import {
   groupShiftsByAssignee,

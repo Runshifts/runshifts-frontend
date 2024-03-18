@@ -6,7 +6,7 @@ import {
   WeekFilter,
 } from "../_components/AppComps/FilterGroup"
 import { LocationsContext } from "../_providers/LocationsProvider"
-import { DepartmentsAndRolesContext } from "../_providers/Employer/DepartmentsAndRolesProvider"
+import { DepartmentsAndRolesContext } from "../_providers/DepartmentsAndRolesProvider"
 
 export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
   const {

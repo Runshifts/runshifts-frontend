@@ -6,8 +6,8 @@ import useCountdown from "../../_hooks/useCountDown"
 import useAxios from "../../_hooks/useAxios"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import toast from "react-hot-toast"
-import { ShiftAndOvertimeRequestsContext } from "../../_providers/ShiftAndOvertimeRequestsProvider"
-import { DashboardContext } from "../../_providers/DashboardContext"
+import { ShiftAndOvertimeRequestsContext } from "../../_providers/Employer/ShiftAndOvertimeRequestsProvider"
+import { DashboardContext } from "../../_providers/Employer/DashboardContext"
 import Spinner from "../../_assets/svgs/Spinner"
 
 export function ShiftRequest({ shiftRequest = {} }) {
