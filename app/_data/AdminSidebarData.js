@@ -42,8 +42,17 @@ export const AdminSidebarData = [
     },
     {
         title: 'Knowledge Base',
-        path: '/admin/knowledge-base',
         icon: knowledge,
+        submenu: [
+            {
+                title: 'All Articles',
+                path: '/admin/knowledge-base/create'
+            },
+            {
+                title: 'Categories',
+                path: '/admin/knowledge-base/categories'
+            }
+        ]
     },
     {
         title: 'Support',

@@ -1,5 +1,4 @@
-"use client";
-import React from "react";
+import React, { useState } from "react";
 import { AdminSidebarData } from "../_data/AdminSidebarData";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,12 +7,17 @@ import { usePathname } from "next/navigation";
 
 function AdminSidebar({ isOpen, onClose }) {
   const Pathname = usePathname();
+  const [isKnowledgeBaseOpen, setIsKnowledgeBaseOpen] = useState(false);
 
   const activeLink =
     "hover:bg-green-100 text-[#449522] pl-4 my-0 mt-4 w-full flex justify-start items-center text-sm space-x-3 font-semibold bg-green-100";
 
   const normalLink =
     "hover:bg-green-100 hover:text-[#449522] pl-4 my-0 mt-4 w-full flex justify-start items-center text-sm space-x-3 font-semibold";
+
+  const toggleKnowledgeBase = () => {
+    setIsKnowledgeBaseOpen(!isKnowledgeBaseOpen);
+  };
 
   return (
     <>
@@ -25,6 +29,43 @@ function AdminSidebar({ isOpen, onClose }) {
 
           <div className="h-10  ">
             {AdminSidebarData.map((item, index) => {
+              if (item.title === "Knowledge Base") {
+                return (
+                  <div key={index}>
+                    <div
+                      onClick={toggleKnowledgeBase}
+                      className={normalLink}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <span>
+                        {" "}
+                        <Image src={item.icon} alt="icon" />{" "}
+                      </span>
+                      <span className="text-sm mx-4 text-[#42526E] not-italic font-medium leading-10">
+                        {" "}
+                        {item.title}{" "}
+                      </span>
+                    </div>
+                    {isKnowledgeBaseOpen && (
+                      <div className="ml-6">
+                        {item.submenu.map((subItem, subIndex) => (
+                          <Link
+                            key={subIndex}
+                            href={subItem.path}
+                            className={
+                              Pathname === subItem.path ? activeLink : normalLink
+                            }
+                          >
+                            <span className="text-sm mx-4 text-[#42526E] not-italic font-medium leading-10">
+                              {subItem.title}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
               return (
                 <div key={index}>
                   <Link
