@@ -130,7 +130,6 @@ function RenderShiftsAndOvertimes({
 }
 
 function ShiftPillWithDetails({ shift = {}, isPending }) {
-  console.log(shift, isPending)
   const { user } = useContext(UserContext)
   const isOwnShift = useMemo(
     () => user._id === shift?.assignee?._id,

@@ -1,12 +1,14 @@
 "use client"
-import React, { useContext, useMemo } from "react"
+import React, { useCallback, useContext, useMemo } from "react"
 import Calender from "../EmployeeCalender"
 import Heading from "../../_components/Headings"
 import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
-// import { UserContext } from "../../_providers/UserProvider"
+import { UserContext } from "../../_providers/UserProvider"
 import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
 import DateRangePicker from "../../_components/AppComps/Datepicker"
 import ShiftSwapReq from "./ShiftSwapReq"
+import AcceptAllShiftsButton from "./AcceptAllShiftsButton"
+import { OrganizationContext } from "../../_providers/OrganizationProvider"
 
 function page() {
   const {
@@ -15,11 +17,29 @@ function page() {
     currentWeek,
     loadingShifts,
     shiftsInCurrentWeek,
+    updateAllShifts,
   } = useContext(EmployeeDashboardContext)
 
+  const { user } = useContext(UserContext)
+  const { organization } = useContext(OrganizationContext)
   const shiftsGroupedByDays = useMemo(() => {
     return groupShiftsByDayOfTheWeek(shiftsInCurrentWeek)
   }, [shiftsInCurrentWeek])
+
+  const handleAcceptAllSucccess = useCallback(
+    () =>
+      updateAllShifts(
+        shiftsInCurrentWeek.map((shift) =>
+          shift.isDroppedOff === false &&
+          shift.isAccepted === false &&
+          shift.assignee?._id === user?._id &&
+          new Date(shift.startTime) > new Date()
+            ? { ...shift, isAccepted: true }
+            : shift
+        )
+      ),
+    [shiftsInCurrentWeek, updateAllShifts, user?._id]
+  )
 
   return (
     <section className="h-screen px-4 md:px-[40px]">
@@ -35,7 +55,6 @@ function page() {
             </button>
           </div>
         </div>
-
         <DateRangePicker
           goToNextWeek={goToNextWeek}
           goToPrevWeek={goToPrevWeek}
@@ -47,9 +66,12 @@ function page() {
           <h2 className="text-[12px] md:text-base font-[600] text-[#292D32] leading-[150%]">
             Shifts
           </h2>
-          <button className="px-[12px] py-[6px] rounded-sm bg-primary-600 text-white leading-[20px] font-[500]">
-            Accept all shifts
-          </button>
+          <AcceptAllShiftsButton
+            isDisabled={loadingShifts}
+            organizationId={organization?._id}
+            currentWeek={currentWeek}
+            handleSuccess={handleAcceptAllSucccess}
+          />
         </div>
         <Calender
           loading={loadingShifts}
