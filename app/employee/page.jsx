@@ -1,7 +1,7 @@
 "use client"
 import React, { useContext, useMemo } from "react"
 import DateRangePicker from "../_components/AppComps/Datepicker"
-import Calender from "./Calender"
+import Calender from "./EmployeeCalender"
 import ShiftSwap from "./ShiftSwap"
 import MyActivities from "./MyActivities"
 import Heading from "../_components/Headings"
