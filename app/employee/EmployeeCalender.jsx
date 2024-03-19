@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react"
 import { useCallback, useMemo } from "react"
-import { daysOfTheWeek, formatHourAsAmOrPm } from "../_utils"
+import { daysOfTheWeek, formatHourAsAmOrPm, isDateInThePast } from "../_utils"
 import Pill from "../_components/AppComps/Pill"
 import placeholderImage from "../_assets/img/user.png"
 import Image from "next/image"
@@ -60,7 +60,7 @@ function CalendarDayContainer({ children, loading }) {
     <div
       className={`${
         loading ? "animate-pulse" : ""
-      } grow shrink-0 py-2 flex items-center justify-center min-w-32 h-[140px] overflow-auto border-dotted border-2 border-[#C7C7C7] rounded-md  bg-white flex items-center justify-center md:min-w-38`}
+      } grow shrink-0 py-2 px-2 flex items-center justify-center min-w-32 h-[140px] overflow-auto border-dotted border-2 border-[#C7C7C7] rounded-md  bg-white flex items-center justify-center md:min-w-38`}
     >
       {children}
     </div>
@@ -70,7 +70,7 @@ function CalendarDayContainer({ children, loading }) {
 function CalendarShiftDay({ loading, day, children }) {
   return (
     <CalendarDayContainer loading={loading}>
-      <div className="text-center flex flex-col gap-[10px]">
+      <div className="text-center flex flex-col gap-[10px] h-full justify-center">
         <h3 className="w-full text-[14px] font-[400] leading-[140%] text-center text-[#303030]">
           {daysOfTheWeek[day]}
         </h3>
@@ -129,18 +129,32 @@ function RenderShiftsAndOvertimes({
   )
 }
 
-function ShiftPillWithDetails({ shift, isPending }) {
+function ShiftPillWithDetails({ shift = {}, isPending }) {
   console.log(shift, isPending)
   const { user } = useContext(UserContext)
-  if (shift.isAccepted === false && user._id !== shift?.assignee?._id)
+  const isOwnShift = useMemo(
+    () => user._id === shift?.assignee?._id,
+    [user._id, shift?.assignee?._id]
+  )
+  const style = useMemo(() => {
+    if (isDateInThePast(new Date(shift.startTime)) && isPending && isOwnShift)
+      return {
+        backgroundColor: "#D7D3D1",
+        opacity: ".7",
+        cursor: "not-allowed",
+      }
+    else if (isPending) return { backgroundColor: "#D7D3D1" }
+    else return { backgroundColor: shift.assignee?.color || "#FFC6C6" }
+  }, [shift, isPending, isOwnShift])
+  if (
+    shift.isAccepted === false &&
+    isOwnShift === false &&
+    !isDateInThePast(new Date(shift.startTime))
+  )
     return <OpenShiftButton shift={shift} />
   return (
     <div
-      style={{
-        backgroundColor: isPending
-          ? "#D7D3D1"
-          : shift.assignee?.color || "#FFC6C6",
-      }}
+      style={style}
       className="flex items-center justify-start bg-red-200 gap-[4px] rounded-[50px] px-[6px] py-[4px]"
     >
       <Image
@@ -148,17 +162,20 @@ function ShiftPillWithDetails({ shift, isPending }) {
         width={24}
         src={shift.assignee?.profileImage?.secure_url || placeholderImage}
         alt="alt"
-        className="rounded-full"
+        className="rounded-full object-cover h-[24px] w-[24px]"
       />
       <div className="text-[#354258] text-left flex flex-col gap-[4px]">
-        <b className="font-[600] text-[14px] leading-[1]">
-          {user._id === shift?.assignee?._id
+        <b className="font-[600] text-[14px] leading-[1] overflow-hidden max-w-[60px] text-ellipsis">
+          {isOwnShift
             ? "My shift"
             : shift.assignee?.firstName ||
               shift.assignee?.lastName ||
               shift.assignee?.email}
         </b>
-        <span className="text-[10px] text-[#303030] leading-[1]">8am-2pm</span>
+        <span className="text-[10px] text-[#303030] leading-[1]">
+          {formatHourAsAmOrPm(new Date(shift.startTime).getHours())}-
+          {formatHourAsAmOrPm(new Date(shift.endTime).getHours())}
+        </span>
       </div>
     </div>
   )
