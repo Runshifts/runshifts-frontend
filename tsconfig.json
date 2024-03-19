@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/_hooks/useHandleShiftDuplication.js", "app/_hooks/useListenForShiftCreationResponse.js"  ],
+, "app/_hooks/useHandleShiftDuplication.js", "app/_hooks/useListenForShiftCreationResponse.js", "app/admin/knowledge-base/categories/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]
