@@ -7,6 +7,8 @@ import Image from "next/image"
 import { UserContext } from "../_providers/UserProvider"
 import Modal from "../_components/AppComps/Modal"
 import ShiftApplicationForm from "./my-shifts/ShiftApplicationForm"
+import OwnShiftDetails from "./my-shifts/OwnShiftDetails"
+import ShiftSwapDetails from "./my-shifts/ShiftSwapDetails"
 
 export default function Calendar({
   shifts = {},
@@ -132,21 +134,40 @@ function RenderShiftsAndOvertimes({
 }
 
 function ShiftPillWithDetails({ shift = {}, isPending }) {
+  const [showModal, setShowModal] = useState(false)
   const { user } = useContext(UserContext)
   const isOwnShift = useMemo(
     () => user._id === shift?.assignee?._id,
     [user._id, shift?.assignee?._id]
   )
   const style = useMemo(() => {
-    if (isDateInThePast(new Date(shift.startTime)) && isPending && isOwnShift)
+    if (
+      (isDateInThePast(new Date(shift.startTime)) && isPending) ||
+      shift.isDroppedOff
+    )
       return {
         backgroundColor: "#D7D3D1",
         opacity: ".7",
         cursor: "not-allowed",
       }
     else if (isPending) return { backgroundColor: "#D7D3D1" }
-    else return { backgroundColor: shift.assignee?.color || "#FFC6C6" }
+    else
+      return {
+        backgroundColor: shift.assignee?.color || "#FFC6C6",
+        cursor: isDateInThePast(new Date(shift.startTime))
+          ? "default"
+          : "pointer",
+      }
   }, [shift, isPending, isOwnShift])
+
+  const canViewInModal = useMemo(() => {
+    return (
+      (isOwnShift === false && !isDateInThePast(new Date(shift.startTime))) ||
+      (shift.isAccepted && isOwnShift) ||
+      (!isDateInThePast(new Date(shift.startTime)) && !shift.isDroppedOff)
+    )
+  }, [isOwnShift, shift])
+
   if (
     shift.isAccepted === false &&
     isOwnShift === false &&
@@ -154,31 +175,48 @@ function ShiftPillWithDetails({ shift = {}, isPending }) {
   )
     return <OpenShiftButton shift={shift} />
   return (
-    <div
-      style={style}
-      className="flex items-center justify-start bg-red-200 gap-[4px] rounded-[50px] px-[6px] py-[4px]"
-    >
-      <Image
-        height={24}
-        width={24}
-        src={shift.assignee?.profileImage?.secure_url || placeholderImage}
-        alt="alt"
-        className="rounded-full object-cover h-[24px] w-[24px]"
-      />
-      <div className="text-[#354258] text-left flex flex-col gap-[4px]">
-        <b className="font-[600] text-[14px] leading-[1] overflow-hidden max-w-[60px] text-ellipsis">
-          {isOwnShift
-            ? "My shift"
-            : shift.assignee?.firstName ||
-              shift.assignee?.lastName ||
-              shift.assignee?.email}
-        </b>
-        <span className="text-[10px] text-[#303030] leading-[1]">
-          {formatHourAsAmOrPm(new Date(shift.startTime).getHours())}-
-          {formatHourAsAmOrPm(new Date(shift.endTime).getHours())}
+    <>
+      <button
+        onClick={() => canViewInModal && setShowModal(true)}
+        style={style}
+        className="flex items-center justify-start bg-red-200 gap-[4px] rounded-[50px] px-[6px] py-[4px]"
+      >
+        <Image
+          height={24}
+          width={24}
+          src={shift.assignee?.profileImage?.secure_url || placeholderImage}
+          alt="alt"
+          className="rounded-full object-cover h-[24px] w-[24px]"
+        />
+        <span className="text-[#354258] text-left flex flex-col gap-[4px]">
+          <b className="font-[600] text-[14px] leading-[1] overflow-hidden max-w-[60px] text-ellipsis">
+            {isOwnShift
+              ? "My shift"
+              : shift.assignee?.firstName ||
+                shift.assignee?.lastName ||
+                shift.assignee?.email}
+          </b>
+          <span className="text-[10px] text-[#303030] leading-[1]">
+            {formatHourAsAmOrPm(new Date(shift.startTime).getHours())}-
+            {formatHourAsAmOrPm(new Date(shift.endTime).getHours())}
+          </span>
         </span>
-      </div>
-    </div>
+      </button>
+      {(!isDateInThePast(new Date(shift.startTime)) || isOwnShift) && (
+        <Modal open={showModal} onClose={() => setShowModal(false)}>
+          {isOwnShift ? (
+            <OwnShiftDetails
+              shift={shift}
+              onClose={() => setShowModal(false)}
+            />
+          ) : (
+            <>
+              <ShiftSwapDetails shift={shift} />
+            </>
+          )}
+        </Modal>
+      )}
+    </>
   )
 }
 

@@ -24,7 +24,7 @@ export default function ShiftApplicationForm({ shift = {}, onFinish }) {
       onFinish()
     } else toast.error(res.message || "Unable to apply for shift.")
     setLoading(false)
-  }, [shift, organization, loading])
+  }, [shift, organization, loading, fetchData])
 
   return (
     <div className="flex flex-col items-center gap-[14px] p-4 bg-white rounded-[16px] max-w-[288px]">

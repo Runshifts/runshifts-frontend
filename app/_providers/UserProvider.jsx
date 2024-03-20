@@ -3,6 +3,7 @@
 import { createContext, useCallback, useEffect, useState } from "react"
 import useAxios from "../_hooks/useAxios"
 import { usePathname, useRouter } from "next/navigation"
+import path from "path"
 
 export const UserContext = createContext({
   user: null,
@@ -20,8 +21,15 @@ export default function UserProvider({ children }) {
     if (res.statusCode === 200) {
       setUser(res.user)
       localStorage.setItem("user", JSON.stringify(res.user))
-    } else router.push("/login")
-  }, [router, fetchData])
+    } else {
+      if (
+        pathname.includes("/employee") ||
+        pathname.includes("/organization") ||
+        pathname.includes("/admin")
+      )
+        router.push("/")
+    }
+  }, [router, fetchData, pathname])
 
   const updateUser = useCallback((value) => {
     setUser(value)

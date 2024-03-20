@@ -42,7 +42,7 @@ export function ModalElement({
             open ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
         ></div>
-        <div className="z-[2]">{children}</div>
+        <div className="z-[2] grow max-w-max">{children}</div>
       </div>
     </>
   )

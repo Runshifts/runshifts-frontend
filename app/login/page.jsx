@@ -81,7 +81,7 @@ const LoginForm = () => {
                 icon={<IoMailOutline size={20} />}
               />
               <AuthInputAndLabel
-                labelText="Company email"
+                labelText="Password"
                 inputProps={{
                   name: "password",
                   value: formData.password,
