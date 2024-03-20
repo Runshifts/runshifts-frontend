@@ -1,15 +1,16 @@
 "use client"
 
-import React, { useCallback, useContext, useState } from "react"
-import { useRouter } from "next/navigation"
+import React, { useCallback, useContext, useState, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import SocialProviders from "../_components/Auth/SocialProviders"
-import { AuthLoadingContext } from "../_providers/AuthLoadingProvider"
+import { LoadingContext } from "../_providers/LoadingProvider"
 import FormCard from "../_components/Auth/FormCard"
 import Link from "next/link"
 import useAxios from "../_hooks/useAxios"
 
 const LoginForm = () => {
-  const { loading, updateLoading } = useContext(AuthLoadingContext)
+  const searchParams = useSearchParams()
+  const { loading, updateLoading } = useContext(LoadingContext)
   const fetchData = useAxios()
   const router = useRouter()
   const [formData, setFormData] = useState({
@@ -29,11 +30,7 @@ const LoginForm = () => {
     async (e) => {
       e.preventDefault()
       updateLoading(true)
-      const res = await fetchData(
-        "http://localhost:2024/api/v1/users/login",
-        "post",
-        formData
-      )
+      const res = await fetchData(`/users/login`, "post", formData)
       if (res.statusCode === 200) {
         setFormData({
           email: "",
@@ -41,7 +38,7 @@ const LoginForm = () => {
         })
         setError(null)
         localStorage.setItem("token", res.token)
-        localStorage.setItem("user", res.user)
+        localStorage.setItem("user", JSON.stringify(res.user))
         router.push(
           res.user.type === "employer"
             ? "/organization"
@@ -117,7 +114,7 @@ const LoginForm = () => {
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
-              <SocialProviders />
+              <SocialProviders accountType={searchParams.get("type")} redirectPath="login" />
             </form>
           </FormCard>
         </div>
@@ -126,4 +123,10 @@ const LoginForm = () => {
   )
 }
 
-export default LoginForm
+export default function Page(){
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  )
+}

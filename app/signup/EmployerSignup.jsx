@@ -7,8 +7,6 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import axios from "axios"
 import SocialProviders from "../_components/Auth/SocialProviders"
-import useGetAuthWithGoogle from "../_hooks/useGetAuthWithGoogle"
-import useGetAuthWithApple from "../_hooks/useGetAuthWithApple"
 
 function Signup() {
   const router = useRouter()
@@ -28,7 +26,7 @@ function Signup() {
     e.preventDefault()
     setLoading(true)
 
-    const URL = "http://localhost:2024/api/v1/users/employers"
+    const URL = "/users/employers"
     let data
 
     try {
@@ -149,11 +147,11 @@ function Signup() {
                   </button>
                 </div>
                 {error && <p style={{ color: "red" }}>{error}</p>}
-                <SocialProviders accountType="employer" />
+                <SocialProviders accountType="employer" redirectPath="signup" />
                 <p className="text-gray-700 font-semibold text-sm pl-3 mt-5">
                   Already have an account?{" "}
                   <span className="text-[#7ED957]">
-                    <Link href="/login">Login here</Link>
+                    <Link href="/login?type=employer">Login here</Link>
                   </span>
                 </p>
               </form>

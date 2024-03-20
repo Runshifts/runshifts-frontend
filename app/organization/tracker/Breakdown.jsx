@@ -1,126 +1,121 @@
-import React from "react"
-import profilepic from "./Ellipse2.svg"
+import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
+import FormInputAndLabel from "../schedule/NewShiftForm/FormInputAndLabel"
+import { useCallback } from "react"
+import { msToHourMinSecond } from "../../_utils"
 
-const YourFormComponent = ({ toggleLargeModal }) => {
+export const BREAKDOWN_VARIANTS = {
+  CLOCKED_IN: "clocked-in",
+  CLOCKED_OUT: "clocked-out",
+  ON_BREAK: "on-break",
+  TIME_OFF: "timeoff",
+  INCOMING_SHIFT_REQUEST: "incoming-shift-request",
+}
+
+const Breakdown = ({
+  handleClose,
+  variant,
+  employee = {},
+  shiftOrTimeOff = {},
+}) => {
+  const getEndTimeDisplay = useCallback((shiftOrTimeOff) => {
+    if (!shiftOrTimeOff.endedAt) {
+      let date = new Date(shiftOrTimeOff.endTime)
+      const now = new Date()
+      if (date.getTime() > now.getTime()) return "-"
+      else return date.toLocaleTimeString("en-us", { hour12: true })
+    } else
+      return new Date(shiftOrTimeOff.endedAt).toLocaleTimeString("en-us", {
+        hour12: true,
+      })
+  }, [])
+
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <div className="flex flex-col items-center justify-center">
-        <h1 className="text-center font-bold ">Time Review</h1>
-        <Image width={30} height={30} className="pt-3" src={profilepic} alt="profile pic" />
+    <div className="w-[90%] md:w-full mx-auto max-w-[336px] py-[24px] px-[20px] md:px-[40px] bg-white rounded-[16px] shadow-md flex flex-col items-center justify-center gap-[14px]">
+      <h3 className="text-center text-[16px] font-[600] text-[#1B1818]">
+        Time Review
+      </h3>
+      <Image
+        width={69}
+        height={69}
+        className="w-[69px] h-[69px] rounded-full"
+        src={employee?.profileImage?.secure_url || placeholderImage}
+        alt=""
+      />
+      <div className="flex flex-col gap-4">
+        <FormInputAndLabel
+          label="Full name"
+          inputProps={{
+            value: (
+              (employee?.firstName + " " + employee?.lastName).trim() ||
+              employee?.fullName ||
+              employee?.email
+            )?.replaceAll("undefined", "-"),
+            disabled: true,
+          }}
+        />
+        <FormInputAndLabel
+          label="Location"
+          inputProps={{
+            value: shiftOrTimeOff?.location?.address || "-",
+            disabled: true,
+          }}
+        />
+
+        <div className="flex gap-4">
+          <FormInputAndLabel
+            label={
+              variant === BREAKDOWN_VARIANTS.TIME_OFF
+                ? "Time off start"
+                : "Check-in time"
+            }
+            inputProps={{
+              value: new Date(shiftOrTimeOff?.startTime).toLocaleTimeString(
+                "en-us",
+                { hour12: true }
+              ),
+              disabled: true,
+            }}
+          />
+          <FormInputAndLabel
+            label={
+              variant === BREAKDOWN_VARIANTS.TIME_OFF
+                ? "Time off end"
+                : "Check-out time"
+            }
+            inputProps={{
+              value: getEndTimeDisplay(shiftOrTimeOff),
+              disabled: true,
+            }}
+          />
+        </div>
+        {variant !== BREAKDOWN_VARIANTS.INCOMING_SHIFT_REQUEST &&
+          variant !== BREAKDOWN_VARIANTS.TIME_OFF && (
+            <div className="flex gap-4">
+              <FormInputAndLabel
+                label="Break duration"
+                inputProps={{
+                  value: `${msToHourMinSecond(
+                    shiftOrTimeOff?.allottedBreakTimeInMilliseconds || 0
+                  )} hr`,
+                  disabled: true,
+                }}
+              />
+              <FormInputAndLabel
+                label="Used break time"
+                inputProps={{
+                  value: `${msToHourMinSecond(
+                    shiftOrTimeOff?.breakDurationUsedInMilliseconds || 0
+                  )} hr`,
+                  disabled: true,
+                }}
+              />
+            </div>
+          )}
       </div>
-      <form>
-        <div className="mb-4">
-          <label
-            htmlhtmlFor="input1"
-            className="block text-xs font-thin text-gray-400"
-          >
-            Full name
-          </label>
-          <input
-            type="text"
-            id="input1"
-            name="name"
-            placeholder="Ariana Woods"
-            className="mt-1 p-2 w-full border rounded-sm text-sm text-[#252525]"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlhtmlFor="input2"
-            className="block text-xs font-thin text-gray-400 "
-          >
-            Location
-          </label>
-          <input
-            type="text"
-            id="input2"
-            name="location"
-            placeholder="Dawaki"
-            className="mt-1 p-2 w-full border rounded-sm text-sm text-[#252525]"
-          />
-        </div>
-
-        <div className="flex mb-4 space-x-4">
-          <div className="flex-1">
-            <label
-              htmlhtmlFor="input3"
-              className="block text-xs font-thin text-gray-400 "
-            >
-              Check in time
-            </label>
-            <input
-              type="text"
-              id="input3"
-              name="checkin"
-              placeholder="07:00 Am"
-              className="mt-1 p-2 w-full border rounded-sm text-sm text-[#252525]"
-            />
-          </div>
-
-          <div className="flex-1">
-            <label
-              htmlhtmlFor="input4"
-              className="block text-xs font-thin text-gray-400 "
-            >
-              Check-out time
-            </label>
-            <input
-              type="text"
-              id="input4"
-              name="checkout"
-              placeholder="-"
-              className="mt-1 p-2 w-full border rounded-sm text-sm text-[#252525]"
-            />
-          </div>
-        </div>
-
-        <div className="flex mb-4 space-x-4">
-          <div className="flex-1">
-            <label
-              htmlhtmlFor="input5"
-              className="block text-xs font-thin text-gray-400 "
-            >
-              Break duration
-            </label>
-            <input
-              type="text"
-              id="input5"
-              name="breakDuration"
-              placeholder="01:00 hr"
-              className="mt-1 p-2 w-full border rounded-sm text-sm text-[#252525]"
-            />
-          </div>
-
-          <div className="flex-1">
-            <label
-              htmlhtmlFor="input6"
-              className="block text-xs font-thin text-gray-400 "
-            >
-              Used break time
-            </label>
-            <input
-              type="text"
-              id="input6"
-              name="usedBreak"
-              placeholder="00:30 hr"
-              className="mt-1 p-2 w-full border rounded-sm text-sm text-[#252525]"
-            />
-          </div>
-        </div>
-
-        <div>
-          <button
-            toggleLargeModal={toggleLargeModal}
-            onClick={toggleLargeModal}
-          >
-            Go back
-          </button>
-        </div>
-      </form>
+      <button onClick={handleClose}>Go back</button>
     </div>
   )
 }
 
-export default YourFormComponent
+export default Breakdown

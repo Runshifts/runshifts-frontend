@@ -4,7 +4,9 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+    "./node_modules/flowbite-react/lib/**/*.js",
+    "./node_modules/tailwind-datepicker-react/dist/**/*.js",
+    ],
   theme: {
     extend: {
       backgroundImage: {
@@ -46,7 +48,7 @@ module.exports = {
           200: "#ACB8CD",
           100: "#D5DBE6",
         },
-        info: {
+        warning: {
           900: "#332200",
           800: "#664400",
           700: "#996700",
@@ -57,7 +59,7 @@ module.exports = {
           200: "#FFDD99",
           100: "#FFEECC",
         },
-        info: {
+        gray: {
           900: "#36322F",
           800: "#706763",
           700: "#9A928D",
@@ -69,9 +71,11 @@ module.exports = {
           100: "#EFEDED",
         },
         black: "#000",
-        white: "#fff"
+        white: "#fff",
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ],
 }

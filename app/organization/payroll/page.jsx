@@ -1,5 +1,5 @@
 import React from "react"
-import ApproveAll from "../../_components/AppComps/ApproveAll"
+import AddFunds from "../../_components/AppComps/AddFunds"
 import DatePicker from "../../_components/AppComps/Datepicker"
 import PayrollTable from "./PayrollTable"
 
@@ -8,7 +8,7 @@ function Payroll() {
     <section className="mx-2 p-3">
       <div className="flex items-center justify-between py-3">
         <h1 className="text-[#292D32] font-semibold  md:text-2xl ">Payroll</h1>
-        <ApproveAll />
+        <AddFunds />
       </div>
 
       <DatePicker />
@@ -25,14 +25,14 @@ function Payroll() {
           </div>
         </div>
 
-        <div className="bg-[#E5F7DD] p-4 flex items-center justify-center rounded-lg">
+        <div className="bg-[#E5F7DD] p-4 flex items-center justify-start rounded-lg">
           <div className="bg-[#CBF0BC] p-2 rounded-full">
             <RequestedSvg />
           </div>
 
           <div className="px-4">
             <h1 className="font-xl font-bold py-2">$293,923</h1>
-            <p className="text-xs py-1">Requested payment</p>
+            <p className="text-xs py-1">Requested EWA</p>
           </div>
         </div>
 

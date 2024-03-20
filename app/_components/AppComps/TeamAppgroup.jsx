@@ -1,22 +1,22 @@
 import React from "react"
-import Link from "next/link"
 
-function TeamAppgroup() {
+function TeamAppgroup({ openNewMemberModal = () => {} }) {
   return (
     <section>
       <div className="flex items-center justify-center ">
-        <Link href="/organization/team/newmember">
-          <button className="bg-[#5BC62D] rounded-sm flex items-center jusitfy-center text-sm mx-1 px-2 py-1">
-            <div>
-              <AddSvg />
-            </div>
-            <p className="text-white px-2">Add New</p>
-          </button>
-        </Link>
+        <button
+          onClick={openNewMemberModal}
+          className="bg-[#5BC62D] rounded-sm flex items-center jusitfy-center text-sm mx-1 px-2 py-1"
+        >
+          <div>
+            <AddSvg />
+          </div>
+          <p className="text-white px-2">Add New</p>
+        </button>
 
-        <button className="hidden md:flex items-center justify-center border rounded-sm bg-gray-100 text-gray-600  text-sm font-semibold mx-2 px-2 py-1">
+        <button className="hidden md:flex items-center justify-center rounded bg-[#091E420A] text-gray-600  text-sm font-semibold mx-2 px-2 py-1">
           <ImportSvg />
-          <p className="px-2">Import from csv</p>
+          <p className="px-2 text-xs text-[#42526E]">Import from csv</p>
         </button>
         <MoreSvg />
       </div>

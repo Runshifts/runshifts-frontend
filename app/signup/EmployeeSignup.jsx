@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { IoMailOutline } from "react-icons/io5"
 import { LuShieldCheck } from "react-icons/lu"
-import { FaRegEyeSlash, FaApple } from "react-icons/fa"
+import { FaRegEyeSlash } from "react-icons/fa"
 import { TbBuildingSkyscraper } from "react-icons/tb"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -65,7 +65,7 @@ function Signup() {
       }
       setLoading(true)
       const data = await fetchData(
-        "http://localhost:2024/api/v1/users/employees",
+        "/users/employees",
         "post",
         formData
       )
@@ -81,7 +81,7 @@ function Signup() {
   const makeOrganizationsSearch = useCallback(
     async (searchText) => {
       const data = await fetchData(
-        `http://localhost:2024/api/v1/organizations?search=${searchText}&limit=20`,
+        `/organizations?search=${searchText}&limit=20`,
         "get"
       )
       if (data.statusCode === 200) setOrganizations(data.results)
@@ -267,7 +267,7 @@ function Signup() {
                 <p className="text-gray-700 font-semibold text-sm pl-3 mt-5">
                   Already have an account?{" "}
                   <span className="text-[#7ED957]">
-                    <Link href="/login">Login here</Link>
+                    <Link href="/login?type=employee">Login here</Link>
                   </span>
                 </p>
               </form>

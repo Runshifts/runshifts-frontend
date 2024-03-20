@@ -11,7 +11,7 @@ function Shedule() {
     const userInLocalStorage = JSON.parse(localStorage.getItem("user"))
     if(!userInLocalStorage) router.push("/")
     else setUser(userInLocalStorage)
-  }, [])
+  }, [router])
 
   return (
     <>
