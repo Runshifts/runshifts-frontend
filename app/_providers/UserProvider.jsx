@@ -36,6 +36,11 @@ export default function UserProvider({ children }) {
 
   useEffect(() => {
     if (user) {
+      if (pathname === "/") {
+        if (user.type === "employee") router.push("/employee")
+        else if (user.type === "employee") router.push("/organization")
+        else if (user.type === "admin") router.push("/admin")
+      }
       if (
         pathname.toLowerCase().startsWith("/employee") &&
         user.type !== "employee"
