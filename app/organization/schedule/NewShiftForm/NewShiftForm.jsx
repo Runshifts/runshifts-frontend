@@ -211,7 +211,7 @@ function NewShiftForm({
   return (
     <section className="w-[95dvw] py-[24px] px-[24px] md:px-[40px] max-w-[576px] bg-white rounded-[16px]">
       <h3 className="text-center font-[600] text-[16px] text-[#1B1818] mb-[14px]">
-        Create shift
+        {isMultipleCreateMode ? "Create" : "Add"} shift
       </h3>
       <form
         className="flex gap-y-[16px] flex-col items-start w-full"

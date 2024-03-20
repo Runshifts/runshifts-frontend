@@ -50,9 +50,11 @@ export function SubmitButton({
   onClick,
   isDisabled,
   type,
+  style
 }) {
   return (
     <button
+      style={style}
       type={type || "submit"}
       onClick={onClick}
       disabled={isLoading || isDisabled}

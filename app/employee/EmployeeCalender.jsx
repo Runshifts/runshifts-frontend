@@ -1,10 +1,12 @@
-import React, { Fragment, useContext } from "react"
+import React, { Fragment, useContext, useState } from "react"
 import { useCallback, useMemo } from "react"
 import { daysOfTheWeek, formatHourAsAmOrPm, isDateInThePast } from "../_utils"
 import Pill from "../_components/AppComps/Pill"
 import placeholderImage from "../_assets/img/user.png"
 import Image from "next/image"
 import { UserContext } from "../_providers/UserProvider"
+import Modal from "../_components/AppComps/Modal"
+import ShiftApplicationForm from "./my-shifts/ShiftApplicationForm"
 
 export default function Calendar({
   shifts = {},
@@ -181,9 +183,24 @@ function ShiftPillWithDetails({ shift = {}, isPending }) {
 }
 
 function OpenShiftButton({ shift }) {
+  const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false)
   return (
-    <button className="border-dashed border-[#706763] border text-[#706763] text-[14px] font-[600] p-[4px] leading-[1] rounded-sm">
-      open shift
-    </button>
+    <>
+      <button
+        onClick={() => setIsApplicationModalOpen(true)}
+        className="border-dashed border-[#706763] border text-[#706763] text-[14px] font-[600] p-[4px] leading-[1] rounded-sm"
+      >
+        open shift
+      </button>
+      <Modal
+        open={isApplicationModalOpen}
+        onClose={() => setIsApplicationModalOpen(false)}
+      >
+        <ShiftApplicationForm
+          onFinish={() => setIsApplicationModalOpen(false)}
+          shift={shift}
+        />
+      </Modal>
+    </>
   )
 }
