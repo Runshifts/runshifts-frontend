@@ -1,14 +1,23 @@
-import React from "react";
+'use client'
+import React from 'react';
+import HeroPageContent from '../knowledgeb/components/Hero';
 
-function EmployeeDashboard() {
+function HomePage() {
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic
+  };
+
   return (
-    <section className="p-3 h-screen">
-      <h1 className="text-[#292D32] font-semibold text-xl md:font-bold text-2xl ">
-      knowledge Base here
-      </h1>
-
-    </section>
+    <div>
+      <HeroPageContent
+        title="Knowledge Base"
+        subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tincidunt arcu eget quam malesuada, sed placerat nisl feugiat."
+        popular=" account creation, reset password, profile image"
+        onSubmit={handleFormSubmit}
+      />
+    </div>
   );
 }
 
-export default EmployeeDashboard;
+export default HomePage;

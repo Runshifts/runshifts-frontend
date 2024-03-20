@@ -47,7 +47,7 @@ export const EmpSidebarData = [
     },
     {
         title: 'Knowledge Base',
-        path: '/admin/knowledge-base',
+        path: '/knowledgeb',
         icon: knowledge,
     },
 ]
