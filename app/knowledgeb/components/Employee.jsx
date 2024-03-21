@@ -3,7 +3,7 @@ import InfoCardsSkeleton from "./InfoCardsSkeleton";
 
 function Employer() {
   return (
-    <div>
+    <div className="px-8">
       <div className="flex items-center justify-between mt-12 mb-4">
         <p className="text-xl text-[#706763] font-medium leading-6 tracking-normal text-left mb-4 pb-1 relative">
           <span className="relative z-10">
