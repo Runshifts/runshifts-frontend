@@ -57,7 +57,7 @@ export const SidebarData = [
     },
     {
         title: 'Knowledge Base',
-        path: '/admin/knowledge-base',
+        path: '/knowledgeb',
         icon: knowledge,
     },
 ]

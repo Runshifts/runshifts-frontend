@@ -1,8 +1,11 @@
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "../globals.css";
-import EmployeeGlobalLayout from "../_components/EmployeeGlobalLayouts";
+import KnowledgeBaseLayout from '../_components/KnowledgeBaseLayout'
 
-const inter = Inter({ subsets: ["latin"] });
+const poppin = Poppins({ 
+  subsets: ["latin"],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900',]
+  });
 
 export const metadata = {
   title: "Runshifts - Knowledge Base",
@@ -12,9 +15,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {children}
-        {/* <EmployeeGlobalLayout>{children}</EmployeeGlobalLayout> */}
+
+      <body className={poppin.className}>
+        <KnowledgeBaseLayout>{children}</KnowledgeBaseLayout>
       </body>
     </html>
   );
