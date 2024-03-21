@@ -44,9 +44,12 @@ const LoginForm = () => {
         setError(null)
         localStorage.setItem("token", res.token)
         localStorage.setItem("user", JSON.stringify(res.user))
-        router.push(
-          res.user.type === "employer" ? "/organization" : "/employee"
-        )
+        let path = "/"
+        if (res.user.type === "employer") path = "/organization"
+        else if (res.user.type === "employee") path = "/employee"
+        else if (res.user.type === "admin") path = "/admin"
+        else toast.error("Invalid account type. Please contact support")
+        router.push(path)
       } else if (res.statusCode === 302) {
         sessionStorage.setItem("email", formData.email)
         router.push("/verify-email")
