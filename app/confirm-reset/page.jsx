@@ -1,13 +1,12 @@
 "use client"
 
 import AuthLayout from "../_components/Auth/Layout"
-import FormHeading from "../_components/Auth/Heading"
-import { AuthLabelText, SubmitButton } from "../_components/Auth/Inputs"
+import FormHeading, { SubHeadingText } from "../_components/Auth/Heading"
+import { SubmitButton } from "../_components/Auth/Inputs"
 import PinInput from "../_components/AppComps/PinInput"
 import useHandlePinInputState from "../_hooks/useHandlePinInputState"
 import { useRouter } from "next/navigation"
 import React, { useCallback, useEffect, useState } from "react"
-import DividerWithCenteredText from "../_components/DividerWithCenteredText"
 import useAxios from "../_hooks/useAxios"
 import toast from "react-hot-toast"
 
@@ -41,8 +40,8 @@ function Verify() {
         router.push("/change-password")
       } else {
         toast.error(
-          res.message || "An error occurred while verifying the email",
-          { duration: 6000 , position: "top-left", className: "mx-[8%]"}
+          res.message || "An error occurred",
+          { duration: 6000, position: "top-left", className: "mx-[8%]" }
         )
       }
       setLoading(false)
@@ -55,10 +54,10 @@ function Verify() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           <FormHeading>Provide the code sent to your mail box</FormHeading>
-          <p className="text-base leading-[23.5px] text-[#645D5D] font-[400]">
+          <SubHeadingText>
             Please provide the six digit code sent to your email to reset your
             password
-          </p>
+          </SubHeadingText>
         </div>
         <PinInput
           stateBoxReference={pinInputStateBoxReference}

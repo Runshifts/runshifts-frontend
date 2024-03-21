@@ -12,7 +12,7 @@ const Home = () => {
   const router = useRouter()
 
   return (
-    <div className="home-bg h-screen bg-cover bg-center flex items-center px-[8%] justify-end">
+    <div className="bg-[url(/img/homepage.png)] h-screen bg-cover bg-center flex items-center px-[8%] justify-end">
       <div className="flex flex-col gap-4 px-6 md:px-8 py-[64px] bg-white rounded-[16px] w-[90dvw] max-w-[534px]">
         <div className="text-gray-800 gap-8 flex flex-col">
           <Heading

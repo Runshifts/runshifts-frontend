@@ -5,7 +5,7 @@ import SocialProviders from "../_components/Auth/SocialProviders"
 import useAxios from "../_hooks/useAxios"
 import AuthLayout from "../_components/Auth/Layout"
 import AuthInputAndLabel, { SubmitButton } from "../_components/Auth/Inputs"
-import FormHeading from "../_components/Auth/Heading"
+import FormHeading, { SubHeadingText } from "../_components/Auth/Heading"
 import { IoMailOutline } from "react-icons/io5"
 import toast from "react-hot-toast"
 
@@ -15,30 +15,34 @@ function Reset() {
   const [email, setEmail] = useState("")
   const fetchData = useAxios()
 
-  const handleRequestReset = useCallback(async (e) => {
-    e.preventDefault()
-    if (loading) return
-    if (!email.trim())
-      return toast.error("Please provide your email address", {
-        position: "top-left",
-        className: "mx-[8%]",
+  const handleRequestReset = useCallback(
+    async (e) => {
+      e.preventDefault()
+      if (loading) return
+      if (!email.trim())
+        return toast.error("Please provide your email address", {
+          position: "top-left",
+          className: "mx-[8%]",
+        })
+      setLoading(true)
+      const res = await fetchData("/users/request-password-reset", "post", {
+        email,
       })
-    setLoading(true)
-    const res = await fetchData("/users/request-password-reset", "post", {
-      email,
-    })
-    if (res.statusCode === 200) {
-      sessionStorage.setItem("email", email)
-      router.push("/confirm-reset")
-      toast.success(
-        res.message || "Reset instructions have been sent to your email."
-      )
-    } else
-      toast.error(
-        res.message || "Something went wrong. Please try again at a later time"
-      )
-    setLoading(false)
-  }, [email, fetchData, router, loading])
+      if (res.statusCode === 200) {
+        sessionStorage.setItem("email", email)
+        router.push("/confirm-reset")
+        toast.success(
+          res.message || "Reset instructions have been sent to your email."
+        )
+      } else
+        toast.error(
+          res.message ||
+            "Something went wrong. Please try again at a later time"
+        )
+      setLoading(false)
+    },
+    [email, fetchData, router, loading]
+  )
 
   return (
     <>
@@ -47,9 +51,9 @@ function Reset() {
           <form onSubmit={handleRequestReset} className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
               <FormHeading>Let&apos;s reset your password</FormHeading>
-              <p className="text-base leading-[23.5px] text-[#645D5D] font-[400]">
+              <SubHeadingText>
                 Please provide your email to reset your password
-              </p>
+              </SubHeadingText>
             </div>
             <AuthInputAndLabel
               labelText="Email address"

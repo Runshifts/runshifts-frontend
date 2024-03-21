@@ -5,3 +5,11 @@ export default function FormHeading({ children }) {
     </h1>
   )
 }
+
+export function SubHeadingText({ children }) {
+  return (
+    <p className="text-base leading-[23.5px] text-[#645D5D] font-[400]">
+      {children}
+    </p>
+  )
+}

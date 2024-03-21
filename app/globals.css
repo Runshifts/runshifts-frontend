@@ -13,60 +13,6 @@
   @apply text-[#292D32] mb-4 mt-2 text-xl not-italic font-medium leading-7 md:text-2xl;
 }
 
-.home-bg {
-  background-image: url("/img/background.png");
-  background-repeat: no-repeat;
-}
-
-.verify-bg {
-  background: url("/img/verify.png");
-  background-repeat: no-repeat;
-}
-
-.about-org-bg {
-  background-image: url("/img/aboutorg.png");
-  background-repeat: no-repeat;
-}
-
-.invite-bg {
-  background-image: url("/img/invite.png");
-  background-repeat: no-repeat;
-}
-
-.runshifts-bg {
-  background-image: url("/img/Runshifts.png");
-  background-repeat: no-repeat;
-}
-
-.login-bg {
-  background-image: url("/img/login.png");
-  background-repeat: no-repeat;
-}
-
-.change-bg {
-  background-image: url("/img/change.png");
-  background-repeat: no-repeat;
-}
-
-.confirm-bg {
-  background-image: url("/img/confirm.png");
-  background-repeat: no-repeat;
-}
-
-.reset-bg {
-  background-image: url("/img/reset.png");
-  background-repeat: no-repeat;
-}
-.check-bg {
-  background-image: url("/img/check.png");
-  background-repeat: no-repeat;
-}
-
-.login-verify-bg {
-  background-image: url("/img/hijab.png");
-  background-repeat: no-repeat;
-}
-
 .knowledgeb-bg {
   background-image: url("../app/knowledgeb/Frame.svg");
   background-repeat: no-repeat;
@@ -144,14 +90,14 @@
 }
 
 .scrollbar-minimized::-webkit-scrollbar {
-    width: 2px;
-    height: 2px;
+  width: 2px;
+  height: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #88888817;
+  background: #88888817;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f11c;
+  background: #f1f1f11c;
 }

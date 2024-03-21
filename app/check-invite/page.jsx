@@ -1,7 +1,7 @@
 "use client"
 
 import AuthLayout from "../_components/Auth/Layout"
-import FormHeading from "../_components/Auth/Heading"
+import FormHeading, { SubHeadingText } from "../_components/Auth/Heading"
 import { AuthLabelText, SubmitButton } from "../_components/Auth/Inputs"
 import PinInput from "../_components/AppComps/PinInput"
 import useHandlePinInputState from "../_hooks/useHandlePinInputState"
@@ -54,10 +54,10 @@ function CheckInvite() {
       <AuthLayout bgClassName="bg-[url(/img/check_invite.png)]">
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
           <FormHeading>See if you&apos;ve been invited to a team</FormHeading>
-          <p className="text-base leading-[23.5px] text-[#645D5D] font-[400]">
+          <SubHeadingText>
             Please provide the invite code that was sent to your work email
             address
-          </p>
+          </SubHeadingText>
           <div>
             <AuthLabelText>Invite code</AuthLabelText>
             <PinInput
