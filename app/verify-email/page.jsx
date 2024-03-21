@@ -8,7 +8,6 @@ import React, {
   useMemo,
   useState,
 } from "react"
-import axios from "axios"
 import EmployerVerification from "./EmployerVerification"
 import EmployeeVerification from "./EmployeeVerification"
 import ErrorBoundary from "../_errorBoundaries"
@@ -36,21 +35,25 @@ function Verify() {
   const accountType = useMemo(() => {
     return query.get("type")
   }, [query])
+  const [loading, setLoading] = useState(false)
   const fetchData = useAxios()
 
   const handleSubmit = useCallback(
     async (e, codeList = []) => {
       e.preventDefault()
+      if(loading) return 
+      setLoading(true)
       const URL = "/users/verify-email"
-      const res = await fetchData(URL, {
+      const res = await fetchData(URL, "post", {
         emailVerificationCode: codeList.join(""),
         email,
       })
       if (res.statusCode === 200) {
-        localStorage.setItem("token", response.data.token)
-        localStorage.setItem("user", JSON.stringify(response.data.user))
+        localStorage.setItem("token", res.token)
+        localStorage.setItem("user", JSON.stringify(res.user))
         router.push("/welcome")
       } else toast.error(res.message || "Unable to verify your email")
+      setLoading(false)
     },
     [email, router, fetchData]
   )
@@ -59,10 +62,10 @@ function Verify() {
     <>
       <Suspense>
         {accountType === "employer" && (
-          <EmployerVerification handleSubmit={handleSubmit} />
+          <EmployerVerification handleSubmit={handleSubmit} loading={loading} />
         )}
         {accountType === "employee" && (
-          <EmployeeVerification handleSubmit={handleSubmit} />
+          <EmployeeVerification handleSubmit={handleSubmit} loading={loading} />
         )}
       </Suspense>
     </>
