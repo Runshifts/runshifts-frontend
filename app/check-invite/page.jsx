@@ -7,7 +7,6 @@ import PinInput from "../_components/AppComps/PinInput"
 import useHandlePinInputState from "../_hooks/useHandlePinInputState"
 import { useRouter } from "next/navigation"
 import React, { useCallback, useState } from "react"
-import axios from "axios"
 import DividerWithCenteredText from "../_components/DividerWithCenteredText"
 import useAxios from "../_hooks/useAxios"
 import toast from "react-hot-toast"
@@ -54,7 +53,7 @@ function CheckInvite() {
     <>
       <AuthLayout bgClassName="bg-[url(/img/check_invite.png)]">
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-          <FormHeading>See if you’ve been invited to a team</FormHeading>
+          <FormHeading>See if you&apos;ve been invited to a team</FormHeading>
           <p className="text-base leading-[23.5px] text-[#645D5D] font-[400]">
             Please provide the invite code that was sent to your work email
             address

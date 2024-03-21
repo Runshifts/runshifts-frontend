@@ -4,7 +4,7 @@ export default function PinInput({
   handleBackspaceAndEnter,
   stateBoxReference,
   handleChange,
-  inputClassName = "p-4 text-center w-full border-[#D0D5DD] border rounded-lg focus:outline-none focus:shadow-0 ring-0 focus:ring-0",
+  inputClassName = "px-2 py-4 md:p-4 text-center w-full border-[#D0D5DD] border rounded-lg focus:outline-none focus:shadow-0 ring-0 focus:ring-0",
   containerClassName = "flex gap-[8px]",
 }) {
   return (
