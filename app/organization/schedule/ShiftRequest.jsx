@@ -23,7 +23,7 @@ export function ShiftRequest({ shiftRequest = {} }) {
   }, [days, hours, minutes, seconds])
 
   return (
-    <article className="border border-gray-300 rounded-lg p-[10px] flex flex-col gap-y-[8px] w-full max-w-[]">
+    <article className="border border-gray-300 rounded-lg p-[10px] flex flex-col gap-y-[8px] w-full max-h-[170px]">
       <UserDisplay
         firstName={shiftRequest.requester?.firstName || "Placeholder"}
         lastName={shiftRequest.requester?.lastName || "Name"}
@@ -39,22 +39,23 @@ export function ShiftRequest({ shiftRequest = {} }) {
         </p>
       </div>
 
-      <p className="text-info-500 font-bold text-[14px] leading-[145%]">
-        {isStillValid &&
-        !shiftRequest.isAccepted &&
-        !shiftRequest.isRejected ? (
-          <>
-            {+days && `${days} days, `}
-            {+hours ? `${hours}:` : "00:"}
-            {+minutes ? `${minutes}:` : "00:"}
-            {seconds} Left
-          </>
-        ) : (
-          !shiftRequest.isAccepted && (
-            <span className="opacity-30 font-[500] text-4">Expired</span>
-          )
+      <div className="text-info-500 font-bold text-[14px] leading-[145%] flex flex-col gap-[8px]">
+        <p>
+          {+days && `${days} days, `}
+          {+hours ? `${hours}:` : "00:"}
+          {+minutes ? `${minutes}:` : "00:"}
+          {seconds} Left
+        </p>
+        {!shiftRequest.isAccepted && !isStillValid && (
+          <p className="opacity-30 font-[500] text-4">Expired</p>
         )}
-      </p>
+        {shiftRequest.isAccepted && (
+          <p className="opacity-30 font-[500] text-4">Accepted</p>
+        )}
+        {shiftRequest.isRejected && (
+          <p className="opacity-30 font-[500] text-4">Rejected</p>
+        )}
+      </div>
 
       {isStillValid && !shiftRequest.isAccepted && !shiftRequest.isRejected ? (
         <AcceptAndRejectButtons
@@ -62,8 +63,6 @@ export function ShiftRequest({ shiftRequest = {} }) {
           requestType={"shifts"}
         />
       ) : null}
-      {shiftRequest.isAccepted && <span className="opacity-30">Accepted</span>}
-      {shiftRequest.isRejected && <span className="opacity-30">Rejected</span>}
     </article>
   )
 }

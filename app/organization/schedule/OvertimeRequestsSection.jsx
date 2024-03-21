@@ -56,7 +56,7 @@ export function OvertimeRequest({ overtimeRequest = {} }) {
   }, [])
 
   return (
-    <article className="border border-gray-300 rounded-lg p-[10px] flex flex-col gap-y-[8px] w-full max-w-[]">
+    <article className="border border-gray-300 rounded-lg p-[10px] flex flex-col gap-y-[8px] w-full">
       <UserDisplay
         firstName={overtimeRequest.requester?.firstName || "Placeholder"}
         lastName={overtimeRequest.requester?.lastName || "Name"}
@@ -81,25 +81,28 @@ export function OvertimeRequest({ overtimeRequest = {} }) {
             </div>
           )}
       </div>
-
-      <p className="text-info-500 bg-white font-bold text-[14px] leading-[145%]"></p>
-
-      {isStillValid &&
-      overtimeRequest.isAccepted === false &&
-      !overtimeRequest.isRejected ? (
-        <AcceptAndRejectButtons
-          requestId={overtimeRequest._id}
-          requestType={"overtimes"}
-        />
-      ) : (
-        <span className="opacity-30">Expired</span>
-      )}
-      {!isStillValid && overtimeRequest.isAccepted && (
-        <span className="opacity-30">Accepted</span>
-      )}
-      {!isStillValid && overtimeRequest.isRejected && (
-        <span className="opacity-30">Rejected</span>
-      )}
+      {
+      !isStillValid &&
+        overtimeRequest.isAccepted === false &&
+        !overtimeRequest.isRejected && (
+          <AcceptAndRejectButtons
+            requestId={overtimeRequest._id}
+            requestType={"overtimes"}
+          />
+        )}
+      <p className="text-info-500 font-bold text-[14px] leading-[145%]">
+        {!isStillValid &&
+          overtimeRequest.isAccepted === false &&
+          overtimeRequest.isRejected === false && (
+            <span className="opacity-30 font-[500] text-4">Expired</span>
+          )}
+        {overtimeRequest.isAccepted && (
+          <span className="opacity-30 font-[500] text-4">Accepted</span>
+        )}
+        {overtimeRequest.isRejected && (
+          <span className="opacity-30 font-[500] text-4">Rejected</span>
+        )}
+      </p>
     </article>
   )
 }
