@@ -43,7 +43,7 @@ function Signup() {
       const data = await fetchData("/users/employees", "post", formData)
       if (data.statusCode === 201) {
         sessionStorage.setItem("email", formData.email)
-        router.push("/login-verify")
+        router.push("/verify-email?type=employee")
       } else setError(data.message)
       setLoading(false)
     },

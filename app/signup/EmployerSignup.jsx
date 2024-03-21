@@ -34,8 +34,12 @@ function Signup() {
       console.log(res.statusCode)
       if (res?.statusCode === 201) {
         sessionStorage.setItem("email", formData.email)
-        router.push("/verify-email")
-      } else toast.error(res?.message || "Something went wrong", { position: "top-left", className: "mx-[8%]"})
+        router.push("/verify-email?type=employer")
+      } else
+        toast.error(res?.message || "Something went wrong", {
+          position: "top-left",
+          className: "mx-[8%]",
+        })
       setLoading(false)
     },
     [formData]
@@ -70,11 +74,7 @@ function Signup() {
             <TermsAndConditionsNotice />
           </div>
 
-          <SubmitButton
-            type="submit"
-            isDisabled={loading}
-            isLoading={loading}
-          >
+          <SubmitButton type="submit" isDisabled={loading} isLoading={loading}>
             Create account
           </SubmitButton>
           <SocialProviders accountType="employer" redirectPath="signup" />

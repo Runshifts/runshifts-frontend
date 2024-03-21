@@ -43,6 +43,12 @@ export default function AuthInputAndLabel({
   )
 }
 
+export function AuthLabelText({ children }) {
+  return (
+    <span className="first-letter:capitalize text-[#101928]">{children}</span>
+  )
+}
+
 export function SubmitButton({
   children,
   loadingText,
@@ -50,7 +56,7 @@ export function SubmitButton({
   onClick,
   isDisabled,
   type,
-  style
+  style,
 }) {
   return (
     <button

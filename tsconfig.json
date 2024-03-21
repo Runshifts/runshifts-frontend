@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -26,9 +22,10 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "app/_hooks/useHandleShiftDuplication.js", "app/_hooks/useListenForShiftCreationResponse.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "**/*.tsx",
+    "app/_hooks/useHandleShiftDuplication.js",
+    "app/_hooks/useListenForShiftCreationResponse.js",
+    "app/_hooks/useHandlePinInputState.jsx"
+  ],
+  "exclude": ["node_modules"]
 }
