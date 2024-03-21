@@ -1,5 +1,9 @@
 export const throwInvalidDateError = (date) => {
-  if (!date || (date && date.toString() === "Invalid Date") || typeof date.getTime !== "function")
+  if (
+    !date ||
+    (date && date.toString() === "Invalid Date") ||
+    typeof date.getTime !== "function"
+  )
     throw new Error("Invalid Date!")
 }
 
@@ -149,4 +153,12 @@ export function getFutureWeekRanges(numOfWeeks, startDate) {
     numOfWeeksUsed = numOfWeeksUsed - 1
   }
   return ranges
+}
+
+export function getUserBasePathForDashboard(accountType) {
+  let path
+  if (accountType === "employer") path = "/organization"
+  else if (accountType === "employee") path = "/employee"
+  else if (accountType === "admin") path = "/admin"
+  return path
 }

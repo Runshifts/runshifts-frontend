@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useCallback, useContext, useState, Suspense } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { redirect, useRouter, useSearchParams } from "next/navigation"
 import SocialProviders from "../_components/Auth/SocialProviders"
 import { LoadingContext } from "../_providers/LoadingProvider"
 import Link from "next/link"
@@ -12,8 +12,10 @@ import FormHeading from "../_components/Auth/Heading"
 import { IoMailOutline } from "react-icons/io5"
 import { LuShieldCheck } from "react-icons/lu"
 import toast from "react-hot-toast"
+import useRedirectUserByAccountType from "../_hooks/useRedirectUserByAccountType"
 
 const LoginForm = () => {
+  const redirectUser = useRedirectUserByAccountType()
   const searchParams = useSearchParams()
   const { loading, updateLoading } = useContext(LoadingContext)
   const fetchData = useAxios()
@@ -44,12 +46,7 @@ const LoginForm = () => {
         setError(null)
         localStorage.setItem("token", res.token)
         localStorage.setItem("user", JSON.stringify(res.user))
-        let path = "/"
-        if (res.user.type === "employer") path = "/organization"
-        else if (res.user.type === "employee") path = "/employee"
-        else if (res.user.type === "admin") path = "/admin"
-        else toast.error("Invalid account type. Please contact support")
-        router.push(path)
+        redirectUser(res.user.type)
       } else if (res.statusCode === 302) {
         sessionStorage.setItem("email", formData.email)
         router.push("/verify-email")
@@ -62,7 +59,7 @@ const LoginForm = () => {
       }
       updateLoading(false)
     },
-    [formData, fetchData, router, updateLoading]
+    [formData, fetchData, router, updateLoading, redirectUser]
   )
 
   return (
