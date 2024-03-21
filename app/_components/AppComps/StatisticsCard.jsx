@@ -8,18 +8,21 @@ export default function StatisticsCard({
   iconBg,
   isLoading,
 }) {
-  if (isLoading) return <StatisticsCardSkeleton mainBg={mainBg} iconBg={iconBg} />
+  if (isLoading)
+    return <StatisticsCardSkeleton mainBg={mainBg} iconBg={iconBg} />
   return (
     <div
       style={{ backgroundColor: mainBg }}
       className="bg-[#FFEECC] p-[28px] flex flex-wrap justify-center items-center gap-[16px] md:gap-[24px] md:justify-start rounded-lg"
     >
-      <div
-        style={{ backgroundColor: iconBg }}
-        className="bg-[#FFDD99] p-[11px] rounded-full"
-      >
-        {icon}
-      </div>
+      {icon && (
+        <div
+          style={{ backgroundColor: iconBg }}
+          className="bg-[#FFDD99] p-[11px] rounded-full"
+        >
+          {icon}
+        </div>
+      )}
 
       <div className="px-4 text-center md:text-start">
         <h1 className="text-[24px] leading-[40px] font-[500] py-2 text-info-700">
