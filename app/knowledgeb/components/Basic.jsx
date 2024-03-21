@@ -3,7 +3,7 @@ import InfoCardsSkeleton from './InfoCardsSkeleton'
 
 function Basic() {
   return (
-    <div>
+    <div className="px-8">
 <p className="text-xl text-[#706763] font-medium leading-6 tracking-normal text-left mb-4 pb-1 relative">
   <span className="relative z-10">
     <span className="relative">
