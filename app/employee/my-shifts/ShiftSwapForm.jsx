@@ -7,10 +7,10 @@ import toast from "react-hot-toast"
 import MY_SHIFTS_URLS from "../../_urls/myShiftsURLs"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 
-export default function ShiftSwapForm({ shift = {} }) {
+export default function ShiftSwapForm({ shift }) {
   return (
     <div className="flex flex-col items-stretch gap-4">
-      {shift && (
+      {!shift && (
         <h3 className="text-left font-[400] leading-[150%] text-[14px] text-[#303030]">
           Swap shift
         </h3>

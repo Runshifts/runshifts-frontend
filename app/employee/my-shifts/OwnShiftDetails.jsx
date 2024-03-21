@@ -26,7 +26,7 @@ export default function OwnShiftDetails({ shift = {}, onClose = () => {} }) {
           </div>
         ) : (
           <div>
-            <ShiftSwapForm shift={shift} />
+            <ShiftSwapForm />
           </div>
         )}
       </div>
