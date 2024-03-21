@@ -4,19 +4,18 @@ import React from "react";
 function HeroPageContent({ title, subtitle, onSubmit, popular }) {
   return (
     <div
-      className="bg-cover bg-center min-h-screen flex flex-col justify-center items-center"
-      style={{ backgroundImage: "url(./Frame.svg)" }}
+      className="knowledgeb-bg bg-cover bg-center min-h-screen flex flex-col justify-center items-center"
     >
       <h1 className="text-6xl font-semibold tracking-normal text-left mb-8">
         {title}
       </h1>
-      <p className=" break-words text-lg font-normal leading-7 tracking-normal text-center text-[#706763] mb-8">
+      <p className=" break-words text-sm font-normal leading-7 tracking-normal text-center text-[#706763] mb-8">
         {subtitle}
       </p>
 
       <form onSubmit={onSubmit}>
        
-        <div className="relative max-w-full">
+        <div className="relative w-full">
           <input
             type="search"
             id="search"
@@ -33,14 +32,9 @@ function HeroPageContent({ title, subtitle, onSubmit, popular }) {
         </div>
       </form>
 
-      <p className=" break-words text-lg font-normal leading-7 tracking-normal text-center text-[#2D6316] mt-5">
-        <p className="text-[#706763]">Popular searches: <span className="text-[#2D6316]">{popular}</span></p> 
+      <p className=" break-words text-sm font-normal leading-7 tracking-normal text-center text-[#2D6316] mt-5">
+        <p className="text-[#706763]">Popular searches: <span className="text-[#2D6316] font-bold">{popular}</span></p> 
       </p>
-
-      {/* <form onSubmit={onSubmit} className="flex">
-        <input type="text" className="border border-gray-300 rounded-l py-2 px-4 focus:outline-none focus:ring focus:border-blue-500" placeholder="Enter your email" />
-        <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-r focus:outline-none focus:ring focus:border-blue-500">{buttonText}</button>
-      </form> */}
     </div>
   );
 }

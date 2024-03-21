@@ -77,6 +77,11 @@
   background-repeat: no-repeat;
 }
 
+.knowledgeb-bg {
+  background-image: url("../app/knowledgeb/Frame.svg");
+  background-repeat: no-repeat;
+}
+
 .centered {
   display: flex;
   justify-content: center;

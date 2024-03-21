@@ -1,22 +1,35 @@
-'use client'
-import React from 'react';
-import HeroPageContent from '../knowledgeb/components/Hero';
+"use client";
+import React from "react";
+import HeroPageContent from "./components/Hero";
+import Cards from "./components/Cards";
+import Employer from "./components/Employer";
+import Employee from "./components/Employee";
+import Basic from "./components/Basic";
 
 function HomePage() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic
   };
 
   return (
-    <div>
-      <HeroPageContent
-        title="Knowledge Base"
-        subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tincidunt arcu eget quam malesuada, sed placerat nisl feugiat."
-        popular=" account creation, reset password, profile image"
-        onSubmit={handleFormSubmit}
-      />
-    </div>
+    <section className="">
+      <div>
+        <HeroPageContent
+          title="Knowledge Base"
+          subtitle="All the resources you need to get the most out of
+        our product, quickly and effectively!"
+          popular=" account creation, reset password, profile image"
+          onSubmit={handleFormSubmit}
+        />
+      </div>
+
+      <div className="p-6">
+        <Cards />
+        <Basic />
+        <Employer />
+        <Employee />
+      </div>
+    </section>
   );
 }
 
