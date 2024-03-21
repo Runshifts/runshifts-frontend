@@ -1,8 +1,8 @@
 import React from "react";
-import Button from "@/app/_components/AdminComps/Button";
+import Button from "../../_components/AppComps/Button";
 import TotalCards from "./TotalCards";
 import AllEmployeesTable from "./AllEmployeesTable";
-import ManageEmployeesFilterGroup from "@/app/_components/AdminComps/ManageEmployeesFilterGroup";
+import ManageEmployeesFilterGroup from "../../_components/AdminComps/ManageEmployeesFilterGroup";
 
 function page() {
   return (

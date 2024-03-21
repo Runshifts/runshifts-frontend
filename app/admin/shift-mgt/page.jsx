@@ -1,31 +1,72 @@
 import React from "react";
-import Button from "../../_components/AdminComps/Button";
+import ShiftsCards from "./ShiftsCards";
+import ShiftsTicket from "./ShiftsTickets";
+import CurrentShifts from "./CurrentShifts";
 
 function page() {
   return (
     <section className="p-6 h-screen">
-      <div className="flex items-center justify-between">
-        <h1 className="custom-h1">Shift Management</h1>
+      <h1 className="custom-h1">Shift Management</h1>
 
-        <Button>
-          <div className="flex items-center justify-center">
-            <PlusSvg />
-            <p>Create new ticket</p>
-          </div>
-        </Button>
+      <div className='flex flex-row'>
+        <select
+          className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] mr-2 h-10 rounded-md md:text-sm "
+          aria-label="Default select example"
+        >
+          <option>Search employees...</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
+
+        <div className="hidden md:block">
+          <select
+            className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] mr-2 h-10 rounded-md md:text-sm "
+            aria-label="Default select example"
+          >
+            <option>Location</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+
+          <select
+            className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] mr-2 h-10 rounded-md md:text-sm "
+            aria-label="Default select example"
+          >
+            <option>Company</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+
+          <select
+            className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] mr-2 h-10 rounded-md md:text-sm "
+            aria-label="Default select example"
+          >
+            <option>Week</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+
+        <select
+          className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] mr-2 h-10 rounded-md md:hidden "
+          aria-label="Default select example"
+        >
+          <option>Filter</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
       </div>
 
-      <select
-        className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] mr-2 h-10 rounded-md md:text-sm "
-        aria-label="Default select example"
-      >
-        <option>Search ticket ID...</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+      <ShiftsCards />
 
-      
+      <ShiftsTicket />
+
+      <CurrentShifts />
     </section>
   );
 }
@@ -52,3 +93,55 @@ function PlusSvg() {
     </svg>
   );
 }
+
+// 'use client'
+// import { useState } from 'react';
+
+// const ShiftSchedule = () => {
+//   const [selectedDays, setSelectedDays] = useState([]);
+
+//   const handleMorningClick = (day) => {
+//     if (selectedDays.includes(day)) {
+//       const newSelectedDays = selectedDays.filter((selectedDay) => selectedDay !== day);
+//       setSelectedDays(newSelectedDays);
+//     } else {
+//       const newSelectedDays = [...selectedDays, day];
+//       setSelectedDays(newSelectedDays);
+//     }
+//   };
+
+//   return (
+//     <div className="flex flex-col items-center justify-center my-8 ">
+//       <div className="mr-8 rounded border p-8 my-5">
+//         <h2 className="text-xl font-semibold mb-4">Morning Shift</h2>
+//         {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+//           <div
+//             key={day}
+//             className={`cursor-pointer mb-2 ${
+//               selectedDays.includes(day) ? 'opacity-50 pointer-events-none' : 'hover:bg-gray-300'
+//             }`}
+//             onClick={() => handleMorningClick(day)}
+//           >
+//             {day}
+//           </div>
+//         ))}
+//       </div>
+//       <div className=' rounded border p-8 my-5'>
+//         <h2 className="text-xl font-semibold mb-4">Evening Shift</h2>
+//         {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+//           <div
+//             key={day}
+//             className={`mb-2 ${
+//               selectedDays.includes(day) ? 'opacity-50 pointer-events-none' : 'hover:bg-gray-300'
+//             }`}
+//             onClick={() => handleMorningClick(day)}
+//           >
+//             {day}
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ShiftSchedule;

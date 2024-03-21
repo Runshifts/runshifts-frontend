@@ -27,7 +27,7 @@ const SignupTable = () => {
       image: Avatar2,
     },
     {
-      name: "BMaritime Global Service",
+      name: "Maritime Global Service",
       location: "London",
       nextDue: "12 Jan 2024",
       status: "Active",
@@ -49,53 +49,45 @@ const SignupTable = () => {
   return (
     <div className="rounded-lg overflow-x-auto shadow-lg">
       <h1 className="text-gray-900 text-base not-italic font-semibold">
-        Recent Signups
+        All employers
       </h1>
 
-      <div className="bg-[#F1F3F9] rounded-t-md my-2 grid grid-cols-6 gap-2">
-        <div className="flex items-center justify-between py-2 px-4 text-[#2252525] text-xs font-thin">
-          
-          <div className=" py-2 px-4">
+      <div className="bg-[#F1F3F9] rounded-t-md my-2 grid grid-cols-7 gap-2">
+        <div className="ml-2">
           <input type="checkbox" className="form-checkbox " />
-          </div>
+        </div>
+        <div className="py-2 text-[#2252525] text-xs font-thin">
           Employer
         </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
-          Location
-        </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
-          Next Due
-        </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
-          Status
-        </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin">
-          Actions
-        </div>
-        <div className="py-2 px-4 text-[#2252525] text-xs font-thin"></div>
+        <div className="py-2 text-[#2252525] text-xs font-thin">Location</div>
+        <div className="py-2 text-[#2252525] text-xs font-thin">Next Due</div>
+        <div className="py-2 text-[#2252525] text-xs font-thin">Status</div>
+        <div className="py-2 text-[#2252525] text-xs font-thin">Actions</div>
+        <div className="py-2 text-[#2252525] text-xs font-thin"></div>
       </div>
 
       {employeeData.map((employee, rowIndex) => (
         <div
           key={rowIndex}
-          className="grid grid-cols-5 bg-white shadow-xl rounded my-2 p-1"
+          className="grid grid-cols-5  place-items-start place-content-center  bg-white shadow-xl rounded my-2 p-1"
         >
-         
+          
 
-          <div className=" flex items-center justify-center">
-            <input type="checkbox" className="form-checkbox mr-4" />
+          <div className="flex items-start justify-start py-2 text-[#2252525] text-xs font-thin">
+          <div className="ml-2 mr-4">
+            <input type="checkbox" className="form-checkbox " />
+          </div>
             <Image
               src={employee.image}
               alt={`avatar-${employee.name}`}
               height={24}
               width={24}
-              className="rounded-full"
+              className="rounded-full mr-1"
             />
-            <div className="text-[#1D2433]  text-sm mx-2">
+            <div className="text-[#1D2433] text-xs font-normal leading-5 tracking-normal text-start">
               {employee.name}
             </div>
           </div>
-
 
           <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
             {employee.location}
@@ -104,7 +96,7 @@ const SignupTable = () => {
           <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
             {employee.nextDue}
           </div>
-          
+
           <div>
             <div
               className={`text-center px-1 rounded-full m-1 text-sm not-italic font-normal w-fit ${getStatusColorClass(
@@ -115,28 +107,22 @@ const SignupTable = () => {
             </div>
           </div>
 
-          <div className=" flex space-x-1">
-          <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
+          <div className="flex space-x-1 items-center">
             <button className="bg-[#5BC62D] rounded text-white py-[8px] px-[10px]">
               <div className="flex items-center">
                 <PenSvg />
-                <p className="ml-2">Edit</p>
+                <p className="ml-2 text-xs">Edit</p>
               </div>
             </button>
-          </div>
-          <div className="py-1 px-4 text-sm not-italic font-normal leading-5">
             <button className="rounded text-[#B22A09] py-[8px] px-[10px]">
               <div className="flex items-center">
-                <div className="h-[20px] w-[20px] ">
+                <div className="h-[20px] w-[20px]">
                   <DeleteSvg />
                 </div>
-                <p className="ml-2">Request removal</p>
+                <p className="ml-2 text-xs">Request removal</p>
               </div>
             </button>
           </div>
-          </div>
-
-         
         </div>
       ))}
     </div>

@@ -35,14 +35,14 @@ const AllEmployeesTable = () => {
   ];
 
   return (
-    <div className=" overflow-x-auto">
+    <div className="overflow-x-auto md:overflow-hidden">
          <h1 className="text-gray-900 text-base not-italic font-semibold">
         All employees
       </h1>
       {employeeData.map((employee, index) => (
         <div
           key={index}
-          className="grid grid-cols-4 bg-white shadow-xl rounded my-2 p-1"
+          className="grid grid-cols-4 place-content-center place-items-center bg-white shadow-xl rounded my-2 p-1"
         >
           
           <div className="mx-auto flex items-center justify-center">
@@ -54,7 +54,7 @@ const AllEmployeesTable = () => {
               width={24}
               className="rounded-full"
             />
-            <div className="text-[#1D2433]  text-sm mx-2">
+            <div className="text-[#1D2433] text-xs mx-2 font-normal leading-5 tracking-normal text-left">
               {employee.empName}
             </div>
           </div>
