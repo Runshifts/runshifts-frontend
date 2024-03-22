@@ -1,7 +1,10 @@
 import Image from "next/image"
 import ShiftSwapForm from "./ShiftSwapForm"
+import { UserContext } from "../../_providers/UserProvider"
+import { useContext } from "react"
 
 export default function ShiftSwapDetails({ shift }) {
+  const { user } = useContext(UserContext)
   return (
     <>
       <div className="flex flex-col items-center gap-[14px] p-4 bg-white rounded-[16px] max-w-[356px]">
@@ -15,7 +18,13 @@ export default function ShiftSwapDetails({ shift }) {
           className="rounded-full w-[69px] h-[69px] object-cover"
           src={shift.assignee?.profileImage?.secure_url || placeholderImage}
         />
-        <ShiftSwapForm shift={shift} />
+        <ShiftSwapForm
+          currentShift={shift}
+          showHeader={false}
+          centerButton={true}
+          idOfUserToShowShiftOptions={user?._id}
+          employee={shift?.assignee}
+        />
       </div>
     </>
   )

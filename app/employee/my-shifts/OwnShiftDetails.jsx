@@ -26,7 +26,7 @@ export default function OwnShiftDetails({ shift = {}, onClose = () => {} }) {
           </div>
         ) : (
           <div>
-            <ShiftSwapForm />
+            <ShiftSwapForm currentShift={shift} showHeader />
           </div>
         )}
       </div>

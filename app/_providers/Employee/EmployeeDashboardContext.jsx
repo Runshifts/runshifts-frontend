@@ -37,9 +37,13 @@ export const EmployeeDashboardContext = createContext({
     overtimeEarnings: 0,
     shiftEarnings: 0,
     shiftHours: 0,
-    overtimeHours: 0
+    overtimeHours: 0,
   },
   loadingActivity: false,
+  swapRequests: [],
+  updateAllSwapRequests: () => {},
+  updateSingleSwapRequest: () => {},
+  loadingSwapRequests: true
 })
 
 export default function EmployeeDashboardProvider({ children }) {
@@ -48,10 +52,11 @@ export default function EmployeeDashboardProvider({ children }) {
   const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } =
     useGetWeekRanges(new Date(Date.now()), 7)
   const [activityData, setActivityData] = useState(null)
+  const [loadingSwapRequests, setLoadingSwapRequests] = useState(true)
+  const [swapRequests, setSwapRequests] = useState([])
   const [allShifts, setAllShifts] = useState([])
   const [allOvertimes, setAllOvertimes] = useState([])
   const [loadingActivity, setLoadingActivity] = useState(false)
-
   const listOfShiftsInCurrentWeek = useMemo(() => {
     return filterShiftsByWeek(allShifts, currentWeek)
   }, [allShifts, currentWeek])
@@ -95,15 +100,45 @@ export default function EmployeeDashboardProvider({ children }) {
       return prev.map((shift) => (shift._id !== update._id ? shift : update))
     })
   }, [])
+
   const handleUpdateSingleOvertime = useCallback((update) => {
-    setAllShifts((prev) => {
+    setAllOvertimes((prev) => {
       return prev.map((overtime) =>
         overtime._id !== update._id ? overtime : update
       )
     })
   }, [])
 
+  const updateAllSwapRequests = useCallback((newSwapRequests = []) => {
+    setAllOvertimes((prev) => {
+      return [
+        ...newSwapRequests,
+        ...prev.filter(
+          (swapRequest) =>
+            JSON.stringify(newSwapRequests).includes(swapRequest._id) === false
+        ),
+      ]
+    })
+  }, [])
+
+  const updateSingleSwapRequest = useCallback((update) => {
+    setAllOvertimes((prev) => {
+      return prev.map((swapRequest) =>
+        swapRequest._id !== update._id ? swapRequest : update
+      )
+    })
+  }, [])
+
   const fetchData = useAxios()
+
+  const fetchSwapRequests = useCallback(async () => {
+    if (loadingSwapRequests) return
+    setLoadingSwapRequests(true)
+    const res = await fetchData(DASHBOARD_URLS.swapRequests, "get")
+    if (res.statusCode === 200) setSwapRequests(res.results)
+    setLoadingSwapRequests(false)
+  }, [loadingSwapRequests])
+
   const fetchActivityData = useCallback(async () => {
     if (!user?._id || !organization?._id || loadingActivity) return
     setLoadingActivity(true)
@@ -122,8 +157,8 @@ export default function EmployeeDashboardProvider({ children }) {
   }, [activityData, fetchActivityData])
 
   useEffect(() => {
-
-  }, [fetchShifts])
+    fetchSwapRequests()
+  }, [fetchSwapRequests])
 
   return (
     <EmployeeDashboardContext.Provider
@@ -146,6 +181,10 @@ export default function EmployeeDashboardProvider({ children }) {
         handleUpdateSingleShift,
         activityData,
         loadingActivity,
+        swapRequests,
+        updateSingleSwapRequest,
+        updateAllSwapRequests,
+        loadingSwapRequests
       }}
     >
       {children}

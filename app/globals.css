@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components{
+  .modal-subheading{
+    @apply text-left font-[400] leading-[150%] text-[14px] text-[#303030];
+  }
+}
 .custom-button {
   @apply rounded-sm;
   @apply bg-[#5BC62D] text-[#ffffff];

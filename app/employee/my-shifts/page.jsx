@@ -6,7 +6,7 @@ import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDash
 import { UserContext } from "../../_providers/UserProvider"
 import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
 import DateRangePicker from "../../_components/AppComps/Datepicker"
-import ShiftSwapReq from "./ShiftSwapReq"
+import ShiftSwapRequests from "./ShiftSwapRequests"
 import AcceptAllShiftsButton from "./AcceptAllShiftsButton"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 
@@ -18,6 +18,8 @@ function page() {
     loadingShifts,
     shiftsInCurrentWeek,
     updateAllShifts,
+    swapRequests,
+    loadingSwapRequests,
   } = useContext(EmployeeDashboardContext)
 
   const { user } = useContext(UserContext)
@@ -81,7 +83,10 @@ function page() {
         />
       </div>
       <div className="rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
-        <ShiftSwapReq />
+        <ShiftSwapRequests
+          swapRequests={swapRequests}
+          loading={loadingSwapRequests}
+        />
       </div>
     </section>
   )

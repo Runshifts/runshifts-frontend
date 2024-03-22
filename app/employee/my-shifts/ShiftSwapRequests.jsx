@@ -5,9 +5,9 @@ import React from "react";
 function ShiftSwapReq() {
   return (
     <div className="bg-white">
-      <h1 className="font-semibold text-lg text-[#292D32] mx-3 py-2 ">
+      <h2 className="font-semibold text-lg text-[#292D32] mx-3 py-2 ">
         Shift swap requests
-      </h1>
+      </h2>
       <div className="flex justify-between items-center">
         <p className="text-sm not-italic font-semibold leading-5 text-[#36322F] mx-3 py-2">
           Incoming Requests
