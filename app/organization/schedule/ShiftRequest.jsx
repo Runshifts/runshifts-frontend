@@ -60,7 +60,7 @@ export function ShiftRequest({ shiftRequest = {} }) {
       {isStillValid && !shiftRequest.isAccepted && !shiftRequest.isRejected ? (
         <AcceptAndRejectButtons
           requestId={shiftRequest._id}
-          requestType={"shifts"}
+          requestType={"shift"}
         />
       ) : null}
     </article>
@@ -75,17 +75,23 @@ export function formatRequestStartDate(date) {
   })} ${`${date.getDate()}${getDateOrdinal(date.getDate())}`}`
 }
 
-export function UserDisplay({ image, firstName, lastName }) {
+export function UserDisplay({
+  image,
+  firstName,
+  lastName,
+  imageWidth = 30,
+  imageHeight = 30,
+}) {
   return (
-    <figure className=" flex items-center justify-start p-[8px]">
+    <figure className="flex items-center justify-start gap-[8px] p-[8px]">
       <Image
-        width={30}
-        height={30}
+        width={imageWidth}
+        height={imageHeight}
         src={image || placeholderImage}
         className="rounded-full overflow-hidden"
         alt="avatar"
       />
-      <figcaption className="text-sm px-2">
+      <figcaption className="text-[14px] text-[#1D2433]">
         {firstName || "Placeholder"} {lastName || "Name"}
       </figcaption>
     </figure>
@@ -100,12 +106,27 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
   const { organization } = useContext(OrganizationContext)
   const URLS = useMemo(() => {
     return {
-      shifts: (decision) =>
+      shift: (decision) =>
         `/shifts/${organization?._id}/applications/${requestId}?action=${decision}`,
-      overtimes: (decision) =>
+      overtime: (decision) =>
         `/overtimes/${organization?._id}/${requestId}?action=${decision}`,
+      swap: (decision) => `/swaps/${requestId}/${decision}`,
     }
   }, [organization?._id, requestId])
+
+  const callbacks = useMemo(
+    () => ({
+      shift: ({ application, shift }) => {
+        handleUpdatedRequest(application, "shift")
+        handleUpdateSingleShift(shift)
+      },
+      overtime: ({ request }) => {
+        handleUpdatedRequest(request, "overtime")
+      },
+      swap: () => {}
+    }),
+    []
+  )
 
   const fetchData = useAxios()
 
@@ -116,10 +137,7 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
       const res = await fetchData(URLS[requestType](decision), "get")
       if (res.statusCode === 200) {
         toast.success(res.message)
-        if (requestType === "shifts") {
-          handleUpdatedRequest(res.application, "shift")
-          handleUpdateSingleShift(res.shift)
-        } else handleUpdatedRequest(res.request, "overtime")
+        if(typeof callbacks[requestType] === "function") callbacks[requestType](res)
       } else toast.error(res.message || "Something went wrong.")
       setLoading("")
     },

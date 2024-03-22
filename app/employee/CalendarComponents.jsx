@@ -144,7 +144,7 @@ export function ShiftPillWithDetails({ shift = {} }) {
   }, [isOwnShift, shift])
 
   if (
-    shift.isAccepted === false &&
+    shift.isDroppedOff === true &&
     isOwnShift === false &&
     !isDateInThePast(new Date(shift.startTime))
   )

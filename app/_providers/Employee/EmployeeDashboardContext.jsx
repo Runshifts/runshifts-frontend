@@ -52,7 +52,7 @@ export default function EmployeeDashboardProvider({ children }) {
   const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } =
     useGetWeekRanges(new Date(Date.now()), 7)
   const [activityData, setActivityData] = useState(null)
-  const [loadingSwapRequests, setLoadingSwapRequests] = useState(true)
+  const [loadingSwapRequests, setLoadingSwapRequests] = useState(false)
   const [swapRequests, setSwapRequests] = useState([])
   const [allShifts, setAllShifts] = useState([])
   const [allOvertimes, setAllOvertimes] = useState([])
@@ -134,7 +134,7 @@ export default function EmployeeDashboardProvider({ children }) {
   const fetchSwapRequests = useCallback(async () => {
     if (loadingSwapRequests) return
     setLoadingSwapRequests(true)
-    const res = await fetchData(DASHBOARD_URLS.swapRequests, "get")
+    const res = await fetchData(DASHBOARD_URLS.swapRequests(), "get")
     if (res.statusCode === 200) setSwapRequests(res.results)
     setLoadingSwapRequests(false)
   }, [loadingSwapRequests])
@@ -158,7 +158,7 @@ export default function EmployeeDashboardProvider({ children }) {
 
   useEffect(() => {
     fetchSwapRequests()
-  }, [fetchSwapRequests])
+  }, [])
 
   return (
     <EmployeeDashboardContext.Provider

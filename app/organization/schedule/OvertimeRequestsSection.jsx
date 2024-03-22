@@ -87,7 +87,7 @@ export function OvertimeRequest({ overtimeRequest = {} }) {
         !overtimeRequest.isRejected && (
           <AcceptAndRejectButtons
             requestId={overtimeRequest._id}
-            requestType={"overtimes"}
+            requestType={"overtime"}
           />
         )}
       <p className="text-info-500 font-bold text-[14px] leading-[145%]">
