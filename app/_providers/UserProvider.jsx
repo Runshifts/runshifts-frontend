@@ -47,7 +47,6 @@ export default function UserProvider({ children }) {
 
   useEffect(() => {
     if (user) {
-      console.log(user, pathname)
       if (pathname === "/") redirectUser(user.type)
       if (
         !pathname.startsWith("/organization") &&
