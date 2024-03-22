@@ -76,7 +76,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
       fetchOrganization()
       fetchEmployees()
     }
-  }, [fetchOrganization, fetchEmployees])
+  }, [fetchOrganization, fetchEmployees, initRetries])
 
   return (
     <OrganizationContext.Provider

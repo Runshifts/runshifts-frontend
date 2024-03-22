@@ -41,7 +41,7 @@ export default function UserProvider({ children }) {
     const userInLocalStorage = JSON.parse(localStorage.getItem("user"))
     if (!userInLocalStorage) fetchUser()
     else setUser(userInLocalStorage)
-  }, [])
+  }, [fetchUser])
 
   const redirectUser = useRedirectUserByAccountType()
 

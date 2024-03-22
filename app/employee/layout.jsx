@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
     <>
       <>
         <>
-          <OrganizationProvider isEmployee>
+          <OrganizationProvider isEmployee={true}>
             <LocationsProvider>
               <EmployeeDashboardProvider>
                 <EmployeeGlobalLayout>{children}</EmployeeGlobalLayout>

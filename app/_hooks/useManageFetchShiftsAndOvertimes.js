@@ -17,7 +17,7 @@ export default function useManageFetchShiftsAndOvertimes({
 
   const fetchShifts = useCallback(
     async (date) => {
-      if (!organization) return
+      if (!organization?._id) return
       const stringifiedDate = JSON.stringify(date)
       if (weeksFetched[stringifiedDate]) return
       setLoadingShifts(true)
@@ -35,7 +35,7 @@ export default function useManageFetchShiftsAndOvertimes({
       } else setFetchingShiftsError(true)
       setLoadingShifts(false)
     },
-    [organization?._id, weeksFetched, updateAllShifts, updateAllOvertimes]
+    [organization, weeksFetched, updateAllShifts, updateAllOvertimes]
   )
 
   useEffect(() => {

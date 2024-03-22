@@ -121,6 +121,10 @@ export default function EmployeeDashboardProvider({ children }) {
     !activityData && fetchActivityData()
   }, [activityData, fetchActivityData])
 
+  useEffect(() => {
+
+  }, [fetchShifts])
+
   return (
     <EmployeeDashboardContext.Provider
       value={{
