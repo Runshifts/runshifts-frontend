@@ -4,6 +4,7 @@ import { createContext, useCallback, useEffect, useState } from "react"
 import useAxios from "../_hooks/useAxios"
 import { usePathname, useRouter } from "next/navigation"
 import path from "path"
+import useRedirectUserByAccountType from "../_hooks/useRedirectUserByAccountType"
 
 export const UserContext = createContext({
   user: null,
@@ -42,13 +43,18 @@ export default function UserProvider({ children }) {
     else setUser(userInLocalStorage)
   }, [])
 
+  const redirectUser = useRedirectUserByAccountType()
+
   useEffect(() => {
     if (user) {
-      if (pathname === "/") {
-        if (user.type === "employee") router.push("/employee")
-        else if (user.type === "employee") router.push("/organization")
-        else if (user.type === "admin") router.push("/admin")
-      }
+      console.log(user, pathname)
+      if (pathname === "/") redirectUser(user.type)
+      if (
+        !pathname.startsWith("/organization") &&
+        !pathname.startsWith("/employee") &&
+        !pathname.startsWith("/admi")
+      )
+        redirectUser(user.type)
       if (
         pathname.toLowerCase().startsWith("/employee") &&
         user.type !== "employee"
@@ -60,7 +66,7 @@ export default function UserProvider({ children }) {
       )
         router.push("/employee")
     }
-  }, [user, pathname])
+  }, [user, pathname, redirectUser])
   return (
     <UserContext.Provider value={{ user, updateUser }}>
       {children}

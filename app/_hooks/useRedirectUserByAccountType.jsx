@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation"
 import { useCallback } from "react"
 import toast from "react-hot-toast"
+import { getUserBasePathForDashboard } from "../_utils"
 
 export default function useRedirectUserByAccountType() {
   const router = useRouter()
