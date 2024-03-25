@@ -19,7 +19,7 @@ export default function ShiftSwapRequestCard({
   )
   const isStillValid = useMemo(() => {
     return new Date(swapRequest?.validUntil).getTime() > Date.now()
-  }, [])
+  }, [swapRequest])
 
   return (
     <article className="border border-gray-300 rounded-lg p-[10px] justify-between flex flex-col gap-y-[8px] grow xl:max-w-[226px]">

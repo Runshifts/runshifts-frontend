@@ -6,6 +6,7 @@ import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDash
 import { UserContext } from "../../_providers/UserProvider"
 import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
 import DateRangePicker from "../../_components/AppComps/Datepicker"
+import RequestedShifts from "./RequestedShifts"
 import ShiftSwapRequests from "./ShiftSwapRequests"
 import AcceptAllShiftsButton from "./AcceptAllShiftsButton"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
@@ -44,7 +45,7 @@ function page() {
   )
 
   return (
-    <section className="h-screen px-4 md:px-[40px]">
+    <section className="min-h-screen px-4 pb-4">
       <div className="flex flex-col gap-6 justify-between pt-6 pb-4">
         <div className="flex justify-between">
           <Heading>My Shifts</Heading>
@@ -82,8 +83,14 @@ function page() {
           showOvertimes={false}
         />
       </div>
-      <div className="rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
+      <div className="mb-4 rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
         <ShiftSwapRequests
+          swapRequests={swapRequests}
+          loading={loadingSwapRequests}
+        />
+      </div>
+      <div className="rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
+        <RequestedShifts
           swapRequests={swapRequests}
           loading={loadingSwapRequests}
         />

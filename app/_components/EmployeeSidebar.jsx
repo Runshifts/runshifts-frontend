@@ -1,64 +1,64 @@
-"use client";
-import React from "react";
-import { EmpSidebarData } from "../_data/EmpSidebarData";
-import Avatar from "../_assets/sidebarImg/Avatar.png";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+"use client"
+import React from "react"
+import { EmpSidebarData } from "../_data/EmpSidebarData"
+import Avatar from "../_assets/sidebarImg/Avatar.png"
+import Link from "next/link"
+import Image from "next/image"
+import { usePathname } from "next/navigation"
 
 function Sidebar({ isOpen, onClose }) {
-  const Pathname = usePathname();
+  const Pathname = usePathname()
 
   const activeLink =
-    "hover:bg-green-100 text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold bg-green-100";
+    "hover:bg-green-100 text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold bg-green-100"
   const normalLink =
-    "hover:bg-green-100 hover:text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold";
+    "hover:bg-green-100 hover:text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold"
 
   return (
     <>
-      <section className="parent-container h-screen fixed">
-        <div className={`sidebar-container ${isOpen ? "hidden" : ""}`}>
-          <button className="block close-btn md:hidden" onClick={onClose}>
-            <CloseSvg />
-          </button>
-          <div className="flex items-center justify-start pl-4 pt-6 pb-2">
-            <Image src={Avatar} alt="avatar" />
-            <div className="pl-3">
-              <h1 className="font-bold text-sm text-gray-600">Gravity Falls</h1>
-              <p className="font-semibold text-xs text-gray-500">HR Company</p>
-            </div>
-          </div>
-
-          <div className="ml-4 pl-4 ">
-            {EmpSidebarData.map((item, index) => {
-              return (
-                <div key={index}>
-                  <Link
-                    href={item.path}
-                    className={Pathname === item.path ? activeLink : normalLink}
-                  >
-                    <span>
-                      {" "}
-                      <Image src={item.icon} alt="icon" />{" "}
-                    </span>
-                    <span className="text-sm text-[#42526E] not-italic font-medium leading-10"> {item.title} </span>
-                  </Link>
-                </div>
-              );
-            })}
-            <div className="text-sm text-center mt-12 m-2 text-gray-500">
-              <p>You&apos;re in a team management made easy.</p>
-              <p>Learn more</p>
-            </div>
+      <section className="">
+        <button className="block close-btn md:hidden" onClick={onClose}>
+          <CloseSvg />
+        </button>
+        <div className="flex items-center justify-start pl-4 pt-6 pb-2">
+          <Image src={Avatar} alt="avatar" />
+          <div className="pl-3">
+            <h1 className="font-bold text-sm text-gray-600">Gravity Falls</h1>
+            <p className="font-semibold text-xs text-gray-500">HR Company</p>
           </div>
         </div>
-        {/* )}    */}
+
+        <div className="ml-4 pl-4 ">
+          {EmpSidebarData.map((item, index) => {
+            return (
+              <div key={index}>
+                <Link
+                  href={item.path}
+                  className={Pathname === item.path ? activeLink : normalLink}
+                >
+                  <span>
+                    {" "}
+                    <Image src={item.icon} alt="icon" />{" "}
+                  </span>
+                  <span className="text-sm text-[#42526E] not-italic font-medium leading-10">
+                    {" "}
+                    {item.title}{" "}
+                  </span>
+                </Link>
+              </div>
+            )
+          })}
+          <div className="text-sm text-center mt-12 m-2 text-gray-500">
+            <p>You&apos;re in a team management made easy.</p>
+            <p>Learn more</p>
+          </div>
+        </div>
       </section>
     </>
-  );
+  )
 }
 
-export default Sidebar;
+export default Sidebar
 
 function CloseSvg() {
   return (
@@ -82,5 +82,5 @@ function CloseSvg() {
         fill="#42526E"
       />
     </svg>
-  );
+  )
 }

@@ -18,7 +18,7 @@ function ShiftSwapReq() {
   )
   return (
     <div className="bg-white">
-      <h2 className="font-semibold text-lg text-[#292D32] mx-3 py-2 ">
+      <h2 className="font-semibold text-lg text-[#292D32] py-2 ">
         Shift swap requests
       </h2>
       <div className="grid gap-2 md:grid-cols-1 lg:grid-cols-2">

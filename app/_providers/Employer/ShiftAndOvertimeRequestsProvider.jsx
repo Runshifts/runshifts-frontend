@@ -10,7 +10,12 @@ import {
 import useAxios from "../../_hooks/useAxios"
 import { OrganizationContext } from "../OrganizationProvider"
 
-export const ShiftAndOvertimeRequestsContext = createContext({})
+export const ShiftAndOvertimeRequestsContext = createContext({
+  shiftRequests: [],
+  overtimeRequests: [],
+  loadingShiftRequests: [],
+  handleUpdatedRequest: () => {},
+})
 
 export default function ShiftAndOvertimeRequestsProvider({ children }) {
   const { organization } = useContext(OrganizationContext)

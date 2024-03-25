@@ -1,8 +1,8 @@
-
 import EmployeeGlobalLayout from "../_components/EmployeeGlobalLayouts"
 import EmployeeDashboardProvider from "../_providers/Employee/EmployeeDashboardContext"
 import OrganizationProvider from "../_providers/OrganizationProvider"
 import LocationsProvider from "../_providers/LocationsProvider"
+import ShiftAndOvertimeRequestsProvider from "../_providers/Employer/ShiftAndOvertimeRequestsProvider"
 
 export const metadata = {
   title: "Runshifts - Employee",
@@ -16,9 +16,11 @@ export default function RootLayout({ children }) {
         <>
           <OrganizationProvider isEmployee={true}>
             <LocationsProvider>
-              <EmployeeDashboardProvider>
-                <EmployeeGlobalLayout>{children}</EmployeeGlobalLayout>
-              </EmployeeDashboardProvider>
+              <ShiftAndOvertimeRequestsProvider>
+                <EmployeeDashboardProvider>
+                  <EmployeeGlobalLayout>{children}</EmployeeGlobalLayout>
+                </EmployeeDashboardProvider>
+              </ShiftAndOvertimeRequestsProvider>
             </LocationsProvider>
           </OrganizationProvider>
         </>
