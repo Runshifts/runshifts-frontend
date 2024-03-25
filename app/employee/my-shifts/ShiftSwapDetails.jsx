@@ -1,5 +1,6 @@
 import Image from "next/image"
 import ShiftSwapForm from "./ShiftSwapForm"
+import placeholderImage from "../../_assets/img/user.png"
 import { UserContext } from "../../_providers/UserProvider"
 import { useContext } from "react"
 

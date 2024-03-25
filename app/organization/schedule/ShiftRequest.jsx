@@ -103,7 +103,9 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
   const [loading, setLoading] = useState("")
   const { handleUpdatedRequest } = useContext(ShiftAndOvertimeRequestsContext)
   const { handleUpdateSingleShift } = useContext(DashboardContext)
-  const { updateSingleSwapRequest } = useContext(EmployeeDashboardContext)
+  const { updateSingleSwapRequest, updateAllShifts } = useContext(
+    EmployeeDashboardContext
+  )
 
   const { organization } = useContext(OrganizationContext)
   const URLS = useMemo(() => {
@@ -127,6 +129,8 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
       },
       swap: ({ request }) => {
         updateSingleSwapRequest(request)
+        updateAllShifts([request.receiverShift, request.senderShift])
+        console.log(request)
       },
     }),
     []
@@ -160,14 +164,16 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
     <div className="flex gap-x-[8px] items-end">
       <button
         onClick={() => handleDecision("accept")}
-        className="bg-primary-600 text-white font-[500] px-3 py-[2px] leading-[20px] flex items-center justify-center gap-2"
+        disabled={loading === "accept"}
+        className="bg-primary-600 disabled:opacity-70 text-white font-[500] px-3 py-[2px] leading-[20px] flex items-center justify-center gap-2"
       >
         {loading === "accept" && <Spinner />}{" "}
         {loading === "accept" ? "Accepting..." : "Accept"}
       </button>
       <button
         onClick={() => handleDecision("reject")}
-        className="text-danger-600 font-[500] text-[14px] flex items-center justify-center gap-2"
+        className="text-danger-600 disabled:opacity-70 font-[500] text-[14px] flex items-center justify-center gap-2"
+        disabled={loading === "reject"}
       >
         {loading === "reject" && <Spinner />}{" "}
         {loading === "reject" ? "Rejecting..." : "Reject"}

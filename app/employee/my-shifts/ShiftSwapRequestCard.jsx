@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 import {
   AcceptAndRejectButtons,
   UserDisplay,
@@ -10,6 +10,7 @@ import useAxios from "../../_hooks/useAxios"
 import MY_SHIFTS_URLS from "../../_urls/myShiftsURLs"
 import toast from "react-hot-toast"
 import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
+import Spinner from "../../_assets/svgs/Spinner"
 
 export default function ShiftSwapRequestCard({
   swapRequest = {},
@@ -23,8 +24,11 @@ export default function ShiftSwapRequestCard({
   const { days, hours, minutes, seconds } = useCountdown(
     new Date(swapRequest?.validUntil)
   )
+  const [isCanceling, setIsCanceling] = useState(false)
   const fetchData = useAxios()
   const handleCancel = useCallback(async () => {
+    if (isCanceling) return
+    setIsCanceling(true)
     const res = await fetchData(
       MY_SHIFTS_URLS.cancelSwapRequest(swapRequest?._id),
       "delete"
@@ -35,14 +39,15 @@ export default function ShiftSwapRequestCard({
       deleteSwapRequest(swapRequest)
     } else toastFunc = toast.error
     toastFunc(res.message)
-  }, [fetchData, swapRequest, deleteSwapRequest])
-  
+    setIsCanceling(false)
+  }, [fetchData, swapRequest, deleteSwapRequest, isCanceling])
+
   const isStillValid = useMemo(() => {
     return new Date(swapRequest?.validUntil).getTime() > Date.now()
   }, [swapRequest])
 
   return (
-    <article className="border border-gray-300 rounded-lg p-[10px] justify-between flex flex-col gap-y-[8px] grow xl:max-w-[226px]">
+    <article className="border border-gray-300 rounded-lg p-[10px] justify-between flex flex-col gap-y-[8px] grow">
       <UserDisplay
         firstName={
           userInFocus?.firstName || userInFocus?.fullName || userInFocus?.email
@@ -104,9 +109,16 @@ export default function ShiftSwapRequestCard({
             </span>
             <button
               onClick={handleCancel}
-              className="text-[#B22A09] font-[500] text-[14px] leading-[20px]"
+              disabled={isCanceling}
+              className="!text-[#B22A09] flex items-center disabled:opacity-70 font-[500] text-[14px] leading-[20px]"
             >
-              Cancel request
+              {isCanceling && (
+                <>
+                  <Spinner />
+                  &nbsp;
+                </>
+              )}
+              {isCanceling ? "Cancelling" : "Cancel request"}
             </button>
           </div>
         )}
