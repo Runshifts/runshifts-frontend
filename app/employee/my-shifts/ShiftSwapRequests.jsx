@@ -43,7 +43,7 @@ function ShiftSwapReq() {
           <p className="text-[14px] font-semibold leading-5 text-[#36322F]">
             Sent Requests
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 flex-wrap">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
             {sentRequests.map((swapRequest) => (
               <ShiftSwapRequestCard
                 key={swapRequest._id}

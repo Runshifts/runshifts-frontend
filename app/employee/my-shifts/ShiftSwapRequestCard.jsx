@@ -14,9 +14,11 @@ export default function ShiftSwapRequestCard({
   isReceived = false,
   userInFocus,
 }) {
+  const { user } = useContext(UserContext)
   const { days, hours, minutes, seconds } = useCountdown(
     new Date(swapRequest?.validUntil)
   )
+  console.log(swapRequest)
   const isStillValid = useMemo(() => {
     return new Date(swapRequest?.validUntil).getTime() > Date.now()
   }, [swapRequest])
@@ -24,7 +26,9 @@ export default function ShiftSwapRequestCard({
   return (
     <article className="border border-gray-300 rounded-lg p-[10px] justify-between flex flex-col gap-y-[8px] grow xl:max-w-[226px]">
       <UserDisplay
-        firstName={userInFocus?.firstName || userInFocus?.fullName || userInFocus?.email}
+        firstName={
+          userInFocus?.firstName || userInFocus?.fullName || userInFocus?.email
+        }
         lastName={userInFocus?.lastName || ""}
         image={userInFocus?.profileImage?.secure_url}
         imageHeight={24}
@@ -61,11 +65,25 @@ export default function ShiftSwapRequestCard({
       </div>
       {isStillValid &&
         swapRequest.isAccepted === false &&
-        swapRequest.isRejected === false && (
+        swapRequest.isRejected === false &&
+        user._id !== swapRequest.sender?._id && (
           <AcceptAndRejectButtons
             requestId={swapRequest._id}
             requestType={"swap"}
           />
+        )}
+      {isStillValid &&
+        swapRequest.isAccepted === false &&
+        swapRequest.isRejected === false &&
+        user._id === swapRequest.sender?._id && (
+          <div className="flex items-center gap-2">
+            <span className="bg-[#FFBC33] text-white px-[12px] py-[2px] font-[500] text-[14px] leading-[20px]">
+              Pending
+            </span>
+            <button className="text-[#B22A09] font-[500] text-[14px] leading-[20px]">
+              Cancel request
+            </button>
+          </div>
         )}
     </article>
   )
