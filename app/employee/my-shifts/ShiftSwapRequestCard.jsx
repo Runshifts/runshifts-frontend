@@ -18,7 +18,6 @@ export default function ShiftSwapRequestCard({
   const { days, hours, minutes, seconds } = useCountdown(
     new Date(swapRequest?.validUntil)
   )
-  console.log(swapRequest)
   const isStillValid = useMemo(() => {
     return new Date(swapRequest?.validUntil).getTime() > Date.now()
   }, [swapRequest])

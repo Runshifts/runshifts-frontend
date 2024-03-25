@@ -90,10 +90,7 @@ function page() {
         />
       </div>
       <div className="rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
-        <RequestedShifts
-          swapRequests={swapRequests}
-          loading={loadingSwapRequests}
-        />
+        <RequestedShifts />
       </div>
     </section>
   )

@@ -110,7 +110,7 @@ export default function EmployeeDashboardProvider({ children }) {
   }, [])
 
   const updateAllSwapRequests = useCallback((newSwapRequests = []) => {
-    setAllOvertimes((prev) => {
+    setSwapRequests((prev) => {
       return [
         ...newSwapRequests,
         ...prev.filter(
@@ -122,7 +122,7 @@ export default function EmployeeDashboardProvider({ children }) {
   }, [])
 
   const updateSingleSwapRequest = useCallback((update) => {
-    setAllOvertimes((prev) => {
+    setSwapRequests((prev) => {
       return prev.map((swapRequest) =>
         swapRequest._id !== update._id ? swapRequest : update
       )
