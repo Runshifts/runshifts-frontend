@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react"
+import { useCallback, useContext, useMemo } from "react"
 import {
   AcceptAndRejectButtons,
   UserDisplay,
@@ -6,6 +6,10 @@ import {
 import { getDateOrdinal } from "../../_utils"
 import useCountdown from "../../_hooks/useCountDown"
 import { UserContext } from "../../_providers/UserProvider"
+import useAxios from "../../_hooks/useAxios"
+import MY_SHIFTS_URLS from "../../_urls/myShiftsURLs"
+import toast from "react-hot-toast"
+import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 
 export default function ShiftSwapRequestCard({
   swapRequest = {},
@@ -15,9 +19,24 @@ export default function ShiftSwapRequestCard({
   userInFocus,
 }) {
   const { user } = useContext(UserContext)
+  const { deleteSwapRequest } = useContext(EmployeeDashboardContext)
   const { days, hours, minutes, seconds } = useCountdown(
     new Date(swapRequest?.validUntil)
   )
+  const fetchData = useAxios()
+  const handleCancel = useCallback(async () => {
+    const res = await fetchData(
+      MY_SHIFTS_URLS.cancelSwapRequest(swapRequest?._id),
+      "delete"
+    )
+    let toastFunc
+    if (res.statusCode === 200) {
+      toastFunc = toast.success
+      deleteSwapRequest(swapRequest)
+    } else toastFunc = toast.error
+    toastFunc(res.message)
+  }, [fetchData, swapRequest, deleteSwapRequest])
+  
   const isStillValid = useMemo(() => {
     return new Date(swapRequest?.validUntil).getTime() > Date.now()
   }, [swapRequest])
@@ -35,26 +54,30 @@ export default function ShiftSwapRequestCard({
       />
       <div className={`flex gap-[8px] ${isReceived ? "" : "row-reverse"}`}>
         <ShiftDetail
-          assigneeId={senderShift.assignee}
+          assigneeId={senderShift.assignee?._id}
           shiftName={senderShift.schedule?.name}
           date={new Date(senderShift.startTime)}
         />
         <ShiftDetail
-          assigneeId={receiverShift.assignee}
+          assigneeId={receiverShift.assignee?._id}
           shiftName={receiverShift.schedule?.name}
           date={new Date(receiverShift.startTime)}
         />
       </div>
       <div className="text-info-500 font-bold text-[14px] leading-[145%] flex flex-col gap-[8px]">
-        <p>
-          {+days && `${days} days, `}
-          {+hours ? `${hours}:` : "00:"}
-          {+minutes ? `${minutes}:` : "00:"}
-          {seconds} Left
-        </p>
-        {!swapRequest.isAccepted && !isStillValid && (
-          <p className="opacity-30 font-[500] text-4">Expired</p>
-        )}
+        {
+          <p>
+            {+days && `${days} days, `}
+            {+hours ? `${hours}:` : "00:"}
+            {+minutes ? `${minutes}:` : "00:"}
+            {seconds} Left
+          </p>
+        }
+        {swapRequest.isAccepted === false &&
+          swapRequest.isAccepted === false &&
+          !isStillValid && (
+            <p className="opacity-30 font-[500] text-4">Expired</p>
+          )}
         {swapRequest.isAccepted && (
           <p className="opacity-30 font-[500] text-4">Accepted</p>
         )}
@@ -79,7 +102,10 @@ export default function ShiftSwapRequestCard({
             <span className="bg-[#FFBC33] text-white px-[12px] py-[2px] font-[500] text-[14px] leading-[20px]">
               Pending
             </span>
-            <button className="text-[#B22A09] font-[500] text-[14px] leading-[20px]">
+            <button
+              onClick={handleCancel}
+              className="text-[#B22A09] font-[500] text-[14px] leading-[20px]"
+            >
               Cancel request
             </button>
           </div>

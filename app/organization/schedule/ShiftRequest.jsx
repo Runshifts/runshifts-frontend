@@ -9,6 +9,7 @@ import toast from "react-hot-toast"
 import { ShiftAndOvertimeRequestsContext } from "../../_providers/Employer/ShiftAndOvertimeRequestsProvider"
 import { DashboardContext } from "../../_providers/Employer/DashboardContext"
 import Spinner from "../../_assets/svgs/Spinner"
+import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 
 export function ShiftRequest({ shiftRequest = {} }) {
   const shiftStart = useMemo(
@@ -102,6 +103,7 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
   const [loading, setLoading] = useState("")
   const { handleUpdatedRequest } = useContext(ShiftAndOvertimeRequestsContext)
   const { handleUpdateSingleShift } = useContext(DashboardContext)
+  const { updateSingleSwapRequest } = useContext(EmployeeDashboardContext)
 
   const { organization } = useContext(OrganizationContext)
   const URLS = useMemo(() => {
@@ -110,7 +112,7 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
         `/shifts/${organization?._id}/applications/${requestId}?action=${decision}`,
       overtime: (decision) =>
         `/overtimes/${organization?._id}/${requestId}?action=${decision}`,
-      swap: (decision) => `/swaps/${requestId}/${decision}`,
+      swap: (decision) => `/shifts/swaps/${requestId}/${decision}`,
     }
   }, [organization?._id, requestId])
 
@@ -123,7 +125,9 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
       overtime: ({ request }) => {
         handleUpdatedRequest(request, "overtime")
       },
-      swap: () => {}
+      swap: ({ request }) => {
+        updateSingleSwapRequest(request)
+      },
     }),
     []
   )
@@ -137,7 +141,8 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
       const res = await fetchData(URLS[requestType](decision), "get")
       if (res.statusCode === 200) {
         toast.success(res.message)
-        if(typeof callbacks[requestType] === "function") callbacks[requestType](res)
+        if (typeof callbacks[requestType] === "function")
+          callbacks[requestType](res)
       } else toast.error(res.message || "Something went wrong.")
       setLoading("")
     },

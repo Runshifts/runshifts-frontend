@@ -43,7 +43,8 @@ export const EmployeeDashboardContext = createContext({
   swapRequests: [],
   updateAllSwapRequests: () => {},
   updateSingleSwapRequest: () => {},
-  loadingSwapRequests: true
+  deleteSwapRequest: () => {},
+  loadingSwapRequests: true,
 })
 
 export default function EmployeeDashboardProvider({ children }) {
@@ -129,6 +130,12 @@ export default function EmployeeDashboardProvider({ children }) {
     })
   }, [])
 
+  const deleteSwapRequest = useCallback((update) => {
+    setSwapRequests((prev) => {
+      return prev.filter((swapRequest) => update?._id !== swapRequest._id)
+    })
+  }, [])
+
   const fetchData = useAxios()
 
   const fetchSwapRequests = useCallback(async () => {
@@ -184,7 +191,8 @@ export default function EmployeeDashboardProvider({ children }) {
         swapRequests,
         updateSingleSwapRequest,
         updateAllSwapRequests,
-        loadingSwapRequests
+        loadingSwapRequests,
+        deleteSwapRequest,
       }}
     >
       {children}
