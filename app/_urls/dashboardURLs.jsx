@@ -9,6 +9,5 @@ const DASHBOARD_URLS = {
     `/users/${organizationId}/employees/${userId}/earnings`,
   swapRequests: () =>
     `/shifts/swaps`,
-  adminDashboardStats: () => ``
 }
 export default DASHBOARD_URLS

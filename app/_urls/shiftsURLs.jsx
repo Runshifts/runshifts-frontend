@@ -1,5 +1,5 @@
 ///:organizationId/accept-all"/:organizationId/accept-all"
-const MY_SHIFTS_URLS = {
+const SHIFTS_URLS = {
   acceptAll: (organizationId) => `/shifts/${organizationId}/accept-all`,
   apply: (organizationId, shiftId) =>
     `/shifts/${organizationId}/${shiftId}/apply`,
@@ -9,4 +9,4 @@ const MY_SHIFTS_URLS = {
   cancelSwapRequest: (shiftSwapRequestId) => `shifts/swaps/${shiftSwapRequestId}/cancel`,
   shiftsManagementStats: () => `/shifts/today`
 }
-export default MY_SHIFTS_URLS
+export default SHIFTS_URLS

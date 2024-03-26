@@ -1,5 +1,5 @@
 import React from "react";
-import ShiftsCards from "./ShiftsCards";
+import Statistics from "./Statistics"
 import ShiftsTicket from "./ShiftsTickets";
 import CurrentShifts from "./CurrentShifts";
 
@@ -8,7 +8,7 @@ function page() {
     <section className="p-6 h-screen">
       <h1 className="custom-h1">Shift Management</h1>
 
-      <div className='flex flex-row'>
+      <div className="flex flex-row">
         <select
           className="bg-[#F4F5F7] border-none text-xs text-[#7A869A] mr-2 h-10 rounded-md md:text-sm "
           aria-label="Default select example"
@@ -62,13 +62,13 @@ function page() {
         </select>
       </div>
 
-      <ShiftsCards />
+      <Statistics />
 
       <ShiftsTicket />
 
       <CurrentShifts />
     </section>
-  );
+  )
 }
 
 export default page;
