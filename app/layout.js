@@ -3,6 +3,7 @@ import "./globals.css"
 import GoogleOAuthProvider from "./_providers/GoogleAuth"
 import LoadingProvider from "./_providers/LoadingProvider"
 import { Toaster } from "react-hot-toast"
+import UserProvider from "./_providers/UserProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,7 +21,9 @@ export default function RootLayout({ children }) {
           defer
         ></script>
         <GoogleOAuthProvider>
-          <LoadingProvider>{children}</LoadingProvider>
+          <LoadingProvider>
+            <UserProvider>{children}</UserProvider>
+          </LoadingProvider>
         </GoogleOAuthProvider>
         <Toaster position="top-center" reverseOrder={false} />
       </body>

@@ -51,25 +51,28 @@ export default function DepartmentsAndRolesProvider({
     const [departmentsResponse, rolesResponse] = await Promise.all([
       !hasCachedDepartments
         ? await fetchData(
-            `/industries/${organizationIndustry.toLowerCase()}/departments`,
+            `/industries/${organizationIndustry?.name.toLowerCase()}/departments`,
             "get"
           )
         : {},
       !hasCachedRoles
-        ? await fetchData(`/industries/${organizationIndustry.toLowerCase()}/roles`, "get")
+        ? await fetchData(
+            `/industries/${organizationIndustry?.name.toLowerCase()}/roles`,
+            "get"
+          )
         : {},
     ])
     if (departmentsResponse.statusCode === 200) {
       setDepartments(departmentsResponse.results)
       localStorage.setItem(
-        `${organizationIndustry}_departments`,
+        `${organizationIndustry?.name}_departments`,
         JSON.stringify(departmentsResponse.results)
       )
     }
     if (rolesResponse.statusCode === 200) {
       setRoles(rolesResponse.results)
       localStorage.setItem(
-        `${organizationIndustry}_roles`,
+        `${organizationIndustry?.name}_roles`,
         JSON.stringify(rolesResponse.results)
       )
     }

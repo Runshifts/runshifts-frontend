@@ -1,23 +1,31 @@
 "use client"
 
-import { createContext, useCallback, useEffect, useState } from "react"
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 import useAxios from "../_hooks/useAxios"
 import DASHBOARD_URLS from "../_urls/dashboardURLs"
 import LocationsProvider from "../_providers/LocationsProvider"
 import DepartmentsAndRolesProvider from "./DepartmentsAndRolesProvider"
 import ShiftsManagementProvider from "./ShiftManagementContext"
-import TrackerProvider from "./TrackerProvider"
-import TeamProvider from "./TeamProvider"
+import TrackerProvider from "./Employer/TrackerProvider"
+import TeamProvider from "./Employer/TeamProvider"
 import { useRouter } from "next/navigation"
+import { UserContext } from "./UserProvider"
 
 export const OrganizationContext = createContext({
   employees: [],
   organization: null,
 })
 
-export default function OrganizationProvider({ children }) {
+export default function OrganizationProvider({ children, isEmployee = false }) {
   const router = useRouter()
   const fetchData = useAxios()
+  const { user } = useContext(UserContext)
   const [initRetries, setInitRetries] = useState(0)
   const [organization, setOrganization] = useState(null)
   const [employees, setEmployees] = useState([])
@@ -26,15 +34,19 @@ export default function OrganizationProvider({ children }) {
   )
 
   const fetchOrganization = useCallback(async () => {
-    const res = await fetchData(DASHBOARD_URLS.organization(), "get")
+    if(isEmployee && !user?.organization) return
+    const res = await fetchData(
+      DASHBOARD_URLS.organization(isEmployee ? user?.organization : null),
+      "get"
+    )
     if (res.statusCode === 200) {
       setOrganization(res.organization)
       setIsFetchingOrganization(false)
     } else {
       setInitRetries((prev) => prev + 1)
-      if (res.statusCode === 404) router.push("/welcome")
+      if (res.statusCode === 404) router.push("/new-organization")
     }
-  }, [router])
+  }, [router, isEmployee, user?.organization])
 
   const fetchEmployees = useCallback(async () => {
     if (!organization) return
@@ -64,7 +76,7 @@ export default function OrganizationProvider({ children }) {
       fetchOrganization()
       fetchEmployees()
     }
-  }, [fetchOrganization, fetchEmployees])
+  }, [fetchOrganization, fetchEmployees, initRetries])
 
   return (
     <OrganizationContext.Provider

@@ -1,14 +1,21 @@
 "use client"
 
 import React, { useCallback, useContext, useState, Suspense } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { redirect, useRouter, useSearchParams } from "next/navigation"
 import SocialProviders from "../_components/Auth/SocialProviders"
 import { LoadingContext } from "../_providers/LoadingProvider"
-import FormCard from "../_components/Auth/FormCard"
 import Link from "next/link"
 import useAxios from "../_hooks/useAxios"
+import AuthLayout from "../_components/Auth/Layout"
+import AuthInputAndLabel, { SubmitButton } from "../_components/Auth/Inputs"
+import FormHeading from "../_components/Auth/Heading"
+import { IoMailOutline } from "react-icons/io5"
+import { LuShieldCheck } from "react-icons/lu"
+import toast from "react-hot-toast"
+import useRedirectUserByAccountType from "../_hooks/useRedirectUserByAccountType"
 
 const LoginForm = () => {
+  const redirectUser = useRedirectUserByAccountType()
   const searchParams = useSearchParams()
   const { loading, updateLoading } = useContext(LoadingContext)
   const fetchData = useAxios()
@@ -39,91 +46,82 @@ const LoginForm = () => {
         setError(null)
         localStorage.setItem("token", res.token)
         localStorage.setItem("user", JSON.stringify(res.user))
-        router.push(
-          res.user.type === "employer"
-            ? "/organization"
-            : "/organization?change to employee when it is ready"
-        )
-      } else if (res.statusCode === 302) router.push("/verify-email")
-      else {
+        redirectUser(res.user.type)
+      } else if (res.statusCode === 302) {
+        sessionStorage.setItem("email", formData.email)
+        router.push("/verify-email")
+      } else {
         console.error(res.message)
-        setError(`Error logging in ${res.message || res.data}`)
+        toast.error(`Error logging in: ${res.message || res.data}`, {
+          position: "top-left",
+          className: "mx-[8%]",
+        })
       }
       updateLoading(false)
     },
-    [formData, fetchData, router, updateLoading]
+    [formData, fetchData, router, updateLoading, redirectUser]
   )
 
   return (
     <>
-      <div className="relative login-bg h-screen bg-cover bg-center flex items-center justify-start">
-        <div className="absolute w-[90dvw] top-1/2 left-[5%] -translate-y-1/2 w-full">
-          <FormCard headingText="Welcome Back">
-            <form
-              onSubmit={handleLogin}
-              className="flex flex-col items-stretch gap-8"
-            >
-              <div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="email"
-                    className="block text-gray-700 text-sm font-semibold mb-2"
-                  >
-                    Company email
-                  </label>
-                  <input
-                    type="text"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:shadow-outline"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="password"
-                    className="block text-gray-700 text-sm font-semibold mb-2"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:shadow-outline"
-                    required
-                  />
-                </div>
-              </div>
-              <p className="font-normal text-[#645D5D] font-base flex gap-[4px]">
-                Forgotten password?
-                <Link
-                  className="text-primary-500 font-semibold hover:underline"
-                  href="/forgot-password"
-                >
-                  Reset here
-                </Link>
-              </p>
-              {error && <p className="text-red-500">{error}</p>}
-              <button
-                type="submit"
-                className="bg-primary-500 text-white w-full p-4 rounded-lg focus:outline-none hover:bg-primary-600"
-                disabled={loading}
+      <AuthLayout bgClassName="bg-[url(/img/login.png)]">
+        <>
+          <form onSubmit={handleLogin} className="flex flex-col gap-8">
+            <FormHeading>Welcome Back</FormHeading>
+            <div className="flex flex-col gap-4">
+              <AuthInputAndLabel
+                labelText="Company email"
+                inputProps={{
+                  name: "email",
+                  value: formData.email,
+                  onChange: handleInputChange,
+                  required: true,
+                  type: "email",
+                }}
+                icon={<IoMailOutline size={20} />}
+              />
+              <AuthInputAndLabel
+                labelText="Password"
+                inputProps={{
+                  name: "password",
+                  value: formData.password,
+                  onChange: handleInputChange,
+                  required: true,
+                  type: "password",
+                }}
+                icon={<LuShieldCheck size={20} />}
+              />
+            </div>
+            <p className="text-[#645D5D] font-[400] text-base">
+              Forgotten password?&nbsp;
+              <Link
+                href="/forgot-password"
+                className="font-[600] text-primary-500"
               >
-                {loading ? "Logging in..." : "Login"}
-              </button>
-              <SocialProviders accountType={searchParams.get("type")} redirectPath="login" />
-            </form>
-          </FormCard>
-        </div>
-      </div>
+                Reset here
+              </Link>
+            </p>
+            {error && <p className="text-red-500">{error}</p>}
+            <SubmitButton
+              type="submit"
+              isDisabled={loading}
+              isLoading={loading}
+              loadingText="Logging in..."
+            >
+              Login
+            </SubmitButton>
+            <SocialProviders
+              accountType={searchParams.get("type")}
+              redirectPath="login"
+            />
+          </form>
+        </>
+      </AuthLayout>
     </>
   )
 }
 
-export default function Page(){
+export default function Page() {
   return (
     <Suspense>
       <LoginForm />

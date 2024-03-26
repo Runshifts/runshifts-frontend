@@ -1,108 +1,82 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import axios from "axios";
+import AuthLayout from "../_components/Auth/Layout"
+import FormHeading, { SubHeadingText } from "../_components/Auth/Heading"
+import { SubmitButton } from "../_components/Auth/Inputs"
+import PinInput from "../_components/AppComps/PinInput"
+import useHandlePinInputState from "../_hooks/useHandlePinInputState"
+import { useRouter } from "next/navigation"
+import React, { useCallback, useEffect, useState } from "react"
+import useAxios from "../_hooks/useAxios"
+import toast from "react-hot-toast"
 
 function Verify() {
-  const router = useRouter();
+  const router = useRouter()
+  useEffect(() => {
+    if (!sessionStorage.getItem("email")) router.push("/forgot-password")
+  }, [])
+  const {
+    pinInputState,
+    pinInputStateBoxReference,
+    handleBackspaceAndEnter,
+    handleChange,
+    handlePaste,
+  } = useHandlePinInputState({ pinLength: 6 })
+  const fetchData = useAxios()
+  const [loading, setLoading] = useState(false)
 
-  const [verificationCode, setVerificationCode] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
-  const [verificationError, setVerificationError] = useState(null);
-
-  const handleCodeChange = (index, value) => {
-    const updatedCode = [...verificationCode];
-    updatedCode[index] = value;
-    setVerificationCode(updatedCode);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const URL = "/users/verify-password-reset-code";
-
-    try {
-      const fullResetCode = verificationCode.join("");
-      console.log(verificationCode);
-
-      const response = await axios.post(URL, {
-        passwordResetCode: fullResetCode,
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault()
+      const code = pinInputState.join("")
+      if (loading || !code) return
+      setLoading(true)
+      const res = await fetchData("/users/verify-password-reset-code", "post", {
+        passwordResetCode: code,
         email: sessionStorage.getItem("email"),
-      });
-      if (response.data.statusCode === 200) {
-        sessionStorage.setItem("passwordResetCode", fullResetCode);
-        router.push("/change-password");
+      })
+      if (res.statusCode === 200) {
+        sessionStorage.setItem("passwordResetCode", code)
+        router.push("/change-password")
+      } else {
+        toast.error(
+          res.message || "An error occurred",
+          { duration: 6000, position: "top-left", className: "mx-[8%]" }
+        )
       }
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-      console.error(
-        "Error confirming email:",
-        err.message || err.response?.data
-      );
-      setVerificationError(
-        err?.response?.response?.data?.message ||
-          "An error occurred while verifying the email"
-      );
-    }
-  };
+      setLoading(false)
+    },
+    [pinInputState, loading, fetchData]
+  )
 
   return (
-    <>
-      <div className="confirm-bg h-screen bg-cover bg-center flex items-center justify-start ">
-        <div className="mx-auto md:w-[400px] pl-8 ml-8 pt-8">
-          <div className="w-full max-w-sm ">
-            <div className="bg-white shadow-md rounded-md px-8 pt-6 pb-8 mb-4">
-              <div className=" bg-white rounded-md">
-                <h1 className="py-4 text-2xl font-bold leading-12 tracking-tight text-left text-[#1B1818]">
-                  Provide the code sent to your mail box
-                </h1>
-
-                <p className="text-xs text-gray-800 font-semibold py-2">
-                  Please provide the six digit code sent to your email to reset
-                  your password
-                </p>
-
-                <form onSubmit={handleSubmit}>
-                  <div className="flex justify-center">
-                    {verificationCode.map((digit, index) => (
-                      <input
-                        key={index}
-                        className="w-10 h-10 text-center mx-1 px-2 border border-gray-300 rounded-md text-lg"
-                        type="text"
-                        name={`digit-${index}`}
-                        value={digit}
-                        onChange={(e) =>
-                          handleCodeChange(index, e.target.value)
-                        }
-                        maxLength="1"
-                      />
-                    ))}
-                  </div>
-                </form>
-
-                <button
-                  type="submit"
-                  onClick={handleSubmit}
-                  className="bg-[#7ED957] text-white rounded-md w-full p-2 my-4 "
-                >
-                  Confirm
-                </button>
-                <p className="text-red-500 text-sm"> {verificationError} </p>
-              </div>
-            </div>
-          </div>
+    <AuthLayout bgClassName="bg-[url(/img/confirm_reset.png)]">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
+          <FormHeading>Provide the code sent to your mail box</FormHeading>
+          <SubHeadingText>
+            Please provide the six digit code sent to your email to reset your
+            password
+          </SubHeadingText>
         </div>
-      </div>
-    </>
-  );
+        <PinInput
+          stateBoxReference={pinInputStateBoxReference}
+          state={pinInputState}
+          handleBackspaceAndEnter={handleBackspaceAndEnter}
+          handlePaste={handlePaste}
+          handleChange={handleChange}
+        />
+        <SubmitButton
+          type="submit"
+          isDisabled={loading}
+          isLoading={loading}
+          loadingText="Hang on..."
+        >
+          Confirm
+        </SubmitButton>
+      </form>
+    </AuthLayout>
+  )
 }
 
-export default Verify;
+export default Verify

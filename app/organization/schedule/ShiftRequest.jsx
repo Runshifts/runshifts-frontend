@@ -6,9 +6,10 @@ import useCountdown from "../../_hooks/useCountDown"
 import useAxios from "../../_hooks/useAxios"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import toast from "react-hot-toast"
-import { ShiftAndOvertimeRequestsContext } from "../../_providers/ShiftAndOvertimeRequestsProvider"
-import { DashboardContext } from "../../_providers/DashboardContext"
+import { ShiftAndOvertimeRequestsContext } from "../../_providers/Employer/ShiftAndOvertimeRequestsProvider"
+import { DashboardContext } from "../../_providers/Employer/DashboardContext"
 import Spinner from "../../_assets/svgs/Spinner"
+import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 
 export function ShiftRequest({ shiftRequest = {} }) {
   const shiftStart = useMemo(
@@ -23,7 +24,7 @@ export function ShiftRequest({ shiftRequest = {} }) {
   }, [days, hours, minutes, seconds])
 
   return (
-    <article className="border border-gray-300 rounded-lg p-[10px] flex flex-col gap-y-[8px] w-full max-w-[]">
+    <article className="border border-gray-300 rounded-lg p-[10px] flex flex-col gap-y-[8px] w-full max-h-[170px]">
       <UserDisplay
         firstName={shiftRequest.requester?.firstName || "Placeholder"}
         lastName={shiftRequest.requester?.lastName || "Name"}
@@ -39,31 +40,30 @@ export function ShiftRequest({ shiftRequest = {} }) {
         </p>
       </div>
 
-      <p className="text-info-500 font-bold text-[14px] leading-[145%]">
-        {isStillValid &&
-        !shiftRequest.isAccepted &&
-        !shiftRequest.isRejected ? (
-          <>
-            {+days && `${days} days, `}
-            {+hours ? `${hours}:` : "00:"}
-            {+minutes ? `${minutes}:` : "00:"}
-            {seconds} Left
-          </>
-        ) : (
-          !shiftRequest.isAccepted && (
-            <span className="opacity-30 font-[500] text-4">Expired</span>
-          )
+      <div className="text-info-500 font-bold text-[14px] leading-[145%] flex flex-col gap-[8px]">
+        <p>
+          {+days && `${days} days, `}
+          {+hours ? `${hours}:` : "00:"}
+          {+minutes ? `${minutes}:` : "00:"}
+          {seconds} Left
+        </p>
+        {!shiftRequest.isAccepted && !isStillValid && (
+          <p className="opacity-30 font-[500] text-4">Expired</p>
         )}
-      </p>
+        {shiftRequest.isAccepted && (
+          <p className="opacity-30 font-[500] text-4">Accepted</p>
+        )}
+        {shiftRequest.isRejected && (
+          <p className="opacity-30 font-[500] text-4">Rejected</p>
+        )}
+      </div>
 
       {isStillValid && !shiftRequest.isAccepted && !shiftRequest.isRejected ? (
         <AcceptAndRejectButtons
           requestId={shiftRequest._id}
-          requestType={"shifts"}
+          requestType={"shift"}
         />
       ) : null}
-      {shiftRequest.isAccepted && <span className="opacity-30">Accepted</span>}
-      {shiftRequest.isRejected && <span className="opacity-30">Rejected</span>}
     </article>
   )
 }
@@ -76,17 +76,23 @@ export function formatRequestStartDate(date) {
   })} ${`${date.getDate()}${getDateOrdinal(date.getDate())}`}`
 }
 
-export function UserDisplay({ image, firstName, lastName }) {
+export function UserDisplay({
+  image,
+  firstName,
+  lastName,
+  imageWidth = 30,
+  imageHeight = 30,
+}) {
   return (
-    <figure className=" flex items-center justify-start p-[8px]">
+    <figure className="flex items-center justify-start gap-[8px] p-[8px]">
       <Image
-        width={30}
-        height={30}
+        width={imageWidth}
+        height={imageHeight}
         src={image || placeholderImage}
         className="rounded-full overflow-hidden"
         alt="avatar"
       />
-      <figcaption className="text-sm px-2">
+      <figcaption className="text-[14px] text-[#1D2433]">
         {firstName || "Placeholder"} {lastName || "Name"}
       </figcaption>
     </figure>
@@ -97,16 +103,38 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
   const [loading, setLoading] = useState("")
   const { handleUpdatedRequest } = useContext(ShiftAndOvertimeRequestsContext)
   const { handleUpdateSingleShift } = useContext(DashboardContext)
+  const { updateSingleSwapRequest, updateAllShifts } = useContext(
+    EmployeeDashboardContext
+  )
 
   const { organization } = useContext(OrganizationContext)
   const URLS = useMemo(() => {
     return {
-      shifts: (decision) =>
+      shift: (decision) =>
         `/shifts/${organization?._id}/applications/${requestId}?action=${decision}`,
-      overtimes: (decision) =>
+      overtime: (decision) =>
         `/overtimes/${organization?._id}/${requestId}?action=${decision}`,
+      swap: (decision) => `/shifts/swaps/${requestId}/${decision}`,
     }
   }, [organization?._id, requestId])
+
+  const callbacks = useMemo(
+    () => ({
+      shift: ({ application, shift }) => {
+        handleUpdatedRequest(application, "shift")
+        handleUpdateSingleShift(shift)
+      },
+      overtime: ({ request }) => {
+        handleUpdatedRequest(request, "overtime")
+      },
+      swap: ({ request }) => {
+        updateSingleSwapRequest(request)
+        updateAllShifts([request.receiverShift, request.senderShift])
+        console.log(request)
+      },
+    }),
+    []
+  )
 
   const fetchData = useAxios()
 
@@ -117,10 +145,8 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
       const res = await fetchData(URLS[requestType](decision), "get")
       if (res.statusCode === 200) {
         toast.success(res.message)
-        if (requestType === "shifts") {
-          handleUpdatedRequest(res.application, "shift")
-          handleUpdateSingleShift(res.shift)
-        } else handleUpdatedRequest(res.request, "overtime")
+        if (typeof callbacks[requestType] === "function")
+          callbacks[requestType](res)
       } else toast.error(res.message || "Something went wrong.")
       setLoading("")
     },
@@ -138,14 +164,16 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
     <div className="flex gap-x-[8px] items-end">
       <button
         onClick={() => handleDecision("accept")}
-        className="bg-primary-600 text-white font-[500] px-3 py-[2px] leading-[20px] flex items-center justify-center gap-2"
+        disabled={loading === "accept"}
+        className="bg-primary-600 disabled:opacity-70 text-white font-[500] px-3 py-[2px] leading-[20px] flex items-center justify-center gap-2"
       >
         {loading === "accept" && <Spinner />}{" "}
         {loading === "accept" ? "Accepting..." : "Accept"}
       </button>
       <button
         onClick={() => handleDecision("reject")}
-        className="text-danger-600 font-[500] text-[14px] flex items-center justify-center gap-2"
+        className="text-danger-600 disabled:opacity-70 font-[500] text-[14px] flex items-center justify-center gap-2"
+        disabled={loading === "reject"}
       >
         {loading === "reject" && <Spinner />}{" "}
         {loading === "reject" ? "Rejecting..." : "Reject"}

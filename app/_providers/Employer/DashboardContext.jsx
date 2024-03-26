@@ -7,15 +7,16 @@ import {
   useMemo,
   useState,
 } from "react"
-import useAxios from "../_hooks/useAxios"
-import DASHBOARD_URLS from "../_urls/dashboardURLs"
-import useGetWeekRanges from "../_hooks/useGetWeekRanges"
+import useAxios from "../../_hooks/useAxios"
+import DASHBOARD_URLS from "../../_urls/dashboardURLs"
+import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
+import useManageFetchShiftsAndOvertimes from "../../_hooks/useManageFetchShiftsAndOvertimes"
 import {
   filterShiftsByWeek,
   groupShiftsByAssignee,
   groupShiftsByHoursWithDateKey,
-} from "../_utils/shifts"
-import { OrganizationContext } from "./OrganizationProvider"
+} from "../../_utils/shifts"
+import { OrganizationContext } from "../OrganizationProvider"
 
 export const DashboardContext = createContext({
   allShifts: [],
@@ -44,9 +45,6 @@ export const DashboardContext = createContext({
 
 export default function DashboardProvider({ children }) {
   const { organization } = useContext(OrganizationContext)
-  const [loadingShifts, setLoadingShifts] = useState(true)
-  const [fetchingShiftsError, setFetchingShiftsError] = useState(false)
-  const [weeksFetched, setWeeksFetched] = useState({})
   const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } =
     useGetWeekRanges(new Date(Date.now()), 7)
   const fetchData = useAxios()
@@ -110,33 +108,17 @@ export default function DashboardProvider({ children }) {
     })
   }, [])
 
+  const { fetchShifts, fetchingShiftsError, loadingShifts } =
+    useManageFetchShiftsAndOvertimes({
+      updateAllShifts,
+      currentWeek,
+    })
+
   const handleUpdateSingleShift = useCallback((update) => {
     setAllShifts((prev) => {
       return prev.map((shift) => (shift._id !== update._id ? shift : update))
     })
   }, [])
-
-  const fetchShifts = useCallback(
-    async (date) => {
-      if (!organization) return
-      const stringifiedDate = JSON.stringify(date)
-      if (weeksFetched[stringifiedDate]) return
-      setLoadingShifts(true)
-      const res = await fetchData(
-        DASHBOARD_URLS.weeklySchedule(organization?._id, date),
-        "get"
-      )
-      if (res.statusCode === 200) {
-        setWeeksFetched((prev) => ({
-          ...prev,
-          [stringifiedDate]: res.schedule.shifts,
-        }))
-        updateAllShifts(res.schedule.shifts)
-      } else setFetchingShiftsError(true)
-      setLoadingShifts(false)
-    },
-    [organization?._id, weeksFetched, updateAllShifts]
-  )
 
   const fetchSnapshot = useCallback(async () => {
     if (!organization) return
@@ -146,10 +128,6 @@ export default function DashboardProvider({ children }) {
     )
     if (res.statusCode === 200) setTodaysSnapshot(res.snapshot)
   }, [organization?._id])
-
-  useEffect(() => {
-    fetchShifts(currentWeek.start)
-  }, [fetchShifts, currentWeek.start])
 
   useEffect(() => {
     fetchSnapshot()
