@@ -47,7 +47,6 @@ export default function AdminDashboardProvider({ children }) {
     if (loading) return
     setLoading(true)
     const res = await fetchData(SHIFTS_URLS.shiftsManagementStats(), "get")
-    console.log(res)
     if (res.statusCode === 200) {
       setCurrentShifts(res.activeShifts)
       setStats({
