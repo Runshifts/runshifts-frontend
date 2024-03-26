@@ -50,7 +50,7 @@ function CurrentShift({ shift = {}, isOdd }) {
 
       <div>{shift.location?.address}</div>
 
-      <div>{formatDate(new Date(shift.startTime), { locale: "en-us" })}</div>
+      <div>{formatDate(new Date(shift.startTime), { year: "numeric" })}</div>
 
       <div className="flex space-x-2 grow">
         <button className="bg-[#5BC62D] rounded text-white py-[8px] flex gap-[4px] px-[12px] py-[4px] items-center">
