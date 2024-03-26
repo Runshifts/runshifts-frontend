@@ -1,8 +1,8 @@
 "use client"
 
 import { createContext, useCallback, useEffect, useState } from "react"
-import useAxios from "../_hooks/useAxios"
-import { getPastNumOfDays } from "../_utils"
+import useAxios from "../../_hooks/useAxios"
+import { getPastNumOfDays } from "../../_utils"
 
 export const TeamContext = createContext({
   teamMembers: [],
@@ -29,7 +29,7 @@ export default function TeamProvider({
   organizationId,
   shouldAutoInitialize,
   updateEmployees = () => {},
-  removeEmployee = () => {}
+  removeEmployee = () => {},
 }) {
   const fetchData = useAxios()
   const [hasInitialized, setHasInitialized] = useState(false)
@@ -108,15 +108,18 @@ export default function TeamProvider({
     ])
   }, [])
 
-  const updateTeamMembers = useCallback((update = []) => {
-    setTeamMembers((prev) => [
-      ...prev,
-      ...update.filter(
-        (upd) => JSON.stringify(prev).includes(upd._id) === false
-      ),
-    ])
-    updateEmployees(update)
-  }, [updateEmployees])
+  const updateTeamMembers = useCallback(
+    (update = []) => {
+      setTeamMembers((prev) => [
+        ...prev,
+        ...update.filter(
+          (upd) => JSON.stringify(prev).includes(upd._id) === false
+        ),
+      ])
+      updateEmployees(update)
+    },
+    [updateEmployees]
+  )
 
   const removeArchivedRecentlyViewed = useCallback((user) => {
     setRecentlyViewedTeamMembers((prev) =>
@@ -124,10 +127,13 @@ export default function TeamProvider({
     )
   }, [])
 
-  const removeArchivedTeamMember = useCallback((user) => {
-    setTeamMembers((prev) => prev.filter((it) => it._id !== user?._id))
-    removeEmployee(user)
-  }, [removeEmployee])
+  const removeArchivedTeamMember = useCallback(
+    (user) => {
+      setTeamMembers((prev) => prev.filter((it) => it._id !== user?._id))
+      removeEmployee(user)
+    },
+    [removeEmployee]
+  )
 
   return (
     <TeamContext.Provider

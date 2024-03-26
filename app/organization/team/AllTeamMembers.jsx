@@ -1,7 +1,6 @@
 import React from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
-import Link from "next/link"
 import TeamMembersSkeleton from "../../_components/Skeletons/TeamMembersSkeleton"
 
 export default function AllTeamMembers({

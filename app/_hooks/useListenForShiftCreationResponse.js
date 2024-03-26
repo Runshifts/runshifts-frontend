@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react"
 import socket from "../_socket"
 import toast from "react-hot-toast"
-import { DashboardContext } from "../_providers/DashboardContext"
+import { DashboardContext } from "../_providers/Employer/DashboardContext"
 
 export default function useListenForMultipleShiftCreation() {
   const { updateAllShifts } = useContext(DashboardContext)

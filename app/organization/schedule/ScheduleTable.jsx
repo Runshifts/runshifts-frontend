@@ -210,11 +210,21 @@ function AssigneeShiftsMapping({
   )
 }
 
-function Shift({ assignee = {}, duplicateShift = async () => {}, shift = {}, isPastWeek }) {
+function Shift({
+  assignee = {},
+  duplicateShift = async () => {},
+  shift = {},
+  isPastWeek,
+}) {
   const [isDuplicating, setIsDuplicating] = useState(false)
   const isPendingShift = useMemo(
     () =>
       shift.isAccepted === false && shift.isDroppedOff === false ? true : false,
+    [shift?.isAccepted, shift?.isDroppedOff]
+  )
+  const isDroppedOff = useMemo(
+    () =>
+      shift.isAccepted === false && shift.isDroppedOff === true ? true : false,
     [shift?.isAccepted, shift?.isDroppedOff]
   )
 
@@ -228,9 +238,12 @@ function Shift({ assignee = {}, duplicateShift = async () => {}, shift = {}, isP
     <Fragment>
       <div
         style={{
-          backgroundColor: isPendingShift ? "#D7D3D1" : assignee.color,
+          backgroundColor:
+            isPendingShift || isDroppedOff ? "#D7D3D1" : assignee.color,
         }}
-        className={`${isPendingShift ? "justify-evenly": "justify-center"} text-[10px] md:min-w-[118px] flex mx-auto gap-[4px] my-[10px] items-center w-max justify-center p-[4px] rounded-full`}
+        className={`${
+          isPendingShift ? "justify-evenly" : "justify-center"
+        } text-[10px] md:min-w-[118px] flex mx-auto gap-[4px] my-[10px] items-center w-max justify-center p-[4px] rounded-full`}
       >
         <Image
           className="rounded-full w-[24px] h-[24px]"
@@ -245,8 +258,9 @@ function Shift({ assignee = {}, duplicateShift = async () => {}, shift = {}, isP
             {formatHourAsAmOrPm(new Date(shift.endTime).getHours())}
           </span>
           {isPendingShift && <span className="font-400">Pending</span>}
+          {isDroppedOff && <span className="font-400">Dropped-off</span>}
         </p>
-        {isPendingShift === false && (
+        {isPendingShift === false && isDroppedOff === false && (
           <button
             disabled={isDuplicating}
             name="duplicate shift"
