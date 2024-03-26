@@ -20,6 +20,7 @@ function Employer() {
         <InfoCardsSkeleton
           title="Scheduling"
           content="Get introduced to the basic concepts of our editor, how to create projects and navigate between all the platform functionalities."
+          // refLink="/knowledgeb/scheduling"
         />
 
         <InfoCardsSkeleton
