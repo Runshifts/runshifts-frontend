@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react"
-import { SubmitButton } from "../_components/Auth/Inputs"
+import { SubmitButton } from "../../_components/Auth/Inputs"
 
 export default function ShiftNotesForm({ shift }) {
   const [note, setNote] = useState("")
@@ -51,7 +51,7 @@ export default function ShiftNotesForm({ shift }) {
             maxWidth: "100px",
             fontSize: "14px",
             color: "#2D6316",
-            fontWeight: "500"
+            fontWeight: "500",
           }}
           loadingText="Sending"
         >

@@ -1,4 +1,4 @@
-import ShiftNotesForm from "../ShiftNotesForm"
+import ShiftNotesForm from "./ShiftNotesForm"
 
 export default function ShiftNotesSection({ shift }) {
   return (
