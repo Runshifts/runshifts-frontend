@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react"
 import useAxios from "../../_hooks/useAxios"
-import MY_SHIFTS_URLS from "../../_urls/myShiftsURLs"
+import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"
 import toast from "react-hot-toast"
 import Spinner from "../../_assets/svgs/Spinner"
 
