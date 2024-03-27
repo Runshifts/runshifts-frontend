@@ -7,6 +7,7 @@ import Link from "next/link";
 import DropDown from "../navbar/Dropdown";
 
 function Navbar({ onToggle }) {
+  
  
   return (
     <>
@@ -60,7 +61,7 @@ function Navbar({ onToggle }) {
                 <SettingsSvg />
               </Link>
             </div>
-            <DropDown />
+            <DropDown  />
           </div>
         </div>
       </section>
