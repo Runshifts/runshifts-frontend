@@ -51,7 +51,8 @@ export default function UserProvider({ children }) {
       if (
         !pathname.startsWith("/organization") &&
         !pathname.startsWith("/employee") &&
-        !pathname.startsWith("/admi")
+        !pathname.startsWith("/admin") &&
+        !pathname.startsWith("/knowledge")
       )
         redirectUser(user.type)
       if (
