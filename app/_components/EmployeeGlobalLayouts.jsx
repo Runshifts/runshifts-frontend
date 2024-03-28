@@ -23,7 +23,7 @@ export default function GlobalLayout({ children }) {
             isSidebarOpen ? "visible opacity-100" : "invisible opacity-0 md:opacity-100 md:visible"
           }`}
         >
-          <div className="bg-[#fafbfc] pr-2  border-r-[1px] border-r-[#d1d5db] border-r-solid  h-screen fixed">
+          <div className="bg-[#fafbfc] pr-2  border-r-[1px] border-r-[#d1d5db] border-r-solid  h-screen fixed md:relative">
             <Sidebar isOpen={!isSidebarOpen} onClose={toggleSidebar} />
           </div>
         </div>

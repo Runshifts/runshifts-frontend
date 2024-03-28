@@ -78,7 +78,7 @@ function TrackerContent({ todaysShift }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:flex sm:justify-center sm:flex-wrap lg:grid-cols-3">
         <TrackerCard
           title="Check-in Time"
           time={
@@ -185,7 +185,7 @@ function TrackerCard({
 }) {
   return (
     <>
-      <div className="bg-[#354258] rounded-xl flex h-48 p-4 gap-2 flex-col items-start">
+      <div className="bg-[#354258] rounded-xl flex h-48 p-4 gap-2 flex-col items-start w-full max-w-[310px]">
         <p className="text-base leading-[46px] text-white not-italic font-normal">
           {title}
         </p>
