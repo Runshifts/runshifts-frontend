@@ -28,6 +28,13 @@ function TrackerContent({ todaysShift }) {
     [todaysShift]
   )
 
+  const shiftHasEnded = useMemo(() => {
+    return (
+      todaysShift?.endedAt ||
+      new Date(todaysShift?.endTime).getTime() < Date.now()
+    )
+  }, [todaysShift])
+
   const breakTimeLeft = useMemo(
     () =>
       msToHourMinSecond(
@@ -58,10 +65,11 @@ function TrackerContent({ todaysShift }) {
   const breakButtonText = useMemo(() => {
     if (!todaysShift) return "--:--"
     if (hasUsedUpAllottedBreaktime) return "Break Over"
-    if (hasStartedBreak) return "Pause Break"
-    else if (todaysShift?.breakStartedAt === null) return "Resume"
+    if (hasStartedBreak && !shiftHasEnded) return "Pause Break"
+    else if (todaysShift?.breakStartedAt === null && !shiftHasEnded)
+      return "Resume"
     else return "Start break"
-  }, [todaysShift, hasStartedBreak])
+  }, [todaysShift, hasStartedBreak, shiftHasEnded])
 
   const getTimeDisplay = (date) => {
     return new Date(date || Date.now())
@@ -78,7 +86,7 @@ function TrackerContent({ todaysShift }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 gap-4 sm:flex sm:justify-center sm:flex-wrap lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:flex sm:justify-center sm:flex-wrap lg:justify-start lg:grid-cols-3">
         <TrackerCard
           title="Check-in Time"
           time={
@@ -111,7 +119,7 @@ function TrackerContent({ todaysShift }) {
           }
           buttonClassNames="bg-[#F5542C] text-white"
           disabled={
-            hasStartedShift === false || !todaysShift || todaysShift.endedAt
+            hasStartedShift === false || !todaysShift || todaysShift?.endedAt
           }
         />
         <CheckoutConfirmationModal
@@ -126,9 +134,7 @@ function TrackerContent({ todaysShift }) {
           title="Break Time"
           time={
             todaysShift
-              ? hasStartedBreak ||
-                loading === "start-break" ||
-                loading === "pause-break"
+              ? hasStartedBreak && !shiftHasEnded
                 ? `${breakMinutesLeft}:${breakSecondsLeft}`
                 : breakTimeLeft
               : "--:--"
@@ -141,7 +147,8 @@ function TrackerContent({ todaysShift }) {
             hasUsedUpAllottedBreaktime ||
             !todaysShift ||
             todaysShift?.endedAt ||
-            hasStartedShift === false
+            hasStartedShift === false ||
+            shiftHasEnded
           }
           loading={loading === "start-break" || loading === "pause-break"}
         />
