@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react"
+import { createContext, useCallback, useContext, useState } from "react"
 import useAxios from "../../_hooks/useAxios"
 import TRACKER_URLS from "../../_urls/trackerURLs"
 import { OrganizationContext } from "../OrganizationProvider"
@@ -22,20 +16,13 @@ export const EmployeeTrackerContext = createContext({
   todaysShift: null,
   todaysOvertime: null,
   checkin: () => {},
+  checkout: () => {},
+  startOrResumeBreak: () => {},
+  pauseOrEndBreak: () => {},
 })
 
 export default function EmployeeTrackerProvider({ children, shiftId }) {
-  const [loading, setLoading] = useState(false)
-  const [hasStartedShift, setHasStartedShift] = useState(false)
-  const [hasEndedShift, setHasEndedShift] = useState(false)
-  const [hasStartedOvertime, setHasStartedOvertime] = useState(false)
-  const [hasEndedOvertime, setHasEndedOvertime] = useState(false)
-  const [todaysShift, setTodaysShift] = useState(null)
-  const [todaysOvertime, setTodaysOvertime] = useState(null)
-  const isBreakTimeOver = useMemo(() => ({}), [])
-  const hasPausedBreak = useMemo(() => ({}), [])
-  const isOnBreak = useMemo(() => ({}), [])
-
+  const [loading, setLoading] = useState("")
   const { organization } = useContext(OrganizationContext)
   const { updateAllShifts } = useContext(EmployeeDashboardContext)
   const fetchData = useAxios()
@@ -48,43 +35,72 @@ export default function EmployeeTrackerProvider({ children, shiftId }) {
     )
     if (res.statusCode === 200) {
       toast.success(res.message)
-      setHasStartedShift(res.checkedIn)
       updateAllShifts([res.shift])
     } else {
       toast.error(res.message)
     }
     setLoading("")
-    console.log(res)
   }, [organization, fetchData, shiftId, loading])
 
   const checkout = useCallback(async () => {
-    if(loading === "checkout" || !shiftId) return
+    if (loading === "checkout" || !shiftId) return
     setLoading("checkout")
     const res = await fetchData(
-      TRACKER_URLS.checkout(organization?._id, shiftId, updateAllShifts),
+      TRACKER_URLS.checkout(organization?._id, shiftId),
       "get"
     )
     if (res.statusCode === 200) {
       toast.success(res.message)
-      setHasEndedShift(res.checkedOut)
-      setHasStartedShift(false)
       updateAllShifts([res.shift])
     } else {
       toast.error(res.message)
     }
     setLoading("")
-    console.log(res)
   }, [organization, fetchData, shiftId, loading, updateAllShifts])
   const startOvertime = useCallback(() => {}, [])
   const endOvertime = useCallback(() => {}, [])
-  const startBreak = useCallback(() => {}, [])
-  const pauseBreak = useCallback(() => {}, [])
+  const startOrResumeBreak = useCallback(async () => {
+    console.log("res", shiftId)
+    if (loading === "start-break" || !shiftId) return
+    setLoading("start-break")
+    const res = await fetchData(
+      TRACKER_URLS.startOrResumeBreak(organization?._id, shiftId),
+      "get"
+    )
+    console.log(res, shiftId)
+    if (res.statusCode === 200) {
+      toast.success(res.message)
+      updateAllShifts([res.shift])
+    } else {
+      toast.error(res.message)
+    }
+    setLoading("")
+  }, [organization, fetchData, shiftId, loading])
+  const pauseOrEndBreak = useCallback(async () => {
+    console.log("res", shiftId)
+    if (loading === "pause-break" || !shiftId) return
+    setLoading("pause-break")
+    const res = await fetchData(
+      TRACKER_URLS.pauseOrEndBreak(organization?._id, shiftId),
+      "get"
+    )
+    console.log(res, shiftId)
+    if (res.statusCode === 200) {
+      toast.success(res.message)
+      updateAllShifts([res.shift])
+    } else {
+      toast.error(res.message)
+    }
+    setLoading("")
+  }, [organization, fetchData, shiftId, loading])
 
   return (
     <EmployeeTrackerContext.Provider
       value={{
         checkin,
         checkout,
+        startOrResumeBreak,
+        pauseOrEndBreak,
         loading,
       }}
     >

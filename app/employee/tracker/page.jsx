@@ -21,7 +21,7 @@ function page() {
   return (
     <EmployeeTrackerProvider shiftId={todaysShift?._id}>
       <section className="p-3 h-screen">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center py-6">
           <Heading>Tracker</Heading>
           {todaysShift && (
             <CountDown

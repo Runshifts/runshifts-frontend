@@ -6,7 +6,7 @@ const TRACKER_URLS = {
   startOrResumeBreak: (organizationId, shiftId) =>
     `/shifts/${organizationId}/${shiftId}/start-break`,
   pauseOrEndBreak: (organizationId, shiftId) =>
-    `/shifts/${organizationId}/${shiftId}/start-break`,
+    `/shifts/${organizationId}/${shiftId}/stop-break`,
 }
 
 export default TRACKER_URLS

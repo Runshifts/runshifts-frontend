@@ -1,43 +1,129 @@
 "use client"
-import React, { useContext } from "react"
+import React, { useCallback, useContext, useMemo, useState } from "react"
 import { EmployeeTrackerContext } from "../../_providers/Employee/TrackerProvider"
 import Spinner from "../../_assets/svgs/Spinner"
+import { checkIsValidDateString, msToHourMinSecond } from "../../_utils"
+import toast from "react-hot-toast"
+import Modal from "../../_components/AppComps/Modal"
 function TrackerContent({ todaysShift }) {
-  const { checkin, loading, checkout } = useContext(EmployeeTrackerContext)
+  const [showConfirmCheckout, setShowConfirmCheckout] = useState(false)
+  const { checkin, loading, checkout, startOrResumeBreak, pauseOrEndBreak } =
+    useContext(EmployeeTrackerContext)
+  const hasStartedShift = useMemo(
+    () => checkIsValidDateString(todaysShift?.startedAt),
+    [todaysShift]
+  )
+  const hasStartedBreak = useMemo(
+    () =>
+      typeof todaysShift?.breakStartedAt === "string" &&
+      checkIsValidDateString(todaysShift?.breakStartedAt),
+    [todaysShift]
+  )
+  const hasUsedUpAllottedBreaktime = useMemo(
+    () =>
+      todaysShift?.breakDurationUsedInMilliseconds &&
+      todaysShift?.breakDurationUsedInMilliseconds ===
+        todaysShift?.allottedBreakTimeInMilliseconds,
+    [todaysShift]
+  )
+
+  const handleBreakClick = useCallback(() => {
+    if (hasUsedUpAllottedBreaktime)
+      return toast.error("You have used up your allotted break time")
+    if (hasStartedBreak === false) {
+      console.log("start", hasStartedBreak)
+      return startOrResumeBreak()
+    } else {
+      console.log("end", hasStartedBreak)
+      return pauseOrEndBreak()
+    }
+  }, [
+    startOrResumeBreak,
+    pauseOrEndBreak,
+    hasUsedUpAllottedBreaktime,
+    hasStartedBreak,
+  ])
+
+  const getTimeDisplay = (date) => {
+    return new Date(date || Date.now())
+      .toLocaleTimeString("default", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+      .split("am")
+      .join("")
+      .split("pm")
+      .join("")
+  }
 
   return (
-    <div>
-      <div className="grid grid-cols-1 gap-3 my-3 md:grid-cols-3">
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <TrackerCard
           title="Check-in Time"
-          time="08:45"
+          time={
+            todaysShift?.startTime
+              ? getTimeDisplay(todaysShift?.startTime)
+              : "--"
+          }
           onButtonClick={() => checkin()}
           unit="AM"
           buttonText="Check In"
           buttonClassNames="bg-[#5BC62D] text-white"
           loading={loading === "checkin"}
+          disabled={hasStartedShift === true || !todaysShift}
         />
         <TrackerCard
           title="Check-out Time"
-          time="08:45"
-          onButtonClick={() => checkout()}
+          time={
+            todaysShift?.endTime ? getTimeDisplay(todaysShift?.endTime) : "--"
+          }
+          onButtonClick={() => setShowConfirmCheckout(true)}
           loading={loading === "checkout"}
           unit="PM"
           buttonText="Check Out"
           buttonClassNames="bg-[#F5542C] text-white"
+          disabled={
+            hasStartedShift === false || !todaysShift || todaysShift.endedAt
+          }
+        />
+        <CheckoutConfirmationModal
+          handleHide={() => setShowConfirmCheckout(false)}
+          show={showConfirmCheckout}
+          handleCheckout={() => {
+            checkout()
+            setShowConfirmCheckout(false)
+          }}
         />
         <TrackerCard
-          title="Check-out Time"
-          time="30:00"
-          onButtonClick={() => {}}
+          title="Break Time"
+          time={msToHourMinSecond(
+            todaysShift?.allottedBreakTimeInMilliseconds -
+              (todaysShift?.breakDurationUsedInMilliseconds || 0) || 0
+          )}
+          onButtonClick={handleBreakClick}
           unit="MIN"
-          buttonText={`Start break`}
-          buttonClassNames="bg-[#FFCD66] text-[#354258]"
+          buttonText={`${
+            hasStartedBreak
+              ? hasUsedUpAllottedBreaktime
+                ? "Break Over"
+                : "Pause break"
+              : "Start break"
+          }`}
+          buttonClassNames="bg-[#FFCD66] text-[#354258] disabled:opacity-60 disabled:cursor-not-allowed rounded w-full px-3  min-h-[46px] flex justify-center items-center gap-[4px]"
+          disabled={
+            hasUsedUpAllottedBreaktime ||
+            !todaysShift ||
+            todaysShift?.endedAt ||
+            hasStartedShift === false
+          }
+          loading={loading === "start-break" || loading === "pause-break"}
         />
       </div>
 
       <div>
-        <div className=" grid grid-cols-1 gap-3 md:grid-cols-2">
+        <div className=" grid grid-cols-1 gap-4 md:grid-cols-2">
           <OvertimeTracker
             title="Start Overtime"
             time="08:45"
@@ -47,12 +133,12 @@ function TrackerContent({ todaysShift }) {
             buttonText="Start overtime"
           />
           <OvertimeTracker
-            title="Start Overtime"
+            title="End Overtime"
             time="08:45"
             unit="PM"
             buttonClassNames="bg-[#F5542C] text-white"
             onButtonClick={() => {}}
-            buttonText="Start overtime"
+            buttonText="End overtime"
           />
         </div>
       </div>
@@ -70,25 +156,25 @@ function TrackerCard({
   buttonClassNames,
   onButtonClick,
   loading,
+  disabled,
 }) {
   return (
     <>
-      <div className=" ">
-        <div className="bg-[#354258] rounded-xl flex h-48 p-4 flex-col items-start">
-          <p className="text-base text-white not-italic font-normal my-2">
-            {title}
-          </p>
-          <p className="text-5xl text-white not-italic font-semibold leading-8 my-2">
-            {time} <span className="text-[#5B7198]">{unit}</span>
-          </p>
-          <button
-            disabled={loading}
-            onClick={onButtonClick}
-            className={`${buttonClassNames} disabled:opacity-60 disabled:cursor-not-allowed rounded w-full my-2 px-3 py-2 flex justify-center items-center gap-[4px]`}
-          >
-            {loading && <Spinner />} {buttonText}
-          </button>
-        </div>
+      <div className="bg-[#354258] rounded-xl flex h-48 p-4 gap-2 flex-col items-start">
+        <p className="text-base leading-[46px] text-white not-italic font-normal">
+          {title}
+        </p>
+        <p className="text-5xl w-full flex items-start leading-[46px] text-white not-italic font-semibold leading-8">
+          <span>{time}</span>{" "}
+          <span className="text-[#5B7198] ml-auto">{unit}</span>
+        </p>
+        <button
+          disabled={disabled || loading}
+          onClick={onButtonClick}
+          className={`${buttonClassNames} disabled:opacity-60 disabled:cursor-not-allowed rounded w-full px-3  min-h-[46px] flex justify-center items-center gap-[4px]`}
+        >
+          {loading && <Spinner />} {loading ? "Please hold on" : buttonText}
+        </button>
       </div>
     </>
   )
@@ -101,21 +187,49 @@ function OvertimeTracker({
   buttonText,
   buttonClassNames,
   onButtonClick,
+  loading,
 }) {
   return (
-    <div className="bg-white border rounded-xl flex p-4 flex-col items-start">
+    <div className="bg-white border border-current rounded-xl flex p-4 flex-col items-start text-info-600 justify-center gap-2">
       <p className="text-base text-[#354258] not-italic font-normal my-2">
         {title}
       </p>
-      <p className="text-5xl text-[#354258] not-italic font-semibold leading-8 my-2">
-        {time} <span className="text-[#354258]">{unit}</span>
+      <p className="text-5xl w-full flex items-start leading-[46px] not-italic font-semibold leading-8 justify-between">
+        <span>{time}</span> <span className="">{unit}</span>
       </p>
       <button
+        disabled={loading}
         onClick={onButtonClick}
-        className={`${buttonClassNames} rounded w-full my-2 px-3 py-2`}
+        className={`${buttonClassNames} disabled:opacity-60 disabled:cursor-not-allowed rounded w-full px-3  min-h-[46px] flex justify-center items-center gap-[4px]`}
       >
-        {buttonText}
+        {loading && <Spinner />} {buttonText}
       </button>
     </div>
+  )
+}
+
+function CheckoutConfirmationModal({ handleHide, handleCheckout, show }) {
+  return (
+    <Modal zIndex={10000} open={show} onClose={handleHide}>
+      <div className="bg-white p-4 rounded-lg">
+        <h3 className="text-center font-[600] mb-4 text-[16px] text-[#1B1818]">
+          Are you sure you want to check out?
+        </h3>
+        <div className="flex justify-center items-center gap-4">
+          <button
+            onClick={handleHide}
+            className="text-info-600 text-4"
+          >
+            Cancel
+          </button>{" "}
+          <button
+            onClick={handleCheckout}
+            className="bg-[#F5542C] text-white text-4 font-normal px-3 py"
+          >
+            Check out
+          </button>
+        </div>
+      </div>
+    </Modal>
   )
 }
