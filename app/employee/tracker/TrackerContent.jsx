@@ -5,6 +5,7 @@ import Spinner from "../../_assets/svgs/Spinner"
 import { checkIsValidDateString, msToHourMinSecond } from "../../_utils"
 import toast from "react-hot-toast"
 import Modal from "../../_components/AppComps/Modal"
+import { useTimeCountdown } from "../../_hooks/useCountDown"
 function TrackerContent({ todaysShift }) {
   const [showConfirmCheckout, setShowConfirmCheckout] = useState(false)
   const { checkin, loading, checkout, startOrResumeBreak, pauseOrEndBreak } =
@@ -27,22 +28,40 @@ function TrackerContent({ todaysShift }) {
     [todaysShift]
   )
 
+  const breakTimeLeft = useMemo(
+    () =>
+      msToHourMinSecond(
+        todaysShift?.allottedBreakTimeInMilliseconds -
+          (todaysShift?.breakDurationUsedInMilliseconds || 0) || 0
+      ),
+    [todaysShift]
+  )
+
+  const { minutes: breakMinutesLeft, seconds: breakSecondsLeft } =
+    useTimeCountdown(
+      todaysShift?.allottedBreakTimeInMilliseconds -
+        (todaysShift?.breakDurationUsedInMilliseconds || 0) || 0
+    )
+
   const handleBreakClick = useCallback(() => {
     if (hasUsedUpAllottedBreaktime)
       return toast.error("You have used up your allotted break time")
-    if (hasStartedBreak === false) {
-      console.log("start", hasStartedBreak)
-      return startOrResumeBreak()
-    } else {
-      console.log("end", hasStartedBreak)
-      return pauseOrEndBreak()
-    }
+    if (hasStartedBreak === false) return startOrResumeBreak()
+    else return pauseOrEndBreak()
   }, [
     startOrResumeBreak,
     pauseOrEndBreak,
     hasUsedUpAllottedBreaktime,
     hasStartedBreak,
   ])
+
+  const breakButtonText = useMemo(() => {
+    if (!todaysShift) return "--:--"
+    if (hasUsedUpAllottedBreaktime) return "Break Over"
+    if (hasStartedBreak) return "Pause Break"
+    else if (todaysShift?.breakStartedAt === null) return "Resume"
+    else return "Start break"
+  }, [todaysShift, hasStartedBreak])
 
   const getTimeDisplay = (date) => {
     return new Date(date || Date.now())
@@ -65,24 +84,31 @@ function TrackerContent({ todaysShift }) {
           time={
             todaysShift?.startTime
               ? getTimeDisplay(todaysShift?.startTime)
-              : "--"
+              : "--:--"
           }
           onButtonClick={() => checkin()}
           unit="AM"
-          buttonText="Check In"
+          buttonText={hasStartedShift ? "Checked In" : "Check In"}
           buttonClassNames="bg-[#5BC62D] text-white"
           loading={loading === "checkin"}
           disabled={hasStartedShift === true || !todaysShift}
         />
         <TrackerCard
-          title="Check-out Time"
+          title={"Check-out Time"}
           time={
-            todaysShift?.endTime ? getTimeDisplay(todaysShift?.endTime) : "--"
+            todaysShift?.endTime
+              ? getTimeDisplay(todaysShift?.endTime)
+              : "--:--"
           }
           onButtonClick={() => setShowConfirmCheckout(true)}
           loading={loading === "checkout"}
           unit="PM"
-          buttonText="Check Out"
+          buttonText={
+            todaysShift?.endedAt ||
+            new Date(todaysShift?.endTime).getTime() < Date.now()
+              ? "Checked Out"
+              : "Check Out"
+          }
           buttonClassNames="bg-[#F5542C] text-white"
           disabled={
             hasStartedShift === false || !todaysShift || todaysShift.endedAt
@@ -98,19 +124,18 @@ function TrackerContent({ todaysShift }) {
         />
         <TrackerCard
           title="Break Time"
-          time={msToHourMinSecond(
-            todaysShift?.allottedBreakTimeInMilliseconds -
-              (todaysShift?.breakDurationUsedInMilliseconds || 0) || 0
-          )}
+          time={
+            todaysShift
+              ? hasStartedBreak ||
+                loading === "start-break" ||
+                loading === "pause-break"
+                ? `${breakMinutesLeft}:${breakSecondsLeft}`
+                : breakTimeLeft
+              : "--:--"
+          }
           onButtonClick={handleBreakClick}
           unit="MIN"
-          buttonText={`${
-            hasStartedBreak
-              ? hasUsedUpAllottedBreaktime
-                ? "Break Over"
-                : "Pause break"
-              : "Start break"
-          }`}
+          buttonText={breakButtonText}
           buttonClassNames="bg-[#FFCD66] text-[#354258] disabled:opacity-60 disabled:cursor-not-allowed rounded w-full px-3  min-h-[46px] flex justify-center items-center gap-[4px]"
           disabled={
             hasUsedUpAllottedBreaktime ||
@@ -216,10 +241,7 @@ function CheckoutConfirmationModal({ handleHide, handleCheckout, show }) {
           Are you sure you want to check out?
         </h3>
         <div className="flex justify-center items-center gap-4">
-          <button
-            onClick={handleHide}
-            className="text-info-600 text-4"
-          >
+          <button onClick={handleHide} className="text-info-600 text-4">
             Cancel
           </button>{" "}
           <button
