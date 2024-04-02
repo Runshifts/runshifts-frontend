@@ -28,6 +28,7 @@ export default function StepOne({ isActive, onSubmit = () => {} }) {
               required: true,
               type: "text",
               placeholder: "Business name",
+              min: 4
             }}
           />
         </div>

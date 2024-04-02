@@ -51,7 +51,8 @@ function Verify() {
       if (res.statusCode === 200) {
         localStorage.setItem("token", res.token)
         localStorage.setItem("user", JSON.stringify(res.user))
-        router.push("/welcome")
+        if(res.user.type === "employee") router.push("/welcome")
+        else router.push("/new-organization")
       } else toast.error(res.message || "Unable to verify your email")
       setLoading(false)
     },
