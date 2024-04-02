@@ -1,40 +1,46 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect  } from "react";
 import { FaEye, FaEyeSlash, FaRegEyeSlash } from "react-icons/fa";
-import profileAvatar from "../../_components/navbar/dp.png";
-import Uploadimage from "./Uploadimage";
+// import profileAvatar from "../../_components/navbar/dp.png";
+// import Uploadimage from "./Uploadimage";
 import { PiWarningCircleFill } from "react-icons/pi";
 import useAxios from "../../_hooks/useAxios";
+import { UserContext } from "../../_providers/UserProvider";
+import { OrganizationContext } from "../../_providers/OrganizationProvider";
 
 const UserProfile = () => {
-  const fetchData = useAxios(); // Initialize the hook
+  const fetchData = useAxios();
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    homeAddress: "", 
-    password: "",
-    confirmPassword: "",
+  const { user } = useContext(UserContext);
+  const { organization } = useContext(OrganizationContext);
+
+  const [formData, setFormData] = useState(() => {
+    const savedFormData = localStorage.getItem('formData');
+    return savedFormData ? JSON.parse(savedFormData) : {
+      phoneNumber: '',
+      homeAddress: '',
+      image: '',
+    };
   });
 
   const [isSecurityEnabled, setIsSecurityEnabled] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [shownewPassword, setShownewPassword] = useState(false);
+
 
   const handleToggle = () => {
     setIsSecurityEnabled((prev) => !prev);
   };
 
-  const handleTogglePassword = () => {
-    setShowPassword((prev) => !prev);
+  const handleOldPasswordChange = () => {
+    setShowOldPassword((prev) => !prev);
   };
 
-  const handleToggleConfirmPassword = () => {
-    setShowConfirmPassword((prev) => !prev);
+  const handlenewPasswordChange = () => {
+    setShownewPassword((prev) => !prev);
   };
 
   const handleInputChange = (event) => {
@@ -42,268 +48,337 @@ const UserProfile = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file)
+    console.log("my file", file);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('formData', JSON.stringify(formData));
+  }, [formData]);
+
+
+  const handleForm1Submit = async (event) => {
+    event.preventDefault();
 
     try {
-      // Example usage of the useAxios hook to post form data to an API endpoint
-      const response = await fetchData("/api/updateProfile", "post", formData);
+      const formDataWithImage = new FormData();
+      formDataWithImage.append("phoneNumber", formData.phoneNumber);
+      formDataWithImage.append("homeAddress", formData.homeAddress);
+      formDataWithImage.append("image", selectedFile);
+
+      const response = await fetchData(
+        `/users/${organization?._id}/${user?._id}`,
+        "put",
+        formDataWithImage
+      );
       console.log("Form submitted successfully:", response);
-      // Reset form fields after successful submission
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
+
+      // setFormData({
+      //   phoneNumber: "",
+      //   homeAddress: "",
+      //   firstName: "",
+      //   lastName: "",
+      //   email: "",
+      // });
+      // setSelectedFile(null);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
+  const handleForm2Submit = async (event) => {
+    event.preventDefault();
+
+    const response = await fetchData(
+      `/users/${organization?._id}/${user?._id}`,
+      "put",
+      formDataWithImage
+    );
+    if (response.statusCode === 200) {
+      updateUser(response.user)
+    }
+  }
+
   return (
-    <div className="max-w-lg bg-white p-8 ">
-      <h1 className="text-[#283142] mt-4 mb-8 text-2xl not-italic font-medium leading-7">
-        User profile
-      </h1>
+    <UserContext.Provider value={{ user }}>
+      <OrganizationContext.Provider
+        value={{
+          organization,
+        }}
+      >
+        {" "}
+        <div className="max-w-lg bg-white p-8 ">
+          <h1 className="text-[#283142] mt-4 mb-8 text-2xl not-italic font-medium leading-7">
+            User profile
+          </h1>
 
-      <Uploadimage />
-
-      <p className="text-sm font-semibold leading-5 text-left text-[#42526E] py-2">
-        Personal Information
-      </p>
-
-      <hr />
-
-      <form action="" onSubmit={handleFormSubmit}>
-        <div className="mb-4 pt-2 flex space-x-2">
-          <div className="w-1/2">
-            <label
-              htmlFor="firstName"
-              className="text-xs not-italic font-thin my-2 leading-4"
-            >
-              First Name
-            </label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              id="firstName"
-              className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-              placeholder="Ariana"
-            />
-          </div>
-          <div className="w-1/2">
-            <label
-              htmlFor="lastName"
-              className="text-xs not-italic font-thin my-2 leading-4"
-            >
-              Last Name
-            </label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              id="lastName"
-              className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-              placeholder="Woods"
-            />
-          </div>
-        </div>
-        <div className="mb-4 flex space-x-2">
-          <div className="w-1/2">
-            <label
-              htmlFor="email"
-              className="text-xs not-italic font-thin my-2 leading-4"
-            >
-              Email Address
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              id="email"
-              className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-              placeholder="Arianawoods@example.com"
-            />
-          </div>
-          <div className="w-1/2">
-            <label
-              htmlFor="phoneNumber"
-              className="text-xs not-italic font-thin my-2 leading-4"
-            >
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              id="phoneNumber"
-              className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-              placeholder="+123-456-7890"
-            />
-          </div>
-        </div>
-
-        <div className="mb-4 flex space-x-2">
-          <div className="w-1/4">
-            <label
-              htmlFor="hourRate"
-              className="text-xs not-italic font-thin my-2 leading-4"
-            >
-              HOurly rate
-            </label>
-            <input
-              type="text"
-              id="hourRate"
-              onChange={handleInputChange}
-              className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-              placeholder="£17"
-            />
-          </div>
-
-          <div className="w-3/4">
-            <label
-              htmlFor="lastName"
-              className="text-xs not-italic font-thin my-2 leading-4"
-            >
-              Home Address
-            </label>
-            <div className="relative flex justify-center items-center">
-              <input
-                type="text"
-                name="homeAddress"
-                value={formData.homeAddress}
-                onChange={handleInputChange}
-                id="homeAddress"
-                className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                placeholder="123 Main St, City"
+          {/* <Uploadimage /> */}
+          {selectedFile && (
+            <div className="mb-2 rounded w-56">
+              <Image
+                width={89}
+                height={89}
+                src={URL.createObjectURL(selectedFile)}
+                alt="Selected photo"
+                className="max-w-full max-h-40 mb-4 rounded-full"
+                loading="lazy"
               />
-              <div className="pt-2">
-                <HomeSvg />
-              </div>
+            </div>
+          )}
+          <div className="">
+            <div className="mb-2 rounded max-w-md">
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="mb-4"
+              />
             </div>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          className="bg-[#7ED957] text-white rounded-md mt-3 px-4 py-1"
-        >
-          Update Profile
-        </button>
+          <p className="text-sm font-semibold leading-5 text-left text-[#42526E] py-2">
+            Personal Information
+          </p>
 
-        <div className="flex justify-between items-center my-2">
-          <div>
-            <p className="text-sm font-semibold leading-5 text-left text-[#42526E] py-2">
-              Security
-            </p>
-          </div>
-          <div>
-            <label className="relative inline-flex items-end me-5 cursor-pointer">
-              <input
-                type="checkbox"
-                value={isSecurityEnabled}
-                onClick={handleToggle}
-                className="sr-only peer"
-                defaultChecked
-              />
-              <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-            </label>
-          </div>
-        </div>
-        <hr />
+          <hr />
 
-        <p className="text-sm font-semibold leading-5 text-left text-[#42526E] pt-2">
-          Change Password
-        </p>
-
-        <div className="mb-4 flex space-x-2">
-          <div className="mb-4">
-            <label className="text-xs not-italic font-thin my-2 leading-4">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={formData.confirmPassword}
-                name="password"
-                onChange={handleInputChange}
-                className="w-full pr-4 py-2 border-2 border-[#DFE1E6] rounded focus:outline-none focus:shadow-outline"
-              />
-              <div
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={handleTogglePassword}
-              >
-                {showPassword ? <EyeSVG /> : <FaEye />}
+          <form action="" onSubmit={handleForm1Submit}>
+            <div className="mb-4 pt-2 flex space-x-2">
+              <div className="w-1/2">
+                <label
+                  htmlFor="firstName"
+                  className="text-xs not-italic font-thin my-2 leading-4"
+                >
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  id="firstName"
+                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
+                  placeholder="Ariana"
+                />
+              </div>
+              <div className="w-1/2">
+                <label
+                  htmlFor="lastName"
+                  className="text-xs not-italic font-thin my-2 leading-4"
+                >
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  id="lastName"
+                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
+                  placeholder="Woods"
+                />
               </div>
             </div>
-          </div>
-          <div className="mb-4">
-            <label className="text-xs not-italic font-thin my-2 leading-4">
-              Confirm Password
-            </label>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                value={formData.confirmPassword}
-                name="confirmPassword"
-                onChange={handleInputChange}
-                className="w-full pr-4 py-2 border-2 border-[#DFE1E6] rounded focus:outline-none focus:shadow-outline"
-              />
-              <div
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={handleToggleConfirmPassword}
-              >
-                {showConfirmPassword ? <EyeSVG /> : <FaEye />}
+            <div className="mb-4 flex space-x-2">
+              <div className="w-1/2">
+                <label
+                  htmlFor="email"
+                  className="text-xs not-italic font-thin my-2 leading-4"
+                >
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  id="email"
+                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
+                  placeholder="Arianawoods@example.com"
+                />
+              </div>
+              <div className="w-1/2">
+                <label
+                  htmlFor="phoneNumber"
+                  className="text-xs not-italic font-thin my-2 leading-4"
+                >
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleInputChange}
+                  id="phoneNumber"
+                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
+                  placeholder="+123-456-7890"
+                />
               </div>
             </div>
-          </div>
-        </div>
 
-        <button className="bg-[#7ED957] text-white rounded-md px-4 py-1">
-          Change Password
-        </button>
+            <div className="mb-4 flex space-x-2">
+              <div className="w-1/4">
+                <label
+                  htmlFor="hourRate"
+                  className="text-xs not-italic font-thin my-2 leading-4"
+                >
+                  Hourly rate
+                </label>
+                <input
+                  type="text"
+                  id="hourRate"
+                  onChange={handleInputChange}
+                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
+                  placeholder="£17"
+                />
+              </div>
 
-        <div className="flex justify-between items-center mt-2">
-          <div>
-            <p className="text-base font-normal leading-5 text-left text-[#1D2433] ">
-              Enable 2fa
-            </p>
-          </div>
-          <div>
-            <label className="relative inline-flex items-end me-5 cursor-pointer">
-              <input
-                type="checkbox"
-                value=""
-                className="sr-only peer"
-                defaultChecked
-              />
-              <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-            </label>
-          </div>
-        </div>
+              <div className="w-3/4">
+                <label
+                  htmlFor="lastName"
+                  className="text-xs not-italic font-thin my-2 leading-4"
+                >
+                  Home Address
+                </label>
+                <div className="relative flex justify-center items-center">
+                  <input
+                    type="text"
+                    name="homeAddress"
+                    value={formData.homeAddress}
+                    onChange={handleInputChange}
+                    id="homeAddress"
+                    className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
+                    placeholder="123 Main St, City"
+                  />
+                  <div className="pt-2">
+                    <HomeSvg />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-        <div className="flex bg-[#DEEBFF] p-4 items-start justify-center">
-          <div className="text-[#0747A6] mr-5">
-            <PiWarningCircleFill />
-          </div>
-          <div>
-            <p className="text-base not-italic font-thin leading-5">
-              Google Authenticator
+            <button
+              type="submit"
+              className="bg-[#7ED957] text-white rounded-md mt-3 px-4 py-1"
+            >
+              Update Profile
+            </button>
+
+            </form>
+
+            <form onSubmit={handleForm2Submit}>
+
+            <div className="flex justify-between items-center my-2">
+              <div>
+                <p className="text-sm font-semibold leading-5 text-left text-[#42526E] py-2">
+                  Security
+                </p>
+              </div>
+              <div>
+                <label className="relative inline-flex items-end me-5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    value={isSecurityEnabled}
+                    onClick={handleToggle}
+                    className="sr-only peer"
+                    defaultChecked
+                  />
+                  <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                </label>
+              </div>
+            </div>
+            <hr />
+
+            <p className="text-sm font-semibold leading-5 text-left text-[#42526E] pt-2">
+              Change Password
             </p>
-            <p className="text-[#172B4D] text-sm not-italic font-normal leading-5">
-              You have linked your account to Google Authenticator.
-            </p>
-          </div>
+
+            <div className="mb-4 flex space-x-2">
+              <div className="mb-4">
+                <label className="text-xs not-italic font-thin my-2 leading-4">
+                  Old Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showOldPassword ? "text" : "password"}
+                    value={formData.oldPassword}
+                    name="oldPassword"
+                    onChange={handleInputChange}
+                    className="w-full pr-4 py-2 border-2 border-[#DFE1E6] rounded focus:outline-none focus:shadow-outline"
+                  />
+                  <div
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                    onClick={handleOldPasswordChange}
+                  >
+                    {showOldPassword ? <EyeSVG /> : <FaEye />}
+                  </div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <label className="text-xs not-italic font-thin my-2 leading-4">
+                  New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={shownewPassword ? "text" : "password"}
+                    value={formData.newPassword}
+                    name="newPassword"
+                    onChange={handleInputChange}
+                    className="w-full pr-4 py-2 border-2 border-[#DFE1E6] rounded focus:outline-none focus:shadow-outline"
+                  />
+                  <div
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                    onClick={handlenewPasswordChange}
+                  >
+                    {shownewPassword ? <EyeSVG /> : <FaEye />}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" className="bg-[#7ED957] text-white rounded-md px-4 py-1">
+              Change Password
+            </button>
+
+            <div className="flex justify-between items-center mt-2">
+              <div>
+                <p className="text-base font-normal leading-5 text-left text-[#1D2433] ">
+                  Enable 2fa
+                </p>
+              </div>
+              <div>
+                <label className="relative inline-flex items-end me-5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    value=""
+                    className="sr-only peer"
+                    defaultChecked
+                  />
+                  <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex bg-[#DEEBFF] p-4 items-start justify-center">
+              <div className="text-[#0747A6] mr-5">
+                <PiWarningCircleFill />
+              </div>
+              <div>
+                <p className="text-base not-italic font-thin leading-5">
+                  Google Authenticator
+                </p>
+                <p className="text-[#172B4D] text-sm not-italic font-normal leading-5">
+                  You have linked your account to Google Authenticator.
+                </p>
+              </div>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
+      </OrganizationContext.Provider>
+    </UserContext.Provider>
   );
 };
 

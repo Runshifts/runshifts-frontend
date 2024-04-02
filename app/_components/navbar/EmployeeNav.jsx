@@ -1,16 +1,20 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import NavIcon from "./Nav-icon.svg";
 import NavLogo from "./runshifts-logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import EmpDropdown from "./EmpDropdown";
+import  { UserContext } from "../../_providers/UserProvider"
 
 function Navbar({ onToggle }) {
-  
- 
+  const { user, updateUser } = useContext(UserContext)
+
+  console.log(user)
+
   return (
     <>
+        <UserContext.Provider value={{ user, updateUser }}>
       <section>
         <div className="bg-white h-20 px-4 min-w-screen flex justify-between items-center border-b-2">
           <div className="flex items-center justify-around">
@@ -19,7 +23,7 @@ function Navbar({ onToggle }) {
                 height={50}
                 width={50}
                 onClick={onToggle}
-                src={NavIcon}
+                src={user?.profileImage?.secure_url || NavIcon}
                 alt="icon"
                 className="toggle-btn"
               />
@@ -56,11 +60,11 @@ function Navbar({ onToggle }) {
               <HeadphoneSvg />
             </div>
 
-          
             <EmpDropdown  />
           </div>
         </div>
       </section>
+      </UserContext.Provider >
     </>
   );
 }

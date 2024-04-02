@@ -1,26 +1,31 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import profileAvatar from "../navbar/dp.png";
+import  { UserContext } from "../../_providers/UserProvider"
 
-const Dropdown = () => {
+const Dropdown = ({ selectedFile }) => {
+  const { user, updateUser } = useContext(UserContext)  
+
+  console.log('the image ', selectedFile)
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
+
     setIsOpen(!isOpen);
   };
 
+
   return (
+    <UserContext.Provider value={{ user, updateUser }}>
+
     <div className="relative inline-block text-left">
-      <div className="cursor-pointer">
-        <Image
-          height={50}
-          width={50}
-          onClick={toggleDropdown}
-          src={profileAvatar}
-          alt="icon"
-          className="toggle-btn"
-        />
+         <div className="cursor-pointer" onClick={toggleDropdown}>
+        {selectedFile ? (
+          <Image src={URL.createObjectURL(selectedFile)} alt="Selected" className="toggle-btn bg-red-400" />
+        ) : (
+          <Image src={profileAvatar} height={50} width={50} alt="Default" className="toggle-btn rounded-full bg-red-400" />
+        )}
       </div>
 
       {/* Dropdown menu, show/hide based on menu state */}
@@ -50,7 +55,10 @@ const Dropdown = () => {
         </div>
       )}
     </div>
+    </UserContext.Provider>
   );
 };
 
 export default Dropdown;
+
+
