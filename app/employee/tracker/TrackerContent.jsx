@@ -6,7 +6,10 @@ import { checkIsValidDateString, msToHourMinSecond } from "../../_utils"
 import toast from "react-hot-toast"
 import Modal from "../../_components/AppComps/Modal"
 import { useTimeCountdown } from "../../_hooks/useCountDown"
+import SendNoteAfterShiftForm from "./SendNoteAfterShiftForm"
+
 function TrackerContent({ todaysShift }) {
+  const [showSendNoteForm, setShowSendNoteForm] = useState(false)
   const [showConfirmCheckout, setShowConfirmCheckout] = useState(false)
   const { checkin, loading, checkout, startOrResumeBreak, pauseOrEndBreak } =
     useContext(EmployeeTrackerContext)
@@ -128,6 +131,7 @@ function TrackerContent({ todaysShift }) {
           handleCheckout={() => {
             checkout()
             setShowConfirmCheckout(false)
+            setShowSendNoteForm(true)
           }}
         />
         <TrackerCard
@@ -174,6 +178,10 @@ function TrackerContent({ todaysShift }) {
           />
         </div>
       </div>
+      <SendNoteAfterShiftForm
+        show={showSendNoteForm}
+        handleHide={() => setShowSendNoteForm(false)}
+      />
     </div>
   )
 }

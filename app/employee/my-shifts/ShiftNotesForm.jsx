@@ -1,13 +1,14 @@
 import { useCallback, useMemo, useState } from "react"
 import { SubmitButton } from "../../_components/Auth/Inputs"
 
-export default function ShiftNotesForm({ shift }) {
+export default function ShiftNotesForm({ shift, onSubmit = () => {} }) {
   const [note, setNote] = useState("")
   const [severity, setSeverity] = useState("")
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault()
-  }, [])
+    typeof onSubmit === "function" && onSubmit()
+  }, [onSubmit])
 
   return (
     <>
