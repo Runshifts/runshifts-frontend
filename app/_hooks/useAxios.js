@@ -18,7 +18,7 @@ export default function useAxios() {
         })
         return response.data
       } catch (error) {
-        console.log(error)
+        console.log("error", error?.response?.data)
         return error.response.data
       }
     },
