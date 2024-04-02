@@ -18,7 +18,6 @@ const Dropdown = ({ selectedFile }) => {
 
   return (
     <UserContext.Provider value={{ user, updateUser }}>
-
     <div className="relative inline-block text-left">
          <div className="cursor-pointer" onClick={toggleDropdown}>
         {selectedFile ? (

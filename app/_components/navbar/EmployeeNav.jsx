@@ -25,7 +25,7 @@ function Navbar({ onToggle }) {
                 onClick={onToggle}
                 src={user?.profileImage?.secure_url || NavIcon}
                 alt="icon"
-                className="toggle-btn"
+                className="toggle-btn bg-red-700"
               />
             </div>
             <div className="">
