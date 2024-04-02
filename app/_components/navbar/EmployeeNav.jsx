@@ -1,20 +1,14 @@
-"use client";
-import React, { useContext } from "react";
-import NavIcon from "./Nav-icon.svg";
-import NavLogo from "./runshifts-logo.svg";
-import Image from "next/image";
-import Link from "next/link";
-import EmpDropdown from "./EmpDropdown";
-import  { UserContext } from "../../_providers/UserProvider"
+"use client"
+import React, { useContext } from "react"
+import NavIcon from "./Nav-icon.svg"
+import NavLogo from "./runshifts-logo.svg"
+import Image from "next/image"
+import Link from "next/link"
+import EmpDropdown from "./EmpDropdown"
 
 function Navbar({ onToggle }) {
-  const { user, updateUser } = useContext(UserContext)
-
-  console.log(user)
-
   return (
     <>
-        <UserContext.Provider value={{ user, updateUser }}>
       <section>
         <div className="bg-white h-20 px-4 min-w-screen flex justify-between items-center border-b-2">
           <div className="flex items-center justify-around">
@@ -23,7 +17,7 @@ function Navbar({ onToggle }) {
                 height={50}
                 width={50}
                 onClick={onToggle}
-                src={user?.profileImage?.secure_url || NavIcon}
+                src={NavIcon}
                 alt="icon"
                 className="toggle-btn"
               />
@@ -60,16 +54,15 @@ function Navbar({ onToggle }) {
               <HeadphoneSvg />
             </div>
 
-            <EmpDropdown  />
+            <EmpDropdown />
           </div>
         </div>
       </section>
-      </UserContext.Provider >
     </>
-  );
+  )
 }
 
-export default Navbar;
+export default Navbar
 
 function SearchIcon() {
   return (
@@ -87,7 +80,7 @@ function SearchIcon() {
         fill="#6B778C"
       />
     </svg>
-  );
+  )
 }
 
 function BellSvg() {
@@ -108,7 +101,7 @@ function BellSvg() {
         fill="#42526E"
       />
     </svg>
-  );
+  )
 }
 
 function HeadphoneSvg() {
@@ -133,7 +126,7 @@ function HeadphoneSvg() {
         fill="#42526E"
       />
     </svg>
-  );
+  )
 }
 
 function SettingsSvg() {
@@ -150,5 +143,5 @@ function SettingsSvg() {
         fill="#42526E"
       />
     </svg>
-  );
+  )
 }

@@ -22,7 +22,7 @@ const Dropdown = () => {
           height={50}
           width={50}
           alt=""
-          className="w-8 h-8 rounded-full bg-red-400"
+          className="w-8 h-8 rounded-full"
         />
       </div>
 
