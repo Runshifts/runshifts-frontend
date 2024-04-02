@@ -3,6 +3,7 @@ import EmployeeDashboardProvider from "../_providers/Employee/EmployeeDashboardC
 import OrganizationProvider from "../_providers/OrganizationProvider"
 import LocationsProvider from "../_providers/LocationsProvider"
 import ShiftAndOvertimeRequestsProvider from "../_providers/Employer/ShiftAndOvertimeRequestsProvider"
+import EmployeeHooksProvider from "../_providers/Employee/HooksProvider"
 
 export const metadata = {
   title: "Runshifts - Employee",
@@ -18,7 +19,9 @@ export default function RootLayout({ children }) {
             <LocationsProvider>
               <ShiftAndOvertimeRequestsProvider>
                 <EmployeeDashboardProvider>
-                  <EmployeeGlobalLayout>{children}</EmployeeGlobalLayout>
+                  <EmployeeHooksProvider>
+                    <EmployeeGlobalLayout>{children}</EmployeeGlobalLayout>
+                  </EmployeeHooksProvider>
                 </EmployeeDashboardProvider>
               </ShiftAndOvertimeRequestsProvider>
             </LocationsProvider>

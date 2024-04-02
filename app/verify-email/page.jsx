@@ -41,7 +41,7 @@ function Verify() {
   const handleSubmit = useCallback(
     async (e, codeList = []) => {
       e.preventDefault()
-      if(loading) return 
+      if (loading) return
       setLoading(true)
       const URL = "/users/verify-email"
       const res = await fetchData(URL, "post", {
@@ -51,7 +51,7 @@ function Verify() {
       if (res.statusCode === 200) {
         localStorage.setItem("token", res.token)
         localStorage.setItem("user", JSON.stringify(res.user))
-        if(res.user.type === "employee") router.push("/welcome")
+        if (res.user.type === "employee") router.push("/welcome")
         else router.push("/new-organization")
       } else toast.error(res.message || "Unable to verify your email")
       setLoading(false)
@@ -62,10 +62,9 @@ function Verify() {
   return (
     <>
       <Suspense>
-        {accountType === "employer" && (
+        {accountType === "employee" ? (
           <EmployerVerification handleSubmit={handleSubmit} loading={loading} />
-        )}
-        {accountType === "employee" && (
+        ) : (
           <EmployeeVerification handleSubmit={handleSubmit} loading={loading} />
         )}
       </Suspense>
