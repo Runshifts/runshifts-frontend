@@ -8,11 +8,12 @@ import { PiWarningCircleFill } from "react-icons/pi";
 import useAxios from "../../_hooks/useAxios";
 import { UserContext } from "../../_providers/UserProvider";
 import { OrganizationContext } from "../../_providers/OrganizationProvider";
+import toast from "react-hot-toast";
 
 const UserProfile = () => {
   const fetchData = useAxios();
 
-  const { user } = useContext(UserContext);
+  const { user, updateUser } = useContext(UserContext);
   const { organization } = useContext(OrganizationContext);
 
   const [formData, setFormData] = useState(() => {
@@ -61,31 +62,22 @@ const UserProfile = () => {
 
   const handleForm1Submit = async (event) => {
     event.preventDefault();
+   const formDataWithImage = new FormData()
+   formDataWithImage.append("phoneNumber", formData.phoneNumber)
+   formDataWithImage.append("homeAddress", formData.homeAddress)
+   formDataWithImage.append("profileImage", selectedFile)
 
-    try {
-      const formDataWithImage = new FormData();
-      formDataWithImage.append("phoneNumber", formData.phoneNumber);
-      formDataWithImage.append("homeAddress", formData.homeAddress);
-      formDataWithImage.append("image", selectedFile);
-
-      const response = await fetchData(
-        `/users/${organization?._id}/${user?._id}`,
-        "put",
-        formDataWithImage
-      );
-      console.log("Form submitted successfully:", response);
-
-      // setFormData({
-      //   phoneNumber: "",
-      //   homeAddress: "",
-      //   firstName: "",
-      //   lastName: "",
-      //   email: "",
-      // });
-      // setSelectedFile(null);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
+   const response = await fetchData(
+     `/users/${organization?._id}/${user?._id}`,
+     "put",
+     formDataWithImage
+   )
+   if (response.statusCode === 200) {
+     updateUser(response.user)
+     toast.success(response.message || "Successfully updated profile")
+   } else {
+     toast.error(response.message || "Something went wrong")
+   }
   };
 
   const handleForm2Submit = async (event) => {
