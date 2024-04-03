@@ -18,7 +18,7 @@ export default function useAxios() {
         })
         return response.data
       } catch (error) {
-        console.log("error", error?.response?.data)
+        console.log("error", process.env.NEXT_PUBLIC_NODE_ENV === "dev" && error?.response?.data)
         return error.response.data
       }
     },
