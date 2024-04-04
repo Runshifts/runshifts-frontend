@@ -1,12 +1,61 @@
 "use client"
-import React, { useCallback, useContext, useMemo, useState } from "react"
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 import { EmployeeTrackerContext } from "../../_providers/Employee/TrackerProvider"
 import Spinner from "../../_assets/svgs/Spinner"
 import { checkIsValidDateString, msToHourMinSecond } from "../../_utils"
 import toast from "react-hot-toast"
 import Modal from "../../_components/AppComps/Modal"
-import { useTimeCountdown } from "../../_hooks/useCountDown"
 import SendNoteAfterShiftForm from "./SendNoteAfterShiftForm"
+
+function useGetShiftBreaktimeCountdown(shift) {
+  const [time, setTime] = useState(
+    shift?.allottedBreakTimeInMilliseconds -
+      (shift?.breakStartedAt
+        ? Date.now() -
+          new Date(shift?.breakStartedAt).getTime() +
+          shift?.breakDurationUsedInMilliseconds
+        : shift?.breakDurationUsedInMilliseconds) || 0
+  )
+  const { minutes: breakMinutesLeft, seconds: breakSecondsLeft } =
+    useMemo(() => {
+      const days = Math.floor(time / (1000 * 60 * 60 * 24))
+      const hours = Math.floor(
+        (time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      )
+      const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((time % (1000 * 60)) / 1000)
+
+      return {
+        days,
+        hours,
+        minutes,
+        seconds,
+      }
+    }, [time])
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTime(
+        shift?.allottedBreakTimeInMilliseconds -
+          (shift?.breakStartedAt
+            ? Date.now() -
+              new Date(shift?.breakStartedAt).getTime() +
+              shift?.breakDurationUsedInMilliseconds
+            : shift?.breakDurationUsedInMilliseconds) || 0
+      )
+    }, 1000)
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [shift])
+  return { breakMinutesLeft, breakSecondsLeft }
+}
 
 function TrackerContent({ todaysShift }) {
   const [showSendNoteForm, setShowSendNoteForm] = useState(false)
@@ -47,11 +96,8 @@ function TrackerContent({ todaysShift }) {
     [todaysShift]
   )
 
-  const { minutes: breakMinutesLeft, seconds: breakSecondsLeft } =
-    useTimeCountdown(
-      todaysShift?.allottedBreakTimeInMilliseconds -
-        (todaysShift?.breakDurationUsedInMilliseconds || 0) || 0
-    )
+  const { breakMinutesLeft, breakSecondsLeft } =
+    useGetShiftBreaktimeCountdown(todaysShift)
 
   const handleBreakClick = useCallback(() => {
     if (hasUsedUpAllottedBreaktime)
@@ -181,6 +227,7 @@ function TrackerContent({ todaysShift }) {
       <SendNoteAfterShiftForm
         show={showSendNoteForm}
         handleHide={() => setShowSendNoteForm(false)}
+        shift={todaysShift}
       />
     </div>
   )

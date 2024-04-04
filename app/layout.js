@@ -26,7 +26,6 @@ export default function RootLayout({ children }) {
           </LoadingProvider>
         </GoogleOAuthProvider>
         <Toaster
-          toastOptions={{ duration: "5000" }}
           position="top-center"
           reverseOrder={false}
         />

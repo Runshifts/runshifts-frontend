@@ -30,12 +30,13 @@ export default function ShiftNotesForm({ shiftId, onSubmit = () => {} }) {
         updateAllNotes([res.note])
         setNote("")
         setSeverity("normal")
+        toast.success(res.message)
       } else {
         toast.error(res.message || "Something went wrong")
       }
       setSubmitting(false)
     },
-    [onSubmit, fetchData, organization, shiftId, updateAllNotes]
+    [onSubmit, fetchData, organization, shiftId, updateAllNotes, note, severity]
   )
 
   return (
