@@ -2,7 +2,7 @@ import Image from "next/image"
 import placeholderImage from "../../_assets/img/user.png"
 export default function UserHeader({ user = {} }) {
   return (
-    <header className="flex gap-2 bg-primary-100 px-[8px] py-[4px] items-center">
+    <header className="flex gap-2 bg-primary-100 px-[8px] py-[4px] items-center rounded-[8px]">
       <Image
         width={50}
         height={50}

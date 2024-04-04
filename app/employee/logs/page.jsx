@@ -3,7 +3,6 @@ import React, { useContext, useEffect } from "react"
 import LogExport from "../../_components/AppComps/LogExport"
 import LogsFilterGroup from "../../_components/EmployeeComps/LogsFilterGroup"
 import LogsContent from "./LogsContent"
-import ShareModal from "./ShareModal"
 import { NotesContext } from "../../_providers/NotesProvider"
 
 function Logs() {
@@ -14,13 +13,15 @@ function Logs() {
   }, [fetchNotes])
 
   return (
-    <section className="mx-auto p-3 h-screen">
-      <div className="flex items-center justify-between py-3">
-        <h1 className="custom-h1">Logs</h1>
-        <LogExport />
-      </div>
+    <section className="flex flex-col gap-4 h-[80dvh] justify-start px-5 md:px-[40px]">
+      <div>
+        <div className="flex items-center justify-between py-3">
+          <h1 className="custom-h1">Logs</h1>
+          <LogExport />
+        </div>
 
-      <LogsFilterGroup />
+        <LogsFilterGroup />
+      </div>
 
       <div className="">
         <LogsContent />

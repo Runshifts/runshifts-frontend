@@ -79,7 +79,7 @@ const NoteLikeSection = ({ note }) => {
         user={isOwnNote ? { ...note.creator, fullName: "You" } : note.creator}
       />
       <SeverityPill severity={note.severity}>{note.severity}</SeverityPill>
-      <p className="text-gray-700 text-[12px] min-h-8">{note.details}</p>
+      <p className="text-gray-700 text-[12px]">{note.details}</p>
       <p className="text-gray-700 text-[12px]">
         {timeAgo(new Date(note.createdAt))}
       </p>

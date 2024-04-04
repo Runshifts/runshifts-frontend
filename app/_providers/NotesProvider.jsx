@@ -1,9 +1,10 @@
 "use client"
 
-import { createContext, useCallback, useState } from "react"
+import { createContext, useCallback, useMemo, useState } from "react"
 import useAxios from "../_hooks/useAxios"
 import NOTES_URLS from "../_urls/notesURLS"
 import { mergeArrays } from "../_utils"
+import { groupNotesByShift } from "../_utils/notes"
 
 export const NotesContext = createContext({
   allNotes: [],
@@ -19,6 +20,10 @@ export default function NotesProvider({ children, organizationId }) {
   const [loadingNotes, setLoadingNotes] = useState(true)
   const [hasFetchedNotes, setHasFetchedNotes] = useState(false)
   const [allNotes, setAllNotes] = useState([])
+
+  const notesGroupedByShifts = useMemo(() => {
+    return groupNotesByShift(allNotes)
+  }, [allNotes])
 
   const fetchNotes = useCallback(async () => {
     if (!organizationId || hasFetchedNotes) return
@@ -42,6 +47,7 @@ export default function NotesProvider({ children, organizationId }) {
         updateAllNotes,
         hasFetchedNotes,
         loadingNotes,
+        notesGroupedByShifts,
       }}
     >
       {children}

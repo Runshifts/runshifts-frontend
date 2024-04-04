@@ -192,11 +192,15 @@ export function timeAgo(date) {
   const days = Math.floor(hours / 24)
 
   if (days > 1) {
-    return date.toLocaleDateString("en-US", {
+    return `${date.toLocaleDateString("en-US", {
       day: "2-digit",
       month: "short",
       year: "numeric",
-    })
+    })} ${date.toLocaleTimeString("en-US", {
+      hour12: !false,
+      minute: "numeric",
+      hour: "numeric"
+    })}`
   } else if (days === 1) {
     return "Yesterday"
   } else if (hours > 0) {
