@@ -1,13 +1,17 @@
 "use client"
 
-import { createContext, useCallback, useEffect, useState } from "react"
+import { createContext, useCallback, useState } from "react"
 import useAxios from "../_hooks/useAxios"
 import NOTES_URLS from "../_urls/notesURLS"
+import { mergeArrays } from "../_utils"
 
 export const NotesContext = createContext({
   allNotes: [],
   notesGroupedByShifts: {},
   fetchNotes: () => {},
+  updateAllNotes: () => {},
+  hasFetchedNotes: false,
+  loadingNotes: false,
 })
 
 export default function NotesProvider({ children, organizationId }) {
@@ -20,7 +24,6 @@ export default function NotesProvider({ children, organizationId }) {
     if (!organizationId || hasFetchedNotes) return
     setLoadingNotes(true)
     const res = await fetchData(NOTES_URLS.getNotes(organizationId), "get")
-    console.log(res)
     if (res.statusCode === 200) {
       setAllNotes(res.results)
       setHasFetchedNotes(true)
@@ -28,8 +31,19 @@ export default function NotesProvider({ children, organizationId }) {
     setLoadingNotes(false)
   }, [organizationId, hasFetchedNotes])
 
+  const updateAllNotes = useCallback((notes = []) => {
+    setAllNotes((prev) => mergeArrays(notes, prev, "_id"))
+  }, [])
   return (
-    <NotesContext.Provider value={{ allNotes, fetchNotes }}>
+    <NotesContext.Provider
+      value={{
+        allNotes,
+        fetchNotes,
+        updateAllNotes,
+        hasFetchedNotes,
+        loadingNotes,
+      }}
+    >
       {children}
     </NotesContext.Provider>
   )
