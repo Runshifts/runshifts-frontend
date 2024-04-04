@@ -11,15 +11,15 @@ export default function UserHeader({ user = {} }) {
         className="rounded-full w-[50px] h-[50px] border border-white"
       />
       <div>
-        <h4 className="text-base text-[#1D2433]">
+        <h4 className="text-base text-[#1D2433] font-[500]">
           {user.fullName ||
             ((user.firstName || "") + " " + (user.lastName || "")).trim() ||
             user.email ||
-            "Test Heading"}
+            "--"}
         </h4>
         <p className="text-[#706763] leading-[20px] text-[12px] h-[40px] flex flex-col items-start">
-          <span>{user.role || "No Assigned role"}</span>
-          <span>{user.role || "No assigned location"}</span>
+          <span>{user.role || "--"}</span>
+          <span>{user.role || "--"}</span>
         </p>
       </div>
     </header>

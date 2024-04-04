@@ -58,9 +58,9 @@ export function ShiftNotes({
           ) : (
             sortedNotes.map((note) =>
               notesDisplayStyle === "chat" ? (
-                <ChatLikeNote note={note} key={note._id} />
+                <NoteLikeChat note={note} key={note._id} />
               ) : (
-                <SectionLikeNote note={note} key={note._id} />
+                <NoteLikeSection note={note} key={note._id} />
               )
             )
           )}
@@ -70,18 +70,24 @@ export function ShiftNotes({
   )
 }
 
-const SectionLikeNote = ({ note }) => {
+const NoteLikeSection = ({ note }) => {
+  const { user } = useContext(UserContext)
+  const isOwnNote = useMemo(() => note.creator?._id === user?._id, [note, user])
   return (
-    <div>
-      <UserHeader user={note.creator} />
-      {note.creator?.fullName}
-      {note.severity}
-      {note.details}mnbbm,
+    <div className="flex flex-col gap-4">
+      <UserHeader
+        user={isOwnNote ? { ...note.creator, fullName: "You" } : note.creator}
+      />
+      <SeverityPill severity={note.severity}>{note.severity}</SeverityPill>
+      <p className="text-gray-700 text-[12px] min-h-8">{note.details}</p>
+      <p className="text-gray-700 text-[12px]">
+        {timeAgo(new Date(note.createdAt))}
+      </p>
     </div>
   )
 }
 
-const ChatLikeNote = ({ note }) => {
+const NoteLikeChat = ({ note }) => {
   const { user } = useContext(UserContext)
   const isOwnNote = useMemo(() => note.creator?._id === user?._id, [note, user])
 
