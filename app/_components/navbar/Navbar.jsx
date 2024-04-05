@@ -4,11 +4,10 @@ import NavIcon from "./Nav-icon.svg";
 import NavLogo from "./runshifts-logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import DropDown from "../navbar/Dropdown";
+import EmpDropdown from "../navbar/EmpDropdown";
 
 function Navbar({ onToggle }) {
   
- 
   return (
     <>
       <section>
@@ -61,7 +60,7 @@ function Navbar({ onToggle }) {
                 <SettingsSvg />
               </Link>
             </div>
-            <DropDown  />
+            <EmpDropdown  />
           </div>
         </div>
       </section>

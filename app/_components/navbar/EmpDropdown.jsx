@@ -18,7 +18,7 @@ const Dropdown = () => {
     <div className="relative inline-block text-left">
       <div className="cursor-pointer" onClick={toggleDropdown}>
         <Image
-          src={user?.profileImage.secure_url || placeholderImage}
+          src={user?.profileImage?.secure_url || placeholderImage}
           height={50}
           width={50}
           alt=""
