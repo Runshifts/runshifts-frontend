@@ -45,6 +45,11 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
     } else {
       setInitRetries((prev) => prev + 1)
       if (res.statusCode === 404) router.push("/new-organization")
+      else if (res.statusCode === 403) {
+        router.push("/")
+        localStorage.clear()
+        router.refresh()
+      }
     }
   }, [router, isEmployee, user?.organization])
 

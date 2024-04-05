@@ -1,3 +1,9 @@
+export const checkIsValidDateString = (dateString) => {
+  return new Date(dateString).toString() === "Invalid Date"
+    ? false
+    : true
+}
+
 export const throwInvalidDateError = (date) => {
   if (
     !date ||

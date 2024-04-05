@@ -46,14 +46,14 @@ export default function StepOne({ isActive, onSubmit = () => {} }) {
       e.preventDefault()
       if (
         teamMembers.length === 0 &&
-        (!formData.fullName.trim() || !formData.email.trim())
+        (!fullName.trim() || !email.trim())
       )
         return toast.error("All fields are required", toastOptions)
       const body = {
         teamMembers: [...teamMembers, { email, fullName }],
       }
       const res = await fetchData("/users/employees/invite", "post", body)
-      if (response.data.statusCode === 200) onSubmit()
+      if (res.statusCode === 200) onSubmit()
       else toast.error(res.message || "Error sending invite", toastOptions)
     },
     [teamMembers, email, fullName, fetchData, onSubmit]

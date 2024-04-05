@@ -14,7 +14,6 @@ import Spinner from "../../../_assets/svgs/Spinner"
 import DropDown from "../../../_components/AppComps/Dropdown"
 import { Option } from "../../../_components/AppComps/Select"
 import { DepartmentsAndRolesContext } from "../../../_providers/DepartmentsAndRolesProvider"
-import useListenForMultipleShiftCreation from "../../../_hooks/useListenForShiftCreationResponse"
 import Modal from "../../../_components/AppComps/Modal"
 
 const getInitialState = () => ({
@@ -54,7 +53,6 @@ function NewShiftForm({
   currentWeek,
 }) {
   const fetchData = useAxios()
-  useListenForMultipleShiftCreation()
   const [loading, setLoading] = useState(false)
   const [shiftData, setShiftData] = useState(() => getInitialState())
   const { organization } = useContext(OrganizationContext)

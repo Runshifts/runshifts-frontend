@@ -17,20 +17,23 @@ export default function UserProvider({ children }) {
   const fetchData = useAxios()
   const [user, setUser] = useState(null)
 
+  const redirectAwayFromDashboard = useCallback(() => {
+    if (
+      pathname.includes("/employee") ||
+      pathname.includes("/organization") ||
+      pathname.includes("/admin")
+    )
+      router.push("/")
+  }, [router, pathname])
+
   const fetchUser = useCallback(async () => {
+    if (!localStorage.getItem("token")) redirectAwayFromDashboard
     const res = await fetchData("/users/me", "get")
     if (res.statusCode === 200) {
       setUser(res.user)
       localStorage.setItem("user", JSON.stringify(res.user))
-    } else {
-      if (
-        pathname.includes("/employee") ||
-        pathname.includes("/organization") ||
-        pathname.includes("/admin")
-      )
-        router.push("/")
-    }
-  }, [router, fetchData, pathname])
+    } else redirectAwayFromDashboard
+  }, [router, fetchData, pathname, redirectAwayFromDashboard])
 
   const updateUser = useCallback((value) => {
     setUser(value)
@@ -50,6 +53,7 @@ export default function UserProvider({ children }) {
       if (pathname === "/") redirectUser(user.type)
       if (
         !pathname.startsWith("/organization") &&
+        !pathname.startsWith("/new-organization") &&
         !pathname.startsWith("/employee") &&
         !pathname.startsWith("/admin") &&
         !pathname.startsWith("/knowledge")

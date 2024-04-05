@@ -37,7 +37,7 @@ function CheckInvite() {
       })
       if (res.statusCode === 200) {
         localStorage.setItem("token", res.token)
-        router.push("/organization")
+        router.push("/employee")
       } else {
         toast.error(
           res.message || "An error occurred while confirming your invitation",
