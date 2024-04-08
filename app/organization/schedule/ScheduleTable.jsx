@@ -105,7 +105,7 @@ const ScheduleTable = ({
 }
 
 function AssigneeRow({
-  assignee = {},
+  assignee,
   shiftsGroupedByDays = {},
   showAddShiftModal = () => {},
   duplicateShift = async () => {},
@@ -115,7 +115,7 @@ function AssigneeRow({
 }) {
   const assigneeModified = useMemo(
     () => ({
-      ...assignee,
+      ...(assignee || {}),
       color:
         assignee?.color ||
         `hsla(${randomIntFromInterval(1, 500)},${randomIntFromInterval(
@@ -157,6 +157,7 @@ function AssigneeRow({
         <AssigneePill
           assignee={assigneeModified}
           hoursScheduledForTheWeek={hoursScheduledForTheWeek}
+          isAssigned={assignee !== null}
         />
       </td>
       {daysOfTheWeek.map((day, listIdx, all) => (
@@ -171,6 +172,7 @@ function AssigneeRow({
               duplicateShift={duplicateShift}
               shifts={shiftsGroupedByDays[day] || []}
               isPastWeek={isPastWeek}
+              isAssigned={assignee !== null}
             />
           </Fragment>
           {shouldShowAddShiftButton(day) && (
@@ -194,6 +196,7 @@ function AssigneeShiftsMapping({
   duplicateShift = () => {},
   shifts = [],
   isPastWeek,
+  isAssigned,
 }) {
   return (
     <>
@@ -204,6 +207,7 @@ function AssigneeShiftsMapping({
           duplicateShift={duplicateShift}
           assignee={assignee}
           isPastWeek={isPastWeek}
+          isAssigned={isAssigned}
         />
       ))}
     </>
@@ -214,7 +218,7 @@ function Shift({
   assignee = {},
   duplicateShift = async () => {},
   shift = {},
-  isPastWeek,
+  isAssigned,
 }) {
   const [isDuplicating, setIsDuplicating] = useState(false)
   const isPendingShift = useMemo(
@@ -240,6 +244,7 @@ function Shift({
         style={{
           backgroundColor:
             isPendingShift || isDroppedOff ? "#D7D3D1" : assignee.color,
+          opacity: isAssigned ? "1" : ".6",
         }}
         className={`${
           isPendingShift ? "justify-evenly" : "justify-center"
@@ -257,8 +262,15 @@ function Shift({
             {formatHourAsAmOrPm(new Date(shift.startTime).getHours())}-
             {formatHourAsAmOrPm(new Date(shift.endTime).getHours())}
           </span>
-          {isPendingShift && <span className="font-400">Pending</span>}
-          {isDroppedOff && <span className="font-400">Dropped-off</span>}
+          {isPendingShift && shift.assignee !== null && (
+            <span className="font-400">Pending</span>
+          )}
+          {isDroppedOff && shift.assignee !== null && (
+            <span className="font-400">Dropped-off</span>
+          )}
+          {shift.assignee === null && (
+            <span className="font-400">Not assigned</span>
+          )}
         </p>
         {isPendingShift === false && isDroppedOff === false && (
           <button
@@ -275,7 +287,7 @@ function Shift({
   )
 }
 
-function AssigneePill({ assignee = {}, hoursScheduledForTheWeek }) {
+function AssigneePill({ assignee = {}, isAssigned, hoursScheduledForTheWeek }) {
   return (
     <div
       className="flex justify-start items-center gap-[4px] mx-auto w-full whitespace-nowrap max-w-[98px] text-ellipsis overflow-hidden py-[4px] px-[6px] text-info-600 rounded-[50px] bg-red-200"
@@ -291,10 +303,19 @@ function AssigneePill({ assignee = {}, hoursScheduledForTheWeek }) {
         alt="alt"
       />
       <div className="capitalize" title={assignee.firstName}>
-        <h6 className="font-bold text-[12px] ">{assignee.firstName}</h6>
-        <p className="text-[10px]">
-          {hoursScheduledForTheWeek} / ${assignee?.hourlyRate}
-        </p>
+        <h6 className="font-bold text-[12px] ">
+          {isAssigned &&
+            (assignee.firstName ||
+              assignee.lastName ||
+              assignee.fullName?.split(" ")?.[0] ||
+              assignee.email?.split("@"))}
+          {!isAssigned && <>Not assigned</>}
+        </h6>
+        {isAssigned && (
+          <p className="text-[10px]">
+            {hoursScheduledForTheWeek} / ${assignee?.hourlyRate}
+          </p>
+        )}
       </div>
     </div>
   )
