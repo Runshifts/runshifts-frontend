@@ -35,9 +35,9 @@ const ScheduleTable = ({
       <div className=" h-[50dvh] max-h-[600px] overflow-auto">
         <table className="min-w-full bg-[#EFEDED] rounded-lg min-h-full">
           <thead className="text-[#252525]">
-            <tr className="border-b border-b-800">
-              <th className="sticky z-[1] left-0 bg-[#EFEDED] py-2 px-4 border-b border-r border-gray-800">
-                <div className="relative  text-left whitespace-nowrap">
+            <tr className="border-b">
+              <th className="sticky z-[10] outline-solid outline outline-info-800 left-0 bg-[#EFEDED] py-2 px-4 border-b border-r border-gray-800">
+                <div className="relative text-left whitespace-nowrap">
                   <UsersFilter
                     updateCurrentValue={handleUserFilterSelect}
                     currentValue={selectedUser}
@@ -52,7 +52,7 @@ const ScheduleTable = ({
                   className={`${
                     idx === allDays.length - 1
                       ? ""
-                      : "border-r border-r-info-800"
+                      : "border-b border-r border-r-info-800 border-b-info-800"
                   }`}
                   date={date}
                 />
@@ -62,7 +62,7 @@ const ScheduleTable = ({
 
           <tbody>
             <tr>
-              <th className="h-[30px] whitespace-nowrap text-center w-max text-[#42526E] font-bold py-2 sticky z-[0] left-0 bg-[#EFEDED] border-b-solid border-b border-b-[#757575] border-t-none border-l-none border-r-solid border-r border-r-[#757575]">
+              <th className="h-[30px] whitespace-nowrap text-center w-max text-[#42526E] font-bold py-2 sticky z-[0]  outline-solid outline outline-info-800/40 left-0 bg-[#EFEDED] border-b-solid border-b border-b-[#757575] border-t-none border-l-none border-r-solid border-r border-r-[#757575]">
                 Open shifts
               </th>
               {allDays.map((_, index) => (
@@ -153,7 +153,7 @@ function AssigneeRow({
 
   return (
     <tr className="border-b border-b-gray-800 h-[52px] sticky z-1">
-      <td className="p-[10px] sticky left-0 bg-[#EFEDED] outline-solid outline outline-gray-800/50">
+      <td className="p-[10px] sticky z-[10] left-0 bg-[#EFEDED] outline-solid outline outline-info-800/50">
         <AssigneePill
           assignee={assigneeModified}
           hoursScheduledForTheWeek={hoursScheduledForTheWeek}
@@ -332,7 +332,9 @@ function DayOfTheWeekTableHead({ date = new Date(), className }) {
     "Sun",
   ]
   return (
-    <th className={`${className} text-info-600 p-4 min-w-[120px]`}>
+    <th
+      className={`${className} bg-[#EFEDED] sticky top-0 z-[10] text-info-600 p-4 min-w-[120px]`}
+    >
       <div className="flex flex-col items-center justify-center w- gap-[10px]">
         <span className="text-[14px]">{date.getDate()}</span>
         <span className="text-[24px] font-[600]">
