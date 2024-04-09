@@ -42,7 +42,7 @@ export default function ShiftNotesForm({ shiftId, onSubmit = () => {} }) {
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-        <fieldset className="flex gap-2 md:gap-4 items-center flex-wrap md:flex-nowrap">
+        <fieldset className="flex flex-wrap gap-2 md:gap-4 items-center flex-wrap lg:flex-nowrap">
           <NoteRadioInput
             severity="normal"
             value="normal"

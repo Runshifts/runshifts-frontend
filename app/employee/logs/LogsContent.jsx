@@ -1,6 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react"
-import { LogsData } from "../../_data/LogsData"
-import LogsContentSide from "../../organization/logs/LogsContentSide"
+import { useContext, useMemo, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import { HiOutlineTrash } from "react-icons/hi"
 import Image from "next/image"
@@ -9,6 +7,7 @@ import { ShiftNotes } from "../my-shifts/ShiftNotesSection"
 import { NotesContext } from "../../_providers/NotesProvider"
 import ShiftNotesForm, { SeverityPill } from "../my-shifts/ShiftNotesForm"
 import { timeAgo } from "../../_utils"
+import Modal from "../../_components/AppComps/Modal"
 
 export default function LogsContent({ notes = [] }) {
   const { notesGroupedByShifts } = useContext(NotesContext)
@@ -19,8 +18,8 @@ export default function LogsContent({ notes = [] }) {
   const [shiftInFocus, setShiftInFocus] = useState(null)
 
   return (
-    <section className="flex flex-col md:flex-row gap-[12px] max-h-[550px]">
-      <div className="grow md:w-[55%] max-h-[500px] overflow-auto gap-[10px]">
+    <section className="flex flex-col gap-2 md:flex-row gap-[12px]">
+      <div className="grow lg:w-[45%] max-h-[80dvh] flex flex-col gap-2 overflow-auto gap-[10px]">
         {latestNotesOfShifts.map((note) => (
           <NoteOverviewCard
             key={note._id}
@@ -29,8 +28,23 @@ export default function LogsContent({ notes = [] }) {
           />
         ))}
       </div>
+      <Modal
+        zIndex={2000}
+        open={shiftInFocus !== null}
+        onClose={() => setShiftInFocus(null)}
+        modalClassNames="lg:hidden"
+      >
+        <div className="relative bg-white w-screen h-screen max-w-[600px] max-h-[800px] rounded-lg p-4">
+          <div className="h-full overflow-auto">
+            <ShiftNotes notesDisplayStyle="section" shiftId={shiftInFocus} />
+          </div>
+          <div className="absolute w-full bottom-4 bg-white left-0 px-4 pt-4">
+            <ShiftNotesForm shiftId={shiftInFocus} />
+          </div>
+        </div>
+      </Modal>
       {shiftInFocus && (
-        <div className="grow md:max-w-[38%] relative rounded-[8px] shadow-[0px_2px_8px_0px_#0000001F] p-4 max-h-[800px]">
+        <div className="hidden lg:block grow lg:max-w-[48%] relative rounded-[8px] shadow-[0px_2px_8px_0px_#0000001F] p-4 lg:max-h-[75dvh] overflow-hidden">
           <div className="h-full overflow-auto">
             <ShiftNotes notesDisplayStyle="section" shiftId={shiftInFocus} />
           </div>
