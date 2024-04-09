@@ -6,8 +6,7 @@ import LogsContent from "./LogsContent"
 import { NotesContext } from "../../_providers/NotesProvider"
 
 function Logs() {
-  const { fetchNotes } = useContext(NotesContext)
-
+  const {notesGroupedByShifts, fetchNotes } = useContext(NotesContext)
   useEffect(() => {
     fetchNotes()
   }, [fetchNotes])
@@ -24,7 +23,7 @@ function Logs() {
       </div>
 
       <div className="">
-        <LogsContent />
+        <LogsContent notesGroupedByShifts={notesGroupedByShifts} />
       </div>
     </section>
   )

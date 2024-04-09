@@ -9,8 +9,7 @@ import ShiftNotesForm, { SeverityPill } from "../my-shifts/ShiftNotesForm"
 import { timeAgo } from "../../_utils"
 import Modal from "../../_components/AppComps/Modal"
 
-export default function LogsContent({ notes = [] }) {
-  const { notesGroupedByShifts } = useContext(NotesContext)
+export default function LogsContent({ notesGroupedByShifts = {} }) {
   const latestNotesOfShifts = useMemo(
     () => Object.values(notesGroupedByShifts).map((val) => val.latestNote),
     [notesGroupedByShifts]
