@@ -199,7 +199,7 @@ export function timeAgo(date) {
     })} ${date.toLocaleTimeString("en-US", {
       hour12: !false,
       minute: "numeric",
-      hour: "numeric"
+      hour: "numeric",
     })}`
   } else if (days === 1) {
     return "Yesterday"
@@ -210,4 +210,19 @@ export function timeAgo(date) {
   } else if (seconds > 0) {
     return `${seconds} second${seconds !== 1 ? "s" : ""} ago`
   } else return "Just now"
+}
+
+export function isWithinDay(mainDate, dateToCheck) {
+  throwInvalidDateError(mainDate)
+  throwInvalidDateError(dateToCheck)
+
+  const year1 = mainDate.getFullYear()
+  const month1 = mainDate.getMonth()
+  const day1 = mainDate.getDate()
+
+  const year2 = dateToCheck.getFullYear()
+  const month2 = dateToCheck.getMonth()
+  const day2 = dateToCheck.getDate()
+
+  return year1 === year2 && month1 === month2 && day1 === day2
 }

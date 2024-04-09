@@ -1,24 +1,26 @@
-import { useContext, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import { HiOutlineTrash } from "react-icons/hi"
 import Image from "next/image"
 import ShareModal from "./ShareModal"
 import { ShiftNotes } from "../my-shifts/ShiftNotesSection"
-import { NotesContext } from "../../_providers/NotesProvider"
 import ShiftNotesForm, { SeverityPill } from "../my-shifts/ShiftNotesForm"
 import { timeAgo } from "../../_utils"
 import Modal from "../../_components/AppComps/Modal"
+import useOutsideClick from "../../_hooks/useOutsideClick"
 
 export default function LogsContent({ notesGroupedByShifts = {} }) {
   const latestNotesOfShifts = useMemo(
     () => Object.values(notesGroupedByShifts).map((val) => val.latestNote),
     [notesGroupedByShifts]
   )
+
   const [shiftInFocus, setShiftInFocus] = useState(null)
+  const shiftInFocusRef = useOutsideClick(() => setShiftInFocus(null))
 
   return (
     <section className="flex flex-col gap-2 md:flex-row gap-[12px]">
-      <div className="grow lg:w-[45%] max-h-[80dvh] flex flex-col gap-2 overflow-auto gap-[10px]">
+      <div className="grow lg:w-[45%] max-h-[80dvh] flex flex-col gap-2 gap-[10px]">
         {latestNotesOfShifts.map((note) => (
           <NoteOverviewCard
             key={note._id}
@@ -33,21 +35,29 @@ export default function LogsContent({ notesGroupedByShifts = {} }) {
         onClose={() => setShiftInFocus(null)}
         modalClassNames="lg:hidden"
       >
-        <div className="relative bg-white w-screen h-screen max-w-[600px] max-h-[800px] rounded-lg p-4">
-          <div className="h-full overflow-auto">
-            <ShiftNotes notesDisplayStyle="section" shiftId={shiftInFocus} />
+        <div className="relative bg-white w-[95dvw] h-screen max-w-[600px] max-h-[800px] rounded-lg p-4">
+          <div className="h-[70%] overflow-auto pb-4">
+            <ShiftNotes
+              notesToDisplay={notesGroupedByShifts[shiftInFocus]?.notes}
+              notesDisplayStyle="chat"
+              shiftId={shiftInFocus}
+            />
           </div>
-          <div className="absolute w-full bottom-4 bg-white left-0 px-4 pt-4">
+          <div className="sticky w-full h-[] bottom-0 bg-white left-0 pt-4">
             <ShiftNotesForm shiftId={shiftInFocus} />
           </div>
         </div>
       </Modal>
       {shiftInFocus && (
-        <div className="hidden lg:block grow lg:max-w-[48%] relative rounded-[8px] shadow-[0px_2px_8px_0px_#0000001F] p-4 lg:max-h-[75dvh] overflow-hidden">
-          <div className="h-full overflow-auto">
-            <ShiftNotes notesDisplayStyle="section" shiftId={shiftInFocus} />
+        <div ref={shiftInFocusRef} className="hidden lg:block grow lg:max-w-[48%] relative rounded-[8px] shadow-[0px_2px_8px_0px_#0000001F] p-4 lg:max-h-[75dvh] overflow-hidden">
+          <div className="h-[70%] overflow-auto pb-4">
+            <ShiftNotes
+              notesToDisplay={notesGroupedByShifts[shiftInFocus]?.notes}
+              notesDisplayStyle="chat"
+              shiftId={shiftInFocus}
+            />
           </div>
-          <div className="absolute w-full bottom-4 bg-white left-0 px-4 pt-4">
+          <div className="sticky w-full h-[] bottom-0 bg-white left-0 pt-4">
             <ShiftNotesForm shiftId={shiftInFocus} />
           </div>
         </div>
@@ -57,7 +67,6 @@ export default function LogsContent({ notesGroupedByShifts = {} }) {
 }
 
 export function NoteOverviewCard({ note, handleView }) {
-  console.log(note)
   return (
     <div className="bg-white w-full py-[10px] px-4 rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex items-center justify-between flex-row flex-wrap md:flex-nowrap gap-2">
       <div className="grow max-w-[40%] md:max-w-[25%] col-start-1 flex gap-2 items-center">
@@ -85,14 +94,14 @@ export function NoteOverviewCard({ note, handleView }) {
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-2 grow max-w-[55%] md:max-w-[70%]">
+      <div className="flex items-center justify-end gap-2 grow max-w-[55%] md:max-w-[70%]">
         <div className="flex flex-col gap-2 md:max-w-[55%] grow">
           <p className="text-gray-700 text-[12px] text-ellipsis overflow-hidden grow w-full line-clamp-3">
             {note.details}
           </p>
           <SeverityPill severity={note.severity}>{note.severity}</SeverityPill>
         </div>
-        <p className="text-gray-700 text-[12px] md:block hidden">
+        <p className="text-gray-700 text-[12px] w-[75px] md:block hidden">
           {timeAgo(new Date(note.createdAt))}
         </p>
         <button
@@ -108,7 +117,7 @@ export function NoteOverviewCard({ note, handleView }) {
           <HiOutlineTrash size={22} />
         </button>
       </div>
-      <div className="md:hidden flex gap-2 items-center">
+      <div className="md:hidden flex gap-2 items-center w-full">
         <button
           onClick={handleView}
           className="bg-[#B2E89A] px-[12px] py-[2px] text-[#2D6316] text-[14px] capitalize"

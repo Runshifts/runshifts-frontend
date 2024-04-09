@@ -27,24 +27,26 @@ export default function ShiftNotesSection({ shift }) {
 export function ShiftNotes({
   notesDisplayStyle = "chat" || "section",
   shiftId,
+  notesToDisplay,
 }) {
   const { allNotes, fetchNotes, hasFetchedNotes, loadingNotes } =
     useContext(NotesContext)
   const notesForShift = useMemo(
-    () => allNotes.filter((note) => note.shift === shiftId),
-    [allNotes, shiftId]
+    () => notesToDisplay || allNotes.filter((note) => note.shift === shiftId),
+    [allNotes, shiftId, notesToDisplay]
   )
   const sortedNotes = useMemo(
     () =>
-      notesForShift.toSorted((a, b) => {
+      (notesToDisplay || notesForShift).toSorted((a, b) => {
         return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       }),
-    [notesForShift]
+    [notesForShift, notesToDisplay]
   )
 
   useEffect(() => {
     if (notesForShift.length === 0 && !hasFetchedNotes) fetchNotes()
   }, [notesForShift])
+
   return (
     <>
       <div>
