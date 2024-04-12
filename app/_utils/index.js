@@ -1,8 +1,29 @@
+export const checkIsValidDateString = (dateString) => {
+  return new Date(dateString).toString() === "Invalid Date" ? false : true
+}
+
 export const throwInvalidDateError = (date) => {
-  if (!date || date.toString() === "Invalid Date")
+  if (
+    !date ||
+    (date && date.toString() === "Invalid Date") ||
+    typeof date.getTime !== "function"
+  )
     throw new Error("Invalid Date!")
 }
 
+export const daysOfTheWeek = {
+  1: "Monday",
+  2: "Tuesday",
+  3: "Wednesday",
+  4: "Thursday",
+  5: "Friday",
+  6: "Saturday",
+  7: "Sunday",
+}
+export const isDateInThePast = (date) => {
+  throwInvalidDateError(date)
+  return date.getTime() <= new Date().getTime()
+}
 export const randomIntFromInterval = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -18,7 +39,7 @@ export const getDateOrdinal = (date) => {
 }
 
 export function msToHours(milliseconds) {
-  return milliseconds / (1000 * 60 * 60);
+  return milliseconds / (1000 * 60 * 60)
 }
 
 export const getAmOrPm = (hour) => {
@@ -40,20 +61,22 @@ export const formatDate = (date, options = {}) => {
 export function formatNumberToTwoDigitsMinimum(number) {
   return number.toLocaleString(undefined, {
     minimumIntegerDigits: 2,
-    useGrouping: false
+    useGrouping: false,
   })
 }
 
 export function msToHourMinSecond(ms) {
-  const roundAndFormat = num => formatNumberToTwoDigitsMinimum(Math.round(num))
-  let seconds = ms / 1000;
-  let hours = parseInt(seconds / 3600);
-  seconds = seconds % 3600;
-  let minutes = parseInt(seconds / 60);
-  seconds = seconds % 60;
-  return hours ? roundAndFormat(hours) + ":" : "" + roundAndFormat(minutes) + ":" + roundAndFormat(seconds)
+  const roundAndFormat = (num) =>
+    formatNumberToTwoDigitsMinimum(Math.round(num))
+  let seconds = ms / 1000
+  let hours = parseInt(seconds / 3600)
+  seconds = seconds % 3600
+  let minutes = parseInt(seconds / 60)
+  seconds = seconds % 60
+  return hours
+    ? roundAndFormat(hours) + ":"
+    : "" + roundAndFormat(minutes) + ":" + roundAndFormat(seconds)
 }
-
 
 export const getPreviousMonday = (date) => {
   let prevMonday = new Date(date)
@@ -134,4 +157,72 @@ export function getFutureWeekRanges(numOfWeeks, startDate) {
     numOfWeeksUsed = numOfWeeksUsed - 1
   }
   return ranges
+}
+
+export function getUserBasePathForDashboard(accountType) {
+  let path
+  if (accountType === "employer") path = "/organization"
+  else if (accountType === "employee") path = "/employee"
+  else if (accountType === "admin") path = "/admin"
+  return path
+}
+
+export function mergeArrays(arr1, arr2, uniqueIdentifier) {
+  const combinedArray = arr1.concat(arr2)
+  const uniqueIds = {}
+  const mergedArray = combinedArray.filter((doc) => {
+    const id = doc[uniqueIdentifier]
+    if (!uniqueIds[id]) {
+      uniqueIds[id] = true
+      return true
+    }
+    return false
+  })
+
+  return mergedArray
+}
+
+export function timeAgo(date) {
+  const now = new Date()
+  const diff = now - date
+
+  const seconds = Math.floor(diff / 1000)
+  const minutes = Math.floor(seconds / 60)
+  const hours = Math.floor(minutes / 60)
+  const days = Math.floor(hours / 24)
+
+  if (days > 1) {
+    return `${date.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })} ${date.toLocaleTimeString("en-US", {
+      hour12: !false,
+      minute: "numeric",
+      hour: "numeric",
+    })}`
+  } else if (days === 1) {
+    return "Yesterday"
+  } else if (hours > 0) {
+    return `${hours} hour${hours !== 1 ? "s" : ""} ago`
+  } else if (minutes > 0) {
+    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`
+  } else if (seconds > 0) {
+    return `${seconds} second${seconds !== 1 ? "s" : ""} ago`
+  } else return "Just now"
+}
+
+export function isWithinDay(mainDate, dateToCheck) {
+  throwInvalidDateError(mainDate)
+  throwInvalidDateError(dateToCheck)
+
+  const year1 = mainDate.getFullYear()
+  const month1 = mainDate.getMonth()
+  const day1 = mainDate.getDate()
+
+  const year2 = dateToCheck.getFullYear()
+  const month2 = dateToCheck.getMonth()
+  const day2 = dateToCheck.getDate()
+
+  return year1 === year2 && month1 === month2 && day1 === day2
 }

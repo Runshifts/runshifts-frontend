@@ -1,18 +1,19 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { throwInvalidDateError } from "../_utils"
 
-
-export default function useCountdown(deadline) {
+export default function useDateCountDown(deadline) {
   throwInvalidDateError(deadline)
   const [time, setTime] = useState(() =>
     Math.max(0, Math.floor((deadline.getTime() - Date.now()) / 1000))
   )
 
-  const decrement = useCallback(() =>
-    setTime((prevTime) => {
-      return prevTime === 0 ? 0 : prevTime - 1
-    })
-  , [])
+  const decrement = useCallback(
+    () =>
+      setTime((prevTime) => {
+        return prevTime === 0 ? 0 : prevTime - 1
+      }),
+    []
+  )
 
   useEffect(() => {
     const id = setInterval(decrement, 1000)
@@ -32,3 +33,4 @@ export default function useCountdown(deadline) {
     seconds: format(time % 60),
   }
 }
+

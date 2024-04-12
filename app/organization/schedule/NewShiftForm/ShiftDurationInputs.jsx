@@ -16,7 +16,7 @@ export default function ShiftDurationInputs({
   showDateInput,
   handleDateSelection,
   selectedDate,
-  currentWeek
+  currentWeek,
 }) {
   const [selectedSchedule, setSelectedSchedule] = useState("")
 
@@ -88,9 +88,11 @@ export default function ShiftDurationInputs({
               placeholder: "00:00",
               readOnly: true,
               value: startTime
-                ? `${formatNumberToTwoDigitsMinimum(
-                    startTime.getHours()
-                  )}:${formatNumberToTwoDigitsMinimum(startTime.getMinutes())}`
+                ? new Date(startTime).toLocaleTimeString("en-us", {
+                    hour12: true,
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
                 : "",
             }}
           />
@@ -100,9 +102,11 @@ export default function ShiftDurationInputs({
               placeholder: "00:00",
               readOnly: true,
               value: endTime
-                ? `${formatNumberToTwoDigitsMinimum(
-                    endTime.getHours()
-                  )}:${formatNumberToTwoDigitsMinimum(endTime.getMinutes())}`
+                ? new Date(endTime).toLocaleTimeString("en-us", {
+                    hour12: true,
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
                 : "",
             }}
           />
@@ -112,18 +116,29 @@ export default function ShiftDurationInputs({
   )
 }
 
-function DateSelectInput({ show, handleDateSelection, selectedDate, currentWeek }) {
+function DateSelectInput({
+  show,
+  handleDateSelection,
+  selectedDate,
+  currentWeek,
+}) {
   const getDateDisplayText = useCallback((date) => {
     const today = new Date(Date.now())
     if (date.toDateString() === today.toDateString()) return "Today"
-    else return date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })
+    else
+      return date.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+      })
   }, [])
 
   const dateOptions = useMemo(() => {
     let currentDay = new Date(Date.now()).getDay()
     const weekStart = new Date(currentWeek.start)
     let today = new Date(weekStart)
-    if(weekStart.getTime() <= Date.now()) today.setDate(today.getDate() + (currentDay > 0 ? currentDay : 7) - 1)
+    if (weekStart.getTime() <= Date.now())
+      today.setDate(today.getDate() + (currentDay > 0 ? currentDay : 7) - 1)
     const nextSunday = getNextSunday(today)
     const options = [today]
     while (true) {

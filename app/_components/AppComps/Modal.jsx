@@ -1,5 +1,4 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 
 export default function Modal({
@@ -7,6 +6,7 @@ export default function Modal({
   open = false,
   onClose = () => {},
   zIndex,
+  modalClassNames
 }) {
   return (
     <>
@@ -16,6 +16,7 @@ export default function Modal({
           children={children}
           open={open}
           onClose={onClose}
+          modalClassNames={modalClassNames}
         />,
         document.getElementById("modal-container") || document.body
       )}
@@ -28,12 +29,13 @@ export function ModalElement({
   children,
   open = false,
   onClose = () => {},
+  modalClassNames
 }) {
   return (
     <>
       <div
         style={{ zIndex }}
-        className={`${
+        className={`${modalClassNames} ${
           open ? "opacity-100 visible" : "opacity-0 invisible"
         } flex justify-center items-center fixed inset-0 `}
       >
@@ -43,7 +45,7 @@ export function ModalElement({
             open ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
         ></div>
-        <div className="z-[2]">{children}</div>
+        <div className="z-[2] grow max-w-max">{children}</div>
       </div>
     </>
   )

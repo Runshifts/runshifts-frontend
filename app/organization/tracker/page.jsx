@@ -2,12 +2,12 @@
 import { useContext, useEffect, useState } from "react"
 import TrackerTable from "./TrackerTable"
 import DateFilter from "./DateFilter"
-import { TrackerContext } from "../../_providers/TrackerProvider"
+import { TrackerContext } from "../../_providers/Employer/TrackerProvider"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import PageSearchInput from "../../_components/AppComps/PageSearchInput"
 import Heading from "../../_components/Headings"
 import { BREAKDOWN_VARIANTS } from "./Breakdown"
-import { ShiftAndOvertimeRequestsContext } from "../../_providers/ShiftAndOvertimeRequestsProvider"
+import { ShiftAndOvertimeRequestsContext } from "../../_providers/Employer/ShiftAndOvertimeRequestsProvider"
 
 function Tracker() {
   const [search, setSearch] = useState("")

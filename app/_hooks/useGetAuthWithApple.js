@@ -1,9 +1,11 @@
 import { useCallback } from "react"
 import useAxios from "./useAxios"
+import useRedirectUserByAccountType from "./useRedirectUserByAccountType"
+import toast from "react-hot-toast"
 
 export default function useGetAuthWithApple(accountType, organizationId) {
   const fetchData = useAxios()
-
+  const redirectUser = useRedirectUserByAccountType()
   const requestAuthWithApple = useCallback(
     async (code) => {
       console.log(code)
@@ -14,16 +16,15 @@ export default function useGetAuthWithApple(accountType, organizationId) {
         code,
       })
       if (res.statusCode === 201 || res.statusCode === 200) {
-        console.log("success", res)
         localStorage.setItem("token", res.token)
         localStorage.setItem("user", res.user)
-        router.push(res.user.type === "employee" ? "/employee" : "organization")
+        redirectUser(res.user.type)
       } else {
-        alert(res.message)
+        toast.error(res.message)
         console.log("err", res)
       }
     },
-    [accountType, organizationId, fetchData]
+    [accountType, organizationId, fetchData, redirectUser]
   )
 
   return requestAuthWithApple
