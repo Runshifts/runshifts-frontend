@@ -27,15 +27,7 @@ export default function RootLayout({ children }) {
             </UserProvider>
           </LoadingProvider>
         </GoogleOAuthProvider>
-<<<<<<< Updated upstream
-        <Toaster
-          toastOptions={{ duration: "5000" }}
-          position="top-center"
-          reverseOrder={false}
-        />
-=======
         <Toaster position="top-center" reverseOrder={false} />
->>>>>>> Stashed changes
       </body>
     </html>
   )

@@ -168,8 +168,6 @@ export function getUserBasePathForDashboard(accountType) {
   else if (accountType === "admin") path = "/admin"
   return path
 }
-<<<<<<< Updated upstream
-=======
 
 export function mergeArrays(arr1, arr2, uniqueIdentifier) {
   console.log(arr1, arr2)
@@ -231,4 +229,3 @@ export function isWithinDay(mainDate, dateToCheck) {
 
   return year1 === year2 && month1 === month2 && day1 === day2
 }
->>>>>>> Stashed changes
