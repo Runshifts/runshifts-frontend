@@ -152,7 +152,7 @@ export default function EmployeeDashboardProvider({ children }) {
     const res = await fetchData(
       DASHBOARD_URLS.employeeActivity(organization?._id, user?._id)
     )
-    if (res) {
+    if (res?.statusCode === 200) {
       const { statusCode, ...rest } = res
       setActivityData(rest)
     }

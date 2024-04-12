@@ -1,18 +1,48 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 import { SubmitButton } from "../../_components/Auth/Inputs"
+import NOTES_URLS from "../../_urls/notesURLS"
+import useAxios from "../../_hooks/useAxios"
+import { OrganizationContext } from "../../_providers/OrganizationProvider"
+import { NotesContext } from "../../_providers/NotesProvider"
+import toast from "react-hot-toast"
 
-export default function ShiftNotesForm({ shift }) {
+export default function ShiftNotesForm({ shiftId, onSubmit = () => {} }) {
+  const { organization } = useContext(OrganizationContext)
+  const { updateAllNotes } = useContext(NotesContext)
   const [note, setNote] = useState("")
-  const [severity, setSeverity] = useState("")
+  const [severity, setSeverity] = useState("normal")
+  const [submitting, setSubmitting] = useState(false)
+  const fetchData = useAxios()
 
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault()
-  }, [])
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault()
+      if (!shiftId) return
+      if (!note) return toast.error("Please provide a note before submitting")
+      setSubmitting(true)
+      const res = await fetchData(
+        NOTES_URLS.create(organization?._id, shiftId),
+        "post",
+        { note, severity }
+      )
+      if (res.statusCode === 201) {
+        typeof onSubmit === "function" && onSubmit(res.note)
+        updateAllNotes([res.note])
+        setNote("")
+        setSeverity("normal")
+        toast.success(res.message)
+      } else {
+        toast.error(res.message || "Something went wrong")
+      }
+      setSubmitting(false)
+    },
+    [onSubmit, fetchData, organization, shiftId, updateAllNotes, note, severity]
+  )
 
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-        <fieldset className="flex gap-2 md:gap-4 items-center flex-wrap md:flex-nowrap">
+        <fieldset className="flex flex-wrap gap-2 md:gap-4 items-center flex-wrap lg:flex-nowrap">
           <NoteRadioInput
             severity="normal"
             value="normal"
@@ -54,6 +84,7 @@ export default function ShiftNotesForm({ shift }) {
             fontWeight: "500",
           }}
           loadingText="Sending"
+          isLoading={submitting}
         >
           Send note
         </SubmitButton>
@@ -63,18 +94,6 @@ export default function ShiftNotesForm({ shift }) {
 }
 
 function NoteRadioInput({ severity, isSelected, handleSelect, name, value }) {
-  const bgColor = useMemo(() => {
-    switch (severity.toLowerCase()) {
-      case "normal":
-        return "#7ED957"
-      case "attention needed":
-        return "#FFAB00"
-      case "urgent":
-        return "#DE350B"
-      default:
-        return "#7ED957"
-    }
-  }, [severity])
   return (
     <label className="flex items-center gap-[8px] cursor-pointer">
       <input
@@ -92,12 +111,30 @@ function NoteRadioInput({ severity, isSelected, handleSelect, name, value }) {
           } inline-block w-[8px] h-[8px] bg-[#9474FF] rounded-full transition-all`}
         ></span>
       </span>
-      <span
-        className="leading-[1rem] text-[12px] px-[6px] font-[400] rounded-[8px] inline-block text-white"
-        style={{ background: bgColor }}
-      >
-        {value}
-      </span>
+      <SeverityPill severity={severity}>{value}</SeverityPill>
     </label>
+  )
+}
+
+export function SeverityPill({ children, severity }) {
+  const bgColor = useMemo(() => {
+    switch (severity.toLowerCase()) {
+      case "normal":
+        return "#7ED957"
+      case "attention needed":
+        return "#FFAB00"
+      case "urgent":
+        return "#DE350B"
+      default:
+        return "#7ED957"
+    }
+  }, [severity])
+  return (
+    <p
+      className="inline-flex justify-center items-center max-h-[1rem] w-fit first-letter:uppercase text-[12px] px-[6px] font-[400] rounded-[8px] text-white"
+      style={{ background: bgColor }}
+    >
+      {children}
+    </p>
   )
 }

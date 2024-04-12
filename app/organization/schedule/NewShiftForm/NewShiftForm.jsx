@@ -55,7 +55,7 @@ function NewShiftForm({
   const fetchData = useAxios()
   const [loading, setLoading] = useState(false)
   const [shiftData, setShiftData] = useState(() => getInitialState())
-  const { organization } = useContext(OrganizationContext)
+  const { organization, employees } = useContext(OrganizationContext)
   const { shiftManagements, customShiftManagements } = useContext(
     ShiftsManagementContext
   )
@@ -138,10 +138,13 @@ function NewShiftForm({
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault()
-      if (!shiftData.location)
+      let requestBody = { ...shiftData }
+      if (!requestBody.location)
         return toast.error("Please select a location for this shift")
-      if (isMultipleCreateMode && shiftData.assignees.length === 0)
-        return toast.error("Please select an employee for this shift")
+      if (isMultipleCreateMode && requestBody.assignees.length === 0) {
+        requestBody.assignees = null
+        requestBody.numberOfShiftsToCreate = employees.length || 7
+      }
       if (!shiftData.startTime || !shiftData.endTime)
         return toast.error("Please select a schedule for this shift")
       setLoading(true)
@@ -150,10 +153,11 @@ function NewShiftForm({
           ? `/shifts/${organization?._id}/locations/${shiftData.location?._id}/${shiftData.schedule}`
           : `/shifts/${organization?._id}/locations/${shiftData.location?._id}/users/${newShiftDetails?.assignee?._id}/${shiftData.schedule}`
       const res = await fetchData(url, "post", {
-        date: shiftData.startTime,
+        date: requestBody.startTime,
         isGeofencingEnabled: shiftData.isGeofencingEnabled,
-        note: shiftData.note,
-        users: shiftData.assignees,
+        note: requestBody.note,
+        users: requestBody.assignees,
+        numberOfShiftsToCreate: requestBody.numberOfShiftsToCreate,
       })
       if (res.statusCode === 201) {
         toast.success(res.message || "Shift(s) created successfully")
@@ -169,6 +173,7 @@ function NewShiftForm({
       newShiftDetails?.assignee?._id,
       handleNewShift,
       isMultipleCreateMode,
+      employees,
     ]
   )
 
@@ -274,6 +279,7 @@ function NewShiftForm({
           selected={shiftData.isGeofencingEnabled}
           label="Enable Geofencing"
           name={"enable geofencing"}
+          disabled={!shiftData.location}
           handleChange={() =>
             setShiftData((prev) => ({
               ...prev,
