@@ -1,7 +1,5 @@
 export const checkIsValidDateString = (dateString) => {
-  return new Date(dateString).toString() === "Invalid Date"
-    ? false
-    : true
+  return new Date(dateString).toString() === "Invalid Date" ? false : true
 }
 
 export const throwInvalidDateError = (date) => {
@@ -170,7 +168,6 @@ export function getUserBasePathForDashboard(accountType) {
 }
 
 export function mergeArrays(arr1, arr2, uniqueIdentifier) {
-  console.log(arr1, arr2)
   const combinedArray = arr1.concat(arr2)
   const uniqueIds = {}
   const mergedArray = combinedArray.filter((doc) => {

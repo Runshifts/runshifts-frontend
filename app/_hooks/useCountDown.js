@@ -34,36 +34,3 @@ export default function useDateCountDown(deadline) {
   }
 }
 
-export const useTimeCountdown = (ms) => {
-  const [time, setTime] = useState(ms)
-
-  const calculatedCountdown = useMemo(() => {
-    const days = Math.floor(time / (1000 * 60 * 60 * 24))
-    const hours = Math.floor(
-      (time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    )
-    const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60))
-    const seconds = Math.floor((time % (1000 * 60)) / 1000)
-
-    return {
-      days,
-      hours,
-      minutes,
-      seconds,
-    }
-  }, [time])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTime((prev) => (prev > 0 ? prev - 1000 : 0))
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [])
-
-  useEffect(() => {
-    setTime(ms)
-  }, [ms])
-
-  return calculatedCountdown
-}

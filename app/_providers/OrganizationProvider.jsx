@@ -16,6 +16,7 @@ import TrackerProvider from "./Employer/TrackerProvider"
 import TeamProvider from "./Employer/TeamProvider"
 import { useRouter } from "next/navigation"
 import { UserContext } from "./UserProvider"
+import NotesProvider from "./NotesProvider"
 
 export const OrganizationContext = createContext({
   employees: [],
@@ -34,7 +35,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
   )
 
   const fetchOrganization = useCallback(async () => {
-    if(isEmployee && !user?.organization) return
+    if (isEmployee && !user?.organization) return
     const res = await fetchData(
       DASHBOARD_URLS.organization(isEmployee ? user?.organization : null),
       "get"
@@ -108,7 +109,9 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
                 shouldAutoInitialize={false}
                 organizationId={organization?._id}
               >
-                {children}
+                <NotesProvider organizationId={organization?._id}>
+                  {children}
+                </NotesProvider>
               </TrackerProvider>
             </TeamProvider>
           </ShiftsManagementProvider>

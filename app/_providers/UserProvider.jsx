@@ -32,7 +32,10 @@ export default function UserProvider({ children }) {
     if (res.statusCode === 200) {
       setUser(res.user)
       localStorage.setItem("user", JSON.stringify(res.user))
-    } else redirectAwayFromDashboard()
+    } else {
+      redirectAwayFromDashboard()
+      router.refresh()
+    }
   }, [router, fetchData, pathname, redirectAwayFromDashboard])
 
   const updateUser = useCallback((value) => {
