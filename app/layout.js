@@ -4,7 +4,7 @@ import GoogleOAuthProvider from "./_providers/GoogleAuth"
 import LoadingProvider from "./_providers/LoadingProvider"
 import { Toaster } from "react-hot-toast"
 import UserProvider from "./_providers/UserProvider"
-
+import ReduxProvider from "./_providers/ReduxProvider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
@@ -22,13 +22,12 @@ export default function RootLayout({ children }) {
         ></script>
         <GoogleOAuthProvider>
           <LoadingProvider>
-            <UserProvider>{children}</UserProvider>
+            <UserProvider>
+              <ReduxProvider>{children}</ReduxProvider>
+            </UserProvider>
           </LoadingProvider>
         </GoogleOAuthProvider>
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-        />
+        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   )

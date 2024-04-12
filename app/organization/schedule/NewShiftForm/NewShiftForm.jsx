@@ -113,7 +113,13 @@ function NewShiftForm({
         dateOfShift.getMonth(),
         dateOfShift.getDate()
       )
-      const endTime = new Date(shiftManagement.endTime)
+      const endTime = new Date(shiftManagement.startTime)
+      endTime.setHours(
+        endTime.getHours() + shiftManagement.numberOfHours,
+        endTime.getMinutes(),
+        endTime.getSeconds(),
+        endTime.getMilliseconds()
+      )
       endTime.setFullYear(
         dateOfShift.getFullYear(),
         dateOfShift.getMonth(),
