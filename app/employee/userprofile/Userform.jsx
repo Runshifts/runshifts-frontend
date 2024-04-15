@@ -2,8 +2,6 @@
 import Image from "next/image"
 import React, { useState, useContext, useEffect } from "react"
 import { FaEye, FaEyeSlash, FaRegEyeSlash } from "react-icons/fa"
-// import profileAvatar from "../../_components/navbar/dp.png";
-// import Uploadimage from "./Uploadimage";
 import { PiWarningCircleFill } from "react-icons/pi"
 import useAxios from "../../_hooks/useAxios"
 import { UserContext } from "../../_providers/UserProvider"
@@ -24,6 +22,7 @@ const UserProfile = () => {
           phoneNumber: "",
           homeAddress: "",
           image: "",
+          hourRate: '',
         }
   })
 
@@ -99,12 +98,13 @@ const UserProfile = () => {
         User profile
       </h1>
 
-      {/* <Uploadimage /> */}
+     
       {selectedFile && (
         <div className="mb-2 rounded w-56">
           <Image
             width={89}
             height={89}
+            name="image"
             src={URL.createObjectURL(selectedFile)}
             alt="Selected photo"
             className="max-w-full max-h-40 mb-4 rounded-full"
@@ -147,6 +147,7 @@ const UserProfile = () => {
               id="firstName"
               className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
               placeholder="Ariana"
+              readOnly
             />
           </div>
           <div className="w-1/2">
@@ -164,6 +165,7 @@ const UserProfile = () => {
               id="lastName"
               className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
               placeholder="Woods"
+              readOnly
             />
           </div>
         </div>
@@ -183,6 +185,7 @@ const UserProfile = () => {
               id="email"
               className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
               placeholder="Arianawoods@example.com"
+              readOnly
             />
           </div>
           <div className="w-1/2">
@@ -200,6 +203,7 @@ const UserProfile = () => {
               id="phoneNumber"
               className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
               placeholder="+123-456-7890"
+              readOnly
             />
           </div>
         </div>
@@ -215,9 +219,11 @@ const UserProfile = () => {
             <input
               type="text"
               id="hourRate"
+              name="hourRate"
               onChange={handleInputChange}
               className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
               placeholder="£17"
+              readOnly
             />
           </div>
 
