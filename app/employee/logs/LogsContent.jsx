@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import { HiOutlineTrash } from "react-icons/hi"
 import Image from "next/image"
@@ -16,8 +16,63 @@ export default function LogsContent({ notesGroupedByShifts = {} }) {
   )
 
   const [shiftInFocus, setShiftInFocus] = useState(null)
-  const shiftInFocusRef = useOutsideClick(() => setShiftInFocus(null))
+  const shiftInFocusRef = useOutsideClick((event) => {
+    typeof event.target.onclick !== "function" && setShiftInFocus(null)
+  })
 
+  const ShiftInFocusContent = useCallback(
+    () => (
+      <>
+        <div className="h-[70%] overflow-auto pb-4">
+          <div className="sticky top-0 flex mb-4 bg-[#354258] rounded-[8px] px-[12px] py-[10px] gap-3">
+            <ShiftDetailsKeyValue
+              keyText="Name"
+              valueText={
+                shiftInFocus?.assignee?.fullName ||
+                `${shiftInFocus?.assignee?.firstName} ${shiftInFocus?.assignee?.lastName}`
+              }
+            />
+            <ShiftDetailsKeyValue
+              keyText="Day"
+              valueText={new Date(shiftInFocus?.startTime).toLocaleDateString(
+                "en-us",
+                { weekday: "long" }
+              )}
+            />
+            <ShiftDetailsKeyValue
+              keyText="Duration"
+              valueText={`${new Date(
+                shiftInFocus?.startTime
+              ).toLocaleTimeString("en-us", {
+                hour: "2-digit",
+                hour12: true,
+              })}-${new Date(shiftInFocus?.endTime).toLocaleTimeString(
+                "en-us",
+                {
+                  hour: "2-digit",
+                  hour12: true,
+                }
+              )}`}
+            />
+            <ShiftDetailsKeyValue
+              keyText="Location"
+              valueText={shiftInFocus?.location?.address}
+            />
+          </div>
+          <ShiftNotes
+            notesToDisplay={notesGroupedByShifts[shiftInFocus?._id]?.notes}
+            notesDisplayStyle="chat"
+            shiftId={shiftInFocus?._id}
+          />
+        </div>
+        <div className="sticky w-full h-[] bottom-0 bg-white left-0 pt-4">
+          <ShiftNotesForm shiftId={shiftInFocus?._id} />
+        </div>
+      </>
+    ),
+    [shiftInFocus, notesGroupedByShifts]
+  )
+  console.log(notesGroupedByShifts)
   return (
     <section className="flex flex-col gap-2 md:flex-row gap-[12px]">
       <div className="grow lg:w-[45%] max-h-[80dvh] flex flex-col gap-2 gap-[10px]">
@@ -36,33 +91,27 @@ export default function LogsContent({ notesGroupedByShifts = {} }) {
         modalClassNames="lg:hidden"
       >
         <div className="relative bg-white w-[95dvw] h-screen max-w-[600px] max-h-[800px] rounded-lg p-4">
-          <div className="h-[70%] overflow-auto pb-4">
-            <ShiftNotes
-              notesToDisplay={notesGroupedByShifts[shiftInFocus]?.notes}
-              notesDisplayStyle="chat"
-              shiftId={shiftInFocus}
-            />
-          </div>
-          <div className="sticky w-full h-[] bottom-0 bg-white left-0 pt-4">
-            <ShiftNotesForm shiftId={shiftInFocus} />
-          </div>
+          <ShiftInFocusContent />
         </div>
       </Modal>
       {shiftInFocus && (
-        <div ref={shiftInFocusRef} className="hidden lg:block grow lg:max-w-[48%] relative rounded-[8px] shadow-[0px_2px_8px_0px_#0000001F] p-4 lg:max-h-[75dvh] overflow-hidden">
-          <div className="h-[70%] overflow-auto pb-4">
-            <ShiftNotes
-              notesToDisplay={notesGroupedByShifts[shiftInFocus]?.notes}
-              notesDisplayStyle="chat"
-              shiftId={shiftInFocus}
-            />
-          </div>
-          <div className="sticky w-full h-[] bottom-0 bg-white left-0 pt-4">
-            <ShiftNotesForm shiftId={shiftInFocus} />
-          </div>
+        <div
+          ref={shiftInFocusRef}
+          className="hidden lg:block grow lg:max-w-[48%] relative rounded-[8px] shadow-[0px_2px_8px_0px_#0000001F] p-4 lg:max-h-[75dvh] overflow-hidden"
+        >
+          <ShiftInFocusContent />
         </div>
       )}
     </section>
+  )
+}
+
+function ShiftDetailsKeyValue({ keyText, valueText }) {
+  return (
+    <p className="flex flex-col text-[12px] text-left gap-2 text-white">
+      <b className="text-[14px]">{keyText}</b>
+      {valueText}
+    </p>
   )
 }
 
@@ -78,7 +127,7 @@ export function NoteOverviewCard({ note, handleView }) {
           className="w-[30px] sm:w-[50px] h-[30px] sm:h-[50px] rounded-full"
         />
         <div>
-          <h4 className="text-[12px] capitalize text-[#1D2433] font-[500]">
+          <h4 className="text-[12px] truncate max-w-[50px] capitalize text-[#1D2433] font-[500]">
             {note.creator?.fullName ||
               (
                 (note.creator?.firstName || "") +
@@ -105,7 +154,10 @@ export function NoteOverviewCard({ note, handleView }) {
           {timeAgo(new Date(note.createdAt))}
         </p>
         <button
-          onClick={handleView}
+          onClick={(e) => {
+            e.stopPropagation()
+            typeof handleView === "function" && handleView()
+          }}
           className="bg-[#B2E89A] px-[12px] py-[2px] text-[#2D6316] text-[14px] capitalize md:block hidden"
         >
           view

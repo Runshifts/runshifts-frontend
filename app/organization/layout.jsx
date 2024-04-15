@@ -17,11 +17,9 @@ export default function RootLayout({ children }) {
           <OrganizationProvider>
             <DashboardProvider>
               <ShiftAndOvertimeRequestsProvider>
-                <NotesProvider>
-                  <OrganizationHooksProvider>
-                    {children}
-                  </OrganizationHooksProvider>
-                </NotesProvider>
+                <OrganizationHooksProvider>
+                  {children}
+                </OrganizationHooksProvider>
               </ShiftAndOvertimeRequestsProvider>
             </DashboardProvider>
           </OrganizationProvider>

@@ -3,7 +3,7 @@ import { isWithinDay } from "../_utils/index"
 
 export default function useFilterNotes({
   notes = [],
-  location = {},
+  location,
   date,
   isShared,
   searchText = "",
@@ -16,7 +16,9 @@ export default function useFilterNotes({
       )
     if (location)
       results = results.filter(
-        (note) => note.shift?.location?._id === location._id
+        (note) =>
+          note.shift?.location?._id === location._id ||
+          note.shift?.location?._id === location
       )
     if (searchText)
       results = results.filter((note) =>

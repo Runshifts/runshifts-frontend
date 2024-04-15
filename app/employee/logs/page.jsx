@@ -10,12 +10,9 @@ import DateFilter from "../../organization/tracker/DateFilter"
 import Heading from "../../_components/Headings"
 
 function Logs() {
-  const { fetchNotes, allNotes } = useContext(NotesContext)
+  const { allNotes } = useContext(NotesContext)
   const [searchText, setSearchText] = useState("")
   const [dateFilter, setDateFilter] = useState()
-  useEffect(() => {
-    fetchNotes()
-  }, [fetchNotes])
 
   const filteredNotes = useFilterNotes({
     notes: allNotes,

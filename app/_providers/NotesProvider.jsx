@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useCallback, useState } from "react"
+import { createContext, useCallback, useEffect, useState } from "react"
 import useAxios from "../_hooks/useAxios"
 import NOTES_URLS from "../_urls/notesURLS"
 import { mergeArrays } from "../_utils"
@@ -18,6 +18,7 @@ export default function NotesProvider({ children, organizationId }) {
   const [loadingNotes, setLoadingNotes] = useState(true)
   const [hasFetchedNotes, setHasFetchedNotes] = useState(false)
   const [allNotes, setAllNotes] = useState([])
+  console.log("djfkasd;", organizationId, allNotes)
 
   const fetchNotes = useCallback(async () => {
     if (!organizationId || hasFetchedNotes) return
@@ -28,11 +29,16 @@ export default function NotesProvider({ children, organizationId }) {
       setHasFetchedNotes(true)
     }
     setLoadingNotes(false)
-  }, [organizationId, hasFetchedNotes])
+  }, [organizationId, hasFetchedNotes, fetchData])
 
   const updateAllNotes = useCallback((notes = []) => {
     setAllNotes((prev) => mergeArrays(notes, prev, "_id"))
   }, [])
+  
+  useEffect(() => {
+    fetchNotes()
+  }, [fetchNotes])
+
   return (
     <NotesContext.Provider
       value={{
