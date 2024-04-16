@@ -14,12 +14,11 @@ export default function useFilterShifts(shifts = []) {
           (shift.location && shift.location === locationFilter) ||
           shift.location?._id === locationFilter) &&
         (!departmentFilter ||
-          (shift.assignee?.department &&
-            shift.assignee?.department === departmentFilter?._id) ||
-          shift.assignee?.department?.name?.toLowerCase() ===
+          shift.assignee?.department?.toLowerCase() ===
             departmentFilter.toLowerCase()) &&
         (!positionFilter ||
-          (shift.assignee?.position && shift.assignee?.position === positionFilter?._id) ||
+          (shift.assignee?.position &&
+            shift.assignee?.position === positionFilter?._id) ||
           shift.assignee?.position?.name?.toLowerCase() ===
             positionFilter.toLowerCase())
       )

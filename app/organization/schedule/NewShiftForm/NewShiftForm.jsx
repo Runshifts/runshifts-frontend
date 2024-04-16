@@ -16,7 +16,7 @@ import { Option } from "../../../_components/AppComps/Select"
 import { DepartmentsAndPositionsContext } from "../../../_providers/DepartmentsAndPositionsProvider"
 import Modal from "../../../_components/AppComps/Modal"
 
-const getInitialState = () => ({
+const getInitialState = (initialState = {}) => ({
   location: null,
   schedule: "",
   startTime: null,
@@ -25,6 +25,7 @@ const getInitialState = () => ({
   isGeofencingEnabled: false,
   assignees: [],
   date: null,
+  ...initialState,
 })
 
 export default function Form({
@@ -54,7 +55,9 @@ function NewShiftForm({
 }) {
   const fetchData = useAxios()
   const [loading, setLoading] = useState(false)
-  const [shiftData, setShiftData] = useState(() => getInitialState())
+  const [shiftData, setShiftData] = useState(() =>
+    getInitialState({ location: newShiftDetails?.assignee?.location })
+  )
   const { organization, employees } = useContext(OrganizationContext)
   const { shiftManagements, customShiftManagements } = useContext(
     ShiftsManagementContext

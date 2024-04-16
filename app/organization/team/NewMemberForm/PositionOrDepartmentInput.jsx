@@ -23,14 +23,14 @@ export default function PositionOrDepartmentInput({
           label={inputType}
           inputProps={{
             readOnly: true,
-            value: selectedOption?.name || "",
+            value: selectedOption?.name || selectedOption || "",
             placeholder: inputType,
           }}
         />
       }
       dropdownContent={
         <>
-          {options[inputType].map((position) => (
+          {options[inputType]?.map((position) => (
             <Option key={position._id} onClick={() => handleSelect(position)}>
               {position.name}
             </Option>
