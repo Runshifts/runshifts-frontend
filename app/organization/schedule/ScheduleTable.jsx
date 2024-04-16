@@ -35,9 +35,9 @@ const ScheduleTable = ({
       <div className=" h-[50dvh] max-h-[600px] overflow-auto">
         <table className="min-w-full bg-[#EFEDED] rounded-lg min-h-full">
           <thead className="text-[#252525]">
-            <tr className="border-b border-b-800">
-              <th className="sticky z-[1] left-0 bg-[#EFEDED] py-2 px-4 border-b border-r border-gray-800">
-                <div className="relative  text-left whitespace-nowrap">
+            <tr className="border-b">
+              <th className="sticky z-[10] outline-solid outline outline-info-800 left-0 bg-[#EFEDED] py-2 px-4 border-b border-r border-gray-800">
+                <div className="relative text-left whitespace-nowrap">
                   <UsersFilter
                     updateCurrentValue={handleUserFilterSelect}
                     currentValue={selectedUser}
@@ -52,7 +52,7 @@ const ScheduleTable = ({
                   className={`${
                     idx === allDays.length - 1
                       ? ""
-                      : "border-r border-r-info-800"
+                      : "border-b border-r border-r-info-800 border-b-info-800"
                   }`}
                   date={date}
                 />
@@ -62,7 +62,7 @@ const ScheduleTable = ({
 
           <tbody>
             <tr>
-              <th className="h-[30px] whitespace-nowrap text-center w-max text-[#42526E] font-bold py-2 sticky z-[0] left-0 bg-[#EFEDED] border-b-solid border-b border-b-[#757575] border-t-none border-l-none border-r-solid border-r border-r-[#757575]">
+              <th className="h-[30px] whitespace-nowrap text-center w-max text-[#42526E] font-bold py-2 sticky z-[0]  outline-solid outline outline-info-800/40 left-0 bg-[#EFEDED] border-b-solid border-b border-b-[#757575] border-t-none border-l-none border-r-solid border-r border-r-[#757575]">
                 Open shifts
               </th>
               {allDays.map((_, index) => (
@@ -105,7 +105,7 @@ const ScheduleTable = ({
 }
 
 function AssigneeRow({
-  assignee = {},
+  assignee,
   shiftsGroupedByDays = {},
   showAddShiftModal = () => {},
   duplicateShift = async () => {},
@@ -115,7 +115,7 @@ function AssigneeRow({
 }) {
   const assigneeModified = useMemo(
     () => ({
-      ...assignee,
+      ...(assignee || {}),
       color:
         assignee?.color ||
         `hsla(${randomIntFromInterval(1, 500)},${randomIntFromInterval(
@@ -153,10 +153,11 @@ function AssigneeRow({
 
   return (
     <tr className="border-b border-b-gray-800 h-[52px] sticky z-1">
-      <td className="p-[10px] sticky left-0 bg-[#EFEDED] outline-solid outline outline-gray-800/50">
+      <td className="p-[10px] sticky z-[10] left-0 bg-[#EFEDED] outline-solid outline outline-info-800/50">
         <AssigneePill
           assignee={assigneeModified}
           hoursScheduledForTheWeek={hoursScheduledForTheWeek}
+          isAssigned={assignee !== null}
         />
       </td>
       {daysOfTheWeek.map((day, listIdx, all) => (
@@ -171,6 +172,7 @@ function AssigneeRow({
               duplicateShift={duplicateShift}
               shifts={shiftsGroupedByDays[day] || []}
               isPastWeek={isPastWeek}
+              isAssigned={assignee !== null}
             />
           </Fragment>
           {shouldShowAddShiftButton(day) && (
@@ -194,6 +196,7 @@ function AssigneeShiftsMapping({
   duplicateShift = () => {},
   shifts = [],
   isPastWeek,
+  isAssigned,
 }) {
   return (
     <>
@@ -204,6 +207,7 @@ function AssigneeShiftsMapping({
           duplicateShift={duplicateShift}
           assignee={assignee}
           isPastWeek={isPastWeek}
+          isAssigned={isAssigned}
         />
       ))}
     </>
@@ -214,7 +218,7 @@ function Shift({
   assignee = {},
   duplicateShift = async () => {},
   shift = {},
-  isPastWeek,
+  isAssigned,
 }) {
   const [isDuplicating, setIsDuplicating] = useState(false)
   const isPendingShift = useMemo(
@@ -240,6 +244,7 @@ function Shift({
         style={{
           backgroundColor:
             isPendingShift || isDroppedOff ? "#D7D3D1" : assignee.color,
+          opacity: isAssigned ? "1" : ".6",
         }}
         className={`${
           isPendingShift ? "justify-evenly" : "justify-center"
@@ -257,8 +262,15 @@ function Shift({
             {formatHourAsAmOrPm(new Date(shift.startTime).getHours())}-
             {formatHourAsAmOrPm(new Date(shift.endTime).getHours())}
           </span>
-          {isPendingShift && <span className="font-400">Pending</span>}
-          {isDroppedOff && <span className="font-400">Dropped-off</span>}
+          {isPendingShift && shift.assignee !== null && (
+            <span className="font-400">Pending</span>
+          )}
+          {isDroppedOff && shift.assignee !== null && (
+            <span className="font-400">Dropped-off</span>
+          )}
+          {shift.assignee === null && (
+            <span className="font-400">Not assigned</span>
+          )}
         </p>
         {isPendingShift === false && isDroppedOff === false && (
           <button
@@ -275,7 +287,7 @@ function Shift({
   )
 }
 
-function AssigneePill({ assignee = {}, hoursScheduledForTheWeek }) {
+function AssigneePill({ assignee = {}, isAssigned, hoursScheduledForTheWeek }) {
   return (
     <div
       className="flex justify-start items-center gap-[4px] mx-auto w-full whitespace-nowrap max-w-[98px] text-ellipsis overflow-hidden py-[4px] px-[6px] text-info-600 rounded-[50px] bg-red-200"
@@ -291,10 +303,19 @@ function AssigneePill({ assignee = {}, hoursScheduledForTheWeek }) {
         alt="alt"
       />
       <div className="capitalize" title={assignee.firstName}>
-        <h6 className="font-bold text-[12px] ">{assignee.firstName}</h6>
-        <p className="text-[10px]">
-          {hoursScheduledForTheWeek} / ${assignee?.hourlyRate}
-        </p>
+        <h6 className="font-bold text-[12px] ">
+          {isAssigned &&
+            (assignee.firstName ||
+              assignee.lastName ||
+              assignee.fullName?.split(" ")?.[0] ||
+              assignee.email?.split("@"))}
+          {!isAssigned && <>Not assigned</>}
+        </h6>
+        {isAssigned && (
+          <p className="text-[10px]">
+            {hoursScheduledForTheWeek} / ${assignee?.hourlyRate}
+          </p>
+        )}
       </div>
     </div>
   )
@@ -311,7 +332,9 @@ function DayOfTheWeekTableHead({ date = new Date(), className }) {
     "Sun",
   ]
   return (
-    <th className={`${className} text-info-600 p-4 min-w-[120px]`}>
+    <th
+      className={`${className} bg-[#EFEDED] sticky top-0 z-[10] text-info-600 p-4 min-w-[120px]`}
+    >
       <div className="flex flex-col items-center justify-center w- gap-[10px]">
         <span className="text-[14px]">{date.getDate()}</span>
         <span className="text-[24px] font-[600]">

@@ -27,12 +27,15 @@ export default function UserProvider({ children }) {
   }, [router, pathname])
 
   const fetchUser = useCallback(async () => {
-    if (!localStorage.getItem("token")) redirectAwayFromDashboard
+    if (!localStorage.getItem("token")) redirectAwayFromDashboard()
     const res = await fetchData("/users/me", "get")
     if (res.statusCode === 200) {
       setUser(res.user)
       localStorage.setItem("user", JSON.stringify(res.user))
-    } else redirectAwayFromDashboard
+    } else {
+      redirectAwayFromDashboard()
+      router.refresh()
+    }
   }, [router, fetchData, pathname, redirectAwayFromDashboard])
 
   const updateUser = useCallback((value) => {

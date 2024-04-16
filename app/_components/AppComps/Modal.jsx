@@ -6,6 +6,7 @@ export default function Modal({
   open = false,
   onClose = () => {},
   zIndex,
+  modalClassNames
 }) {
   return (
     <>
@@ -15,6 +16,7 @@ export default function Modal({
           children={children}
           open={open}
           onClose={onClose}
+          modalClassNames={modalClassNames}
         />,
         document.getElementById("modal-container") || document.body
       )}
@@ -27,12 +29,13 @@ export function ModalElement({
   children,
   open = false,
   onClose = () => {},
+  modalClassNames
 }) {
   return (
     <>
       <div
         style={{ zIndex }}
-        className={`${
+        className={`${modalClassNames} ${
           open ? "opacity-100 visible" : "opacity-0 invisible"
         } flex justify-center items-center fixed inset-0 `}
       >

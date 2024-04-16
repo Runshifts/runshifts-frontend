@@ -1,11 +1,11 @@
+"use client"
 import { useCallback } from "react"
 import axios from "axios"
-
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_SERVER_URL
 
 export default function useAxios() {
   const fetchData = useCallback(
     async (url, method = "get", body, headers = {}) => {
+      axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_SERVER_URL
       try {
         const response = await axios({
           url,
@@ -18,7 +18,7 @@ export default function useAxios() {
         })
         return response.data
       } catch (error) {
-        console.log("error", error?.response?.data)
+        console.log(`USEAXIOS | LINE 21: ${error.message}`)
         return error.response.data
       }
     },

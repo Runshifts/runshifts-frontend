@@ -1,7 +1,5 @@
 export const checkIsValidDateString = (dateString) => {
-  return new Date(dateString).toString() === "Invalid Date"
-    ? false
-    : true
+  return new Date(dateString).toString() === "Invalid Date" ? false : true
 }
 
 export const throwInvalidDateError = (date) => {
@@ -167,4 +165,64 @@ export function getUserBasePathForDashboard(accountType) {
   else if (accountType === "employee") path = "/employee"
   else if (accountType === "admin") path = "/admin"
   return path
+}
+
+export function mergeArrays(arr1, arr2, uniqueIdentifier) {
+  const combinedArray = arr1.concat(arr2)
+  const uniqueIds = {}
+  const mergedArray = combinedArray.filter((doc) => {
+    const id = doc[uniqueIdentifier]
+    if (!uniqueIds[id]) {
+      uniqueIds[id] = true
+      return true
+    }
+    return false
+  })
+
+  return mergedArray
+}
+
+export function timeAgo(date) {
+  const now = new Date()
+  const diff = now - date
+
+  const seconds = Math.floor(diff / 1000)
+  const minutes = Math.floor(seconds / 60)
+  const hours = Math.floor(minutes / 60)
+  const days = Math.floor(hours / 24)
+
+  if (days > 1) {
+    return `${date.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })} ${date.toLocaleTimeString("en-US", {
+      hour12: !false,
+      minute: "numeric",
+      hour: "numeric",
+    })}`
+  } else if (days === 1) {
+    return "Yesterday"
+  } else if (hours > 0) {
+    return `${hours} hour${hours !== 1 ? "s" : ""} ago`
+  } else if (minutes > 0) {
+    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`
+  } else if (seconds > 0) {
+    return `${seconds} second${seconds !== 1 ? "s" : ""} ago`
+  } else return "Just now"
+}
+
+export function isWithinDay(mainDate, dateToCheck) {
+  throwInvalidDateError(mainDate)
+  throwInvalidDateError(dateToCheck)
+
+  const year1 = mainDate.getFullYear()
+  const month1 = mainDate.getMonth()
+  const day1 = mainDate.getDate()
+
+  const year2 = dateToCheck.getFullYear()
+  const month2 = dateToCheck.getMonth()
+  const day2 = dateToCheck.getDate()
+
+  return year1 === year2 && month1 === month2 && day1 === day2
 }
