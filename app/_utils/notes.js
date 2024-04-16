@@ -1,5 +1,4 @@
 export const groupNotesByShift = (notes = []) => {
-  console.log(notes, "djsfalwoeroiureureiur90r904832948309483904830948092")
   return notes.reduce((acc, note) => {
     if (acc[note.shift?._id]) {
       const isLatestNote =
