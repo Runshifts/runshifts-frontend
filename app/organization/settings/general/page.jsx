@@ -3,12 +3,12 @@ import React, { useState, useContext, useEffect } from "react";
 import Image from "next/image";
 import { FaEye, FaEyeSlash, FaRegEyeSlash } from "react-icons/fa";
 import LogoAvatar from "../Avatar.svg";
-import UploadLogo from "../UploadLogo";
-import ColorPicker from "../ColorPicker";
 import SettingTab from "../page";
+import Shiftsmangements from "./ShiftsManagements";
 import useAxios from "../../../_hooks/useAxios";
 import { UserContext } from "../../../_providers/UserProvider";
 import { OrganizationContext } from "../../../_providers/OrganizationProvider";
+import AddLocationInputs from './AddLocationInputs'
 
 const General = () => {
   const fetchData = useAxios();
@@ -23,7 +23,7 @@ const General = () => {
       : {
           businessName: organization?.name || "",
           numberOfWorkers: "",
-          officeAddress: "",
+          officeAddress: [],
           image: null,
         };
   });
@@ -40,21 +40,18 @@ const General = () => {
     setSelectedImage(file);
   };
 
-  useEffect(() => {
-    const fetchWorkers = async () => {
-      const response = await fetchData("/api/number-of-workers");
-      if (response.statusCode === 200) {
-        setFormData((prevData) => ({
-          ...prevData,
-          numberOfWorkers: response.data.numberOfWorkers,
-        }));
-        toast.success(response.message || "Successfully updated profile");
-      } else {
-        toast.error(response.message || "Something went wrong");
-      }
-    };
-    fetchWorkers();
-  }, []);
+  const handleAddAddress = () => {
+    setFormData({
+      ...formData,
+      officeAddress: [...formData.officeAddress, ""],
+    });
+  };
+
+  const handleAddressChange = (index, value) => {
+    const updatedAddresses = [...formData.officeAddress];
+    updatedAddresses[index] = value;
+    setFormData({ ...formData, officeAddress: updatedAddresses });
+  };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -64,39 +61,23 @@ const General = () => {
     formDataWithImage.append("officeAddress", formData.officeAddress);
     formDataWithImage.append("image", selectedImage);
 
-    const response = await fetchData(`/organization`, "put", formDataWithImage);
+    const response = await fetchData(
+      `/organizations/:id`,
+      "put",
+      formDataWithImage
+    );
+
     if (response.statusCode === 200) {
       updateUser(response.user);
-      // Provide user feedback on success
-      if (response.statusCode === 200) {
-        updateUser(response.user);
-        toast.success(response.message || "Successfully updated profile");
-      } else {
-        toast.error(response.message || "Something went wrong");
-      }
+      toast.success(response.message || "Successfully updated profile");
+    } else {
+      toast.error(response.message || "Something went wrong");
     }
   };
 
-  //locations route
-  const handleLocations = async () => {
-    try {
-      const response = await fetchData(
-        `/organizations/locations/${id}/${organizationId}`,
-        "put",
-        formDataWithImage
-      );
-      if (response.statusCode === 200) {
-        updateUser(response.user);
-        // Provide user feedback on success
-        toast.success(response.message || "Successfully updated profile");
-      } else {
-        toast.error(response.message || "Something went wrong");
-      }
-    } catch (error) {
-      console.error("Error updating locations:", error);
-      toast.error("Failed to update locations. Please try again later.");
-    }
-  };
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formData));
+  }, [formData]);
 
   return (
     <section className="p-4">
@@ -154,13 +135,14 @@ const General = () => {
                 Number of Workers
               </label>
               <input
-                type="text"
-                id="numberOfWorkers"
-                name="numberOfWorkers"
-                placeholder="1-10"
-                value={formData.numberOfWorkers}
-                className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
-              />
+        type="text"
+        id="numberOfWorkers"
+        name="numberOfWorkers"
+        placeholder="1-10"
+        value={formData.numberOfWorkers}
+        onChange={handleInputChange} // Bind onChange event to handleChange function
+        className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
+      />
             </div>
           </div>
           <label
@@ -169,211 +151,27 @@ const General = () => {
           >
             Office Address
           </label>
-          <input
-            type="text"
-            id="officeAddress"
-            name="officeAddress"
-            value={formData.officeAddress}
-            onChange={handleInputChange}
-            className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
-            placeholder="123 Main St, City"
-          />
-          <button
-            type="submit"
-            onClick={handleLocations}
-            className="bg-[#7ED957] text-white rounded-md px-4 py-2 mt-4"
-          >
-            + Add Location
-          </button>
+          {/* <input
+                type="text"
+                value={formData.handleAddAddress}
+                onChange={(e) => handleAddressChange(index, e.target.value)}
+                className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
+                placeholder="123 Main St, City"
+              /> */}
+
+<AddLocationInputs />
+
+<Shiftsmangements />
+        
         </form>
-
-        <form>
-          <div className="flex justify-between items-center my-2">
-            <div>
-              <p className="text-base  font-normal leading-5">
-                Enable Shifts Management
-              </p>
-            </div>
-            <div>
-              <label className="relative inline-flex items-end me-5 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="sr-only peer"
-                  defaultChecked
-                />
-                <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-              </label>
-            </div>
-          </div>
-          <hr />
-          <div>
-            <h1 className="m-2 text-sm  font-semibold leading-5">Morning</h1>
-            <div className="mb-4 flex space-x-2">
-              <div className="w-1/2">
-                <label
-                  htmlFor="BusinessName"
-                  className="text-xs font-thin m-2 leading-4"
-                >
-                  Shift Time
-                </label>
-                <select
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>10 - 30</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-              <div className="w-1/2">
-                <label
-                  htmlFor="lastName"
-                  className="text-xs  font-thin my-2 leading-4"
-                >
-                  Number of workers
-                </label>
-                <select
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>10 - 30</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h1 className="m-2 text-sm  font-semibold leading-5">Afternoon</h1>
-            <div className="mb-4 flex space-x-2">
-              <div className="w-1/2">
-                <label
-                  htmlFor="BusinessName"
-                  className="text-xs  font-thin m-2 leading-4"
-                >
-                  Shift Time
-                </label>
-                <select
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>10 - 30</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-              <div className="w-1/2">
-                <label
-                  htmlFor="lastName"
-                  className="text-xs  font-thin my-2 leading-4"
-                >
-                  Number of workers
-                </label>
-                <select
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>10 - 30</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h1 className="m-2 text-sm  font-semibold leading-5">Evening</h1>
-            <div className="mb-4 flex space-x-2">
-              <div className="w-1/2">
-                <label
-                  htmlFor="BusinessName"
-                  className="text-xs  font-thin m-2 leading-4"
-                >
-                  Shift Time
-                </label>
-                <select
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>10 - 30</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-              <div className="w-1/2">
-                <label
-                  htmlFor="lastName"
-                  className="text-xs  font-thin my-2 leading-4"
-                >
-                  Number of workers
-                </label>
-                <select
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>10 - 30</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <button className="bg-[#7ED957] text-white rounded-md m-2 px-4 py-2">
-            + Add Custom Time
-          </button>
-
-          <h1 className="m-2 text-sm  font-semibold leading-5">
-            Break Duration
-          </h1>
-          <div className="w-full">
-            <label
-              htmlFor="breakDuration"
-              className="text-xs  font-thin m-2 leading-4"
-            >
-              Minutes
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-              placeholder="Ariana"
-            />
-          </div>
-
-          <div className="m-2">
-            <ColorPicker />
-          </div>
-
-          <div className="flex justify-between items-center mx-2 my-4">
-            <div>
-              <p>Enable Geofencing</p>
-            </div>
-            <div>
-              <label className="relative inline-flex items-end me-5 cursor-pointer">
-                <input
-                  type="checkbox"
-                  value=""
-                  className="sr-only peer"
-                  defaultChecked
-                />
-                <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-              </label>
-            </div>
-          </div>
-
-          <button className="bg-[#7ED957] text-white rounded-md  m-2 px-4 py-2">
-            Save changes
-          </button>
-        </form>
+       
       </div>
+      <button
+        type="submit"
+        className="bg-[#7ED957] text-white rounded-md px-4 py-2 mt-4"
+      >
+        Save
+      </button>
     </section>
   );
 };
