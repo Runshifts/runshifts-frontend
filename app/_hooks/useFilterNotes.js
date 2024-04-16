@@ -7,10 +7,24 @@ export default function useFilterNotes({
   date,
   isShared,
   searchText = "",
+  department,
+  position,
 }) {
   const filteredNotes = useMemo(() => {
     let results = [...notes]
-    if (date)
+    if (department)
+      results = results.filter(
+        (note) =>
+          note.creator?.department?.toLowerCase() ===
+          department?.toLowerCase()
+      )
+    if (position)
+      results = results.filter(
+        (note) =>
+          note.creator?.position?.toLowerCase() ===
+          position?.toLowerCase()
+      )
+    if (date && new Date().toDateString() !== new Date(date).toDateString())
       results = results.filter((note) =>
         isWithinDay(new Date(date), new Date(note.createdAt))
       )
@@ -25,7 +39,7 @@ export default function useFilterNotes({
         note.details.toLowerCase().includes(searchText.toLowerCase())
       )
     return results
-  }, [notes, searchText, location, date])
+  }, [notes, searchText, location, date, department, position])
 
   return filteredNotes
 }

@@ -18,8 +18,6 @@ export default function NotesProvider({ children, organizationId }) {
   const [loadingNotes, setLoadingNotes] = useState(true)
   const [hasFetchedNotes, setHasFetchedNotes] = useState(false)
   const [allNotes, setAllNotes] = useState([])
-  console.log("djfkasd;", organizationId, allNotes)
-
   const fetchNotes = useCallback(async () => {
     if (!organizationId || hasFetchedNotes) return
     setLoadingNotes(true)

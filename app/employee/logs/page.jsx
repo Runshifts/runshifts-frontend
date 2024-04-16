@@ -8,18 +8,23 @@ import useFilterNotes from "../../_hooks/useFilterNotes"
 import { groupNotesByShift } from "../../_utils/notes"
 import DateFilter from "../../organization/tracker/DateFilter"
 import Heading from "../../_components/Headings"
+import { LocationFilter } from "../../_components/AppComps/FilterGroup"
+import { LocationsContext } from "../../_providers/LocationsProvider"
 
 function Logs() {
+  const { locations } = useContext(LocationsContext)
   const { allNotes } = useContext(NotesContext)
   const [searchText, setSearchText] = useState("")
   const [dateFilter, setDateFilter] = useState()
+  const [selectedLocation, setSelectedLocation] = useState(null)
 
   const filteredNotes = useFilterNotes({
     notes: allNotes,
     searchText,
     date: dateFilter,
+    location: selectedLocation
   })
-
+  console.log(locations)
   const notesGroupedByShifts = useMemo(() => {
     return groupNotesByShift(filteredNotes)
   }, [filteredNotes])
@@ -37,8 +42,16 @@ function Logs() {
             onChange={(e) => setSearchText(e.target.value)}
             value={searchText}
           />
+          <LocationFilter
+            options={locations}
+            currentValue={selectedLocation}
+            updateCurrentValue={(val) => {
+              setSelectedLocation(val)
+            }}
+          />
           <DateFilter
             dateFilter={dateFilter}
+            options={{ todayBtn: false, clearBtn: false }}
             updateDateFilter={(val) => setDateFilter(val)}
           />
         </div>

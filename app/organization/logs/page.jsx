@@ -23,12 +23,17 @@ function Logs() {
   const [dateFilter, setDateFilter] = useState()
   const [selectedLocation, setSelectedLocation] = useState(null)
   const [selectedDepartment, setSelectedDepartment] = useState(null)
+  const [selectedPosition, setSelectedPosition] = useState(null)
 
   const filteredNotes = useFilterNotes({
     notes: allNotes,
     searchText,
     location: selectedLocation,
+    department: selectedDepartment,
+    position: selectedPosition,
+    date: dateFilter
   })
+
   const notesGroupedByShifts = useMemo(() => {
     return groupNotesByShift(filteredNotes)
   }, [filteredNotes])
@@ -48,7 +53,6 @@ function Logs() {
           options={locations}
           currentValue={selectedLocation}
           updateCurrentValue={(val) => {
-            console.log(val)
             setSelectedLocation(val)
           }}
         />
@@ -57,21 +61,20 @@ function Logs() {
           options={departments}
           currentValue={selectedDepartment}
           updateCurrentValue={(val) => {
-            console.log(val)
             setSelectedDepartment(val)
           }}
         />
         <DepartmentsOrPositionsFilter
           name="Position"
           options={positions}
-          currentValue={selectedDepartment}
+          currentValue={selectedPosition}
           updateCurrentValue={(val) => {
-            console.log(val)
-            setSelectedLocation(val)
+            setSelectedPosition(val)
           }}
         />
         <DateFilter
           dateFilter={dateFilter}
+          options={{ todayBtn: false, clearBtn: false }}
           updateDateFilter={(val) => setDateFilter(val)}
         />
       </div>

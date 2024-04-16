@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import { HiOutlineTrash } from "react-icons/hi"
 import Image from "next/image"
@@ -8,6 +8,7 @@ import ShiftNotesForm, { SeverityPill } from "../my-shifts/ShiftNotesForm"
 import { timeAgo } from "../../_utils"
 import Modal from "../../_components/AppComps/Modal"
 import useOutsideClick from "../../_hooks/useOutsideClick"
+import { UserContext } from "../../_providers/UserProvider"
 
 export default function LogsContent({ notesGroupedByShifts = {} }) {
   const latestNotesOfShifts = useMemo(
@@ -72,7 +73,6 @@ export default function LogsContent({ notesGroupedByShifts = {} }) {
     ),
     [shiftInFocus, notesGroupedByShifts]
   )
-  console.log(notesGroupedByShifts)
   return (
     <section className="flex flex-col gap-2 md:flex-row gap-[12px]">
       <div className="grow lg:w-[45%] max-h-[80dvh] flex flex-col gap-2 gap-[10px]">
@@ -116,6 +116,8 @@ function ShiftDetailsKeyValue({ keyText, valueText }) {
 }
 
 export function NoteOverviewCard({ note, handleView }) {
+  const { user } = useContext(UserContext)
+  const isOwnNote = useMemo(() => note.creator?._id === user?._id, [note, user])
   return (
     <div className="bg-white w-full py-[10px] px-4 rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex items-center justify-between flex-row flex-wrap md:flex-nowrap gap-2">
       <div className="grow max-w-[40%] md:max-w-[25%] col-start-1 flex gap-2 items-center">
@@ -128,14 +130,16 @@ export function NoteOverviewCard({ note, handleView }) {
         />
         <div>
           <h4 className="text-[12px] truncate max-w-[50px] capitalize text-[#1D2433] font-[500]">
-            {note.creator?.fullName ||
-              (
-                (note.creator?.firstName || "") +
-                " " +
-                (note.creator?.lastName || "")
-              ).trim() ||
-              note.creator?.email ||
-              "--"}
+            {isOwnNote
+              ? "You"
+              : note.creator?.fullName ||
+                (
+                  (note.creator?.firstName || "") +
+                  " " +
+                  (note.creator?.lastName || "")
+                ).trim() ||
+                note.creator?.email ||
+                "--"}
           </h4>
           <p className="text-[#706763] leading-[20px] text-[12px] h-[40px] flex flex-col items-start">
             <span>{note.creator?.position || "--"}</span>

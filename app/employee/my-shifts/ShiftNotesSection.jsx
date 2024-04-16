@@ -74,7 +74,7 @@ const NoteLikeChat = ({ note }) => {
   return (
     <article
       className={`flex items-start gap-2 ${
-        isOwnNote ? "justify-start" : "flex-row-reverse  justify-start"
+        isOwnNote ? "justify-start" : "flex-row-reverse text-right justify-start"
       }`}
     >
       <Image
