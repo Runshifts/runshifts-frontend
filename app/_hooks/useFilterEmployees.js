@@ -2,7 +2,7 @@ import { useMemo, useState } from "react"
 
 export default function useFilterEmployees(employees = []) {
   const [departmentFilter, setDepartmentFilter] = useState(null)
-  const [roleFilter, setRoleFilter] = useState(null)
+  const [positionFilter, setRoleFilter] = useState(null)
   const [locationFilter, setLocationFilter] = useState(null)
 
   const filteredEmployees = useMemo(() => {
@@ -10,13 +10,13 @@ export default function useFilterEmployees(employees = []) {
       return (
         (!locationFilter || employee.location?._id === locationFilter) &&
         (!departmentFilter ||
-          employee?.department?.name?.toLowerCase() ===
+          employee?.department?.toLowerCase() ===
             departmentFilter.toLowerCase()) &&
-        (!roleFilter ||
-          employee?.role?.name?.toLowerCase() === roleFilter.toLowerCase())
+        (!positionFilter ||
+          employee?.position?.toLowerCase() === positionFilter.toLowerCase())
       )
     })
-  }, [employees, departmentFilter, roleFilter, locationFilter])
+  }, [employees, departmentFilter, positionFilter, locationFilter])
 
   return {
     filteredEmployees,
@@ -24,7 +24,7 @@ export default function useFilterEmployees(employees = []) {
     setRoleFilter,
     setLocationFilter,
     departmentFilter,
-    roleFilter,
+    positionFilter,
     locationFilter,
   }
 }

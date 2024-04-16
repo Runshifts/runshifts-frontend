@@ -13,7 +13,7 @@ import useAxios from "../../../_hooks/useAxios"
 import Spinner from "../../../_assets/svgs/Spinner"
 import DropDown from "../../../_components/AppComps/Dropdown"
 import { Option } from "../../../_components/AppComps/Select"
-import { DepartmentsAndRolesContext } from "../../../_providers/DepartmentsAndRolesProvider"
+import { DepartmentsAndPositionsContext } from "../../../_providers/DepartmentsAndPositionsProvider"
 import Modal from "../../../_components/AppComps/Modal"
 
 const getInitialState = () => ({
@@ -345,7 +345,7 @@ function EmployeeInput({
           (selectedPositions.length === 0 ||
             JSON.stringify(selectedPositions)
               .toLowerCase()
-              .includes(emp.role?.name?.toLowerCase()) === true)
+              .includes(emp.position?.name?.toLowerCase()) === true)
       ),
     [employees, selectedUsers, selectedPositions]
   )
@@ -394,14 +394,14 @@ function PositionInput({
   handleSelect,
   deselectPosition,
 }) {
-  const { roles } = useContext(DepartmentsAndRolesContext)
+  const { positions } = useContext(DepartmentsAndPositionsContext)
   const availableRoleOptions = useMemo(
     () =>
-      roles.filter(
+      positions.filter(
         (role) =>
           JSON.stringify(selectedPositions)?.includes(role._id) === false
       ),
-    [roles, selectedPositions]
+    [positions, selectedPositions]
   )
 
   if (defaultAssignee)
@@ -411,7 +411,7 @@ function PositionInput({
         inputProps={{
           placeholder: "Choose position",
           readOnly: true,
-          value: defaultAssignee?.role?.name || "",
+          value: defaultAssignee?.position?.name || "",
         }}
       />
     )
@@ -422,7 +422,7 @@ function PositionInput({
         <FormMultipleSelectInputAndLabel
           label="Choose Position"
           placeholder={
-            roles.length > 0 ? "Choose Position" : "No positions available"
+            positions.length > 0 ? "Choose Position" : "No positions available"
           }
           selectedOptions={selectedPositions}
           handleDeselect={deselectPosition}

@@ -1,38 +1,38 @@
 import { useCallback, useContext } from "react"
 import useFilterShifts from "./useFilterShifts"
 import {
-  DepartmentsOrRolesFilter,
+  DepartmentsOrPositionsFilter,
   LocationFilter,
   WeekFilter,
 } from "../_components/AppComps/FilterGroup"
 import { LocationsContext } from "../_providers/LocationsProvider"
-import { DepartmentsAndRolesContext } from "../_providers/DepartmentsAndRolesProvider"
+import { DepartmentsAndPositionsContext } from "../_providers/DepartmentsAndPositionsProvider"
 
 export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
   const {
     filteredShifts,
-    roleFilter,
+    positionFilter,
     departmentFilter,
     locationFilter,
     weekFilter,
     setWeekFilter,
-    setRoleFilter,
+    setPositionFilter,
     setDepartmentFilter,
     setLocationFilter,
   } = useFilterShifts(shiftsToFilter)
 
   const { locations } = useContext(LocationsContext)
-  const { departments, roles } = useContext(DepartmentsAndRolesContext)
+  const { departments, positions } = useContext(DepartmentsAndPositionsContext)
 
   const renderShiftFilters = useCallback(
     (props = {}) => {
       const {
         ComponentToRender,
         onWeekFilterSelect,
-        onRoleFilterSelect,
+        onPositionFilterSelect,
         onDepartmentFilterSelect,
         onLocationFilterSelect,
-        showRoleFilter = true,
+        showPositionFilter = true,
         showDepartmentFilter = true,
         showLocationFilter = true,
       } = props
@@ -40,16 +40,16 @@ export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
         return (
           <ComponentToRender
             {...{
-              roleFilter,
+              positionFilter,
               departmentFilter,
               locationFilter,
               weekFilter,
               setWeekFilter,
-              setRoleFilter,
+              setPositionFilter,
               setDepartmentFilter,
               setLocationFilter,
               onWeekFilterSelect,
-              onRoleFilterSelect,
+              onPositionFilterSelect,
               onDepartmentFilterSelect,
               onLocationFilterSelect,
             }}
@@ -73,7 +73,7 @@ export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
           )}
           {showDepartmentFilter && (
             <li>
-              <DepartmentsOrRolesFilter
+              <DepartmentsOrPositionsFilter
                 updateCurrentValue={(newFilterValue, idx) => {
                   setDepartmentFilter(newFilterValue)
                   newFilterValue !== null &&
@@ -100,18 +100,18 @@ export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
               />
             </li>
           )}
-          {showRoleFilter && (
+          {showPositionFilter && (
             <li>
-              <DepartmentsOrRolesFilter
+              <DepartmentsOrPositionsFilter
                 updateCurrentValue={(newFilterValue, idx) => {
-                  setRoleFilter(newFilterValue)
+                  setPositionFilter(newFilterValue)
                   newFilterValue !== null &&
-                    typeof onRoleFilterSelect === "function" &&
-                    onRoleFilterSelect(newFilterValue, idx)
+                    typeof onPositionFilterSelect === "function" &&
+                    onPositionFilterSelect(newFilterValue, idx)
                 }}
-                currentValue={roleFilter}
-                name="Roles"
-                options={roles}
+                currentValue={positionFilter}
+                name="Positions"
+                options={positions}
               />
             </li>
           )}
@@ -119,17 +119,17 @@ export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
       )
     },
     [
-      roleFilter,
+      positionFilter,
       departmentFilter,
       locationFilter,
       weekFilter,
       setWeekFilter,
-      setRoleFilter,
+      setPositionFilter,
       setDepartmentFilter,
       setLocationFilter,
       locations,
       departments,
-      roles,
+      positions,
       weekRanges,
     ]
   )
@@ -137,16 +137,16 @@ export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
   return {
     renderShiftFilters,
     filteredShifts,
-    roleFilter,
+    positionFilter,
     departmentFilter,
     locationFilter,
     weekFilter,
     setWeekFilter,
-    setRoleFilter,
+    setPositionFilter,
     setDepartmentFilter,
     setLocationFilter,
     locations,
     departments,
-    roles,
+    positions,
   }
 }

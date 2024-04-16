@@ -3,7 +3,7 @@ import Modal from "../../../_components/AppComps/Modal"
 import FormInputAndLabel, {
   FormLabelText,
 } from "../../schedule/NewShiftForm/FormInputAndLabel"
-import RoleOrDepartmentInput from "./RoleOrDepartmentInput"
+import PositionOrDepartmentInput from "./PositionOrDepartmentInput"
 import FormLocationInput from "../../schedule/NewShiftForm/FormLocationInput"
 import { useCallback, useMemo, useState } from "react"
 import DateInput from "../../../_components/AppComps/DateInput"
@@ -55,7 +55,7 @@ const NewMemberForm = ({
     department: isEditMode
       ? teamMemberFormData?.user?.department || null
       : null,
-    role: isEditMode ? teamMemberFormData?.user?.roll || null : null,
+    position: isEditMode ? teamMemberFormData?.user?.position || null : null,
     hourlyEarnings: isEditMode
       ? teamMemberFormData?.user?.hourlyRate || ""
       : "",
@@ -87,7 +87,7 @@ const NewMemberForm = ({
       if (!formData.location) return toast.error("Please provide a location")
       if (!formData.department)
         return toast.error("Please provide a department")
-      if (!formData.role) return toast.error("Please provide a role")
+      if (!formData.position) return toast.error("Please provide a position")
       if (!formData.profileImage)
         return toast.error("Please provide a profile image")
       if (!formData.rightToWorkExpiry)
@@ -98,7 +98,7 @@ const NewMemberForm = ({
         body.set("profileImage", formData.profileImage)
       body.set("department", formData.department?._id)
       body.set("locationId", formData.location?._id)
-      body.set("role", formData.role?._id)
+      body.set("position", formData.position?._id)
       body.set("department", formData.department?._id)
       body.set("hourlyRate", formData.hourlyEarnings)
       body.set("rightToWorkExpiry", formData.rightToWorkExpiry)
@@ -211,17 +211,17 @@ const NewMemberForm = ({
             setFormData((prev) => ({ ...prev, location }))
           }
         />
-        <RoleOrDepartmentInput
+        <PositionOrDepartmentInput
           inputType="department"
           handleSelect={(department) =>
             setFormData((prev) => ({ ...prev, department }))
           }
           selectedOption={formData.department}
         />
-        <RoleOrDepartmentInput
-          inputType="role"
-          handleSelect={(role) => setFormData((prev) => ({ ...prev, role }))}
-          selectedOption={formData.role}
+        <PositionOrDepartmentInput
+          inputType="position"
+          handleSelect={(position) => setFormData((prev) => ({ ...prev, position }))}
+          selectedOption={formData.position}
         />
         <FormInputAndLabel
           label="Hourly earnings"

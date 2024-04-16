@@ -42,7 +42,7 @@ export function LocationFilter({
   )
 }
 
-export function DepartmentsOrRolesFilter({
+export function DepartmentsOrPositionsFilter({
   name,
   options = [],
   isActive,

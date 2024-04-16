@@ -10,14 +10,14 @@ import DateFilter from "../tracker/DateFilter"
 import Heading from "../../_components/Headings"
 import {
   LocationFilter,
-  DepartmentsOrRolesFilter,
+  DepartmentsOrPositionsFilter,
 } from "../../_components/AppComps/FilterGroup"
 import { LocationsContext } from "../../_providers/LocationsProvider"
-import { DepartmentsAndRolesContext } from "../../_providers/DepartmentsAndRolesProvider"
+import { DepartmentsAndPositionsContext } from "../../_providers/DepartmentsAndPositionsProvider"
 
 function Logs() {
   const { locations } = useContext(LocationsContext)
-  const { departments, roles } = useContext(DepartmentsAndRolesContext)
+  const { departments, positions } = useContext(DepartmentsAndPositionsContext)
   const { allNotes } = useContext(NotesContext)
   const [searchText, setSearchText] = useState("")
   const [dateFilter, setDateFilter] = useState()
@@ -52,7 +52,7 @@ function Logs() {
             setSelectedLocation(val)
           }}
         />
-        <DepartmentsOrRolesFilter
+        <DepartmentsOrPositionsFilter
           name="Department"
           options={departments}
           currentValue={selectedDepartment}
@@ -61,9 +61,9 @@ function Logs() {
             setSelectedDepartment(val)
           }}
         />
-        <DepartmentsOrRolesFilter
+        <DepartmentsOrPositionsFilter
           name="Position"
-          options={roles}
+          options={positions}
           currentValue={selectedDepartment}
           updateCurrentValue={(val) => {
             console.log(val)

@@ -18,8 +18,8 @@ export default function UserHeader({ user = {} }) {
             "--"}
         </h4>
         <p className="text-[#706763] leading-[20px] text-[12px] h-[40px] flex flex-col items-start">
-          <span>{user.role || "--"}</span>
-          <span>{user.role || "--"}</span>
+          <span>{user.position || "--"}</span>
+          <span>{user.position || "--"}</span>
         </p>
       </div>
     </header>

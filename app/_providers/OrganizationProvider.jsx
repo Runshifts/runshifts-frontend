@@ -10,7 +10,7 @@ import {
 import useAxios from "../_hooks/useAxios"
 import DASHBOARD_URLS from "../_urls/dashboardURLs"
 import LocationsProvider from "../_providers/LocationsProvider"
-import DepartmentsAndRolesProvider from "./DepartmentsAndRolesProvider"
+import DepartmentsAndPositionsProvider from "./DepartmentsAndPositionsProvider"
 import ShiftsManagementProvider from "./ShiftManagementContext"
 import TrackerProvider from "./Employer/TrackerProvider"
 import TeamProvider from "./Employer/TeamProvider"
@@ -95,7 +95,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
       }}
     >
       <LocationsProvider organizationId={organization?._id}>
-        <DepartmentsAndRolesProvider
+        <DepartmentsAndPositionsProvider
           organizationIndustry={organization?.industry}
         >
           <ShiftsManagementProvider organizationId={organization?._id}>
@@ -115,7 +115,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
               </TrackerProvider>
             </TeamProvider>
           </ShiftsManagementProvider>
-        </DepartmentsAndRolesProvider>
+        </DepartmentsAndPositionsProvider>
       </LocationsProvider>
     </OrganizationContext.Provider>
   )

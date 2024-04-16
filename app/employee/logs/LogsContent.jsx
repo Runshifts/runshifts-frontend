@@ -138,7 +138,7 @@ export function NoteOverviewCard({ note, handleView }) {
               "--"}
           </h4>
           <p className="text-[#706763] leading-[20px] text-[12px] h-[40px] flex flex-col items-start">
-            <span>{note.creator?.role || "--"}</span>
+            <span>{note.creator?.position || "--"}</span>
             <span>{note.creator?.location || "--"}</span>
           </p>
         </div>
