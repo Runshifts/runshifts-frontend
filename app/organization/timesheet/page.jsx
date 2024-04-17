@@ -31,13 +31,14 @@ function Timesheet() {
 
   const shiftsGroupedByAssignee = groupShiftsByAssignee(shifts)
 
+  console.log(shifts, shiftsGroupedByAssignee)
   return (
     <section className="mx-2 p-3 h-screen">
       <div className="flex items-center justify-between py-3">
         <Heading as="h1">Timesheet</Heading>
         <ApproveAll />
       </div>
-      <div className="flex items-center gap-2 list-none">
+      <div className="flex items-center gap-2 list-none pb-4">
         <DateRangePicker
           currentWeek={currentWeek}
           goToNextWeek={goToNextWeek}
@@ -48,7 +49,9 @@ function Timesheet() {
         })}
       </div>
 
-      <TimesheetTable />
+      <div className="flex w-full overflow-auto">
+        <TimesheetTable shiftsGroupedByEmployee={shiftsGroupedByAssignee} />
+      </div>
     </section>
   )
 }
