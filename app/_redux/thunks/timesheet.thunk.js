@@ -7,7 +7,7 @@ export const fetchTimeSheet = createAsyncThunk(
   async ({ date, organizationId }) => {
     const res = await axiosFetcher({
       url: TIMESHEET_URLS.get(organizationId),
-      method: "get",
+      method: "post",
       body: { date },
     })
     return { shifts: res.shifts, date }
