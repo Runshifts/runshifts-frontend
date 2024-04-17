@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { RiDeleteBinLine } from "react-icons/ri";
 
-export default function AddDynamicInputFields() {
+
+export default function AddDynamicInputFields({ handleFormSubmit }) {
   const [formData, setFormData] = useState({
-    officeAddress: [""], // Initial state with one empty address
+    officeAddress: [""],
   });
 
   const handleAddressChange = (index, value) => {
@@ -26,6 +28,7 @@ export default function AddDynamicInputFields() {
 
   return (
     <div className="container">
+      <form onSubmit={handleFormSubmit}>
       <div className="mb-4">
         {formData.officeAddress.map((address, index) => (
           <div key={index}>
@@ -36,7 +39,9 @@ export default function AddDynamicInputFields() {
               className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
               placeholder="123 Main St, City"
             />
-            <button onClick={() => handleRemoveAddress(index)}>Remove</button>
+            <button onClick={() => handleRemoveAddress(index)}>
+              <RiDeleteBinLine />
+            </button>
           </div>
         ))}
       </div>
@@ -47,14 +52,8 @@ export default function AddDynamicInputFields() {
       >
         + Add Location
       </button>
-      {/* <button
-        type="button"
-        className="bg-[#7ED957] text-white rounded-md px-4 py-2 mt-4"
-        onClick={handleAddAddress}
-      >
-        Add Location
-      </button> */}
-      {/* <div className="body">{JSON.stringify(formData.officeAddress)}</div> */}
+      </form>
+     
     </div>
   );
 }

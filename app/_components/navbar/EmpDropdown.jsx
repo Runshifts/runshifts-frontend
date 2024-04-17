@@ -7,7 +7,6 @@ import { UserContext } from "../../_providers/UserProvider"
 const Dropdown = () => {
   const { user } = useContext(UserContext)
 
-  console.log("the image ", user)
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleDropdown = () => {
@@ -26,7 +25,6 @@ const Dropdown = () => {
         />
       </div>
 
-      {/* Dropdown menu, show/hide based on menu state */}
       {isOpen && (
         <div
           className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
