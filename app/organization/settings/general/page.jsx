@@ -1,26 +1,24 @@
-"use client";
-import React, { useState, useContext, useEffect } from "react";
-import Image from "next/image";
-import { FaEye, FaEyeSlash, FaRegEyeSlash } from "react-icons/fa";
-import LogoAvatar from "../Avatar.svg";
-import SettingTab from "../page";
-import ColorPicker from "../ColorPicker";
-import useAxios from "../../../_hooks/useAxios";
-import { UserContext } from "../../../_providers/UserProvider";
-import { OrganizationContext } from "../../../_providers/OrganizationProvider";
-import AddLocationInputs from "./AddLocationInputs";
+"use client"
+import React, { useState, useContext, useEffect } from "react"
+import Image from "next/image"
+import { FaEye, FaEyeSlash, FaRegEyeSlash } from "react-icons/fa"
+import LogoAvatar from "../Avatar.svg"
+import SettingTab from "../page"
+import ColorPicker from "../ColorPicker"
+import useAxios from "../../../_hooks/useAxios"
+import { UserContext } from "../../../_providers/UserProvider"
+import { OrganizationContext } from "../../../_providers/OrganizationProvider"
+import AddLocationInputs from "./AddLocationInputs"
 import Shiftsmangements from "./ShiftsManagements"
+import toast from "react-hot-toast"
 
 const General = ({}) => {
-  const fetchData = useAxios();
+  const fetchData = useAxios()
 
-  const { user, updateUser } = useContext(UserContext);
-  console.log("the settings ", user)
-
-  const { organization } = useContext(OrganizationContext);
+  const { organization } = useContext(OrganizationContext)
 
   const [formData, setFormData] = useState(() => {
-    const savedFormData = localStorage.getItem("formData");
+    const savedFormData = localStorage.getItem("formData")
     return savedFormData
       ? JSON.parse(savedFormData)
       : {
@@ -33,25 +31,21 @@ const General = ({}) => {
             afternoon: { startTime: "", stopTime: "" },
             evening: { startTime: "", stopTime: "" },
           },
-        };
-  });
+        }
+  })
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null)
   const [enableShiftsManagement, setEnableShiftsManagement] = useState(false)
 
-  const handleToggle = () => {
-    setEnableShiftsManagement(!prev)
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]
+    setSelectedImage(file)
   }
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-  };
-
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = event.target
+    setFormData({ ...formData, [name]: value })
+  }
 
   const handleShiftChange = (shiftName, startTime, stopTime) => {
     setFormData({
@@ -60,47 +54,46 @@ const General = ({}) => {
         ...formData.shifts,
         [shiftName]: { startTime, stopTime },
       },
-    });
-  };
+    })
+  }
 
   const handleStartTimeChange = (shiftName, startTime) => {
-    const stopTime = "";
-    handleShiftChange(shiftName, startTime, stopTime);
-  };
+    const stopTime = ""
+    handleShiftChange(shiftName, startTime, stopTime)
+  }
 
   const handleStopTimeChange = (shiftName, startTime) => {
-    const stopTime = "";
-    handleShiftChange(shiftName, startTime, stopTime);
-  };
+    const stopTime = ""
+    handleShiftChange(shiftName, startTime, stopTime)
+  }
 
   const handleFormSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    const formDataWithImage = new FormData();
-    formDataWithImage.append("businessName", formData.businessName);
-    formDataWithImage.append("numberOfWorkers", formData.numberOfWorkers);
-    formDataWithImage.append("officeAddress", formData.officeAddress);
-    formDataWithImage.append("image", selectedImage);
-    formDataWithImage.append("shifts", JSON.stringify(formData.shifts));
+    const formDataWithImage = new FormData()
+    formDataWithImage.append("businessName", formData.businessName)
+    formDataWithImage.append("numberOfWorkers", formData.numberOfWorkers)
+    formDataWithImage.append("officeAddress", formData.officeAddress)
+    formDataWithImage.append("image", selectedImage)
+    formDataWithImage.append("shifts", JSON.stringify(formData.shifts))
 
     const response = await fetchData(
-      `/organizations/:id`,
+      `/organizations/${organization?._id}`,
       "put",
       formDataWithImage
-    );
-    console.log(response)
+    )
+    console.log(response, "jlfjads;fsfkja")
 
     if (response.statusCode === 200) {
-      updateUser(response.user);
-      toast.success(response.message || "Successfully updated settings");
+      toast.success(response.message || "Successfully updated settings")
     } else {
-      toast.error(response.message || "Something went wrong");
+      toast.error(response.message || "Something went wrong")
     }
-  };
+  }
 
   useEffect(() => {
-    localStorage.setItem("formData", JSON.stringify(formData));
-  }, [formData]);
+    localStorage.setItem("formData", JSON.stringify(formData))
+  }, [formData])
 
   return (
     <section className="p-4">
@@ -131,7 +124,6 @@ const General = ({}) => {
               />
             </div>
           </div>
-
           <div className="mb-4 flex space-x-2">
             <div className="w-1/2">
               <label
@@ -181,11 +173,8 @@ const General = ({}) => {
                 className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
                 placeholder="123 Main St, City"
               /> */}
-
           <AddLocationInputs />
-
           {/* <Shiftsmangements /> */}
-
           <div className="flex justify-between items-center my-2">
             <div>
               <p className="text-base  font-normal leading-5">
@@ -195,7 +184,7 @@ const General = ({}) => {
             <div>
               <label className="relative inline-flex items-end me-5 cursor-pointer">
                 <input
-                onClick={handleToggle}
+                  onChange={() => setEnableShiftsManagement((prev) => !prev)}
                   type="checkbox"
                   className="sr-only peer"
                   defaultChecked
@@ -216,10 +205,12 @@ const General = ({}) => {
                   Start Time
                 </label>
                 <select
-                type='default'
-                name="morning"
-                id="morningStartTime"
-                onChange={(e) => handleStartTimeChange("morning", e.target.value)}
+                  type="default"
+                  name="morning"
+                  id="morningStartTime"
+                  onChange={(e) =>
+                    handleStartTimeChange("morning", e.target.value)
+                  }
                   className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
                   aria-label="Default select example"
                 >
@@ -236,10 +227,12 @@ const General = ({}) => {
                   Stop Time
                 </label>
                 <select
-                type='default'
-                name="morning"
-                     id="morningStopTime"
-                     onChange={(e) => handleStopTimeChange("morning", e.target.value)}
+                  type="default"
+                  name="morning"
+                  id="morningStopTime"
+                  onChange={(e) =>
+                    handleStopTimeChange("morning", e.target.value)
+                  }
                   className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
                   aria-label="Default select example"
                 >
@@ -250,7 +243,6 @@ const General = ({}) => {
               </div>
             </div>
           </div>
-
           <div>
             <h1 className="m-2 text-sm  font-semibold leading-5">Afternoon</h1>
             <div className="mb-4 flex space-x-2">
@@ -262,10 +254,12 @@ const General = ({}) => {
                   Start Time
                 </label>
                 <select
-                type='default'
-                name="afternoon"
+                  type="default"
+                  name="afternoon"
                   id="afternoonStartTime"
-                  onChange={(e) => handleStartTimeChange("afternoon", e.target.value)}
+                  onChange={(e) =>
+                    handleStartTimeChange("afternoon", e.target.value)
+                  }
                   className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
                   aria-label="Default select example"
                 >
@@ -282,21 +276,22 @@ const General = ({}) => {
                   Stop Time
                 </label>
                 <select
-                type='default'
-                name="afternoon"
-                     id="afternoonStopTime"
-                     onChange={(e) => handleStopTimeChange("afternoon", e.target.value)}
+                  type="default"
+                  name="afternoon"
+                  id="afternoonStopTime"
+                  onChange={(e) =>
+                    handleStopTimeChange("afternoon", e.target.value)
+                  }
                   className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
                   aria-label="Default select example"
                 >
-                    <option>12:00 - 14:00</option>
+                  <option>12:00 - 14:00</option>
                   <option value="1">14:00 - 16:00</option>
                   <option value="2">16:00 - 18:00</option>
                 </select>
               </div>
             </div>
           </div>
-
           <div>
             <h1 className="m-2 text-sm  font-semibold leading-5">Evening</h1>
             <div className="mb-4 flex space-x-2">
@@ -308,10 +303,12 @@ const General = ({}) => {
                   Start Time
                 </label>
                 <select
-                type='default'
-                name="evening"
+                  type="default"
+                  name="evening"
                   id="eveningStartTime"
-                  onChange={(e) => handleStartTimeChange("evening", e.target.value)}
+                  onChange={(e) =>
+                    handleStartTimeChange("evening", e.target.value)
+                  }
                   className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
                   aria-label="Default select example"
                 >
@@ -328,10 +325,12 @@ const General = ({}) => {
                   Stop Time
                 </label>
                 <select
-                type='default'
-                name="evening"
-                     id="EveningStopTime"
-                     onChange={(e) => handleStopTimeChange("evening", e.target.value)}
+                  type="default"
+                  name="evening"
+                  id="EveningStopTime"
+                  onChange={(e) =>
+                    handleStopTimeChange("evening", e.target.value)
+                  }
                   className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
                   aria-label="Default select example"
                 >
@@ -342,11 +341,9 @@ const General = ({}) => {
               </div>
             </div>
           </div>
-
           <button className="bg-[#7ED957] text-white rounded-md m-2 px-4 py-2">
             + Add Custom Time
           </button>
-
           <h1 className="m-2 text-sm  font-semibold leading-5">
             Break Duration
           </h1>
@@ -364,11 +361,9 @@ const General = ({}) => {
               placeholder="30 minutes"
             />
           </div>
-
           <div className="m-2">
             <ColorPicker />
           </div>
-
           <div className="flex justify-between items-center mx-2 my-4">
             <div>
               <p>Enable Geofencing</p>
@@ -385,19 +380,19 @@ const General = ({}) => {
               </label>
             </div>
           </div>
+          <button
+            type="submit"
+            className="bg-[#7ED957] text-white rounded-md px-4 py-2 mt-4"
+          >
+            Save Changes
+          </button>
         </form>
       </div>
-      <button
-        type="submit"
-        className="bg-[#7ED957] text-white rounded-md px-4 py-2 mt-4"
-      >
-        Save Changes
-      </button>
     </section>
-  );
-};
+  )
+}
 
-export default General;
+export default General
 
 function HomeSvg() {
   return (
@@ -422,5 +417,5 @@ function HomeSvg() {
         fill="#706763"
       />
     </svg>
-  );
+  )
 }
