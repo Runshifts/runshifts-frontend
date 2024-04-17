@@ -169,9 +169,6 @@ export function NoteOverviewCard({ note, handleView }) {
         <div className="md:flex justify-center items-center w-fit hidden">
           <ShareModal />
         </div>
-        <button className="text-[#B22A09] font-bold md:block hidden">
-          <HiOutlineTrash size={22} />
-        </button>
       </div>
       <div className="md:hidden flex gap-2 items-center w-full">
         <button
