@@ -1,36 +1,34 @@
+"use client";
 import React, { useState } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 
-
-export default function AddDynamicInputFields({ handleFormSubmit }) {
-  const [formData, setFormData] = useState({
-    officeAddress: [""],
-  });
-
-  const handleAddressChange = (index, value) => {
-    const updatedAddresses = [...formData.officeAddress];
-    updatedAddresses[index] = value;
-    setFormData({ ...formData, officeAddress: updatedAddresses });
-  };
-
-  const handleAddAddress = () => {
-    setFormData({
-      ...formData,
-      officeAddress: [...formData.officeAddress, ""],
-    });
-  };
-
-  const handleRemoveAddress = (index) => {
-    const updatedAddresses = [...formData.officeAddress];
-    updatedAddresses.splice(index, 1);
-    setFormData({ ...formData, officeAddress: updatedAddresses });
-  };
-
+export default function AddDynamicInputFields({
+  officeAddress,
+  handleAddressChange,
+  handleAddAddress,
+  handleRemoveAddress,
+}) {
   return (
     <div className="container">
-      <form onSubmit={handleFormSubmit}>
       <div className="mb-4">
-        {formData.officeAddress.map((address, index) => (
+        {officeAddress.map((address, index) => (
+          <div key={index}>
+            <input
+              type="text"
+              value={address.address}
+              onChange={(e) => handleAddressChange(index, e.target.value)}
+              className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
+              placeholder="123 Main St, City"
+            />
+            {officeAddress.length > 1 && (
+              <button type="button" onClick={() => handleRemoveAddress(index)}>
+                <RiDeleteBinLine />
+              </button>
+            )}
+          </div>
+        ))}
+
+        {/* {formData.officeAddress.map((address, index) => (
           <div key={index}>
             <input
               type="text"
@@ -43,7 +41,7 @@ export default function AddDynamicInputFields({ handleFormSubmit }) {
               <RiDeleteBinLine />
             </button>
           </div>
-        ))}
+        ))} */}
       </div>
       <button
         type="button"
@@ -52,8 +50,6 @@ export default function AddDynamicInputFields({ handleFormSubmit }) {
       >
         + Add Location
       </button>
-      </form>
-     
     </div>
   );
 }

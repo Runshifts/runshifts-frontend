@@ -1,24 +1,23 @@
-"use client"
-import React, { useState, useContext, useEffect } from "react"
-import Image from "next/image"
-import { FaEye, FaEyeSlash, FaRegEyeSlash } from "react-icons/fa"
-import LogoAvatar from "../Avatar.svg"
-import SettingTab from "../page"
-import ColorPicker from "../ColorPicker"
-import useAxios from "../../../_hooks/useAxios"
-import { UserContext } from "../../../_providers/UserProvider"
-import { OrganizationContext } from "../../../_providers/OrganizationProvider"
-import AddLocationInputs from "./AddLocationInputs"
-import Shiftsmangements from "./ShiftsManagements"
-import toast from "react-hot-toast"
+"use client";
+import React, { useState, useContext, useEffect } from "react";
+import Image from "next/image";
+import SettingTab from "../page";
+import ColorPicker from "../ColorPicker";
+import useAxios from "../../../_hooks/useAxios";
+import { OrganizationContext } from "../../../_providers/OrganizationProvider";
+import AddLocationInputs from "./AddLocationInputs";
+import toast from "react-hot-toast";
+import Options from "./Options";
+import { LocationsContext } from "../../../_providers/LocationsProvider";
 
-const General = ({}) => {
-  const fetchData = useAxios()
+const General = () => {
+  const fetchData = useAxios();
 
-  const { organization } = useContext(OrganizationContext)
+  const { organization } = useContext(OrganizationContext);
+  const { locations } = useContext(LocationsContext);
 
   const [formData, setFormData] = useState(() => {
-    const savedFormData = localStorage.getItem("formData")
+    const savedFormData = localStorage.getItem("formData");
     return savedFormData
       ? JSON.parse(savedFormData)
       : {
@@ -31,21 +30,29 @@ const General = ({}) => {
             afternoon: { startTime: "", stopTime: "" },
             evening: { startTime: "", stopTime: "" },
           },
-        }
-  })
+        };
+  });
 
-  const [selectedImage, setSelectedImage] = useState(null)
-  const [enableShiftsManagement, setEnableShiftsManagement] = useState(false)
+  const [ officeAddress, setOfficeAddress ] = useState(
+    locations.length>0 ? [...locations] : [{address:''}]);
+  console.log(officeAddress)
+
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formData));
+  }, [formData]);
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [enableShiftsManagement, setEnableShiftsManagement] = useState(false);
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0]
-    setSelectedImage(file)
-  }
+    const file = event.target.files[0];
+    setSelectedImage(file);
+  };
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target
-    setFormData({ ...formData, [name]: value })
-  }
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleShiftChange = (shiftName, startTime, stopTime) => {
     setFormData({
@@ -54,46 +61,77 @@ const General = ({}) => {
         ...formData.shifts,
         [shiftName]: { startTime, stopTime },
       },
-    })
-  }
+    });
+  };
+
+  const handleAddressChange = (index, value) => {
+    setOfficeAddress((prevofficeAddress) => {
+      return prevofficeAddress.map((address, addressIndex) => {
+        if (index === addressIndex) {
+          return { ...address, address: value };
+        } else {
+          return address;
+        }
+      });
+    });
+  };
+
+  const handleAddAddress = () => {
+    setOfficeAddress(prev => (
+      [...prev, {address:''}]
+    ))
+  };
+  
+  const handleRemoveAddress = (index) => {
+  setOfficeAddress(prev => ( prev.filter((address, addressIndex) => (
+    addressIndex!== index
+  ))
+  ))
+  };
 
   const handleStartTimeChange = (shiftName, startTime) => {
-    const stopTime = ""
-    handleShiftChange(shiftName, startTime, stopTime)
-  }
+    const stopTime = "";
+    handleShiftChange(shiftName, startTime, stopTime);
+  };
 
   const handleStopTimeChange = (shiftName, startTime) => {
-    const stopTime = ""
-    handleShiftChange(shiftName, startTime, stopTime)
-  }
+    const stopTime = "";
+    handleShiftChange(shiftName, startTime, stopTime);
+  };
 
   const handleFormSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const formDataWithImage = new FormData()
-    formDataWithImage.append("businessName", formData.businessName)
-    formDataWithImage.append("numberOfWorkers", formData.numberOfWorkers)
-    formDataWithImage.append("officeAddress", formData.officeAddress)
-    formDataWithImage.append("image", selectedImage)
-    formDataWithImage.append("shifts", JSON.stringify(formData.shifts))
+    const numberOfWorkers = formData.numberOfWorkers.split('-')
+    const minStaffCount = numberOfWorkers?.[0]
+    const maxStaffCount = numberOfWorkers?.[1]
+
+    const formDataWithImage = new FormData();
+    // formDataWithImage.append("businessName", formData.businessName);
+
+    formDataWithImage.append("minStaffCount", minStaffCount);
+    formDataWithImage.append("maxStaffCount", maxStaffCount);
+    formDataWithImage.append("logo", selectedImage);
+    // formDataWithImage.append("shifts", JSON.stringify(formData.shifts));
+    officeAddress.forEach((address) => (
+      formDataWithImage.append("locations", JSON.stringify(address))
+    ))
+
+  
 
     const response = await fetchData(
       `/organizations/${organization?._id}`,
       "put",
       formDataWithImage
-    )
-    console.log(response, "jlfjads;fsfkja")
+    );
+    console.log(response, "jlfjads;fsfkja");
 
     if (response.statusCode === 200) {
-      toast.success(response.message || "Successfully updated settings")
+      toast.success(response.message || "Successfully updated settings");
     } else {
-      toast.error(response.message || "Something went wrong")
+      toast.error(response.message || "Something went wrong");
     }
-  }
-
-  useEffect(() => {
-    localStorage.setItem("formData", JSON.stringify(formData))
-  }, [formData])
+  };
 
   return (
     <section className="p-4">
@@ -124,6 +162,7 @@ const General = ({}) => {
               />
             </div>
           </div>
+          <Options />
           <div className="mb-4 flex space-x-2">
             <div className="w-1/2">
               <label
@@ -173,7 +212,12 @@ const General = ({}) => {
                 className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
                 placeholder="123 Main St, City"
               /> */}
-          <AddLocationInputs />
+          <AddLocationInputs
+            officeAddress={officeAddress}
+            handleAddressChange={handleAddressChange}
+            handleAddAddress={handleAddAddress}
+            handleRemoveAddress={handleRemoveAddress}
+          />
           {/* <Shiftsmangements /> */}
           <div className="flex justify-between items-center my-2">
             <div>
@@ -297,7 +341,7 @@ const General = ({}) => {
             <div className="mb-4 flex space-x-2">
               <div className="w-1/2">
                 <label
-                  htmlFor="BusinessName"
+                  htmlFor="eveningStartTime"
                   className="text-xs  font-thin m-2 leading-4"
                 >
                   Start Time
@@ -319,7 +363,7 @@ const General = ({}) => {
               </div>
               <div className="w-1/2">
                 <label
-                  htmlFor="lastName"
+                  htmlFor="EveningStopTime"
                   className="text-xs  font-thin my-2 leading-4"
                 >
                   Stop Time
@@ -389,10 +433,10 @@ const General = ({}) => {
         </form>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default General
+export default General;
 
 function HomeSvg() {
   return (
@@ -417,5 +461,5 @@ function HomeSvg() {
         fill="#706763"
       />
     </svg>
-  )
+  );
 }
