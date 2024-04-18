@@ -1,49 +1,73 @@
-import DateRangePicker from "../../_components/AppComps/Datepicker";
-import TimesheetCalendarScroll from "./TimesheetCalendarScroll";
-import Queries from "./Queries";
-import WorkersFilter from "./WorkersFilter";
+"use client"
+import DateRangePicker from "../../_components/AppComps/Datepicker"
+import TimesheetCalendarScroll from "./TimesheetCalendarScroll"
+import Queries from "./Queries"
+import WorkersFilter from "./WorkersFilter"
+import { useContext, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { fetchTimeSheet } from "../../_redux/thunks/timesheet.thunk"
+import { OrganizationContext } from "../../_providers/OrganizationProvider"
+import Heading from "../../_components/Headings"
+import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
+import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
+import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
 
 function page() {
+  const { organization } = useContext(OrganizationContext)
+  const { weekRanges, goToNextWeek, goToPrevWeek, currentWeek, jumpToWeek } =
+    useGetWeekRanges(new Date(), 7)
+  const { shifts, cache } = useSelector((store) => store.timesheet)
+  const { renderShiftFilters } = useRenderShiftFilters(shifts, weekRanges)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (cache[currentWeek.start.toDateString()] !== true && organization)
+      dispatch(
+        fetchTimeSheet({
+          date: currentWeek.start,
+          organizationId: organization?._id,
+        })
+      )
+  }, [dispatch, organization?._id, currentWeek.start, shifts])
+
+  const shiftsGroupedByDate = groupShiftsByDayOfTheWeek(shifts)
+
+  console.log(shiftsGroupedByDate)
   return (
     <section className="p-3 h-screen">
       <div className="flex items-center justify-between py-3">
-        <h1 className="custom-h1">Timesheet</h1>
-
+        <Heading as="h1">Timesheet</Heading>
         <div className="bg-[#F4F5F7] border-none text-[#7A869A] text-xs m-2 px-2 mx-2 h-10 w-32 rounded flex justify-around items-center cursor-pointer">
-        <DownloadSvg />
+          <DownloadSvg />
           <p>Download</p>
-          
         </div>
       </div>
 
-      <div className="flex justify-start items-center">
-        <div>
-          <DateRangePicker />
-        </div>
-        <select
-          className="bg-[#F4F5F7] border-none text-[#7A869A] text-sm m-2 mx-2 h-10 w-fit rounded-md flex justify-between items-center"
-          aria-label="Default select example"
-        >
-          <option>7 Dec - 21 Dec</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
-        <div>
-          <WorkersFilter />
-        </div>
+      <div className="">
+        <ul className="list-none flex justify-start items-center">
+          <DateRangePicker
+            goToPrevWeek={goToPrevWeek}
+            goToNextWeek={goToNextWeek}
+            currentWeek={currentWeek}
+          />
+          {renderShiftFilters({
+            showPositionFilter: false,
+            showDepartmentFilter: false,
+            showLocationFilter: false,
+            onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
+          })}
+        </ul>
       </div>
 
       <div className="bg-white rounded-xl shadow-xl p-4">
         <TimesheetCalendarScroll />
-
         <Queries />
       </div>
     </section>
-  );
+  )
 }
 
-export default page;
+export default page
 
 function DownloadSvg() {
   return (
@@ -67,5 +91,5 @@ function DownloadSvg() {
         fill="#292D32"
       />
     </svg>
-  );
+  )
 }
