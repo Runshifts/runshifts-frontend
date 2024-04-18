@@ -1,3 +1,14 @@
+
+export const ONE_HOUR_IN_MILLISECONDS =  3600000 
+export const DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY = [
+  "monday", 
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday"
+]
 export const checkIsValidDateString = (dateString) => {
   return new Date(dateString).toString() === "Invalid Date" ? false : true
 }

@@ -31,7 +31,6 @@ function Timesheet() {
 
   const shiftsGroupedByAssignee = groupShiftsByAssignee(shifts)
 
-  console.log(shifts, shiftsGroupedByAssignee)
   return (
     <section className="mx-2 p-3 h-screen">
       <div className="flex items-center justify-between py-3">
@@ -49,7 +48,7 @@ function Timesheet() {
         })}
       </div>
 
-      <div className="flex w-full overflow-auto">
+      <div className="flex w-full overflow-auto shadow-[0px_2px_8px_0px_#0000001F]">
         <TimesheetTable shiftsGroupedByEmployee={shiftsGroupedByAssignee} />
       </div>
     </section>
