@@ -11,28 +11,39 @@ import Heading from "../../_components/Headings"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
 import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
+import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 
 function page() {
-  const { organization } = useContext(OrganizationContext)
-  const { weekRanges, goToNextWeek, goToPrevWeek, currentWeek, jumpToWeek } =
-    useGetWeekRanges(new Date(), 7)
-  const { shifts, cache } = useSelector((store) => store.timesheet)
-  const { renderShiftFilters } = useRenderShiftFilters(shifts, weekRanges)
-  const dispatch = useDispatch()
+  // const { organization } = useContext(OrganizationContext)
+  // const { weekRanges, goToNextWeek, goToPrevWeek, currentWeek, jumpToWeek } =
+  //   useGetWeekRanges(new Date(), 7)
+  // const { shifts, cache } = useSelector((store) => store.timesheet)
+  const {
+    shiftsInCurrentWeek,
+    goToNextWeek,
+    goToPrevWeek,
+    currentWeek,
+    weekRanges,
+    jumpToWeek
+  } = useContext(EmployeeDashboardContext)
+  const { renderShiftFilters } = useRenderShiftFilters(
+    shiftsInCurrentWeek,
+    weekRanges
+  )
+  // const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (cache[currentWeek.start.toDateString()] !== true && organization)
-      dispatch(
-        fetchTimeSheet({
-          date: currentWeek.start,
-          organizationId: organization?._id,
-        })
-      )
-  }, [dispatch, organization?._id, currentWeek.start, shifts])
+  // useEffect(() => {
+  //   if (cache[currentWeek.start.toDateString()] !== true && organization)
+  //     dispatch(
+  //       fetchTimeSheet({
+  //         date: currentWeek.start,
+  //         organizationId: organization?._id,
+  //       })
+  //     )
+  // }, [dispatch, organization?._id, currentWeek.start, shifts])
 
-  const shiftsGroupedByDate = groupShiftsByDayOfTheWeek(shifts)
+  const shiftsGroupedByDate = groupShiftsByDayOfTheWeek(shiftsInCurrentWeek)
 
-  console.log(shiftsGroupedByDate)
   return (
     <section className="p-3 h-screen">
       <div className="flex items-center justify-between py-3">
@@ -60,8 +71,8 @@ function page() {
       </div>
 
       <div className="bg-white rounded-xl shadow-xl p-4">
-        <TimesheetCalendarScroll />
-        <Queries />
+        <TimesheetCalendarScroll shiftsGroupedByDate={shiftsGroupedByDate} />
+        {/* <Queries /> */}
       </div>
     </section>
   )

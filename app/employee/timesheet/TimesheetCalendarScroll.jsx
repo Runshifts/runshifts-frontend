@@ -1,15 +1,69 @@
-import { DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY } from "../../_utils"
-import { CalendarDayContainer, CalendarShiftDay } from "../CalendarComponents"
+import { useCallback, useMemo } from "react"
+import Pill from "../../_components/AppComps/Pill"
+import {
+  DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY,
+  ONE_HOUR_IN_MILLISECONDS,
+} from "../../_utils"
+import { CalendarShiftDay } from "../CalendarComponents"
 
-export default function EmployeeTimeSheet() {
+export default function EmployeeTimeSheet({ shiftsGroupedByDate }) {
+  const calculateShiftHoursWorked = useCallback((shifts) => {
+    if (!Array.isArray(shifts)) return null
+    const hoursWorked = (
+      shifts.reduce((acc, current) => {
+        return !current.isOvertime && current.startedAt
+          ? new Date(current.endedAt || current.endTime).getTime() -
+              new Date(current.startedAt).getTime() +
+              acc
+          : acc + 0
+      }, 0) / ONE_HOUR_IN_MILLISECONDS
+    ).toFixed(2)
+    return hoursWorked
+  }, [])
+  const calculateOvertimeHoursWorked = useCallback((shifts) => {
+    if (!Array.isArray(shifts)) return null
+    const hoursWorked = (
+      shifts.reduce((acc, current) => {
+        return current.isOvertime && current.startedAt
+          ? new Date(current.endedAt || current.endTime).getTime() -
+              new Date(current.startedAt).getTime() +
+              acc
+          : acc + 0
+      }, 0) / ONE_HOUR_IN_MILLISECONDS
+    ).toFixed(2)
+    return hoursWorked
+  }, [])
   return (
     <>
       <ol className="list-none flex items-stretch gap-2">
         {DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY.map((day, idx) => (
           <CalendarShiftDay key={day} day={idx + 1}>
-            <>
-              <span>{day}</span>
-            </>
+            <div className="flex flex-col items-center text-center text-[10px] leading-[20px] gap-[10px]">
+              <span>
+                <h6>Hours worked</h6>
+                <TimesheetElement
+                  numberOfHours={calculateShiftHoursWorked(
+                    shiftsGroupedByDate[idx + 1]
+                  )}
+                  shifts={(shiftsGroupedByDate[idx + 1] || []).filter(
+                    (it) => !it.isOvertime
+                  )}
+                  isOvertime={false}
+                />
+              </span>
+              <span>
+                <h6>Overtime</h6>
+                <TimesheetElement
+                  numberOfHours={calculateOvertimeHoursWorked(
+                    shiftsGroupedByDate[idx + 1]
+                  )}
+                  shifts={(shiftsGroupedByDate[idx + 1] || []).filter(
+                    (it) => it.isOvertime
+                  )}
+                  isOvertime={false}
+                />
+              </span>
+            </div>
           </CalendarShiftDay>
         ))}
       </ol>
@@ -17,6 +71,48 @@ export default function EmployeeTimeSheet() {
   )
 }
 
+function TimesheetElement({ numberOfHours, shifts, isOvertime }) {
+  const hasHours = useMemo(() => {
+    if (shifts.length > 0 && numberOfHours === 0) return false
+  }, [numberOfHours, shifts])
+  const notStartedShift = useMemo(() => {
+    return shifts.find(
+      (it) =>
+        new Date(it.startTime).getTime() > Date.now() &&
+        new Date(it.endTime).getTime() > Date.now() &&
+        !it.endedAt
+    )
+  }, [])
+  const ongoingShift = useMemo(() => {
+    return shifts.find(
+      (it) =>
+        new Date(it.startTime).getTime() < Date.now() &&
+        new Date(it.endTime).getTime() > Date.now() &&
+        !it.endedAt
+    )
+  }, [shifts])
+  const useRedBg = useMemo(
+    () =>
+      (isOvertime && notStartedShift !== undefined) ||
+      shifts.length === 0 ||
+      !hasHours ||
+      isOvertime,
+    [isOvertime, notStartedShift, hasHours]
+  )
+  return (
+    <div
+      className={`${
+        useRedBg ? "bg-red-300" : "bg-primary-200"
+      } h-[15px] rounded-[50px] flex items-center justify-center`}
+    >
+      {!numberOfHours &&
+      (notStartedShift === undefined || ongoingShift === undefined)
+        ? "-"
+        : `${numberOfHours} hrs`}
+      {ongoingShift && "Ongoing"}
+    </div>
+  )
+}
 // function ShiftsCalenderScroll() {
 //   return (
 //     <div className=" p-4">
