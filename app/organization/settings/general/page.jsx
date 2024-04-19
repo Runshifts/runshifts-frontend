@@ -7,7 +7,7 @@ import useAxios from "../../../_hooks/useAxios";
 import { OrganizationContext } from "../../../_providers/OrganizationProvider";
 import AddLocationInputs from "./AddLocationInputs";
 import toast from "react-hot-toast";
-import Options from "./Options";
+import ShiftsManagementForm from "./ShiftsManagements";
 import { LocationsContext } from "../../../_providers/LocationsProvider";
 
 const General = () => {
@@ -33,16 +33,29 @@ const General = () => {
         };
   });
 
-  const [ officeAddress, setOfficeAddress ] = useState(
-    locations.length>0 ? [...locations] : [{address:''}]);
-  console.log(officeAddress)
+  const [officeAddress, setOfficeAddress] = useState(
+    locations.length > 0 ? [...locations] : [{ address: "" }]
+  );
+  console.log(officeAddress);
+
+  const [shiftManagementEnabled, setShiftManagementEnabled] = useState(true);
+  const [morningShift, setMorningShift] = useState({
+    startTime: "",
+    stopTime: "",
+  });
+  const [afternoonShift, setAfternoonShift] = useState({
+    startTime: "",
+    stopTime: "",
+  });
+  const [eveningShift, setEveningShift] = useState({
+    startTime: "",
+    stopTime: "",
+  });
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("formData", JSON.stringify(formData));
   }, [formData]);
-
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [enableShiftsManagement, setEnableShiftsManagement] = useState(false);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -51,17 +64,26 @@ const General = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    const updatedFormData = { ...formData, [name]: value };
+    setFormData(updatedFormData);
+
+    localStorage.setItem("formData", JSON.stringify(updatedFormData));
   };
 
-  const handleShiftChange = (shiftName, startTime, stopTime) => {
-    setFormData({
-      ...formData,
-      shifts: {
-        ...formData.shifts,
-        [shiftName]: { startTime, stopTime },
-      },
-    });
+  const handleShiftTimeChange = (shift, field, value) => {
+    switch (shift) {
+      case "morning":
+        setMorningShift({ ...morningShift, [field]: value });
+        break;
+      case "afternoon":
+        setAfternoonShift({ ...afternoonShift, [field]: value });
+        break;
+      case "evening":
+        setEveningShift({ ...eveningShift, [field]: value });
+        break;
+      default:
+        break;
+    }
   };
 
   const handleAddressChange = (index, value) => {
@@ -77,54 +99,42 @@ const General = () => {
   };
 
   const handleAddAddress = () => {
-    setOfficeAddress(prev => (
-      [...prev, {address:''}]
-    ))
+    setOfficeAddress((prev) => [...prev, { address: "" }]);
   };
-  
+
   const handleRemoveAddress = (index) => {
-  setOfficeAddress(prev => ( prev.filter((address, addressIndex) => (
-    addressIndex!== index
-  ))
-  ))
-  };
-
-  const handleStartTimeChange = (shiftName, startTime) => {
-    const stopTime = "";
-    handleShiftChange(shiftName, startTime, stopTime);
-  };
-
-  const handleStopTimeChange = (shiftName, startTime) => {
-    const stopTime = "";
-    handleShiftChange(shiftName, startTime, stopTime);
+    setOfficeAddress((prev) =>
+      prev.filter((address, addressIndex) => addressIndex !== index)
+    );
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    const numberOfWorkers = formData.numberOfWorkers.split('-')
-    const minStaffCount = numberOfWorkers?.[0]
-    const maxStaffCount = numberOfWorkers?.[1]
+    const numberOfWorkers = formData.numberOfWorkers.split("-");
+    const minStaffCount = numberOfWorkers?.[0];
+    const maxStaffCount = numberOfWorkers?.[1];
 
     const formDataWithImage = new FormData();
-    // formDataWithImage.append("businessName", formData.businessName);
 
     formDataWithImage.append("minStaffCount", minStaffCount);
     formDataWithImage.append("maxStaffCount", maxStaffCount);
     formDataWithImage.append("logo", selectedImage);
-    // formDataWithImage.append("shifts", JSON.stringify(formData.shifts));
-    officeAddress.forEach((address) => (
-      formDataWithImage.append("locations", JSON.stringify(address))
-    ))
 
-  
+    formDataWithImage.append("morningShift", JSON.stringify(morningShift));
+    formDataWithImage.append("afternoonShift", JSON.stringify(afternoonShift));
+    formDataWithImage.append("eveningShift", JSON.stringify(eveningShift));
+
+    officeAddress.forEach((address) =>
+      formDataWithImage.append("locations", JSON.stringify(address))
+    );
 
     const response = await fetchData(
       `/organizations/${organization?._id}`,
       "put",
       formDataWithImage
     );
-    console.log(response, "jlfjads;fsfkja");
+    console.log(response, "response");
 
     if (response.statusCode === 200) {
       toast.success(response.message || "Successfully updated settings");
@@ -162,7 +172,6 @@ const General = () => {
               />
             </div>
           </div>
-          <Options />
           <div className="mb-4 flex space-x-2">
             <div className="w-1/2">
               <label
@@ -188,15 +197,16 @@ const General = () => {
               >
                 Number of Workers
               </label>
-              <input
-                type="text"
-                id="numberOfWorkers"
-                name="numberOfWorkers"
-                placeholder="1-10"
-                value={formData.numberOfWorkers}
-                onChange={handleInputChange}
-                className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
-              />
+              <select class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                <option value="" disabled selected>
+                  Select number of workers
+                </option>
+                <option value="1-10">1-10</option>
+                <option value="11-50">11-50</option>
+                <option value="51-200">51-200</option>
+                <option value="201-500">201-500</option>
+                <option value="500+">500+</option>
+              </select>
             </div>
           </div>
           <label
@@ -205,209 +215,45 @@ const General = () => {
           >
             Office Address
           </label>
-          {/* <input
-                type="text"
-                value={formData.handleAddAddress}
-                onChange={(e) => handleAddressChange(index, e.target.value)}
-                className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
-                placeholder="123 Main St, City"
-              /> */}
+
           <AddLocationInputs
             officeAddress={officeAddress}
             handleAddressChange={handleAddressChange}
             handleAddAddress={handleAddAddress}
             handleRemoveAddress={handleRemoveAddress}
           />
-          {/* <Shiftsmangements /> */}
-          <div className="flex justify-between items-center my-2">
-            <div>
-              <p className="text-base  font-normal leading-5">
-                Enable Shifts Management
-              </p>
-            </div>
-            <div>
-              <label className="relative inline-flex items-end me-5 cursor-pointer">
-                <input
-                  onChange={() => setEnableShiftsManagement((prev) => !prev)}
-                  type="checkbox"
-                  className="sr-only peer"
-                  defaultChecked
-                />
-                <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+          <ShiftsManagementForm
+            shiftManagementEnabled={shiftManagementEnabled}
+            setShiftManagementEnabled={setShiftManagementEnabled}
+            morningShift={morningShift}
+            afternoonShift={afternoonShift}
+            eveningShift={eveningShift}
+            handleShiftTimeChange={handleShiftTimeChange}
+          />
+          <div>
+            <h1 className="m-2 text-sm font-semibold leading-5">
+              Break Duration
+            </h1>
+            <div className="w-full">
+              <label
+                htmlFor="breakDuration"
+                className="text-xs font-thin m-2 leading-4"
+              >
+                Minutes
               </label>
+              <input
+                type="number"
+                id="breakDuration"
+                className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
+                placeholder="30 minutes"
+              />
             </div>
           </div>
-          <hr />
-          <div>
-            <h1 className="m-2 text-sm  font-semibold leading-5">Morning</h1>
-            <div className="mb-4 flex space-x-2">
-              <div className="w-1/2">
-                <label
-                  htmlFor="BusinessName"
-                  className="text-xs font-thin m-2 leading-4"
-                >
-                  Start Time
-                </label>
-                <select
-                  type="default"
-                  name="morning"
-                  id="morningStartTime"
-                  onChange={(e) =>
-                    handleStartTimeChange("morning", e.target.value)
-                  }
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>04:00 - 06:00</option>
-                  <option value="1">06:00 - 10:00</option>
-                  <option value="2">10:00 - 12:00</option>
-                </select>
-              </div>
-              <div className="w-1/2">
-                <label
-                  htmlFor="lastName"
-                  className="text-xs  font-thin my-2 leading-4"
-                >
-                  Stop Time
-                </label>
-                <select
-                  type="default"
-                  name="morning"
-                  id="morningStopTime"
-                  onChange={(e) =>
-                    handleStopTimeChange("morning", e.target.value)
-                  }
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>04:00 - 06:00</option>
-                  <option value="1">06:00 - 10:00</option>
-                  <option value="2">10:00 - 12:00</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h1 className="m-2 text-sm  font-semibold leading-5">Afternoon</h1>
-            <div className="mb-4 flex space-x-2">
-              <div className="w-1/2">
-                <label
-                  htmlFor="BusinessName"
-                  className="text-xs  font-thin m-2 leading-4"
-                >
-                  Start Time
-                </label>
-                <select
-                  type="default"
-                  name="afternoon"
-                  id="afternoonStartTime"
-                  onChange={(e) =>
-                    handleStartTimeChange("afternoon", e.target.value)
-                  }
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>12:00 - 14:00</option>
-                  <option value="1">14:00 - 16:00</option>
-                  <option value="2">16:00 - 18:00</option>
-                </select>
-              </div>
-              <div className="w-1/2">
-                <label
-                  htmlFor="lastName"
-                  className="text-xs  font-thin my-2 leading-4"
-                >
-                  Stop Time
-                </label>
-                <select
-                  type="default"
-                  name="afternoon"
-                  id="afternoonStopTime"
-                  onChange={(e) =>
-                    handleStopTimeChange("afternoon", e.target.value)
-                  }
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>12:00 - 14:00</option>
-                  <option value="1">14:00 - 16:00</option>
-                  <option value="2">16:00 - 18:00</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h1 className="m-2 text-sm  font-semibold leading-5">Evening</h1>
-            <div className="mb-4 flex space-x-2">
-              <div className="w-1/2">
-                <label
-                  htmlFor="eveningStartTime"
-                  className="text-xs  font-thin m-2 leading-4"
-                >
-                  Start Time
-                </label>
-                <select
-                  type="default"
-                  name="evening"
-                  id="eveningStartTime"
-                  onChange={(e) =>
-                    handleStartTimeChange("evening", e.target.value)
-                  }
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>18:00 - 20:00</option>
-                  <option value="1">20:00 - 22:00</option>
-                  <option value="2">22:00 - 24:00</option>
-                </select>
-              </div>
-              <div className="w-1/2">
-                <label
-                  htmlFor="EveningStopTime"
-                  className="text-xs  font-thin my-2 leading-4"
-                >
-                  Stop Time
-                </label>
-                <select
-                  type="default"
-                  name="evening"
-                  id="EveningStopTime"
-                  onChange={(e) =>
-                    handleStopTimeChange("evening", e.target.value)
-                  }
-                  className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-                  aria-label="Default select example"
-                >
-                  <option>18:00 - 20:00</option>
-                  <option value="1">20:00 - 22:00</option>
-                  <option value="2">22:00 - 24:00</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <button className="bg-[#7ED957] text-white rounded-md m-2 px-4 py-2">
-            + Add Custom Time
-          </button>
-          <h1 className="m-2 text-sm  font-semibold leading-5">
-            Break Duration
-          </h1>
-          <div className="w-full">
-            <label
-              htmlFor="breakDuration"
-              className="text-xs  font-thin m-2 leading-4"
-            >
-              Minutes
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433] "
-              placeholder="30 minutes"
-            />
-          </div>
+
           <div className="m-2">
             <ColorPicker />
           </div>
+
           <div className="flex justify-between items-center mx-2 my-4">
             <div>
               <p>Enable Geofencing</p>

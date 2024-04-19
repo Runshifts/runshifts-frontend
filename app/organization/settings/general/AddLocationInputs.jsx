@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 export default function AddDynamicInputFields({
@@ -27,21 +27,6 @@ export default function AddDynamicInputFields({
             )}
           </div>
         ))}
-
-        {/* {formData.officeAddress.map((address, index) => (
-          <div key={index}>
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => handleAddressChange(index, e.target.value)}
-              className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
-              placeholder="123 Main St, City"
-            />
-            <button onClick={() => handleRemoveAddress(index)}>
-              <RiDeleteBinLine />
-            </button>
-          </div>
-        ))} */}
       </div>
       <button
         type="button"
