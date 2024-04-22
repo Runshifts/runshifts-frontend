@@ -9,28 +9,26 @@ import { CalendarShiftDay } from "../CalendarComponents"
 export default function EmployeeTimeSheet({ shiftsGroupedByDate }) {
   const calculateShiftHoursWorked = useCallback((shifts) => {
     if (!Array.isArray(shifts)) return null
-    const hoursWorked = (
-      shifts.reduce((acc, current) => {
-        return !current.isOvertime && current.startedAt
-          ? new Date(current.endedAt || current.endTime).getTime() -
-              new Date(current.startedAt).getTime() +
-              acc
-          : acc + 0
-      }, 0) / ONE_HOUR_IN_MILLISECONDS
-    ).toFixed(2)
+    const hoursWorked =
+      shifts.length === 0
+        ? null
+        : (
+            shifts.reduce((acc, current) => {
+              return current.totalTimeWorkedInMilliseconds + acc
+            }, 0) / ONE_HOUR_IN_MILLISECONDS
+          ).toFixed(2)
     return hoursWorked
   }, [])
   const calculateOvertimeHoursWorked = useCallback((shifts) => {
     if (!Array.isArray(shifts)) return null
-    const hoursWorked = (
-      shifts.reduce((acc, current) => {
-        return current.isOvertime && current.startedAt
-          ? new Date(current.endedAt || current.endTime).getTime() -
-              new Date(current.startedAt).getTime() +
-              acc
-          : acc + 0
-      }, 0) / ONE_HOUR_IN_MILLISECONDS
-    ).toFixed(2)
+    const hoursWorked =
+      shifts.length === 0
+        ? null
+        : (
+            shifts.reduce((acc, current) => {
+              return current.totalTimeWorkedInMilliseconds + acc
+            }, 0) / ONE_HOUR_IN_MILLISECONDS
+          ).toFixed(2)
     return hoursWorked
   }, [])
   return (
@@ -43,7 +41,9 @@ export default function EmployeeTimeSheet({ shiftsGroupedByDate }) {
                 <h6>Hours worked</h6>
                 <TimesheetElement
                   numberOfHours={calculateShiftHoursWorked(
-                    shiftsGroupedByDate[idx + 1]
+                    (shiftsGroupedByDate[idx + 1] || []).filter(
+                      (it) => !it.isOvertime
+                    )
                   )}
                   shifts={(shiftsGroupedByDate[idx + 1] || []).filter(
                     (it) => !it.isOvertime
@@ -55,12 +55,14 @@ export default function EmployeeTimeSheet({ shiftsGroupedByDate }) {
                 <h6>Overtime</h6>
                 <TimesheetElement
                   numberOfHours={calculateOvertimeHoursWorked(
-                    shiftsGroupedByDate[idx + 1]
+                    (shiftsGroupedByDate[idx + 1] || []).filter(
+                      (it) => it.isOvertime === true
+                    )
                   )}
                   shifts={(shiftsGroupedByDate[idx + 1] || []).filter(
-                    (it) => it.isOvertime
+                    (it) => it.isOvertime === true
                   )}
-                  isOvertime={false}
+                  isOvertime={true}
                 />
               </span>
             </div>
@@ -72,9 +74,6 @@ export default function EmployeeTimeSheet({ shiftsGroupedByDate }) {
 }
 
 function TimesheetElement({ numberOfHours, shifts, isOvertime }) {
-  const hasHours = useMemo(() => {
-    if (shifts.length > 0 && numberOfHours === 0) return false
-  }, [numberOfHours, shifts])
   const notStartedShift = useMemo(() => {
     return shifts.find(
       (it) =>
@@ -91,19 +90,11 @@ function TimesheetElement({ numberOfHours, shifts, isOvertime }) {
         !it.endedAt
     )
   }, [shifts])
-  const useRedBg = useMemo(
-    () =>
-      (isOvertime && notStartedShift !== undefined) ||
-      shifts.length === 0 ||
-      !hasHours ||
-      isOvertime,
-    [isOvertime, notStartedShift, hasHours]
-  )
   return (
     <div
       className={`${
-        useRedBg ? "bg-red-300" : "bg-primary-200"
-      } h-[15px] rounded-[50px] flex items-center justify-center`}
+        isOvertime ? "bg-red-300" : "bg-primary-200"
+      } h-[15px] rounded-[50px] w-fit p-[4px] mx-auto flex items-center justify-center`}
     >
       {!numberOfHours &&
       (notStartedShift === undefined || ongoingShift === undefined)

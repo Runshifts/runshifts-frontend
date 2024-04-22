@@ -3,44 +3,43 @@ import DateRangePicker from "../../_components/AppComps/Datepicker"
 import TimesheetCalendarScroll from "./TimesheetCalendarScroll"
 import Queries from "./Queries"
 import WorkersFilter from "./WorkersFilter"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useMemo } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { fetchTimeSheet } from "../../_redux/thunks/timesheet.thunk"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import Heading from "../../_components/Headings"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
-import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
+import {
+  filterShiftsByWeek,
+  groupShiftsByDayOfTheWeek,
+} from "../../_utils/shifts"
 import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 
 function page() {
-  // const { organization } = useContext(OrganizationContext)
-  // const { weekRanges, goToNextWeek, goToPrevWeek, currentWeek, jumpToWeek } =
-  //   useGetWeekRanges(new Date(), 7)
-  // const { shifts, cache } = useSelector((store) => store.timesheet)
-  const {
-    shiftsInCurrentWeek,
-    goToNextWeek,
-    goToPrevWeek,
-    currentWeek,
-    weekRanges,
-    jumpToWeek
-  } = useContext(EmployeeDashboardContext)
+  const { organization } = useContext(OrganizationContext)
+  const { weekRanges, goToNextWeek, goToPrevWeek, currentWeek, jumpToWeek } =
+    useGetWeekRanges(new Date(), 7)
+  const { shifts, cache } = useSelector((store) => store.timesheet)
+  const shiftsInCurrentWeek = useMemo(
+    () => filterShiftsByWeek(shifts, currentWeek),
+    [shifts, currentWeek]
+  )
   const { renderShiftFilters } = useRenderShiftFilters(
     shiftsInCurrentWeek,
     weekRanges
   )
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-  // useEffect(() => {
-  //   if (cache[currentWeek.start.toDateString()] !== true && organization)
-  //     dispatch(
-  //       fetchTimeSheet({
-  //         date: currentWeek.start,
-  //         organizationId: organization?._id,
-  //       })
-  //     )
-  // }, [dispatch, organization?._id, currentWeek.start, shifts])
+  useEffect(() => {
+    if (cache[currentWeek.start.toDateString()] !== true && organization)
+      dispatch(
+        fetchTimeSheet({
+          date: currentWeek.start,
+          organizationId: organization?._id,
+        })
+      )
+  }, [dispatch, organization?._id, currentWeek.start, shifts])
 
   const shiftsGroupedByDate = groupShiftsByDayOfTheWeek(shiftsInCurrentWeek)
 
@@ -66,6 +65,7 @@ function page() {
             showDepartmentFilter: false,
             showLocationFilter: false,
             onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
+            weekRanges
           })}
         </ul>
       </div>

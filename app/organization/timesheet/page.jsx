@@ -1,5 +1,5 @@
 "use client"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useMemo } from "react"
 import ApproveAll from "../../_components/AppComps/ApproveAll"
 import TimesheetTable from "./TimesheetTable"
 import { useSelector, useDispatch } from "react-redux"
@@ -9,7 +9,7 @@ import Heading from "../../_components/Headings"
 import DateRangePicker from "../../_components/AppComps/Datepicker"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
-import { groupShiftsByAssignee } from "../../_utils/shifts"
+import { filterShiftsByWeek, groupShiftsByAssignee } from "../../_utils/shifts"
 
 function Timesheet() {
   const { organization } = useContext(OrganizationContext)
@@ -29,7 +29,12 @@ function Timesheet() {
       )
   }, [dispatch, organization?._id, currentWeek.start, shifts])
 
-  const shiftsGroupedByAssignee = groupShiftsByAssignee(shifts)
+  const shiftsInCurrentWeek = useMemo(
+    () => filterShiftsByWeek(shifts, currentWeek),
+    [shifts, currentWeek]
+  )
+
+  const shiftsGroupedByAssignee = groupShiftsByAssignee(shiftsInCurrentWeek)
 
   return (
     <section className="mx-2 p-3 h-screen">
@@ -45,6 +50,7 @@ function Timesheet() {
         />
         {renderShiftFilters({
           onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
+          weekFilter: currentWeek,
         })}
       </div>
 
