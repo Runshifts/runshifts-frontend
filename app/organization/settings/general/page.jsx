@@ -9,13 +9,18 @@ import AddLocationInputs from "./AddLocationInputs";
 import toast from "react-hot-toast";
 import ShiftsManagementForm from "./ShiftsManagements";
 import { LocationsContext } from "../../../_providers/LocationsProvider";
+import { ShiftsManagementContext } from "./../../../_providers/ShiftManagementContext";
+import { useColor } from "react-color-palette";
 
 const General = () => {
   const fetchData = useAxios();
 
   const { organization } = useContext(OrganizationContext);
   const { locations } = useContext(LocationsContext);
-
+  const { defaultShiftManagements, customShiftManagements } = useContext(
+    ShiftsManagementContext
+  );
+  console.log(defaultShiftManagements);
   const [formData, setFormData] = useState(() => {
     const savedFormData = localStorage.getItem("formData");
     return savedFormData
@@ -24,6 +29,7 @@ const General = () => {
           businessName: organization?.name || "",
           numberOfWorkers: "",
           officeAddress: [""],
+          breakDuration: null,
           image: null,
           shifts: {
             morning: { startTime: "", stopTime: "" },
@@ -36,7 +42,32 @@ const General = () => {
   const [officeAddress, setOfficeAddress] = useState(
     locations.length > 0 ? [...locations] : [{ address: "" }]
   );
-  console.log(officeAddress);
+
+  useEffect(() => {
+    setOfficeAddress([...locations]);
+  }, [locations]);
+
+  useEffect(() => {
+    if (organization) {
+      setFormData((prev) => {
+        return {
+          ...prev,
+          numberOfWorkers: `${organization.employeesCount.minimum}${
+            organization.employeesCount.maximum
+              ? `-${organization.employeesCount.maximum}}`
+              : "+"
+          }`,
+        };
+      });
+    }
+  }, [organization]);
+
+  console.log(locations, officeAddress);
+
+  const [defaultShiftManagementState, setDefaultShiftManagementState] =
+    useState([...defaultShiftManagements]);
+
+  const [color, setColor] = useColor("hex", "#121212");
 
   const [shiftManagementEnabled, setShiftManagementEnabled] = useState(true);
   const [morningShift, setMorningShift] = useState({
@@ -70,6 +101,18 @@ const General = () => {
     localStorage.setItem("formData", JSON.stringify(updatedFormData));
   };
 
+  const handleNumberOfWorkers = (event) => {
+    setFormData((prev) => {
+      return { ...prev, numberOfWorkers: event.target.value };
+    });
+  };
+
+  const handleBreakDuration = (event) => {
+    setFormData((prev) => {
+      return { ...prev, breakDuration: event.target.value}
+    })
+  }
+
   const handleShiftTimeChange = (shift, field, value) => {
     switch (shift) {
       case "morning":
@@ -85,6 +128,8 @@ const General = () => {
         break;
     }
   };
+
+  // console.log(organization);
 
   const handleAddressChange = (index, value) => {
     setOfficeAddress((prevofficeAddress) => {
@@ -103,9 +148,13 @@ const General = () => {
   };
 
   const handleRemoveAddress = (index) => {
-    setOfficeAddress((prev) =>
+    const isConfirmed = window.confirm('Are you sure you want to delete this location?');
+if(isConfirmed) {
+  setOfficeAddress((prev) =>
       prev.filter((address, addressIndex) => addressIndex !== index)
     );
+}
+  
   };
 
   const handleFormSubmit = async (event) => {
@@ -120,6 +169,8 @@ const General = () => {
     formDataWithImage.append("minStaffCount", minStaffCount);
     formDataWithImage.append("maxStaffCount", maxStaffCount);
     formDataWithImage.append("logo", selectedImage);
+    formDataWithImage.append("brandColor", color);
+    formDataWithImage.append("allottedBreakTimeInMilliseconds", breakDuration);
 
     formDataWithImage.append("morningShift", JSON.stringify(morningShift));
     formDataWithImage.append("afternoonShift", JSON.stringify(afternoonShift));
@@ -184,9 +235,10 @@ const General = () => {
                 type="text"
                 id="businessName"
                 name="businessName"
-                value={formData.businessName}
-                placeholder="Gravity hills"
+                value={organization?.name}
+                placeholder={organization?.name}
                 readOnly
+                disabled
                 className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
               />
             </div>
@@ -197,14 +249,18 @@ const General = () => {
               >
                 Number of Workers
               </label>
-              <select class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+              <select
+                onChange={handleNumberOfWorkers}
+                value={formData.numberOfWorkers}
+                className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              >
                 <option value="" disabled selected>
                   Select number of workers
                 </option>
                 <option value="1-10">1-10</option>
                 <option value="11-50">11-50</option>
-                <option value="51-200">51-200</option>
-                <option value="201-500">201-500</option>
+                <option value="51-150">51-150</option>
+                <option value="151-499">151-499</option>
                 <option value="500+">500+</option>
               </select>
             </div>
@@ -229,7 +285,10 @@ const General = () => {
             afternoonShift={afternoonShift}
             eveningShift={eveningShift}
             handleShiftTimeChange={handleShiftTimeChange}
+            customShiftManagements={customShiftManagements}
+            defaultShiftManagements={defaultShiftManagements}
           />
+
           <div>
             <h1 className="m-2 text-sm font-semibold leading-5">
               Break Duration
@@ -244,6 +303,9 @@ const General = () => {
               <input
                 type="number"
                 id="breakDuration"
+                name='breakDuration'
+                value={formData.breakDuration}
+                onChange={handleBreakDuration}
                 className="w-full border-2 border-[#DFE1E6] rounded px-3 py-2 text-sm font-normal leading-5 text-left text-[#1D2433]"
                 placeholder="30 minutes"
               />
@@ -251,7 +313,7 @@ const General = () => {
           </div>
 
           <div className="m-2">
-            <ColorPicker />
+            <ColorPicker color={color} setColor={setColor} />
           </div>
 
           <div className="flex justify-between items-center mx-2 my-4">

@@ -3,10 +3,11 @@
 import React from "react";
 import Options from "./Options";
 
-const ShiftsManagementForm = ({ handleShiftTimeChange, shiftManagementEnabled, setShiftManagementEnabled,  morningShift, afternoonShift, eveningShift, }) => {
+const ShiftsManagementForm = ({ handleShiftTimeChange, shiftManagementEnabled, setShiftManagementEnabled, defaultShiftManagements, customShiftManagements,  morningShift, afternoonShift, eveningShift, }) => {
 
 
   return (
+
     <div>
       <div className="flex justify-between items-center my-2">
         <div>
@@ -25,7 +26,38 @@ const ShiftsManagementForm = ({ handleShiftTimeChange, shiftManagementEnabled, s
         </div>
       </div>
       <hr />
-      <div>
+      
+      {defaultShiftManagements.map((defaultShift, index) => (
+        <div key={index}>
+        <h1 className="m-2 text-sm font-semibold leading-5">{defaultShift.name}</h1>
+        <div className="mb-4 flex space-x-2">
+          <div className="w-1/2 flex flex-col">
+            <label htmlFor="morningStartTime" className="text-xs font-thin m-2 leading-4">
+              Start Time
+            </label>
+            <Options
+              id="morningStartTime"
+              disabled={!shiftManagementEnabled}
+              value={morningShift.startTime}
+              onChange={(e) => handleShiftTimeChange("morning", "startTime", e.target.value)}
+            />
+          </div>
+          <div className="w-1/2 flex flex-col">
+            <label htmlFor="morningStopTime" className="text-xs font-thin my-2 leading-4">
+              Stop Time
+            </label>
+            <Options
+              id="morningStopTime"
+              disabled={!shiftManagementEnabled}
+              value={morningShift.stopTime}
+              onChange={(e) => handleShiftTimeChange("morning", "stopTime", e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+      ))}
+
+      {/* <div>
         <h1 className="m-2 text-sm font-semibold leading-5">Morning</h1>
         <div className="mb-4 flex space-x-2">
           <div className="w-1/2 flex flex-col">
@@ -120,7 +152,7 @@ const ShiftsManagementForm = ({ handleShiftTimeChange, shiftManagementEnabled, s
             />
           </div>
         </div>
-      </div>
+      </div> */}
 
       <button type='button' className="bg-[#7ED957] text-white rounded-md m-2 px-4 py-2">
         + Add Custom Time
