@@ -8,7 +8,7 @@ import React, {
 } from "react"
 import { EmployeeTrackerContext } from "../../_providers/Employee/TrackerProvider"
 import Spinner from "../../_assets/svgs/Spinner"
-import { checkIsValidDateString, msToHourMinSecond } from "../../_utils"
+import { checkIsValidDateString, msToMinSecond } from "../../_utils"
 import toast from "react-hot-toast"
 import Modal from "../../_components/AppComps/Modal"
 import SendNoteAfterShiftForm from "./SendNoteAfterShiftForm"
@@ -89,7 +89,7 @@ function TrackerContent({ todaysShift }) {
 
   const breakTimeLeft = useMemo(
     () =>
-      msToHourMinSecond(
+      msToMinSecond(
         todaysShift?.allottedBreakTimeInMilliseconds -
           (todaysShift?.breakDurationUsedInMilliseconds || 0) || 0
       ),

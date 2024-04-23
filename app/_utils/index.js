@@ -1,13 +1,12 @@
-
-export const ONE_HOUR_IN_MILLISECONDS =  3600000 
+export const ONE_HOUR_IN_MILLISECONDS = 3600000
 export const DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY = [
-  "monday", 
+  "monday",
   "tuesday",
   "wednesday",
   "thursday",
   "friday",
   "saturday",
-  "sunday"
+  "sunday",
 ]
 export const checkIsValidDateString = (dateString) => {
   return new Date(dateString).toString() === "Invalid Date" ? false : true
@@ -76,6 +75,17 @@ export function formatNumberToTwoDigitsMinimum(number) {
   })
 }
 
+export function msToMinSecond(ms) {
+  const roundAndFormat = (num) =>
+    formatNumberToTwoDigitsMinimum(Math.round(num))
+  let seconds = ms / 1000
+  let hours = parseInt(seconds / 3600)
+  seconds = seconds % 3600
+  let minutes = parseInt(seconds / 60)
+  seconds = parseInt(seconds % 60)
+  return roundAndFormat(minutes) + ":" + roundAndFormat(seconds)
+}
+
 export function msToHourMinSecond(ms) {
   const roundAndFormat = (num) =>
     formatNumberToTwoDigitsMinimum(Math.round(num))
@@ -84,9 +94,8 @@ export function msToHourMinSecond(ms) {
   seconds = seconds % 3600
   let minutes = parseInt(seconds / 60)
   seconds = seconds % 60
-  return hours
-    ? roundAndFormat(hours) + ":"
-    : "" + roundAndFormat(minutes) + ":" + roundAndFormat(seconds)
+  return roundAndFormat(hours) + ":" + roundAndFormat(minutes) 
+    //+ ":" + roundAndFormat(seconds)
 }
 
 export const getPreviousMonday = (date) => {

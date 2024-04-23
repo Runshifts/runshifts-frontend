@@ -12,19 +12,18 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <>
-      <GlobalLayout>
-        <>
-          <OrganizationProvider>
-            <DashboardProvider>
-              <ShiftAndOvertimeRequestsProvider>
-                <OrganizationHooksProvider>
-                  {children}
-                </OrganizationHooksProvider>
-              </ShiftAndOvertimeRequestsProvider>
-            </DashboardProvider>
-          </OrganizationProvider>
-        </>
-      </GlobalLayout>
+      <>
+        <OrganizationProvider>
+          <DashboardProvider>
+            <ShiftAndOvertimeRequestsProvider>
+              <OrganizationHooksProvider>
+                <GlobalLayout> {children} </GlobalLayout>
+              </OrganizationHooksProvider>
+            </ShiftAndOvertimeRequestsProvider>
+          </DashboardProvider>
+        </OrganizationProvider>
+      </>
+
       <div id="modal-container" />
     </>
   )
