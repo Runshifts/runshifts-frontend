@@ -30,7 +30,6 @@ export default function OvertimeRequestsSection({
 }
 
 export function OvertimeRequest({ overtimeRequest = {} }) {
-  console.log(overtimeRequest)
   const overtimeStart = useMemo(
     () => new Date(overtimeRequest?.shift?.startTime),
     [overtimeRequest?.startTime]

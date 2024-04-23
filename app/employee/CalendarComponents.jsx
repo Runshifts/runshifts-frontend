@@ -15,6 +15,20 @@ export function ShiftPill({ shift = {} }) {
     () => shift.isAccepted === false && shift.isDroppedOff === false,
     [shift?.isAccepted, shift?.isDroppedOff]
   )
+  const style = useMemo(() => {
+    const style = {}
+    style.backgroundColor = shift.assignee?.color
+    if (isPending) {
+      style.backgroundColor = "#D7D3D1"
+    } else if (shift.isOvertime) {
+      style.backgroundColor = "#DE350B"
+      style.color = "white"
+    } else if (!shift.assignee?.color) {
+      style.backgroundColor = "#FFC6C6"
+    }
+    return style
+  }, [isPending, shift])
+
   const { startHour, endHour } = useMemo(() => {
     return {
       startHour: new Date(shift.startTime).getHours(),
@@ -22,13 +36,7 @@ export function ShiftPill({ shift = {} }) {
     }
   }, [shift?.startTime, shift?.endTime])
   return (
-    <Pill
-      style={{
-        backgroundColor: isPending
-          ? "#D7D3D1"
-          : shift.assignee?.color || "#FFC6C6",
-      }}
-    >
+    <Pill style={style}>
       <span>
         {formatHourAsAmOrPm(startHour)}-{formatHourAsAmOrPm(endHour)}
       </span>
