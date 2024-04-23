@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useContext, useMemo } from "react"
+import React, { useCallback, useContext, useMemo, useState } from "react"
 import Calender from "../EmployeeCalender"
 import Heading from "../../_components/Headings"
 import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
@@ -10,8 +10,17 @@ import RequestedShifts from "./RequestedShifts"
 import ShiftSwapRequests from "./ShiftSwapRequests"
 import AcceptAllShiftsButton from "./AcceptAllShiftsButton"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
+import OvertimeApplicationFormModal from "./OvertimeApplication"
 
 function page() {
+  const { allShifts } = useContext(EmployeeDashboardContext)
+  const requestableOvertimeShifts = useMemo(
+    () => allShifts.filter((shift) => !shift.assignee),
+    [allShifts]
+  )
+  const [showOvertimeApplicationModal, setShowOvertimeApplicationModal] =
+    useState(false)
+
   const {
     goToNextWeek,
     goToPrevWeek,
@@ -43,16 +52,24 @@ function page() {
       ),
     [shiftsInCurrentWeek, updateAllShifts, user?._id]
   )
-
   return (
     <section className="min-h-screen px-4 pb-4">
       <div className="flex flex-col gap-6 justify-between pt-6 pb-4">
         <div className="flex justify-between">
           <Heading>My Shifts</Heading>
           <div>
-            <button className="p-2 mx-1 bg-[#5BC62D] text-white text-sm rounded-sm">
+            <button
+              disabled={requestableOvertimeShifts.length === 0}
+              onClick={() => setShowOvertimeApplicationModal(true)}
+              className="p-2 mx-1 bg-[#5BC62D] text-white text-sm rounded-sm disabled:bg-gray-300"
+            >
               Request overtime
             </button>
+            <OvertimeApplicationFormModal
+              requestableOvertimeShifts={requestableOvertimeShifts}
+              show={showOvertimeApplicationModal}
+              handleHide={() => setShowOvertimeApplicationModal(false)}
+            />
             <button className="p-2 mx-1 text-[#42526E] bg-white text-sm rounded-sm">
               Request time off
             </button>

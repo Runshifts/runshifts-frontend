@@ -6,25 +6,79 @@ import useAxios from "../../_hooks/useAxios"
 import toast from "react-hot-toast"
 import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
+import DropDown from "../../_components/AppComps/Dropdown"
+import { Option } from "../../_components/AppComps/Select"
 
-export default function ShiftApplicationForm({ shift = {}, onFinish }) {
+export default function ShiftApplicationForm({
+  shift = {},
+  onFinish,
+  isOvertimeApplication = false,
+  requestableOvertimeShifts = [],
+}) {
   const { organization } = useContext(OrganizationContext)
+  const [selectedOvertimeShift, setSelectedOvertimeShift] = useState(null)
   const [loading, setLoading] = useState(false)
   const fetchData = useAxios()
 
-  const handleShiftApplication = useCallback(async () => {
-    if (loading) return
-    setLoading(true)
-    const res = await fetchData(
-      MY_SHIFTS_URLS.apply(organization?._id, shift._id),"post"
+  const handleShiftApplication = useCallback(
+    async (shift) => {
+      if (loading || !shift) return
+      setLoading(true)
+      const url = isOvertimeApplication
+        ? MY_SHIFTS_URLS.requestOvertime(organization?._id)
+        : MY_SHIFTS_URLS.apply(organization?._id, shift._id)
+      const res = await fetchData(url, "post", { shiftId: shift?._id })
+      console.log(res)
+      if (res.statusCode === 201) {
+        toast.success(res.message || "Application sent!")
+        onFinish()
+      } else {
+        if (res.message) toast.error(res.message)
+        else
+          toast.error(
+            isOvertimeApplication
+              ? "Unable to request overtime"
+              : "Unable to apply for shift."
+          )
+      }
+      setLoading(false)
+    },
+    [organization, loading, fetchData, isOvertimeApplication]
+  )
+
+  const getShiftDayInput = useCallback((shift) => {
+    return (
+      <FormInputAndLabel
+        label="Day"
+        inputProps={{
+          readOnly: true,
+          value: shift
+            ? formatDate(new Date(shift.startTime), {
+                day: "numeric",
+                weekday: "long",
+                month: "long",
+              })
+            : "",
+        }}
+      />
     )
-    console.log(res)
-    if (res.statusCode === 201) {
-      toast.success(res.message || "Application sent!")
-      onFinish()
-    } else toast.error(res.message || "Unable to apply for shift.")
-    setLoading(false)
-  }, [shift, organization, loading, fetchData])
+  }, [])
+
+  const getShiftTimeInput = useCallback((shift) => {
+    return (
+      <FormInputAndLabel
+        label="Duration"
+        inputProps={{
+          readOnly: true,
+          value: shift
+            ? `${formatHourAsAmOrPm(
+                new Date(shift?.startTime).getHours()
+              )}-${formatHourAsAmOrPm(new Date(shift?.endTime).getHours())}`
+            : "",
+        }}
+      />
+    )
+  }, [])
 
   return (
     <div className="flex flex-col items-center gap-[14px] p-4 bg-white rounded-[16px] max-w-[288px]">
@@ -32,30 +86,40 @@ export default function ShiftApplicationForm({ shift = {}, onFinish }) {
         Apply for shift
       </h3>
       <div className="flex gap-4">
-        <FormInputAndLabel
-          label="Day"
-          inputProps={{
-            readOnly: true,
-            value: formatDate(new Date(shift.startTime), {
-              day: "numeric",
-              weekday: "long",
-              month: "long",
-            }),
-          }}
-        />
-        <FormInputAndLabel
-          label="Duration"
-          inputProps={{
-            readOnly: true,
-            value: `${formatHourAsAmOrPm(
-              new Date(shift.startTime).getHours()
-            )}-${formatHourAsAmOrPm(new Date(shift.endTime).getHours())}`,
-          }}
-        />
+        {isOvertimeApplication ? (
+          <DropDown
+            dropDownTrigger={<>{getShiftDayInput(selectedOvertimeShift)}</>}
+            dropdownContent={
+              <ul>
+                {requestableOvertimeShifts.map((overtimeShift) => (
+                  <Option
+                    key={overtimeShift._id}
+                    onClick={() => setSelectedOvertimeShift(overtimeShift)}
+                  >
+                    {formatDate(new Date(overtimeShift.startTime), {
+                      day: "numeric",
+                      weekday: "long",
+                      month: "long",
+                    })}
+                  </Option>
+                ))}
+              </ul>
+            }
+          />
+        ) : (
+          <>{getShiftDayInput(shift)}</>
+        )}
+        {isOvertimeApplication
+          ? getShiftTimeInput(selectedOvertimeShift)
+          : getShiftTimeInput(shift)}
       </div>
       <SubmitButton
         style={{ padding: "6px 12px", maxWidth: "83px", fontSize: "14px" }}
-        onClick={handleShiftApplication}
+        onClick={() =>
+          handleShiftApplication(
+            isOvertimeApplication ? selectedOvertimeShift : shift
+          )
+        }
         isLoading={loading}
         loadingText="Applying"
       >
