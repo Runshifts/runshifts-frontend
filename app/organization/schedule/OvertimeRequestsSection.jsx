@@ -30,12 +30,13 @@ export default function OvertimeRequestsSection({
 }
 
 export function OvertimeRequest({ overtimeRequest = {} }) {
+  console.log(overtimeRequest)
   const overtimeStart = useMemo(
-    () => new Date(overtimeRequest?.startTime),
+    () => new Date(overtimeRequest?.shift?.startTime),
     [overtimeRequest?.startTime]
   )
   const overtimeEnd = useMemo(
-    () => new Date(overtimeRequest?.endTime),
+    () => new Date(overtimeRequest?.shift?.endTime),
     [overtimeRequest?.endTime]
   )
 
@@ -53,7 +54,7 @@ export function OvertimeRequest({ overtimeRequest = {} }) {
   )
   const isStillValid = useMemo(() => {
     return new Date(overtimeRequest?.validUntil).getTime() > Date.now()
-  }, [])
+  }, [overtimeRequest?.validUntil])
 
   return (
     <article className="border border-gray-300 rounded-lg p-[10px] flex flex-col gap-y-[8px] w-full">
@@ -66,25 +67,22 @@ export function OvertimeRequest({ overtimeRequest = {} }) {
         <p className="font-[600] leading-[20px] text-[10px] text-gray-900">
           Overtime details
         </p>
-        {isStillValid &&
-          overtimeRequest.isAccepted === false &&
-          !overtimeRequest.isRejected && (
-            <div className="bg-white px-[4px]">
-              <p className="capitalize leading-[20px] text-[12px] text-gray-800 font-[500]">
-                {formatRequestStartDate(overtimeStart)}
-              </p>
-              <p className="uppercase tracking-loose leading-[20px] text-[10px] text-gray-600 font-[500]">
-                {start}
-                {getAmOrPm(overtimeStart.getHours())} - {end}
-                {getAmOrPm(overtimeEnd.getHours())}
-              </p>
-            </div>
-          )}
+        {
+          <div className="bg-white px-[4px]">
+            <p className="capitalize leading-[20px] text-[12px] text-gray-800 font-[500]">
+              {formatRequestStartDate(overtimeStart)}
+            </p>
+            <p className="uppercase tracking-loose leading-[20px] text-[10px] text-gray-600 font-[500]">
+              {start}
+              {getAmOrPm(overtimeStart.getHours())} - {end}
+              {getAmOrPm(overtimeEnd.getHours())}
+            </p>
+          </div>
+        }
       </div>
-      {
-      !isStillValid &&
+      {isStillValid &&
         overtimeRequest.isAccepted === false &&
-        !overtimeRequest.isRejected && (
+        overtimeRequest.isRejected === false && (
           <AcceptAndRejectButtons
             requestId={overtimeRequest._id}
             requestType={"overtime"}

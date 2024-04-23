@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { Fragment, useContext, useState } from "react"
 import { useCallback, useMemo } from "react"
 import { daysOfTheWeek, formatHourAsAmOrPm, isDateInThePast } from "../_utils"
 import Pill from "../_components/AppComps/Pill"
@@ -74,10 +74,16 @@ export function RenderShiftsAndOvertimes({
     return (
       <ul className="w-full flex flex-col gap-y-2 items-center py-2 max-h-full overflow-auto">
         {shifts.map((shift) =>
-          useDetailedPill ? (
-            <ShiftPillWithDetails key={shift._id} shift={shift} />
+          shift.assignee ? (
+            <Fragment key={shift._id}>
+              {useDetailedPill ? (
+                <ShiftPillWithDetails shift={shift} />
+              ) : (
+                <ShiftPill shift={shift} />
+              )}
+            </Fragment>
           ) : (
-            <ShiftPill key={shift._id} shift={shift} />
+            <Fragment key={shift._id}>{null}</Fragment>
           )
         )}
       </ul>
@@ -221,7 +227,13 @@ export function ShiftAssigneePill({ shift, handleClick, isOwnShift }) {
   )
 }
 
-function ModalChildrenForShift({ hasModal, isModalOpen, onClose, shift , isOwnShift}) {
+function ModalChildrenForShift({
+  hasModal,
+  isModalOpen,
+  onClose,
+  shift,
+  isOwnShift,
+}) {
   if (!hasModal) return null
   return (
     <>
