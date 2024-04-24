@@ -20,7 +20,7 @@ const Dropdown = () => {
           src={user?.profileImage?.secure_url || placeholderImage}
           height={50}
           width={50}
-          alt=""
+          alt="image"
           className="w-8 h-8 rounded-full"
         />
       </div>

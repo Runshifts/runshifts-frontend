@@ -34,6 +34,11 @@ const General = () => {
           officeAddress: [""],
           breakDuration: breakDuration * 60 * 1000,
           logo: null,
+          shifts: {
+            morning: defaultShiftManagements.morning || { startTime: "", stopTime: "" },
+            afternoon: defaultShiftManagements.afternoon || { startTime: "", stopTime: "" },
+            evening: defaultShiftManagements.evening || { startTime: "", stopTime: "" },
+          },
         };
   });
 
@@ -60,76 +65,25 @@ const General = () => {
     }
   }, [organization]);
 
-  // console.log(locations, officeAddress);
+  console.log(locations, officeAddress);
 
   const [shiftManagementEnabled, setShiftManagementEnabled] = useState(true);
 
   const [defaultShiftManagementState, setDefaultShiftManagementState] =
-    useState([]);
-    console.log( 'checking the state', defaultShiftManagementState)
-
-
-  useEffect(() => {
-    setDefaultShiftManagementState([
-      ...defaultShiftManagements.map((defaults) => {
-        return {
-          ...defaults,
-          startHour: new Date(defaults.startTime).getHours(),
-          endHour:
-            new Date(defaults.startTime).getHours() + defaults.numberOfHours,
-            minutes: new Date(defaults.startTime).getMinutes(),
-        };
-      }),
-    ]);
-  }, [defaultShiftManagements]);
-
-
-  // const [morningShift, setMorningShift] = useState({
-  //   startTime: "",
-  //   stopTime: "",
-  // });
-  // const [afternoonShift, setAfternoonShift] = useState({
-  //   startTime: "",
-  //   stopTime: "",
-  // });
-  // const [eveningShift, setEveningShift] = useState({
-  //   startTime: "",
-  //   stopTime: "",
-  // });
-
-  const calculateStopTime = (startTime, numberOfHours) => {
-    if (startTime && numberOfHours) {
-      const start = new Date(startTime);
-      const stop = new Date(start.getTime() + numberOfHours * 60 * 60 * 1000);
-      return stop;
-    }
-    return "";
-  };
+    useState([...defaultShiftManagements]);
 
   const [morningShift, setMorningShift] = useState({
-    startTime: defaultShiftManagements.morning?.startTime || "",
-    stopTime: calculateStopTime(
-      defaultShiftManagements.morning?.startTime,
-      defaultShiftManagements.morning?.numberOfHours
-    ),
+    startTime: "",
+    stopTime: "",
   });
-
   const [afternoonShift, setAfternoonShift] = useState({
-    startTime: defaultShiftManagements.afternoon?.startTime || "",
-    stopTime: calculateStopTime(
-      defaultShiftManagements.afternoon?.startTime,
-      defaultShiftManagements.afternoon?.numberOfHours
-    ),
+    startTime: "",
+    stopTime: "",
   });
-
   const [eveningShift, setEveningShift] = useState({
-    startTime: defaultShiftManagements.evening?.startTime || "",
-    stopTime: calculateStopTime(
-      defaultShiftManagements.evening?.startTime,
-      defaultShiftManagements.evening?.numberOfHours
-    ),
+    startTime: "",
+    stopTime: "",
   });
-
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
@@ -163,34 +117,23 @@ const General = () => {
     });
   };
 
-  // const handleShiftTimeChange = (shift, field, value) => {
-  //   switch (shift) {
-  //     case "morning":
-  //       setMorningShift({ ...morningShift, [field]: value });
-  //       break;
-  //     case "afternoon":
-  //       setAfternoonShift({ ...afternoonShift, [field]: value });
-  //       break;
-  //     case "evening":
-  //       setEveningShift({ ...eveningShift, [field]: value });
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
-
-  const handleShiftTimeChange = (shift, value) => {
-    const [hour, minute] = value.split(':')
-    setDefaultShiftManagementState((prev) => {
-      return prev.map((defaultShift) => {
- if (defaultShift._id === shift.id) {
-  return {...defaultShift, startHour: hour, endHour:Number(hour) + 8, minute}
- } else {
-  return defaultShift
- }
-      })
-    })
+  const handleShiftTimeChange = (shift, field, value) => {
+    switch (shift) {
+      case "morning":
+        setMorningShift({ ...morningShift, [field]: value });
+        break;
+      case "afternoon":
+        setAfternoonShift({ ...afternoonShift, [field]: value });
+        break;
+      case "evening":
+        setEveningShift({ ...eveningShift, [field]: value });
+        break;
+      default:
+        break;
+    }
   };
+
+  // console.log(organization);
 
   const handleAddressChange = (index, value) => {
     setOfficeAddress((prevofficeAddress) => {
@@ -237,16 +180,9 @@ const General = () => {
       formData.breakDuration
     );
 
-  
-defaultShiftManagementState.map((defaultShift) => {
-  const startTime = new Date(Date.now())
-  startTime.setHours(Number(defaultShift.startHour), Number(defaultShift.minute))
-  console.log({...defaultShift, startTime})
-  return {...defaultShift, startTime}
-
-}).forEach((defaultShift) => {
-  formDataWithImage.append("shiftManagements", JSON.stringify(defaultShift));
-})
+    formDataWithImage.append("morningShift", JSON.stringify(morningShift));
+    formDataWithImage.append("afternoonShift", JSON.stringify(afternoonShift));
+    formDataWithImage.append("eveningShift", JSON.stringify(eveningShift));
 
     officeAddress.forEach((address) =>
       formDataWithImage.append("locations", JSON.stringify(address))
@@ -337,7 +273,6 @@ defaultShiftManagementState.map((defaultShift) => {
               </select>
             </div>
           </div>
-
           <label
             htmlFor="officeAddress"
             className="text-xs font-thin my-2 leading-4"
@@ -351,7 +286,6 @@ defaultShiftManagementState.map((defaultShift) => {
             handleAddAddress={handleAddAddress}
             handleRemoveAddress={handleRemoveAddress}
           />
-
           <ShiftsManagementForm
             shiftManagementEnabled={shiftManagementEnabled}
             setShiftManagementEnabled={setShiftManagementEnabled}
@@ -360,7 +294,7 @@ defaultShiftManagementState.map((defaultShift) => {
             eveningShift={eveningShift}
             handleShiftTimeChange={handleShiftTimeChange}
             customShiftManagements={customShiftManagements}
-            defaultShiftManagements={defaultShiftManagementState}
+            defaultShiftManagements={defaultShiftManagements}
           />
 
           <div>

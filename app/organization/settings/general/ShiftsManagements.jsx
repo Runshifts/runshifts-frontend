@@ -38,8 +38,8 @@ const ShiftsManagementForm = ({ handleShiftTimeChange, shiftManagementEnabled, s
             <Options
               id="morningStartTime"
               disabled={!shiftManagementEnabled}
-              value={morningShift.startTime}
-              onChange={(e) => handleShiftTimeChange("morning", "startTime", e.target.value)}
+              value={`${defaultShift.startHour}:${defaultShift.minutes}`}
+              onChange={(e) => handleShiftTimeChange(defaultShift, e.target.value)}
             />
           </div>
           <div className="w-1/2 flex flex-col">
@@ -48,9 +48,9 @@ const ShiftsManagementForm = ({ handleShiftTimeChange, shiftManagementEnabled, s
             </label>
             <Options
               id="morningStopTime"
-              disabled={!shiftManagementEnabled}
-              value={morningShift.stopTime}
-              onChange={(e) => handleShiftTimeChange("morning", "stopTime", e.target.value)}
+              disabled={true}
+              value={`${defaultShift.endHour}:${defaultShift.minutes}`}
+              // onChange={(e) => handleShiftTimeChange(defaultShift, "endHour", e.target.value)}
             />
           </div>
         </div>

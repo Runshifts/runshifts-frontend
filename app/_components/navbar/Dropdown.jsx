@@ -1,9 +1,14 @@
-import { useState } from "react";
+'use client'
+import { useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import profileAvatar from "../navbar/dp.png";
+import { OrganizationContext } from "../../_providers/OrganizationProvider.jsx"
+import placeholderImage from "../../_assets/img/user.png"
 
 const Dropdown = () => {
+  const { organization } = useContext(OrganizationContext);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -17,7 +22,7 @@ const Dropdown = () => {
           height={50}
           width={50}
           onClick={toggleDropdown}
-          src={profileAvatar}
+          src={organization?.logo?.secure_url || placeholderImage}
           alt="icon"
           className="toggle-btn"
         />

@@ -1,12 +1,16 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import NavIcon from "./Nav-icon.svg";
 import NavLogo from "./runshifts-logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import EmpDropdown from "../navbar/EmpDropdown";
+import Dropdown from "../navbar/Dropdown";
+import { OrganizationContext } from "../../_providers/OrganizationProvider.jsx"
+
 
 function Navbar({ onToggle }) {
+  const { organization } = useContext(OrganizationContext);
+
   
   return (
     <>
@@ -60,7 +64,7 @@ function Navbar({ onToggle }) {
                 <SettingsSvg />
               </Link>
             </div>
-            <EmpDropdown  />
+            <Dropdown  />
           </div>
         </div>
       </section>

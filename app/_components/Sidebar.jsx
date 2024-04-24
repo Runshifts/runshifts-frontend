@@ -5,16 +5,16 @@ import Avatar from "../_assets/sidebarImg/Avatar.png";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { OrganizationContext } from "../_providers/OrganizationProvider";
+import { OrganizationContext } from "./../_providers/OrganizationProvider.jsx"
+import placeholderImage from "../_assets/img/user.png"
+
 
 function Sidebar({ isOpen, onClose }) {
   const { organization } = useContext(OrganizationContext);
   
   const Pathname = usePathname();
-  const organizationName = organization ? organization.name : "";
-  console.log("Organization Name:", organizationName);
 
-
+console.log(organization)
   const activeLink =
     "hover:bg-green-100 text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold bg-green-100";
   const normalLink =
@@ -29,10 +29,10 @@ function Sidebar({ isOpen, onClose }) {
             <ButtonSvg />
           </button>
           <div className="flex items-center justify-start pl-4 pt-6 pb-2">
-            <Image src={Avatar} alt="avatar" />
+            <Image width={50} height={50} src={organization?.logo?.secure_url || placeholderImage} alt="avatar" />
             <div className="pl-3">
-              <h1 className="font-bold text-sm text-gray-600">{organizationName}</h1>
-              <p className="font-semibold text-xs text-gray-500">{organizationName}</p>
+              <h1 className="font-bold text-sm text-gray-600">{organization?.name}</h1>
+              <p className="font-semibold text-xs text-gray-500 uppercase">{organization?.industry.name}</p>
             </div>
           </div>
 
