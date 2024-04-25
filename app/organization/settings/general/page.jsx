@@ -1,49 +1,49 @@
-"use client";
-import React, { useState, useContext, useEffect } from "react";
-import Image from "next/image";
-import SettingTab from "../page";
-import ColorPicker from "../ColorPicker";
-import useAxios from "../../../_hooks/useAxios";
-import { OrganizationContext } from "../../../_providers/OrganizationProvider";
-import AddLocationInputs from "./AddLocationInputs";
-import toast from "react-hot-toast";
-import ShiftsManagementForm from "./ShiftsManagements";
-import { LocationsContext } from "../../../_providers/LocationsProvider";
-import { ShiftsManagementContext } from "./../../../_providers/ShiftManagementContext";
-import { useColor } from "react-color-palette";
+"use client"
+import React, { useState, useContext, useEffect } from "react"
+import Image from "next/image"
+import SettingTab from "../page"
+import ColorPicker from "../ColorPicker"
+import useAxios from "../../../_hooks/useAxios"
+import { OrganizationContext } from "../../../_providers/OrganizationProvider"
+import AddLocationInputs from "./AddLocationInputs"
+import toast from "react-hot-toast"
+import ShiftsManagementForm from "./ShiftsManagements"
+import { LocationsContext } from "../../../_providers/LocationsProvider"
+import { ShiftsManagementContext } from "./../../../_providers/ShiftManagementContext"
+import { useColor } from "react-color-palette"
 
 const General = () => {
-  const fetchData = useAxios();
+  const fetchData = useAxios()
 
-  const { organization } = useContext(OrganizationContext);
+  const { organization } = useContext(OrganizationContext)
   // console.log("check organization from settings", organization);
 
-  const { locations } = useContext(LocationsContext);
+  const { locations } = useContext(LocationsContext)
   const { defaultShiftManagements, customShiftManagements } = useContext(
     ShiftsManagementContext
-  );
-  console.log("checking shifts", defaultShiftManagements);
+  )
 
   const [formData, setFormData] = useState(() => {
-    const savedFormData = localStorage.getItem("formData");
+    const savedFormData = localStorage.getItem("formData")
     return savedFormData
       ? JSON.parse(savedFormData)
       : {
           businessName: organization?.name || "",
           numberOfWorkers: "",
           officeAddress: [""],
-          breakDuration: breakDuration * 60 * 1000,
+          breakDuration: 0,
+          // breakDuration: breakDuration * 60 * 1000,
           logo: null,
-        };
-  });
+        }
+  })
 
   const [officeAddress, setOfficeAddress] = useState(
     locations.length > 0 ? [...locations] : [{ address: "" }]
-  );
+  )
 
   useEffect(() => {
-    setOfficeAddress([...locations]);
-  }, [locations]);
+    setOfficeAddress([...locations])
+  }, [locations])
 
   useEffect(() => {
     if (organization) {
@@ -52,37 +52,36 @@ const General = () => {
           ...prev,
           numberOfWorkers: `${organization.employeesCount.minimum}${
             organization.employeesCount.maximum
-              ? `-${organization.employeesCount.maximum}}`
+              ? `-${organization.employeesCount.maximum}`
               : "+"
           }`,
-        };
-      });
+        }
+      })
     }
-  }, [organization]);
+  }, [organization])
 
   // console.log(locations, officeAddress);
 
-  const [shiftManagementEnabled, setShiftManagementEnabled] = useState(true);
+  const [shiftManagementEnabled, setShiftManagementEnabled] = useState(true)
 
   const [defaultShiftManagementState, setDefaultShiftManagementState] =
-    useState([]);
-    console.log( 'checking the state', defaultShiftManagementState)
-
+    useState([])
 
   useEffect(() => {
     setDefaultShiftManagementState([
       ...defaultShiftManagements.map((defaults) => {
+        const startTime = new Date(defaults.startTime)
+        let endHour = startTime.getHours() + 8
+        if (endHour >= 24) endHour = endHour - 24
         return {
           ...defaults,
-          startHour: new Date(defaults.startTime).getHours(),
-          endHour:
-            new Date(defaults.startTime).getHours() + defaults.numberOfHours,
-            minutes: new Date(defaults.startTime).getMinutes(),
-        };
+          startHour: startTime.getHours(),
+          endHour,
+          minutes: startTime.getMinutes(),
+        }
       }),
-    ]);
-  }, [defaultShiftManagements]);
-
+    ])
+  }, [defaultShiftManagements])
 
   // const [morningShift, setMorningShift] = useState({
   //   startTime: "",
@@ -99,12 +98,12 @@ const General = () => {
 
   const calculateStopTime = (startTime, numberOfHours) => {
     if (startTime && numberOfHours) {
-      const start = new Date(startTime);
-      const stop = new Date(start.getTime() + numberOfHours * 60 * 60 * 1000);
-      return stop;
+      const start = new Date(startTime)
+      const stop = new Date(start.getTime() + numberOfHours * 60 * 60 * 1000)
+      return stop
     }
-    return "";
-  };
+    return ""
+  }
 
   const [morningShift, setMorningShift] = useState({
     startTime: defaultShiftManagements.morning?.startTime || "",
@@ -112,7 +111,7 @@ const General = () => {
       defaultShiftManagements.morning?.startTime,
       defaultShiftManagements.morning?.numberOfHours
     ),
-  });
+  })
 
   const [afternoonShift, setAfternoonShift] = useState({
     startTime: defaultShiftManagements.afternoon?.startTime || "",
@@ -120,7 +119,7 @@ const General = () => {
       defaultShiftManagements.afternoon?.startTime,
       defaultShiftManagements.afternoon?.numberOfHours
     ),
-  });
+  })
 
   const [eveningShift, setEveningShift] = useState({
     startTime: defaultShiftManagements.evening?.startTime || "",
@@ -128,40 +127,40 @@ const General = () => {
       defaultShiftManagements.evening?.startTime,
       defaultShiftManagements.evening?.numberOfHours
     ),
-  });
+  })
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null)
 
   useEffect(() => {
-    localStorage.setItem("formData", JSON.stringify(formData));
-  }, [formData]);
+    localStorage.setItem("formData", JSON.stringify(formData))
+  }, [formData])
 
-  const [color, setColor] = useColor("hex", "#121212");
+  const [color, setColor] = useColor("hex", "#121212")
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-  };
+    const file = event.target.files[0]
+    setSelectedImage(file)
+  }
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    const updatedFormData = { ...formData, [name]: value };
-    setFormData(updatedFormData);
+    const { name, value } = event.target
+    const updatedFormData = { ...formData, [name]: value }
+    setFormData(updatedFormData)
 
-    localStorage.setItem("formData", JSON.stringify(updatedFormData));
-  };
+    localStorage.setItem("formData", JSON.stringify(updatedFormData))
+  }
 
   const handleNumberOfWorkers = (event) => {
     setFormData((prev) => {
-      return { ...prev, numberOfWorkers: event.target.value };
-    });
-  };
+      return { ...prev, numberOfWorkers: event.target.value }
+    })
+  }
 
   const handleBreakDuration = (event) => {
     setFormData((prev) => {
-      return { ...prev, breakDuration: event.target.value };
-    });
-  };
+      return { ...prev, breakDuration: event.target.value }
+    })
+  }
 
   // const handleShiftTimeChange = (shift, field, value) => {
   //   switch (shift) {
@@ -180,91 +179,99 @@ const General = () => {
   // };
 
   const handleShiftTimeChange = (shift, value) => {
-    const [hour, minute] = value.split(':')
+    const [hour, minutes] = value.split(":")
     setDefaultShiftManagementState((prev) => {
       return prev.map((defaultShift) => {
- if (defaultShift._id === shift.id) {
-  return {...defaultShift, startHour: hour, endHour:Number(hour) + 8, minute}
- } else {
-  return defaultShift
- }
+        if (defaultShift._id === shift.id) {
+          let endHour = Number(hour) + 8
+          if (endHour >= 24) endHour = endHour - 24
+          console.log(endHour)
+          return { ...defaultShift, startHour: hour, endHour, minutes }
+        } else {
+          return defaultShift
+        }
       })
     })
-  };
+  }
 
   const handleAddressChange = (index, value) => {
     setOfficeAddress((prevofficeAddress) => {
       return prevofficeAddress.map((address, addressIndex) => {
         if (index === addressIndex) {
-          return { ...address, address: value };
+          return { ...address, address: value }
         } else {
-          return address;
+          return address
         }
-      });
-    });
-  };
+      })
+    })
+  }
 
   const handleAddAddress = () => {
-    setOfficeAddress((prev) => [...prev, { address: "" }]);
-  };
+    setOfficeAddress((prev) => [...prev, { address: "" }])
+  }
 
   const handleRemoveAddress = (index) => {
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this location?"
-    );
+    )
     if (isConfirmed) {
       setOfficeAddress((prev) =>
         prev.filter((address, addressIndex) => addressIndex !== index)
-      );
+      )
     }
-  };
+  }
 
   const handleFormSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    const numberOfWorkers = formData.numberOfWorkers.split("-");
-    const minStaffCount = numberOfWorkers?.[0];
-    const maxStaffCount = numberOfWorkers?.[1];
+    const numberOfWorkers = formData.numberOfWorkers.split("-")
+    const minStaffCount = numberOfWorkers?.[0]
+    const maxStaffCount = numberOfWorkers?.[1]
 
-    const formDataWithImage = new FormData();
+    const formDataWithImage = new FormData()
 
-    formDataWithImage.append("minStaffCount", minStaffCount);
-    formDataWithImage.append("maxStaffCount", maxStaffCount);
-    formDataWithImage.append("logo", selectedImage);
-    formDataWithImage.append("brandColor", color);
+    formDataWithImage.append("minStaffCount", minStaffCount)
+    formDataWithImage.append("maxStaffCount", maxStaffCount)
+    formDataWithImage.append("logo", selectedImage)
+    formDataWithImage.append("brandColor", color)
     formDataWithImage.append(
       "allottedBreakTimeInMilliseconds",
       formData.breakDuration
-    );
+    )
 
-  
-defaultShiftManagementState.map((defaultShift) => {
-  const startTime = new Date(Date.now())
-  startTime.setHours(Number(defaultShift.startHour), Number(defaultShift.minute))
-  console.log({...defaultShift, startTime})
-  return {...defaultShift, startTime}
-
-}).forEach((defaultShift) => {
-  formDataWithImage.append("shiftManagements", JSON.stringify(defaultShift));
-})
+    defaultShiftManagementState
+      .map((defaultShift) => {
+        const startTime = new Date(Date.now())
+        startTime.setHours(
+          Number(defaultShift.startHour),
+          Number(defaultShift.minutes)
+        )
+        return { ...defaultShift, startTime }
+      })
+      .forEach((defaultShift) => {
+        formDataWithImage.append(
+          "shiftManagements",
+          JSON.stringify(defaultShift)
+        )
+      })
 
     officeAddress.forEach((address) =>
       formDataWithImage.append("locations", JSON.stringify(address))
-    );
+    )
 
     const response = await fetchData(
       `/organizations/${organization?._id}`,
       "put",
       formDataWithImage
-    );
-    console.log(response, "response");
+    )
+    console.log(response, "response")
 
     if (response.statusCode === 200) {
-      toast.success(response.message || "Successfully updated settings");
+      toast.success(response.message || "Successfully updated settings")
     } else {
-      toast.error(response.message || "Something went wrong");
+      toast.error(response.message || "Something went wrong")
     }
-  };
+  }
 
   return (
     <section className="p-4">
@@ -333,7 +340,7 @@ defaultShiftManagementState.map((defaultShift) => {
                 <option value="11-50">11-50</option>
                 <option value="51-150">51-150</option>
                 <option value="151-499">151-499</option>
-                <option value="500+">500+</option>
+                <option value="500">500+</option>
               </select>
             </div>
           </div>
@@ -415,10 +422,10 @@ defaultShiftManagementState.map((defaultShift) => {
         </form>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default General;
+export default General
 
 function HomeSvg() {
   return (
@@ -443,5 +450,5 @@ function HomeSvg() {
         fill="#706763"
       />
     </svg>
-  );
+  )
 }
