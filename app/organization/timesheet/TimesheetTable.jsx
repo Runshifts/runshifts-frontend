@@ -2,7 +2,8 @@ import React, { useCallback, useMemo } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
 import TooltipModal from "../../_components/AppComps/TooltipModal"
-import MoreSvg from "../../_assets/svgs/More"
+import ThreeDotIcon from "../../_assets/svgs/More"
+import EyeIcon from "../../_assets/svgs/Eye"
 import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
 import {
   DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY,
@@ -12,7 +13,7 @@ import {
 const ScheduleTable = ({ shiftsGroupedByEmployee }) => {
   return (
     <>
-      <table className="bg-gray-50 flex-grow rounded-[px] overflow-hidden">
+      <table className="bg-gray-50 flex-grow rounded-[px]">
         <thead className="bg-[#F1F3F9]">
           <tr>
             <TimesheetTableHeading className="py-2 px-4">
@@ -105,13 +106,37 @@ function EmployeeTableRow({ shifts = [], isOdd }) {
         </TimesheetTableData>
       ))}
       <TimesheetTableData>
-        {/* <Link href='/timesheetReview'> */}
-        {/* <MoreSvg /> */}
-        {/* <Link>            */}
-        <TooltipModal tooltipContent={<>Hi</>}>
-          <MoreSvg />
-        </TooltipModal>
+        <TimesheetOptionsButton />
       </TimesheetTableData>
     </tr>
   )
+}
+
+function TimesheetOptionsButton() {
+  return (
+    <TooltipModal tooltipContent={<TimesheetActions/>}>
+      <ThreeDotIcon />
+    </TooltipModal>
+  )
+}
+function TimesheetActions() {
+  return (
+    <div>
+      <ul className="flex flex-col gap-2 bg-white rounded-[12px]">
+        <TimesheetActionButton>
+          <EyeIcon /> Review Timesheet
+        </TimesheetActionButton>
+        <TimesheetActionButton>
+          <EyeIcon /> Approve Timesheet
+        </TimesheetActionButton>
+        <TimesheetActionButton>
+          <EyeIcon /> Download
+        </TimesheetActionButton>
+      </ul>
+    </div>
+  )
+}
+
+function TimesheetActionButton({ children, onClick }) {
+  return <button className="flex items-center whitespace-nowrap">{children}</button>
 }
