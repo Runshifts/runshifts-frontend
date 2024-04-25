@@ -3,7 +3,7 @@ import Carousel from "./Carousel";
 
 const Review = () => {
   return (
-    <section>
+    <section className="bg-white px-[40px] py-[24px] rounded-[16px] max-w-[616px]">
       <div>
         <Carousel />
       </div>

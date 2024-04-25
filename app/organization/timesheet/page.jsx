@@ -27,7 +27,7 @@ function Timesheet() {
           organizationId: organization?._id,
         })
       )
-  }, [dispatch, organization?._id, currentWeek.start, shifts])
+  }, [dispatch, organization, currentWeek.start, shifts, cache])
 
   const shiftsInCurrentWeek = useMemo(
     () => filterShiftsByWeek(shifts, currentWeek),
@@ -54,7 +54,7 @@ function Timesheet() {
         })}
       </div>
 
-      <div className="flex w-full overflow shadow-[0px_2px_8px_0px_#0000001F]">
+      <div className="flex items-start w-full overflow-auto min-h-[50dvh] shadow-[0px_2px_8px_0px_#0000001F]">
         <TimesheetTable shiftsGroupedByEmployee={shiftsGroupedByAssignee} />
       </div>
     </section>

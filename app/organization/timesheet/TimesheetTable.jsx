@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
 import TooltipModal from "../../_components/AppComps/TooltipModal"
@@ -9,11 +9,13 @@ import {
   DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY,
   ONE_HOUR_IN_MILLISECONDS,
 } from "../../_utils"
+import Modal from "../../_components/AppComps/Modal"
+import TimesheetReview from "./Review"
 
 const ScheduleTable = ({ shiftsGroupedByEmployee }) => {
   return (
     <>
-      <table className="bg-gray-50 flex-grow rounded-[px]">
+      <table className="bg-gray-50 flex-grow rounded-[4px]">
         <thead className="bg-[#F1F3F9]">
           <tr>
             <TimesheetTableHeading className="py-2 px-4">
@@ -51,9 +53,9 @@ function TimesheetTableHeading({ children }) {
   )
 }
 
-function TimesheetTableData({ children }) {
+function TimesheetTableData({ children, className }) {
   return (
-    <td className="py-[10px] capitalize px-2 text-sm text-[#1D2433] text-[14px]">
+    <td className={`py-[10px] capitalize px-2 text-sm text-[#1D2433] text-[14px] ${className}`}>
       {children}
     </td>
   )
@@ -79,7 +81,7 @@ function EmployeeTableRow({ shifts = [], isOdd }) {
   }, [])
 
   return (
-    <tr style={{ backgroundColor: isOdd ? "#F8F9FC" : "white" }}>
+    <tr style={{ backgroundColor: isOdd ? "#F8F9FC" : "white" }} className="relative">
       <TimesheetTableData>
         <input type="checkbox" className="form-checkbox" />
       </TimesheetTableData>
@@ -105,8 +107,8 @@ function EmployeeTableRow({ shifts = [], isOdd }) {
           )}
         </TimesheetTableData>
       ))}
-      <TimesheetTableData>
-        <TimesheetOptionsButton />
+      <TimesheetTableData className={`sticky right-0 z-[100] ${isOdd ? "bg-[#F8F9FC]" : "bg-white" }`}>
+        <><TimesheetOptionsButton /></>
       </TimesheetTableData>
     </tr>
   )
@@ -114,16 +116,17 @@ function EmployeeTableRow({ shifts = [], isOdd }) {
 
 function TimesheetOptionsButton() {
   return (
-    <TooltipModal tooltipContent={<TimesheetActions/>}>
+    <TooltipModal tooltipContent={<TimesheetActions />} styles={{ right: "100%", top: 0, bottom: 0 }}>
       <ThreeDotIcon />
     </TooltipModal>
   )
 }
 function TimesheetActions() {
+  const [showReviewModal, setShowReviewModal] = useState(false)
   return (
     <div>
-      <ul className="flex flex-col gap-2 bg-white rounded-[12px]">
-        <TimesheetActionButton>
+      <ul className="flex flex-col gap-2 bg-white rounded-[12px] shadow-[0px_2px_8px_0px_#0000001F]">
+        <TimesheetActionButton onClick={() => setShowReviewModal(true)}>
           <EyeIcon /> Review Timesheet
         </TimesheetActionButton>
         <TimesheetActionButton>
@@ -133,10 +136,13 @@ function TimesheetActions() {
           <EyeIcon /> Download
         </TimesheetActionButton>
       </ul>
+      <Modal open={showReviewModal} onClose={() => setShowReviewModal(false)}>
+        <TimesheetReview />
+      </Modal>
     </div>
   )
 }
 
 function TimesheetActionButton({ children, onClick }) {
-  return <button className="flex items-center whitespace-nowrap">{children}</button>
+  return <button onClick={onClick} className="flex items-center whitespace-nowrap px-2 py-[6px] gap-2  hover:bg-primary-100">{children}</button>
 }
