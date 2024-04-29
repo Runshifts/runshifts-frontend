@@ -266,7 +266,11 @@ function Shift({
             <span className="font-400">Pending</span>
           )}
           {shift.isOvertime && shift.assignee !== null && (
-            <span className="font-400">Overtime</span>
+            <span className="font-400">
+              Overtime -{" "}
+              {new Date(shift.endTime).getHours() -
+                new Date(shift.startTime).getHours()}hrs
+            </span>
           )}
           {isDroppedOff && shift.assignee !== null && (
             <span className="font-400">Dropped-off</span>
