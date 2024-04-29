@@ -2,14 +2,13 @@ import Link from "next/link"
 import FormInputAndLabel, { FormLabelText } from "./FormInputAndLabel"
 import FormRadio from "./FormRadio"
 import { useCallback, useMemo, useState } from "react"
-import { formatNumberToTwoDigitsMinimum, getNextSunday } from "../../../_utils"
+import { getNextSunday } from "../../../_utils"
 import DropDown from "../../../_components/AppComps/Dropdown"
 import { Option } from "../../../_components/AppComps/Select"
 
-export const defaultShiftManageMents = ["morning", "afternoon", "evening"]
-
 export default function ShiftDurationInputs({
   customShiftManagements = [],
+  defaultShiftManageMents = [], 
   handleScheduleSelection,
   startTime,
   endTime,
@@ -22,6 +21,7 @@ export default function ShiftDurationInputs({
 
   const handleSelect = useCallback(
     (selection) => {
+      console.log(selection)
       const canUpdate = handleScheduleSelection(selection)
       canUpdate && setSelectedSchedule(selection)
     },
@@ -40,7 +40,7 @@ export default function ShiftDurationInputs({
               handleChange={(checked) =>
                 checked && handleSelect(shiftManagement)
               }
-              label={`${shiftManagement} shift`}
+              label={`${shiftManagement.name} shift`}
             />
           ))}
           {customShiftManagements.length > 0 && (

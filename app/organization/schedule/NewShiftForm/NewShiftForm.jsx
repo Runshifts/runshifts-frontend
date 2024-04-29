@@ -62,6 +62,10 @@ function NewShiftForm({
   const { shiftManagements, customShiftManagements } = useContext(
     ShiftsManagementContext
   )
+  const defaultShiftManageMents = useMemo(
+    () => shiftManagements.filter((it) => it.type === "default"),
+    [shiftManagements]
+  )
   const shiftDurationDate = useMemo(
     () => newShiftDetails?.shiftDate,
     [newShiftDetails?.shiftDate]
@@ -99,15 +103,10 @@ function NewShiftForm({
   )
 
   const handleScheduleSelection = useCallback(
-    (selected) => {
-      const shiftManagement = shiftManagements.find(
-        (it) =>
-          it._id === selected ||
-          it.name.toLowerCase() === selected.toLowerCase()
-      )
-      if (!shiftManagement || (!shiftDurationDate && !shiftData.date))
+    (selectedShiftManagement) => {
+      if (!selectedShiftManagement || (!shiftDurationDate && !shiftData.date))
         return null
-      const startTime = new Date(shiftManagement.startTime)
+      const startTime = new Date(selectedShiftManagement.startTime)
       const dateOfShift = new Date(
         shiftDurationDate || new Date(shiftData.date)
       )
@@ -116,9 +115,9 @@ function NewShiftForm({
         dateOfShift.getMonth(),
         dateOfShift.getDate()
       )
-      const endTime = new Date(shiftManagement.startTime)
+      const endTime = new Date(selectedShiftManagement.startTime)
       endTime.setHours(
-        endTime.getHours() + shiftManagement.numberOfHours,
+        endTime.getHours() + selectedShiftManagement.numberOfHours,
         endTime.getMinutes(),
         endTime.getSeconds(),
         endTime.getMilliseconds()
@@ -130,7 +129,7 @@ function NewShiftForm({
       )
       setShiftData((prev) => ({
         ...prev,
-        schedule: shiftManagement._id,
+        schedule: selectedShiftManagement._id,
         startTime,
         endTime,
       }))
@@ -264,6 +263,7 @@ function NewShiftForm({
         </div>
         <ShiftDurationInputs
           customShiftManagements={customShiftManagements}
+          defaultShiftManageMents={defaultShiftManageMents}
           handleScheduleSelection={handleScheduleSelection}
           startTime={shiftData.startTime}
           endTime={shiftData.endTime}
