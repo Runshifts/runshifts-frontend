@@ -43,6 +43,7 @@ export const DashboardContext = createContext({
   indexOfThePresentWeek: 0,
   updateAllShifts: () => {},
   handleUpdateSingleShift: () => {},
+  overtimesInCurrentWeek: []
 })
 
 export default function DashboardProvider({ children }) {
@@ -100,6 +101,10 @@ export default function DashboardProvider({ children }) {
     return filterShiftsByWeek(allShifts, currentWeek)
   }, [allShifts, currentWeek])
 
+  const listOfOvertimesInCurrentWeek = useMemo(() => {
+    return filterShiftsByWeek(allOvertimes, currentWeek)
+  }, [allOvertimes, currentWeek])
+
   const updateAllShifts = useCallback((newShifts = []) => {
     setAllShifts((prev) => {
       return [
@@ -156,7 +161,8 @@ export default function DashboardProvider({ children }) {
         indexOfThePresentWeek,
         updateAllShifts,
         handleUpdateSingleShift,
-        allOvertimes
+        allOvertimes,
+        overtimesInCurrentWeek: listOfOvertimesInCurrentWeek
       }}
     >
       {children}

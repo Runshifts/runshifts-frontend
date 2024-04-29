@@ -37,6 +37,7 @@ export default function Schedule() {
     indexOfThePresentWeek,
     loadingShifts,
     updateAllShifts,
+    overtimesInCurrentWeek,
   } = useContext(DashboardContext)
 
   const { duplicateWeek, inProgress, duplicateSingleShift } =
@@ -72,8 +73,10 @@ export default function Schedule() {
     return currentWeek.start.getTime() < weekWithPresentDateInIt.start.getTime()
   }, [weekWithPresentDateInIt.start, currentWeek.start])
   const { filteredShifts, renderShiftFilters, setWeekFilter } =
-    useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
-
+    useRenderShiftFilters(
+      [...shiftsInCurrentWeek, ...overtimesInCurrentWeek],
+      weekRanges
+    )
   const { allDays } = useMemo(() => {
     const start = getPreviousMonday(new Date(currentWeek.start))
     const end = getNextSunday(new Date(currentWeek.start))
