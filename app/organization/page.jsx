@@ -23,11 +23,12 @@ export default function Dashboard() {
     loadingShifts,
     weekRanges,
     jumpToWeek,
+    overtimesInCurrentWeek
   } = useContext(DashboardContext)
   const { user } = useContext(UserContext)
 
   const { filteredShifts, renderShiftFilters, setWeekFilter } =
-    useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
+    useRenderShiftFilters([...shiftsInCurrentWeek, ...overtimesInCurrentWeek], weekRanges)
   const shiftsInCurrentWeekGroupedByDate = useMemo(() => {
     return groupShiftsByDayOfTheWeek(filteredShifts)
   }, [filteredShifts])

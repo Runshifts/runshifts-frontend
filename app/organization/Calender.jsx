@@ -55,6 +55,11 @@ function CalenderShiftItem({ shift, isPending }) {
           Pending
         </span>
       )}
+      {shift.isOvertime && shift.assignee !== null && (
+        <span className="text-[#303030] text-[8px] leading-normal block text-center">
+          Overtime
+        </span>
+      )}
       {shift.assignee === null && (
         <span className="text-[#303030] text-[8px] leading-normal block text-center">
           Not assigned
