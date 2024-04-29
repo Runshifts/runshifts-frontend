@@ -57,6 +57,7 @@ export function SubmitButton({
   isDisabled,
   type,
   style,
+  className
 }) {
   return (
     <button
@@ -67,8 +68,8 @@ export function SubmitButton({
       className={`${
         isLoading
           ? "bg-primary-500/50 cursor-not-allowed"
-          : "bg-primary-500 cursor-pointer"
-      } text-white rounded-md font-[600] w-full px-6 py-4`}
+          : "cursor-pointer"
+      } ${className || "bg-primary-500 text-white rounded-md font-[600] w-full px-6 py-4"}`}
     >
       {isLoading ? loadingText || "Loading..." : children}
     </button>

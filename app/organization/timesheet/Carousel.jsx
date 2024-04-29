@@ -1,10 +1,18 @@
-import React from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import React from "react"
+import Slider from "react-slick"
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import { SubmitButton } from "../../_components/Auth/Inputs"
 
-const CardCarousel = () => {
-  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MobileTimesheet = () => {
+  const daysOfWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ]
 
   const settings = {
     dots: true,
@@ -12,36 +20,46 @@ const CardCarousel = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-  };
+  }
 
   return (
-    <section className="block my-3 mx-24 md:hidden">
-            <h1 className='font-bold text-[#252525] text-sm py-2'>Work days</h1>
-
+    <section className="md:hidden">
       <Slider {...settings}>
         {daysOfWeek.map((day, index) => (
-          <div key={index} className="p-4 border border-separate border-gray-300 rounded md:w-1/2 lg:w-1/3 xl:w-1/4">
-            <div className='flex '>
-            <p className='text-xs bg-gray-200 rounded-full mb-2'>{day}</p>
-            <p className='text-sm mb-2 px-2 font-semibold'>Dec 5, 2023</p>
-            </div>
-            
-            <p className='text-[14px] mb-4 font-semibold'>
-              Hid subcomponents with duplicative name
-            </p>
-            <div className="flex items-center justify-start">
-              <button className='bg-[#5BC62D] px-2 py-1 text-white rounded-sm'>
-                Approve
-              </button>
-              <button className="text-red-700 font-bold px-2">
-                Query
-              </button>
-            </div>
-          </div>
+          <TimesheetComponent key={index} />
         ))}
       </Slider>
     </section>
-  );
-};
+  )
+}
 
-export default CardCarousel;
+export default MobileTimesheet
+
+export function TimesheetComponent() {
+  return (
+    <div className="border border-solid border-[#CAC6C3] md:border-[#E3E3E3] rounded-[8px] p-4 flex flex-col md:flex-row gap-2 md:gap-0 md:p-0">
+      <div className="flex gap-2 items-center md:w-[45%] md:border-r-solid md:border-r md:border-r-[#E3E3E3] md:p-4">
+        <p className="text-[12px] px-[4px] py-[2px] leading-[1rem] bg-[#0000000F] rounded-[8px] whitespace-nowrap">
+          Monday
+        </p>
+        <p className="text-[14px] leading-[20px] whitespace-nowrap">
+          Dec 5, 2023
+        </p>
+      </div>
+
+      <p className="text-[14px] leading-[20px] md:border-x-solid md:border-x md:border-x-[#E3E3E3] md:p-4">
+        Hid subcomponents with duplicative name
+      </p>
+      <div className="flex items-center justify-center max-w-[122px] md:max-w-none gap-2 md:w-[35%] md:p-4">
+        <SubmitButton
+          className={
+            "px-[12px] py-[2px] bg-[#5BC62D] text-[14px] md:py-[8px] md:px-[16px] text-white md:font-[600] rounded-[8px]"
+          }
+        >
+          Approve
+        </SubmitButton>
+        <button className="text-danger-600">Query</button>
+      </div>
+    </div>
+  )
+}

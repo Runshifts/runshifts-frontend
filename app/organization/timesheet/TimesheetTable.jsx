@@ -136,7 +136,7 @@ function TimesheetActions() {
           <EyeIcon /> Download
         </TimesheetActionButton>
       </ul>
-      <Modal open={showReviewModal} onClose={() => setShowReviewModal(false)}>
+      <Modal open={!showReviewModal} onClose={() => setShowReviewModal(false)}>
         <TimesheetReview />
       </Modal>
     </div>
