@@ -12,6 +12,8 @@ export default function ShiftsManagementProvider({ children, organizationId }) {
   const customShiftManagements = useMemo(() => {
     return shiftManagements.filter((it) => it.name.toLowerCase() === "custom")
   }, [shiftManagements])
+  console.log(shiftManagements, 'this is shiftsmanagement')
+
 
   const defaultShiftManagements = useMemo(() => {
     console.log(shiftManagements, 'main shifts')
@@ -30,9 +32,12 @@ export default function ShiftsManagementProvider({ children, organizationId }) {
       }
   }, [organizationId, fetchData])
 
+
+
   useEffect(() => {
     fetchShiftsManagement()
   }, [fetchShiftsManagement])
+
 
   return (
     <ShiftsManagementContext.Provider

@@ -312,7 +312,9 @@ const General = () => {
     });
 
 
-    console.log(customShiftManagementState);
+    console.log(customShiftManagementState, 'custom shift');
+    console.log(defaultShiftManagementState, 'default shaift');
+
 
     officeAddress.forEach((address) =>
       formDataWithImage.append("locations", JSON.stringify(address))
