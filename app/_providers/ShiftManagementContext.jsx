@@ -14,13 +14,20 @@ export default function ShiftsManagementProvider({ children, organizationId }) {
   }, [shiftManagements])
 
   const defaultShiftManagements = useMemo(() => {
+    console.log(shiftManagements, 'main shifts')
     return shiftManagements.filter((it) => it.type.toLowerCase() === "default")
   }, [shiftManagements])
 
   const fetchShiftsManagement = useCallback(async () => {
     if (!organizationId) return
     const res = await fetchData(`/shifts-managements/${organizationId}`, "get")
-    if (res.statusCode === 200) setShiftsManagement(res.results)
+    // if (res.statusCode === 200) setShiftsManagement(res.results)
+    // console.log(res.results)
+
+    if(res.statusCode === 200){
+      console.log(res.results)
+      setShiftsManagement(res.results)
+      }
   }, [organizationId, fetchData])
 
   useEffect(() => {

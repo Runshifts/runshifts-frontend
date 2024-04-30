@@ -1,17 +1,26 @@
-"use client";
-
 import React from "react";
 import Options from "./Options";
+import { RiDeleteBinLine } from "react-icons/ri";
 
-const ShiftsManagementForm = ({ handleShiftTimeChange, shiftManagementEnabled, setShiftManagementEnabled, defaultShiftManagements, customShiftManagements,  morningShift, afternoonShift, eveningShift, }) => {
-
+const ShiftsManagementForm = ({
+  handleShiftTimeChange,
+  shiftManagementEnabled,
+  setShiftManagementEnabled,
+  defaultShiftManagements,
+  deleteCustomShift,
+  addCustomShift,
+  customShiftManagements,
+  setShiftManagement,
+  timeChange,
+}) => {
 
   return (
-
     <div>
       <div className="flex justify-between items-center my-2">
         <div>
-          <p className="text-base font-normal leading-5">Enable Shifts Management</p>
+          <p className="text-base font-normal leading-5">
+            Enable Shifts Management
+          </p>
         </div>
         <div>
           <label className="relative inline-flex items-end me-5 cursor-pointer">
@@ -26,139 +35,105 @@ const ShiftsManagementForm = ({ handleShiftTimeChange, shiftManagementEnabled, s
         </div>
       </div>
       <hr />
-      
+
       {defaultShiftManagements.map((defaultShift, index) => (
         <div key={index}>
-        <h1 className="m-2 text-sm font-semibold leading-5">{defaultShift.name}</h1>
-        <div className="mb-4 flex space-x-2">
-          <div className="w-1/2 flex flex-col">
-            <label htmlFor="morningStartTime" className="text-xs font-thin m-2 leading-4">
-              Start Time
-            </label>
-            <Options
-              id="morningStartTime"
-              disabled={!shiftManagementEnabled}
-              value={`${defaultShift.startHour}:${defaultShift.minutes}`}
-              onChange={(e) => handleShiftTimeChange(defaultShift, e.target.value)}
-            />
-          </div>
-          <div className="w-1/2 flex flex-col">
-            <label htmlFor="morningStopTime" className="text-xs font-thin my-2 leading-4">
-              Stop Time
-            </label>
-            <Options
-              id="morningStopTime"
-              disabled={true}
-              value={`${defaultShift.endHour}:${defaultShift.minutes}`}
-              // onChange={(e) => handleShiftTimeChange(defaultShift, "endHour", e.target.value)}
-            />
+          <h1 className="m-2 text-sm font-semibold leading-5">
+            {defaultShift.name}
+          </h1>
+          <div className="mb-4 flex space-x-2">
+            <div className="w-1/2 flex flex-col">
+              <label
+                htmlFor={`startHour_${index}`}
+                className="text-xs font-thin m-2 leading-4"
+              >
+                Start Time
+              </label>
+              <Options
+                id={`startHour_${index}`}
+                disabled={!shiftManagementEnabled}
+                value={`${defaultShift.startHour}:${defaultShift.minutes}`}
+                onChange={(e) =>
+                  handleShiftTimeChange(defaultShift, e.target.value)
+                }
+              />
+            </div>
+            <div className="w-1/2 flex flex-col">
+              <label
+                htmlFor={`stopHour_${index}`}
+                className="text-xs font-thin my-2 leading-4"
+              >
+                Stop Time
+              </label>
+              <Options
+                id={`stopHour_${index}`}
+                disabled={true}
+                value={`${defaultShift.endHour}:${defaultShift.minutes}`}
+              />
+            </div>
           </div>
         </div>
-      </div>
       ))}
 
-      {/* <div>
-        <h1 className="m-2 text-sm font-semibold leading-5">Morning</h1>
-        <div className="mb-4 flex space-x-2">
-          <div className="w-1/2 flex flex-col">
-            <label htmlFor="morningStartTime" className="text-xs font-thin m-2 leading-4">
-              Start Time
-            </label>
-            <Options
-              id="morningStartTime"
-              disabled={!shiftManagementEnabled}
-              value={morningShift.startTime}
-              onChange={(e) => handleShiftTimeChange("morning", "startTime", e.target.value)}
-            />
-          </div>
-          <div className="w-1/2 flex flex-col">
-            <label htmlFor="morningStopTime" className="text-xs font-thin my-2 leading-4">
-              Stop Time
-            </label>
-            <Options
-              id="morningStopTime"
-              disabled={!shiftManagementEnabled}
-              value={morningShift.stopTime}
-              onChange={(e) => handleShiftTimeChange("morning", "stopTime", e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h1 className="m-2 text-sm  font-semibold leading-5">Afternoon</h1>
-        <div className="mb-4 flex space-x-2">
-          <div className="w-1/2 flex flex-col">
-            <label
-              htmlFor="BusinessName"
-              className="text-xs  font-thin m-2 leading-4"
-            >
-              Start Time
-            </label>
-            <Options 
-            id="afternoonStartTime"
-            disabled={!shiftManagementEnabled}
-            value={afternoonShift.startTime}
-            onChange={(e) => handleShiftTimeChange("afternoon", "startTime", e.target.value)}
-            />
-          </div>
-          <div className="w-1/2 flex flex-col">
-            <label
-              htmlFor="lastName"
-              className="text-xs  font-thin my-2 leading-4"
-            >
-              Stop Time
-            </label>
-            <Options 
-            id="afternoonStopTime"
-            disabled={!shiftManagementEnabled}
-            value={afternoonShift.stopTime}
-            onChange={(e) => handleShiftTimeChange("afternoon", "StopTime", e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h1 className="m-2 text-sm  font-semibold leading-5">Evening</h1>
-        <div className="mb-4 flex space-x-2">
-          <div className="w-1/2 flex flex-col">
-            <label
-              htmlFor="BusinessName"
-              className="text-xs  font-thin m-2 leading-4"
-            >
-              Start Time
-            </label>
-            <Options 
-            
-            id="eveningStartTime"
-              disabled={!shiftManagementEnabled}
-              value={eveningShift.startTime}
-              onChange={(e) => handleShiftTimeChange("evening", "startTime", e.target.value)}
+      {customShiftManagements.map((customShift, index) => (
+        <div key={index} className="mb-4 ">
+          <h1 className="m-2 text-sm font-semibold leading-5">
+            Custom shift
+          </h1>
+          <div className="flex space-x-2">
+            <div className="w-1/2 flex flex-col">
+              <label
+                htmlFor={`customStartHour_${index}`}
+                className="text-xs font-thin m-2 leading-4"
+              >
+                Start Time
+              </label>
+              <Options
+                id={`customStartHour_${index}`}
+                disabled={!shiftManagementEnabled}
+                value={`${customShift.startHour}:${customShift.minutes}`}
+                onChange={(e) => {
+                  const newCustomShiftManagements = customShiftManagements.map(
+                    (custom, id) => {
+                      if (id === index) {
+                        return timeChange(e.target.value);
+                      }
+                      return custom;
+                    }
+                  );
+                  setShiftManagement(newCustomShiftManagements);
+                }}
               />
-          </div>
-          <div className="w-1/2 flex flex-col">
-            <label
-              htmlFor="lastName"
-              className="text-xs  font-thin my-2 leading-4"
-            >
-              Stop Time
-            </label>
-            <Options 
-            id="eveningStopTime"
-            disabled={!shiftManagementEnabled}
-            value={eveningShift.stopTime}
-            onChange={(e) => handleShiftTimeChange("evening", "stopTime", e.target.value)}
-            />
-          </div>
-        </div>
-      </div> */}
+            </div>
 
-      <button type='button' className="bg-[#7ED957] text-white rounded-md m-2 px-4 py-2">
+            <div className="w-1/2 flex flex-col">
+              <label
+                htmlFor={`customStopHour_${index}`}
+                className="text-xs font-thin my-2 leading-4"
+              >
+                Stop Time
+              </label>
+              <Options
+                id={`customStopHour_${index}`}
+                disabled={true}
+                value={`${customShift.endHour}:${customShift.minutes}`}
+              />
+            </div>
+          </div>
+
+          <button type="button" onClick={() => deleteCustomShift(index)}>
+            <RiDeleteBinLine />
+          </button>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={addCustomShift}
+        className="bg-[#7ED957] text-white rounded-md m-2 px-4 py-2"
+      >
         + Add Custom Time
       </button>
-
-   
     </div>
   );
 };
