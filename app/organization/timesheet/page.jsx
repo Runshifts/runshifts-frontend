@@ -42,7 +42,7 @@ function Timesheet() {
         <Heading as="h1">Timesheet</Heading>
         <ApproveAll />
       </div>
-      <div className="flex items-center gap-2 list-none pb-4">
+      <div className="flex flex-wrap items-center gap-2 list-none pb-4">
         <DateRangePicker
           currentWeek={currentWeek}
           goToNextWeek={goToNextWeek}
