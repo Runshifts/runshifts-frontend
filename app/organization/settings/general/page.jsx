@@ -311,6 +311,10 @@ const General = () => {
       );
     });
 
+    console.log(customShift, 'oridinary custom shifts')
+
+
+
 
     console.log(customShiftManagementState, 'custom shift');
     console.log(defaultShiftManagementState, 'default shaift');
