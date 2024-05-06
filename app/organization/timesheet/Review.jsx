@@ -21,6 +21,7 @@ const Review = ({ employee, shifts = [] }) => {
           src={employee?.profileImage?.secure_url || placeholderImg}
           width={30}
           height={30}
+          alt=""
         />
         <div className="flex flex-col gap-4">
           <div className="flex w-full flex-col md:grid grid-cols-2 gap-4">
