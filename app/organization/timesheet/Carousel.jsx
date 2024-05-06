@@ -32,7 +32,7 @@ const MobileTimesheet = () => {
 
 export default MobileTimesheet
 
-export function TimesheetComponent() {
+export function TimesheetComponent({ shift = {} }) {
   return (
     <div className="border border-solid border-[#CAC6C3] max-h-[140px] md:border-[#E3E3E3] rounded-[8px] p-4 flex flex-col md:flex-row gap-2 md:gap-0 md:p-0">
       <div className="flex gap-2 items-center md:w-[45%] md:border-r-solid md:border-r md:border-r-[#E3E3E3] md:p-4">
@@ -40,12 +40,16 @@ export function TimesheetComponent() {
           Monday
         </p>
         <p className="text-[14px] leading-[20px] whitespace-nowrap">
-          Dec 5, 2023
+          {new Date(shift?.startTime).toLocaleDateString("en-us", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
         </p>
       </div>
 
-      <p className="text-[14px] leading-[20px] md:border-x-solid md:border-x md:border-x-[#E3E3E3] md:p-4">
-        Hid subcomponents with duplicative name
+      <p className="text-[14px] grow leading-[20px] md:border-x-solid md:border-x md:border-x-[#E3E3E3] md:p-4">
+        {shift?.checkoutNote?.details || "-- -- -- -- -- -- --"}
       </p>
       <div className="flex items-center justify-center max-w-[122px] md:max-w-none gap-2 md:w-[35%] md:p-4">
         <SubmitButton

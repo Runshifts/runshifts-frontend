@@ -35,6 +35,7 @@ const ScheduleTable = ({ shiftsGroupedByEmployee }) => {
               key={key}
               shifts={shiftsGroupedByEmployee[key]}
               isOdd={rowIndex % 2}
+              index={rowIndex}
             />
           ))}
         </tbody>
@@ -53,15 +54,18 @@ function TimesheetTableHeading({ children }) {
   )
 }
 
-function TimesheetTableData({ children, className }) {
+function TimesheetTableData({ children, className, style = {} }) {
   return (
-    <td className={`py-[10px] capitalize px-2 text-sm text-[#1D2433] text-[14px] ${className}`}>
+    <td
+      style={style}
+      className={`py-[10px] capitalize px-2 text-sm text-[#1D2433] text-[14px] ${className}`}
+    >
       {children}
     </td>
   )
 }
 
-function EmployeeTableRow({ shifts = [], isOdd }) {
+function EmployeeTableRow({ shifts = [], isOdd, index }) {
   const employee = useMemo(() => {
     return shifts.find((it) => it.assignee)?.assignee
   }, [shifts])
@@ -81,7 +85,10 @@ function EmployeeTableRow({ shifts = [], isOdd }) {
   }, [])
 
   return (
-    <tr style={{ backgroundColor: isOdd ? "#F8F9FC" : "white" }} className="relative">
+    <tr
+      style={{ backgroundColor: isOdd ? "#F8F9FC" : "white" }}
+      className="relative"
+    >
       <TimesheetTableData>
         <input type="checkbox" className="form-checkbox" />
       </TimesheetTableData>
@@ -107,21 +114,29 @@ function EmployeeTableRow({ shifts = [], isOdd }) {
           )}
         </TimesheetTableData>
       ))}
-      <TimesheetTableData className={`sticky right-0 z-[100] ${isOdd ? "bg-[#F8F9FC]" : "bg-white" }`}>
-        <><TimesheetOptionsButton /></>
+      <TimesheetTableData
+        style={{ zIndex: 1000 - (index || 0) }}
+        className={`sticky right-0 ${isOdd ? "bg-[#F8F9FC]" : "bg-white"}`}
+      >
+        <>
+          <TimesheetOptionsButton employee={employee} shifts={shifts} />
+        </>
       </TimesheetTableData>
     </tr>
   )
 }
 
-function TimesheetOptionsButton() {
+function TimesheetOptionsButton({ employee, shifts }) {
   return (
-    <TooltipModal tooltipContent={<TimesheetActions />} styles={{ right: "100%", top: 0, bottom: 0 }}>
+    <TooltipModal
+      tooltipContent={<TimesheetActions employee={employee} shifts={shifts} />}
+      styles={{ right: "100%", top: 0, bottom: 0 }}
+    >
       <ThreeDotIcon />
     </TooltipModal>
   )
 }
-function TimesheetActions() {
+function TimesheetActions({ employee, shifts, index }) {
   const [showReviewModal, setShowReviewModal] = useState(false)
   return (
     <div>
@@ -137,12 +152,19 @@ function TimesheetActions() {
         </TimesheetActionButton>
       </ul>
       <Modal open={showReviewModal} onClose={() => setShowReviewModal(false)}>
-        <TimesheetReview />
+        <TimesheetReview employee={employee} shifts={shifts} />
       </Modal>
     </div>
   )
 }
 
 function TimesheetActionButton({ children, onClick }) {
-  return <button onClick={onClick} className="flex items-center whitespace-nowrap px-2 py-[6px] gap-2  hover:bg-primary-100">{children}</button>
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center whitespace-nowrap px-2 py-[6px] gap-2  hover:bg-primary-100"
+    >
+      {children}
+    </button>
+  )
 }
