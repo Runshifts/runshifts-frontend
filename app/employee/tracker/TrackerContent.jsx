@@ -175,7 +175,6 @@ function TrackerContent({ todaysShift }) {
           handleHide={() => setShowConfirmCheckout(false)}
           show={showConfirmCheckout}
           handleCheckout={() => {
-            checkout()
             setShowConfirmCheckout(false)
             setShowSendNoteForm(true)
           }}
@@ -228,6 +227,7 @@ function TrackerContent({ todaysShift }) {
         show={showSendNoteForm}
         handleHide={() => setShowSendNoteForm(false)}
         shift={todaysShift}
+        handleSubmit={(note = {}) => checkout(new Date(), note)}
       />
     </div>
   )
