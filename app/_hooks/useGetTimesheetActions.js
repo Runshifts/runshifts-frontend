@@ -29,7 +29,7 @@ export default function useGetTimesheetActions() {
       } else toast.error(res.message || "Something went wrong!")
       setLoading((prev) => ({ ...prev, singleShift: false }))
     },
-    [fetchData, dispatch]
+    [fetchData, dispatch, organization]
   )
 
   const approveMultipleShifts = useCallback(
@@ -54,7 +54,7 @@ export default function useGetTimesheetActions() {
       } else toast.error(res.message || "Something went wrong!")
       setLoading((prev) => ({ ...prev, multipleShifts: false }))
     },
-    [fetchData, dispatch]
+    [fetchData, dispatch, organization]
   )
   return { approveSingleShift, approveMultipleShifts, loading }
 }

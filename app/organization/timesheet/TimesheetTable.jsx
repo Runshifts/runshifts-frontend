@@ -12,7 +12,7 @@ import {
 import Modal from "../../_components/AppComps/Modal"
 import TimesheetReview from "./Review"
 
-const ScheduleTable = ({ shiftsGroupedByEmployee }) => {
+const TimesheetTable = ({ shiftsGroupedByEmployee }) => {
   return (
     <>
       <table className="bg-gray-50 flex-grow rounded-[4px]">
@@ -44,7 +44,7 @@ const ScheduleTable = ({ shiftsGroupedByEmployee }) => {
   )
 }
 
-export default ScheduleTable
+export default TimesheetTable
 
 function TimesheetTableHeading({ children }) {
   return (

@@ -10,6 +10,7 @@ import DateRangePicker from "../../_components/AppComps/Datepicker"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
 import { filterShiftsByWeek, groupShiftsByAssignee } from "../../_utils/shifts"
+import useGetTimesheetActions from "../../_hooks/useGetTimesheetActions"
 
 function Timesheet() {
   const { organization } = useContext(OrganizationContext)
@@ -35,12 +36,22 @@ function Timesheet() {
   )
 
   const shiftsGroupedByAssignee = groupShiftsByAssignee(shiftsInCurrentWeek)
-
+  const { approveMultipleShifts, loading } = useGetTimesheetActions()
   return (
     <section className="mx-2 p-3 h-screen">
       <div className="flex items-center justify-between py-3">
         <Heading as="h1">Timesheet</Heading>
-        <ApproveAll />
+        <ApproveAll
+          disabled={
+            shiftsInCurrentWeek.some((it) => it.isQueried === true) ||
+            shiftsInCurrentWeek.length === 0 ||
+            shiftsInCurrentWeek.some((it) => it.isApproved === true) ||
+            loading.multipleShifts
+          }
+          approveAllShifts={() =>
+            approveMultipleShifts(shiftsInCurrentWeek.map((it) => it._id))
+          }
+        />
       </div>
       <div className="flex flex-wrap items-center gap-2 list-none pb-4">
         <DateRangePicker
