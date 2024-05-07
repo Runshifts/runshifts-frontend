@@ -18,7 +18,7 @@ export default function useAxios() {
         })
         return response.data
       } catch (error) {
-        console.log(`USEAXIOS | LINE 21: ${error.message}`)
+        console.log(`USEAXIOS | LINE 21: ${error.message}`, `Could not ${method} ${url}`)
         return error.response.data
       }
     },

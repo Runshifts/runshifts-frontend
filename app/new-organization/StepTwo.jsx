@@ -64,7 +64,7 @@ export default function StepOne({ isActive, onSubmit = () => {} }) {
             isSelected={employeeCount === "151-499"}
           />
           <StaffCountButton
-            value="500+"
+            value="500"
             onClick={() => setEmployeeCount("500+")}
             isSelected={employeeCount === "500+"}
           />
