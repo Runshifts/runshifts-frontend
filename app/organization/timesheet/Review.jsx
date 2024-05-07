@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import TimesheetComponent from "./TimesheetComponent"
 import FormInputAndLabel from "../schedule/NewShiftForm/FormInputAndLabel"
 import Image from "next/image"
@@ -10,6 +10,7 @@ import "swiper/css/pagination"
 import { msToHourMinSecond } from "../../_utils"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import { SubmitButton } from "../../_components/Auth/Inputs"
+import useGetTimesheetActions from "../../_hooks/useGetTimesheetActions"
 
 const Review = ({ employee, shifts = [] }) => {
   const { organization } = useContext(OrganizationContext)
@@ -21,6 +22,8 @@ const Review = ({ employee, shifts = [] }) => {
       ),
     [shifts]
   )
+  const [approvalNote, setApprovalNote] = useState("")
+  const { approveMultipleShifts, loading } = useGetTimesheetActions()
   return (
     <>
       <section className="bg-white flex flex-col gap-[14px] justify-center items-center px-[20px] md:px-[40px] py-[24px] rounded-[16px] w-[80dvw] md:max-w-[616px] py-[24px]">
@@ -84,13 +87,27 @@ const Review = ({ employee, shifts = [] }) => {
             label="Add your note"
             inputProps={{
               placeholder: "Write feedback here...",
+              value: approvalNote,
+              onChange: (e) => setApprovalNote(e.target.value),
             }}
           />
           <div className="w-full flex flex-col gap-2 mt-[-2px]">
             <SubmitButton
+              onClick={() =>
+                approveMultipleShifts(
+                  sortedShifts.map((it) => it._id),
+                  approvalNote,
+                  employee?._id
+                )
+              }
               className={
                 "px-[12px] py-[2px] disabled:cursor-not-allowed disabled:bg-primary-200 bg-[#5BC62D] text-[14px] md:py-[8px] md:px-[16px] text-white md:font-[600] rounded-[8px]"
               }
+              isLoading={loading.multipleShifts}
+              isDisabled={sortedShifts.some(
+                (it) => it.isApproved || it.isQueried || loading.multipleShifts
+              )}
+              loadingText="Approving timesheet"
             >
               Approve Timesheet
             </SubmitButton>

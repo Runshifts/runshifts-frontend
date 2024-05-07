@@ -5,8 +5,10 @@ import TIMESHEET_URLS from "../_urls/timesheetsURLs"
 import toast from "react-hot-toast"
 import { useDispatch } from "react-redux"
 import { updateShifts } from "../_redux/timesheet.slice"
+import { useSelector } from "react-redux"
 
 export default function useGetTimesheetActions() {
+  const { shifts } = useSelector((store) => store.timesheet)
   const { organization } = useContext(OrganizationContext)
   const fetchData = useAxios()
   const [loading, setLoading] = useState({
@@ -29,5 +31,30 @@ export default function useGetTimesheetActions() {
     },
     [fetchData, dispatch]
   )
-  return { approveSingleShift, loading }
+
+  const approveMultipleShifts = useCallback(
+    async (shiftIds = [], approvalNote, assignee) => {
+      setLoading((prev) => ({ ...prev, multipleShifts: true }))
+      const res = await fetchData(
+        TIMESHEET_URLS.approveMultipleShifts(organization?._id),
+        "post",
+        { shiftIds, approvalNote, assignee }
+      )
+      if (res.statusCode === 200) {
+        dispatch(
+          updateShifts({
+            shifts: shifts.map((shift) =>
+              shiftIds.includes(shift?._id)
+                ? { ...shift, isApproved: true }
+                : shift
+            ),
+          })
+        )
+        toast.success(res.message || "Successfully approved timesheet")
+      } else toast.error(res.message || "Something went wrong!")
+      setLoading((prev) => ({ ...prev, multipleShifts: false }))
+    },
+    [fetchData, dispatch]
+  )
+  return { approveSingleShift, approveMultipleShifts, loading }
 }
