@@ -40,7 +40,7 @@ export default function UserProvider({ children }) {
 
   const updateUser = useCallback((value) => {
     setUser(value)
-    localStorage.setItem("user", value)
+    localStorage.setItem("user", JSON.stringify(value))
   }, [])
 
   useEffect(() => {

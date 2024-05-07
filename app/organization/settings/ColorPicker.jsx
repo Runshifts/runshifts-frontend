@@ -1,8 +1,7 @@
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 
-export default function ColorPickerGfg() {
-  const [color, setColor] = useColor("hex", "#121212");
+export default function ColorPickerGfg({ setColor, color}) {
 
   return (
     <div>

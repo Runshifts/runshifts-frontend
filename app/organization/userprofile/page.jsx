@@ -145,10 +145,14 @@ const UserProfile = () => {
         </label>
       </div>
     </div>
+
       <hr />
+
       <h1 className="my-2 text-sm not-italic font-semibold leading-5">
       Change Password
       </h1>
+
+      <div className="mb-4 flex space-x-2">
       <div className="mb-4">
         <label className="text-xs not-italic font-thin my-2 leading-4">
           Password
@@ -187,6 +191,8 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
+      </div>
+      
       <button className="bg-[#7ED957] text-white rounded-md px-4 py-2">
         Confirm Password
       </button>

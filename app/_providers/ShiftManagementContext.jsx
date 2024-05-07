@@ -13,10 +13,20 @@ export default function ShiftsManagementProvider({ children, organizationId }) {
     return shiftManagements.filter((it) => it.name.toLowerCase() === "custom")
   }, [shiftManagements])
 
+  const defaultShiftManagements = useMemo(() => {
+    return shiftManagements.filter((it) => it.type.toLowerCase() === "default")
+  }, [shiftManagements])
+
   const fetchShiftsManagement = useCallback(async () => {
     if (!organizationId) return
     const res = await fetchData(`/shifts-managements/${organizationId}`, "get")
-    if (res.statusCode === 200) setShiftsManagement(res.results)
+    // if (res.statusCode === 200) setShiftsManagement(res.results)
+    // console.log(res.results)
+
+    if (res.statusCode === 200) {
+      console.log(res.results)
+      setShiftsManagement(res.results)
+    }
   }, [organizationId, fetchData])
 
   useEffect(() => {
@@ -25,7 +35,13 @@ export default function ShiftsManagementProvider({ children, organizationId }) {
 
   return (
     <ShiftsManagementContext.Provider
-      value={{ shiftManagements, customShiftManagements }}
+      value={{
+        shiftManagements,
+        customShiftManagements,
+        defaultShiftManagements,
+        updateShiftManagements: (update) =>
+          Array.isArray(update) && setShiftsManagement(update),
+      }}
     >
       {children}
     </ShiftsManagementContext.Provider>

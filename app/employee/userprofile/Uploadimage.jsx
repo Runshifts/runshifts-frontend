@@ -10,26 +10,25 @@ function ImageUpload() {
   };
 
   return (
-    <div className="flex items-center justify-start">
-      <div className="bg-gray-100  mb-2  rounded-md w-56">
+    <div className="">
+      {selectedFile && (
+      <div className=" mb-2 rounded w-56">
+      <Image
+            width={50}
+            height={50}
+            src={URL.createObjectURL(selectedFile)}
+            alt="Selected"
+            className="max-w-full max-h-40 mb-4 rounded-md"
+          />
+        </div>
+      )}
+      <div className="mb-2 rounded max-w-md">
         <input
           type="file"
           accept="image/*"
           onChange={handleFileChange}
           className="mb-4"
         />
-
-        {selectedFile && (
-          <div>
-            <Image
-              width={50}
-              height={50}
-              src={URL.createObjectURL(selectedFile)}
-              alt="Selected"
-              className="max-w-full max-h-40 mb-4 rounded-md"
-            />
-          </div>
-        )}
       </div>
     </div>
   );

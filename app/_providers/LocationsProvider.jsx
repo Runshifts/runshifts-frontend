@@ -20,7 +20,13 @@ export default function LocationsProvider({ children, organizationId }) {
   }, [fetchLocations])
 
   return (
-    <LocationsContext.Provider value={{ locations }}>
+    <LocationsContext.Provider
+      value={{
+        locations,
+        updateLocations: (update) =>
+          Array.isArray(update) && setLocations(update),
+      }}
+    >
       {children}
     </LocationsContext.Provider>
   )
