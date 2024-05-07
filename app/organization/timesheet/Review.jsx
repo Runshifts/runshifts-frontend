@@ -9,6 +9,7 @@ import "swiper/css"
 import "swiper/css/pagination"
 import { msToHourMinSecond } from "../../_utils"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
+import { SubmitButton } from "../../_components/Auth/Inputs"
 
 const Review = ({ employee, shifts = [] }) => {
   const { organization } = useContext(OrganizationContext)
@@ -78,6 +79,24 @@ const Review = ({ employee, shifts = [] }) => {
             {sortedShifts.map((shift, index) => (
               <TimesheetComponent key={shift?._id} shift={shift} />
             ))}
+          </div>
+          <FormInputAndLabel
+            label="Add your note"
+            inputProps={{
+              placeholder: "Write feedback here...",
+            }}
+          />
+          <div className="w-full flex flex-col gap-2 mt-[-2px]">
+            <SubmitButton
+              className={
+                "px-[12px] py-[2px] disabled:cursor-not-allowed disabled:bg-primary-200 bg-[#5BC62D] text-[14px] md:py-[8px] md:px-[16px] text-white md:font-[600] rounded-[8px]"
+              }
+            >
+              Approve Timesheet
+            </SubmitButton>
+            <button className={`text-danger-600 disabled:opacity-30`}>
+              Query Timesheet
+            </button>
           </div>
         </div>
       </section>
