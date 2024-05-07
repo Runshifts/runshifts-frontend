@@ -1,5 +1,5 @@
-import React, { useContext } from "react"
-import { TimesheetComponent } from "./Carousel"
+import React, { useContext, useMemo } from "react"
+import TimesheetComponent from "./TimesheetComponent"
 import FormInputAndLabel from "../schedule/NewShiftForm/FormInputAndLabel"
 import Image from "next/image"
 import placeholderImg from "../../_assets/img/user.png"
@@ -12,7 +12,14 @@ import { OrganizationContext } from "../../_providers/OrganizationProvider"
 
 const Review = ({ employee, shifts = [] }) => {
   const { organization } = useContext(OrganizationContext)
-
+  const sortedShifts = useMemo(
+    () =>
+      shifts.toSorted(
+        (a, b) =>
+          new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+      ),
+    [shifts]
+  )
   return (
     <>
       <section className="bg-white flex flex-col gap-[14px] justify-center items-center px-[20px] md:px-[40px] py-[24px] rounded-[16px] w-[80dvw] md:max-w-[616px] py-[24px]">
@@ -35,26 +42,27 @@ const Review = ({ employee, shifts = [] }) => {
                     " " +
                     (employee?.lastName || "")
                   ).trim() ||
-                  employee.email,
+                  employee.email ||
+                  "",
                 readOnly: true,
               }}
             />
             <FormInputAndLabel
               label="Branch Location"
               inputProps={{
-                value: employee?.location?.address,
+                value: employee?.location?.address || "",
                 readOnly: true,
               }}
             />
             <FormInputAndLabel
               label="Position"
-              inputProps={{ value: employee?.position, readOnly: true }}
+              inputProps={{ value: employee?.position || "", readOnly: true }}
             />
             <FormInputAndLabel
               label="Unpaid Break"
               inputProps={{
                 value: msToHourMinSecond(
-                  organization?.allottedBreakTimeInMilliseconds
+                  organization?.allottedBreakTimeInMilliseconds || ""
                 ),
                 readOnly: true,
               }}
@@ -64,10 +72,10 @@ const Review = ({ employee, shifts = [] }) => {
             Work days
           </h3>
           <div className="md:hidden w-[300px] sm:w-auto">
-            <SwiperTimesheet shifts={shifts} />
+            <SwiperTimesheet shifts={sortedShifts} />
           </div>
           <div className="hidden md:grid grid-cols-1 gap-3 max-h-[40dvh] overflow-auto">
-            {shifts.map((shift, index) => (
+            {sortedShifts.map((shift, index) => (
               <TimesheetComponent key={shift?._id} shift={shift} />
             ))}
           </div>
@@ -79,7 +87,7 @@ const Review = ({ employee, shifts = [] }) => {
 
 export default Review
 
-function SwiperTimesheet({ shifts = []}) {
+function SwiperTimesheet({ shifts = [] }) {
   return (
     <Swiper
       pagination={{ clickable: true }}

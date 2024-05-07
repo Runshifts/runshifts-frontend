@@ -16,11 +16,17 @@ export const timesheetSlice = createSlice({
   initialState,
   reducers: {
     updateShifts: (state, action) => {
-      state.store = mergeArrays(state.shifts, action.payload.shifts, "_id")
-      state.cache = {
-        ...state.cache,
-        [new Date(action.payload.date).toDateString()]: true,
-      }
+      console.log(action.payload.shifts)
+      state.shifts = mergeArrays(
+        action.payload.shifts,
+        [...state.shifts],
+        "_id"
+      )
+      if (action.payload.date)
+        state.cache = {
+          ...state.cache,
+          [new Date(action.payload.date).toDateString()]: true,
+        }
     },
     reset: (state) => {
       state = initialState
