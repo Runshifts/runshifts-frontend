@@ -22,11 +22,14 @@ const Review = ({ employee, shifts = [] }) => {
       ),
     [shifts]
   )
-  const [approvalNote, setApprovalNote] = useState("")
+  const [note, setNote] = useState("")
   const { approveMultipleShifts, loading } = useGetTimesheetActions()
   return (
     <>
       <section className="bg-white flex flex-col gap-[14px] justify-center items-center px-[20px] md:px-[40px] py-[24px] rounded-[16px] w-[80dvw] md:max-w-[616px] py-[24px]">
+        <h3 className="self-center mx-auto font-[600] text-[#1B1818] leading-[20px] text-[16px]">
+          Timesheet review
+        </h3>
         <Image
           className="w-[64px] h-[64px] rounded-full object-cover"
           src={employee?.profileImage?.secure_url || placeholderImg}
@@ -87,8 +90,8 @@ const Review = ({ employee, shifts = [] }) => {
             label="Add your note"
             inputProps={{
               placeholder: "Write feedback here...",
-              value: approvalNote,
-              onChange: (e) => setApprovalNote(e.target.value),
+              value: note,
+              onChange: (e) => setNote(e.target.value),
             }}
           />
           <div className="w-full flex flex-col gap-2 mt-[-2px]">
@@ -96,7 +99,7 @@ const Review = ({ employee, shifts = [] }) => {
               onClick={() =>
                 approveMultipleShifts(
                   sortedShifts.map((it) => it._id),
-                  approvalNote,
+                  note,
                   employee?._id
                 )
               }
@@ -123,7 +126,7 @@ const Review = ({ employee, shifts = [] }) => {
 
 export default Review
 
-function SwiperTimesheet({ shifts = [] }) {
+function SwiperTimesheet({ shifts = [], onQueryClick }) {
   return (
     <Swiper
       pagination={{ clickable: true }}
@@ -132,7 +135,10 @@ function SwiperTimesheet({ shifts = [] }) {
     >
       {shifts.map((shift) => (
         <SwiperSlide key={shift?._id}>
-          <TimesheetComponent shift={shift} />
+          <TimesheetComponent
+            shift={shift}
+            onQueryClick={() => setShowQueryModal(true)}
+          />
         </SwiperSlide>
       ))}
     </Swiper>

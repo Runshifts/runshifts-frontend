@@ -1,12 +1,16 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { SubmitButton } from "../../_components/Auth/Inputs"
 import useGetTimesheetActions from "../../_hooks/useGetTimesheetActions"
+import Modal from "../../_components/AppComps/Modal"
+import FormInputAndLabel from "../schedule/NewShiftForm/FormInputAndLabel"
+import Image from "next/image"
 
-export default function TimesheetComponent({ shift = {} }) {
+export default function TimesheetComponent({ shift = {}, onQueryClick }) {
   const shiftStartTime = useMemo(
     () => new Date(shift?.startTime),
     [shift?.startTime]
   )
+  const [showQueryModal, setShowQueryModal] = useState(false)
   const { approveSingleShift, loading } = useGetTimesheetActions()
   return (
     <div className="border border-solid border-[#CAC6C3] max-h-[140px] md:border-[#E3E3E3] rounded-[8px] p-4 flex flex-col md:flex-row gap-2 md:gap-0 md:p-0">
@@ -35,18 +39,77 @@ export default function TimesheetComponent({ shift = {} }) {
           loadingText="Approving"
           isLoading={loading.singleShift}
           isDisabled={
-            shift?.isApproved === true || shift?.isQueried === true || loading.singleShift
+            shift?.isApproved === true ||
+            shift?.isQueried === true ||
+            loading.singleShift
           }
         >
           {shift?.isApproved ? "Approved" : "Approve"}
         </SubmitButton>
         <button
+          onClick={() => {
+            setShowQueryModal(true)
+            console.log("dfd;lsf;ds")
+          }}
           className={`text-danger-600 disabled:opacity-30`}
-          disabled={shift?.isApproved === true || shift?.isQueried === true || loading.singleShift}
+          disabled={
+            shift?.isApproved === true ||
+            shift?.isQueried === true ||
+            loading.singleShift
+          }
         >
           Query
         </button>
       </div>
+      <Modal
+        open={showQueryModal}
+        zIndex={45000000}
+        onClose={() => setShowQueryModal(false)}
+        modalClassNames="fixed"
+      >
+        <QueryForm assignee={shift?.assignee} shift={shift} />
+      </Modal>
+    </div>
+  )
+}
+
+const QueryForm = ({ shift }) => {
+  const [queryReason, setQueryReason] = useState("")
+  const { querySingleShift, loading } = useGetTimesheetActions()
+
+  return (
+    <div className="flex items-stretch gap-[14px] flex-col w-[95dvw] max-w-[484px] px-4 py-6 rounded-[16px] bg-white">
+      <h3 className="self-center mx-auto font-[600] text-[#1B1818] leading-[20px] text-[16px]">
+        Reason for query
+      </h3>
+      <Image
+        src={shift?.assignee?.profileImage?.secure_url || placeholderImg}
+        alt=""
+        className="rounded-full w-[64px] h-[64px] object-cover self-center"
+        width={64}
+        height={64}
+      />
+      <FormInputAndLabel
+        label="Add your note"
+        inputProps={{
+          placeholder: "Reason for query",
+          value: queryReason,
+          onChange: (e) => setQueryReason(e.target.value),
+        }}
+      />
+      <SubmitButton
+        onClick={() => querySingleShift({ shiftId: shift?._id, queryReason })}
+        className={
+          "px-[12px] py-[2px] disabled:cursor-not-allowed disabled:bg-primary-200 bg-[#5BC62D] text-[14px] md:py-[8px] md:px-[16px] text-white md:font-[600] rounded-[8px]"
+        }
+        isLoading={loading.singleShift}
+        isDisabled={
+          shift?.isApproved || shift?.isQueried || loading.multipleShifts
+        }
+        loadingText="Sending query..."
+      >
+        Send query
+      </SubmitButton>
     </div>
   )
 }

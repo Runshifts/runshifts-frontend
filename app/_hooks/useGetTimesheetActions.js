@@ -56,5 +56,53 @@ export default function useGetTimesheetActions() {
     },
     [fetchData, dispatch, organization]
   )
-  return { approveSingleShift, approveMultipleShifts, loading }
+
+  const querySingleShift = useCallback(
+    async ({ shiftId, queryReason }) => {
+      setLoading((prev) => ({ ...prev, singleShift: true }))
+      const res = await fetchData(
+        TIMESHEET_URLS.querySingleShift(organization?._id, shiftId),
+        "put",
+        { queryReason }
+      )
+      if (res.statusCode === 200) {
+        dispatch(updateShifts({ shifts: [res.shift] }))
+        toast.success(res.message || "Successfully queried shift")
+      } else toast.error(res.message || "Something went wrong!")
+      setLoading((prev) => ({ ...prev, singleShift: false }))
+    },
+    [fetchData, dispatch, organization]
+  )
+
+  const queryMultipleShifts = useCallback(
+    async (shiftIds = [], queryReason, assignee) => {
+      setLoading((prev) => ({ ...prev, multipleShifts: true }))
+      const res = await fetchData(
+        TIMESHEET_URLS.queryMultipleShifts(organization?._id),
+        "post",
+        { shiftIds, approvalNote, assignee }
+      )
+      if (res.statusCode === 200) {
+        dispatch(
+          updateShifts({
+            shifts: shifts.map((shift) =>
+              shiftIds.includes(shift?._id)
+                ? { ...shift, isQueried: true, queryReason, isApproved: false }
+                : shift
+            ),
+          })
+        )
+        toast.success(res.message || "Successfully queried timesheet")
+      } else toast.error(res.message || "Something went wrong!")
+      setLoading((prev) => ({ ...prev, multipleShifts: false }))
+    },
+    [fetchData, dispatch, organization]
+  )
+  return {
+    approveSingleShift,
+    approveMultipleShifts,
+    loading,
+    queryMultipleShifts,
+    querySingleShift,
+  }
 }

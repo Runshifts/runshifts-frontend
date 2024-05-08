@@ -151,7 +151,11 @@ function TimesheetActions({ employee, shifts, index }) {
           <EyeIcon /> Download
         </TimesheetActionButton>
       </ul>
-      <Modal open={showReviewModal} onClose={() => setShowReviewModal(false)}>
+      <Modal
+        open={showReviewModal}
+        zIndex={44000000}
+        onClose={() => setShowReviewModal(false)}
+      >
         <TimesheetReview employee={employee} shifts={shifts} />
       </Modal>
     </div>
