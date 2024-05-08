@@ -11,6 +11,7 @@ import {
 } from "../../_utils"
 import Modal from "../../_components/AppComps/Modal"
 import TimesheetReview from "./Review"
+import useGetTimesheetActions from "../../_hooks/useGetTimesheetActions"
 
 const TimesheetTable = ({ shiftsGroupedByEmployee }) => {
   return (
@@ -137,6 +138,34 @@ function TimesheetOptionsButton({ employee, shifts }) {
   )
 }
 function TimesheetActions({ employee, shifts, index }) {
+  const {
+    approveMultipleShifts: approveShifts,
+    loading,
+    queryMultipleShifts: queryShifts,
+  } = useGetTimesheetActions()
+
+  const approveMultipleShifts = useCallback(
+    (note) => {
+      approveShifts(
+        shifts.filter((it) => !it.isApproved).map((it) => it._id),
+        note,
+        employee?._id
+      )
+    },
+    [shifts, approveShifts]
+  )
+
+  const queryMultipleShifts = useCallback(
+    (note) => {
+      queryShifts(
+        sortedShifts.map((it) => it._id),
+        note,
+        employee?._id
+      )
+    },
+    [shifts, queryShifts]
+  )
+
   const [showReviewModal, setShowReviewModal] = useState(false)
   return (
     <div>
@@ -144,8 +173,21 @@ function TimesheetActions({ employee, shifts, index }) {
         <TimesheetActionButton onClick={() => setShowReviewModal(true)}>
           <EyeIcon /> Review Timesheet
         </TimesheetActionButton>
-        <TimesheetActionButton>
-          <EyeIcon /> Approve Timesheet
+        <TimesheetActionButton
+          onClick={approveMultipleShifts}
+          isDisabled={
+            shifts.every((it) => it.isApproved) || loading.multipleShifts
+          }
+        >
+          {loading.multipleShifts ? (
+            <>
+              <EyeIcon /> Approving
+            </>
+          ) : (
+            <>
+              <EyeIcon /> Approve Timesheet
+            </>
+          )}
         </TimesheetActionButton>
         <TimesheetActionButton>
           <EyeIcon /> Download
@@ -156,17 +198,24 @@ function TimesheetActions({ employee, shifts, index }) {
         zIndex={44000000}
         onClose={() => setShowReviewModal(false)}
       >
-        <TimesheetReview employee={employee} shifts={shifts} />
+        <TimesheetReview
+          approveMultipleShifts={approveMultipleShifts}
+          loading={loading}
+          queryMultipleShifts={queryMultipleShifts}
+          employee={employee}
+          shifts={shifts}
+        />
       </Modal>
     </div>
   )
 }
 
-function TimesheetActionButton({ children, onClick }) {
+function TimesheetActionButton({ children, onClick, isDisabled }) {
   return (
     <button
-      onClick={onClick}
-      className="flex items-center whitespace-nowrap px-2 py-[6px] gap-2  hover:bg-primary-100"
+      onClick={() => onClick()}
+      disabled={isDisabled}
+      className="disabled:opacity-40 disabled:cursor-not-allowed flex items-center whitespace-nowrap px-2 py-[6px] gap-2  hover:bg-primary-100"
     >
       {children}
     </button>

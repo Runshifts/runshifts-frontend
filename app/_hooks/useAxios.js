@@ -18,8 +18,9 @@ export default function useAxios() {
         })
         return response.data
       } catch (error) {
+        console.log(error)
         console.log(`USEAXIOS | LINE 21: ${error.message}`)
-        return error.response.data
+        return error.response?.data || {}
       }
     },
     []
