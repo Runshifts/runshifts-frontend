@@ -11,6 +11,7 @@ import { msToHourMinSecond } from "../../_utils"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import { SubmitButton } from "../../_components/Auth/Inputs"
 import useGetTimesheetActions from "../../_hooks/useGetTimesheetActions"
+import toast from "react-hot-toast"
 
 const Review = ({ employee, shifts = [] }) => {
   const { organization } = useContext(OrganizationContext)
@@ -23,7 +24,8 @@ const Review = ({ employee, shifts = [] }) => {
     [shifts]
   )
   const [note, setNote] = useState("")
-  const { approveMultipleShifts, loading } = useGetTimesheetActions()
+  const { approveMultipleShifts, loading, queryMultipleShifts } =
+    useGetTimesheetActions()
   return (
     <>
       <section className="bg-white flex flex-col gap-[14px] justify-center items-center px-[20px] md:px-[40px] py-[24px] rounded-[16px] w-[80dvw] md:max-w-[616px] py-[24px]">
@@ -114,7 +116,19 @@ const Review = ({ employee, shifts = [] }) => {
             >
               Approve Timesheet
             </SubmitButton>
-            <button className={`text-danger-600 disabled:opacity-30`}>
+            <button
+              onClick={() => {
+                if (note.trim().length === 0)
+                  toast.error("Please provide a reason for query")
+                note.length > 0 &&
+                  queryMultipleShifts(
+                    sortedShifts.map((it) => it._id),
+                    note,
+                    employee?._id
+                  )
+              }}
+              className={`text-danger-600 disabled:opacity-30`}
+            >
               Query Timesheet
             </button>
           </div>

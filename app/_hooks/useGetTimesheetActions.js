@@ -80,7 +80,7 @@ export default function useGetTimesheetActions() {
       const res = await fetchData(
         TIMESHEET_URLS.queryMultipleShifts(organization?._id),
         "post",
-        { shiftIds, approvalNote, assignee }
+        { shiftIds, queryReason, assignee }
       )
       if (res.statusCode === 200) {
         dispatch(
