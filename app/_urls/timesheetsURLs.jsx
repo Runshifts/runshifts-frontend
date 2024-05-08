@@ -1,7 +1,7 @@
 const TIMESHEET_URLS = {
   get: (organizationId) => `/timesheets/${organizationId}`,
   approveSingleShift: (organizationId, shiftId) =>
-    `/timesheets/${organizationId}/${shiftId}`,
+    `/timesheets/${organizationId}/${shiftId}/approve`,
   approveMultipleShifts: (organizationId) =>
     `/timesheets/${organizationId}/approve`,
   querySingleShift: (organizationId, shiftId) =>
