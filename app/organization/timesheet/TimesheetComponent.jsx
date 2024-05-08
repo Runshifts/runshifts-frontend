@@ -47,10 +47,7 @@ export default function TimesheetComponent({ shift = {}, onQueryClick }) {
           {shift?.isApproved ? "Approved" : "Approve"}
         </SubmitButton>
         <button
-          onClick={() => {
-            setShowQueryModal(true)
-            console.log("dfd;lsf;ds")
-          }}
+          onClick={() => setShowQueryModal(true)}
           className={`text-danger-600 disabled:opacity-30`}
           disabled={
             shift?.isApproved === true ||
