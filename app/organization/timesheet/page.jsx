@@ -43,10 +43,9 @@ function Timesheet() {
         <Heading as="h1">Timesheet</Heading>
         <ApproveAll
           disabled={
-            shiftsInCurrentWeek.some((it) => it.isQueried === true) ||
             shiftsInCurrentWeek.length === 0 ||
-            shiftsInCurrentWeek.some((it) => it.isApproved === true) ||
-            loading.multipleShifts
+            loading.multipleShifts ||
+            shiftsInCurrentWeek.every((shift) => shift.isApproved)
           }
           approveAllShifts={() =>
             approveMultipleShifts(shiftsInCurrentWeek.map((it) => it._id))

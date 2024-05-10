@@ -13,7 +13,13 @@ import { SubmitButton } from "../../_components/Auth/Inputs"
 import useGetTimesheetActions from "../../_hooks/useGetTimesheetActions"
 import toast from "react-hot-toast"
 
-const Review = ({ employee, shifts = [], approveMultipleShifts, loading, queryMultipleShifts }) => {
+const Review = ({
+  employee,
+  shifts = [],
+  approveMultipleShifts,
+  loading,
+  queryMultipleShifts,
+}) => {
   const { organization } = useContext(OrganizationContext)
   const sortedShifts = useMemo(
     () =>
@@ -97,16 +103,17 @@ const Review = ({ employee, shifts = [], approveMultipleShifts, loading, queryMu
           />
           <div className="w-full flex flex-col gap-2 mt-[-2px]">
             <SubmitButton
-              onClick={() =>
+              onClick={() => {
                 approveMultipleShifts(note)
-              }
+                setNote("")
+              }}
               className={
                 "px-[12px] py-[2px] disabled:cursor-not-allowed disabled:bg-primary-200 bg-[#5BC62D] text-[14px] md:py-[8px] md:px-[16px] text-white md:font-[600] rounded-[8px]"
               }
               isLoading={loading.multipleShifts}
-              isDisabled={sortedShifts.some(
-                (it) => it.isApproved || it.isQueried || loading.multipleShifts
-              )}
+              isDisabled={sortedShifts.every(
+                (it) => it.isApproved
+              ) || loading.multipleShifts}
               loadingText="Approving timesheet"
             >
               Approve Timesheet
@@ -115,10 +122,14 @@ const Review = ({ employee, shifts = [], approveMultipleShifts, loading, queryMu
               onClick={() => {
                 if (note.trim().length === 0)
                   toast.error("Please provide a reason for query")
-                note.length > 0 &&
-                  queryMultipleShifts(note)
+                note.length > 0 && queryMultipleShifts(note)
+                setNote("")
               }}
-              className={`text-danger-600 disabled:opacity-30`}
+              className={`text-danger-600 disabled:opacity-30 disabled:cursor-not-allowed`}
+              disabled={
+                shifts.some((shift) => shift.isQueried) ||
+                shifts.every((shift) => shift.isApproved)
+              }
             >
               Query Timesheet
             </button>

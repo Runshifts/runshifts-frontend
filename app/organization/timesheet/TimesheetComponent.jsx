@@ -40,7 +40,6 @@ export default function TimesheetComponent({ shift = {}, onQueryClick }) {
           isLoading={loading.singleShift}
           isDisabled={
             shift?.isApproved === true ||
-            shift?.isQueried === true ||
             loading.singleShift
           }
         >
@@ -55,7 +54,7 @@ export default function TimesheetComponent({ shift = {}, onQueryClick }) {
             loading.singleShift
           }
         >
-          Query
+          {shift?.isQueried ? "Queried" : "Query"}
         </button>
       </div>
       <Modal

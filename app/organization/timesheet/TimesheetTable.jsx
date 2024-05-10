@@ -4,6 +4,7 @@ import Image from "next/image"
 import TooltipModal from "../../_components/AppComps/TooltipModal"
 import ThreeDotIcon from "../../_assets/svgs/More"
 import EyeIcon from "../../_assets/svgs/Eye"
+import DownloadIcon from "../../_assets/svgs/DownloadIcon"
 import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
 import {
   DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY,
@@ -12,6 +13,7 @@ import {
 import Modal from "../../_components/AppComps/Modal"
 import TimesheetReview from "./Review"
 import useGetTimesheetActions from "../../_hooks/useGetTimesheetActions"
+import CheckInSquare from "../../_assets/svgs/CheckInSquare"
 
 const TimesheetTable = ({ shiftsGroupedByEmployee }) => {
   return (
@@ -158,14 +160,17 @@ function TimesheetActions({ employee, shifts, index }) {
   const queryMultipleShifts = useCallback(
     (note) => {
       queryShifts(
-        sortedShifts.map((it) => it._id),
+        shifts.map((it) => it._id),
         note,
         employee?._id
       )
     },
     [shifts, queryShifts]
   )
-
+  const allShiftsAreApproved = useMemo(
+    () => shifts.every((it) => it.isApproved),
+    [shifts]
+  )
   const [showReviewModal, setShowReviewModal] = useState(false)
   return (
     <div>
@@ -175,22 +180,21 @@ function TimesheetActions({ employee, shifts, index }) {
         </TimesheetActionButton>
         <TimesheetActionButton
           onClick={approveMultipleShifts}
-          isDisabled={
-            shifts.every((it) => it.isApproved) || loading.multipleShifts
-          }
+          isDisabled={allShiftsAreApproved || loading.multipleShifts}
         >
           {loading.multipleShifts ? (
             <>
-              <EyeIcon /> Approving
+              <CheckInSquare /> Approving
             </>
           ) : (
             <>
-              <EyeIcon /> Approve Timesheet
+              <CheckInSquare />{" "}
+              {allShiftsAreApproved ? "Approved" : "Approve Timesheet"}
             </>
           )}
         </TimesheetActionButton>
         <TimesheetActionButton>
-          <EyeIcon /> Download
+          <DownloadIcon /> Download
         </TimesheetActionButton>
       </ul>
       <Modal
