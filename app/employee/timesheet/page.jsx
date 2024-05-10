@@ -2,10 +2,12 @@
 import DateRangePicker from "../../_components/AppComps/Datepicker"
 import TimesheetCalendarScroll from "./TimesheetCalendarScroll"
 import Queries from "./Queries"
-import WorkersFilter from "./WorkersFilter"
 import { useContext, useEffect, useMemo } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { fetchTimeSheet } from "../../_redux/thunks/timesheet.thunk"
+import {
+  fetchQueries,
+  fetchTimeSheet,
+} from "../../_redux/thunks/timesheet.thunk"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import Heading from "../../_components/Headings"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
@@ -14,15 +16,20 @@ import {
   filterShiftsByWeek,
   groupShiftsByDayOfTheWeek,
 } from "../../_utils/shifts"
-import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 
 function page() {
   const { organization } = useContext(OrganizationContext)
   const { weekRanges, goToNextWeek, goToPrevWeek, currentWeek, jumpToWeek } =
     useGetWeekRanges(new Date(), 7)
-  const { shifts, cache } = useSelector((store) => store.timesheet)
+  const { shifts, cache, cachedQueries, queries } = useSelector(
+    (store) => store.timesheet
+  )
   const shiftsInCurrentWeek = useMemo(
     () => filterShiftsByWeek(shifts, currentWeek),
+    [shifts, currentWeek]
+  )
+  const queriesInCurrentWeek = useMemo(
+    () => filterShiftsByWeek(queries, currentWeek),
     [shifts, currentWeek]
   )
   const { renderShiftFilters } = useRenderShiftFilters(
@@ -39,7 +46,20 @@ function page() {
           organizationId: organization?._id,
         })
       )
-  }, [dispatch, organization?._id, currentWeek.start, shifts])
+  }, [dispatch, organization?._id, currentWeek.start, cache])
+
+  useEffect(() => {
+    if (
+      cachedQueries[currentWeek.start.toDateString()] !== true &&
+      organization
+    )
+      dispatch(
+        fetchQueries({
+          organizationId: organization?._id,
+          date: currentWeek.start,
+        })
+      )
+  }, [dispatch, organization, currentWeek.start, cachedQueries])
 
   const shiftsGroupedByDate = groupShiftsByDayOfTheWeek(shiftsInCurrentWeek)
 
@@ -65,14 +85,14 @@ function page() {
             showDepartmentFilter: false,
             showLocationFilter: false,
             onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
-            weekRanges
+            weekRanges,
           })}
         </ul>
       </div>
 
       <div className="bg-white rounded-xl shadow-xl p-4">
         <TimesheetCalendarScroll shiftsGroupedByDate={shiftsGroupedByDate} />
-        {/* <Queries /> */}
+        <Queries queries={queriesInCurrentWeek} />
       </div>
     </section>
   )
