@@ -1,3 +1,229 @@
+const handleFormSubmit = async (event) => {
+  event.preventDefault();
+
+  const numberOfWorkers = formData.numberOfWorkers.split("-");
+  const minStaffCount = numberOfWorkers?.[0];
+  const maxStaffCount = numberOfWorkers?.[1];
+
+  const formDataWithImage = new FormData();
+
+  formDataWithImage.append("minStaffCount", minStaffCount);
+  formDataWithImage.append("maxStaffCount", maxStaffCount);
+  formDataWithImage.append("logo", selectedImage);
+  formDataWithImage.append("brandColor", color);
+  formDataWithImage.append(
+    "allottedBreakTimeInMilliseconds",
+    formData.breakDuration
+  );
+
+  // Append default shift management data
+  defaultShiftManagementState.forEach((defaultShift) => {
+    formDataWithImage.append(
+      "shiftManagements",
+      JSON.stringify(defaultShift)
+    );
+  });
+
+  // Append custom shift management data
+  customShiftManagementState.forEach((customShift) => {
+    formDataWithImage.append(
+      "shiftManagements",
+      JSON.stringify(customShift)
+    );
+  });
+
+  // Append office addresses
+  officeAddress.forEach((address) =>
+    formDataWithImage.append("locations", JSON.stringify(address))
+  );
+
+  const response = await fetchData(
+    `/organizations/${organization?._id}`,
+    "put",
+    formDataWithImage
+  );
+
+  if (response.statusCode === 200) {
+    toast.success(response.message || "Successfully updated settings");
+  } else {
+    toast.error(response.message || "Something went wrong");
+  }
+};
+
+defaultShiftManagementState
+.map((defaultShift) => {
+  const startTime = new Date(Date.now())
+  startTime.setHours(
+    Number(defaultShift.startHour),
+    Number(defaultShift.minutes)
+  )
+  return { ...defaultShift, startTime }
+})
+.forEach((defaultShift) => {
+  formDataWithImage.append(
+    "shiftManagements",
+    JSON.stringify(defaultShift)
+  )
+})
+
+
+
+
+
+
+
+
+import React from "react";
+import Options from "./Options";
+import { RiDeleteBinLine } from "react-icons/ri";
+
+const ShiftsManagementForm = ({
+  handleShiftTimeChange,
+  shiftManagementEnabled,
+  setShiftManagementEnabled,
+  defaultShiftManagements,
+  deleteCustomShift,
+  addCustomShift,
+  customShiftManagements,
+  setShiftManagement,
+  timeChange,
+}) => {
+  return (
+    <div>
+      <div className="flex justify-between items-center my-2">
+        <div>
+          <p className="text-base font-normal leading-5">
+            Enable Shifts Management
+          </p>
+        </div>
+        <div>
+          <label className="relative inline-flex items-end me-5 cursor-pointer">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={shiftManagementEnabled}
+              onChange={(e) => setShiftManagementEnabled(e.target.checked)}
+            />
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+          </label>
+        </div>
+      </div>
+      <hr />
+
+      {defaultShiftManagements.map((defaultShift, index) => (
+        <div key={index}>
+          <h1 className="m-2 text-sm font-semibold leading-5">
+            {defaultShift.name}
+          </h1>
+          <div className="mb-4 flex space-x-2">
+            <div className="w-1/2 flex flex-col">
+              <label
+                htmlFor={`startHour_${index}`}
+                className="text-xs font-thin m-2 leading-4"
+              >
+                Start Time
+              </label>
+              <Options
+                id={`startHour_${index}`}
+                disabled={!shiftManagementEnabled}
+                value={`${defaultShift.startHour}:${defaultShift.minutes}`}
+                onChange={(e) =>
+                  handleShiftTimeChange(defaultShift, e.target.value)
+                }
+              />
+            </div>
+            <div className="w-1/2 flex flex-col">
+              <label
+                htmlFor={`stopHour_${index}`}
+                className="text-xs font-thin my-2 leading-4"
+              >
+                Stop Time
+              </label>
+              <Options
+                id={`stopHour_${index}`}
+                disabled={true}
+                value={`${defaultShift.endHour}:${defaultShift.minutes}`}
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {customShiftManagements.map((customShift, index) => (
+        <div key={index} className="mb-4 ">
+          <h1 className="m-2 text-sm font-semibold leading-5">
+            Custom shift
+          </h1>
+          <div className="flex space-x-2">
+            <div className="w-1/2 flex flex-col">
+              <label
+                htmlFor={`customStartHour_${index}`}
+                className="text-xs font-thin m-2 leading-4"
+              >
+                Start Time
+              </label>
+              <Options
+                id={`customStartHour_${index}`}
+                disabled={!shiftManagementEnabled}
+                value={`${customShift.startHour}:${customShift.minutes}`}
+                onChange={(e) => {
+                  const newCustomShiftManagements = customShiftManagements.map(
+                    (custom, id) => {
+                      if (id === index) {
+                        return timeChange(e.target.value);
+                      }
+                      return custom;
+                    }
+                  );
+                  setShiftManagement(newCustomShiftManagements);
+                }}
+              />
+            </div>
+
+            <div className="w-1/2 flex flex-col">
+              <label
+                htmlFor={`customStopHour_${index}`}
+                className="text-xs font-thin my-2 leading-4"
+              >
+                Stop Time
+              </label>
+              <Options
+                id={`customStopHour_${index}`}
+                disabled={true}
+                value={`${customShift.endHour}:${customShift.minutes}`}
+              />
+            </div>
+          </div>
+
+          <button type="button" onClick={() => deleteCustomShift(index)}>
+            <RiDeleteBinLine />
+          </button>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={addCustomShift}
+        className="bg-[#7ED957] text-white rounded-md m-2 px-4 py-2"
+      >
+        + Add Custom Time
+      </button>
+    </div>
+  );
+};
+
+export default ShiftsManagementForm;
+
+
+
+
+
+
+
+
+
+
+
 "use client"
 import React, { useState, useContext, useEffect } from "react"
 import Image from "next/image"
@@ -11,19 +237,18 @@ import ShiftsManagementForm from "./ShiftsManagements"
 import { LocationsContext } from "../../../_providers/LocationsProvider"
 import { ShiftsManagementContext } from "./../../../_providers/ShiftManagementContext"
 import { useColor } from "react-color-palette"
+import defaultShiftManageMents from './../../schedule/NewShiftForm/ShiftDurationInputs';
 
 const General = () => {
   const fetchData = useAxios()
 
-  const { organization, updateOrganization } = useContext(OrganizationContext)
+  const { organization } = useContext(OrganizationContext)
 
-  const { locations, updateLocations } = useContext(LocationsContext)
+  const { locations } = useContext(LocationsContext)
 
-  const {
-    defaultShiftManagements,
-    customShiftManagements,
-    updateShiftManagements,
-  } = useContext(ShiftsManagementContext)
+  const { defaultShiftManagements, customShiftManagements } = useContext(
+    ShiftsManagementContext
+  )
 
   const [formData, setFormData] = useState(() => {
     const savedFormData = localStorage.getItem("formData")
@@ -66,29 +291,19 @@ const General = () => {
   const [defaultShiftManagementState, setDefaultShiftManagementState] =
     useState([])
 
-  const [customShiftManagementState, setCustomShiftManagementState] = useState(
-    []
-  )
+    const [customShiftManagementState, setCustomShiftManagementState] =
+    useState([])
+ 
+    const deleteCustomShift = (index) => {
+      const newCustomShiftManagementState = [...customShiftManagementState];
+      newCustomShiftManagementState.splice(index, 1);
+      setCustomShiftManagementState(newCustomShiftManagementState);
+    };
+  
+    const addCustomShift = () => {
+      setCustomShiftManagementState([...customShiftManagementState, { startHour: "00", minutes: "00" }]);
+    };
 
-  const deleteCustomShift = (index) => {
-    const newCustomShiftManagementState = [...customShiftManagementState]
-    newCustomShiftManagementState.splice(index, 1)
-    setCustomShiftManagementState(newCustomShiftManagementState)
-  }
-
-  const addCustomShift = () => {
-    setCustomShiftManagementState([
-      ...customShiftManagementState,
-      {
-        startHour: "00",
-        minutes: "00",
-        type: "custom",
-        name: "custom",
-        id: Date.now(),
-        startTime: new Date(),
-      },
-    ])
-  }
 
   useEffect(() => {
     setDefaultShiftManagementState([
@@ -113,17 +328,14 @@ const General = () => {
         let endHour = startTime.getHours() + 8
         if (endHour >= 24) endHour = endHour - 24
         return {
+          ...customs,
           startHour: startTime.getHours(),
           endHour,
           minutes: startTime.getMinutes(),
-          type: "custom",
-          name: "custom",
-          id: Date.now(),
-          ...customs,
         }
       }),
     ])
-  }, [customShiftManagements])
+  }, [])
 
   const calculateStopTime = (startTime, numberOfHours) => {
     if (startTime && numberOfHours) {
@@ -133,6 +345,38 @@ const General = () => {
     }
     return ""
   }
+
+  const [morningShift, setMorningShift] = useState({
+    startTime: defaultShiftManagements.morning?.startTime || "",
+    stopTime: calculateStopTime(
+      defaultShiftManagements.morning?.startTime,
+      defaultShiftManagements.morning?.numberOfHours
+    ),
+  })
+
+  const [afternoonShift, setAfternoonShift] = useState({
+    startTime: defaultShiftManagements.afternoon?.startTime || "",
+    stopTime: calculateStopTime(
+      defaultShiftManagements.afternoon?.startTime,
+      defaultShiftManagements.afternoon?.numberOfHours
+    ),
+  })
+
+  const [eveningShift, setEveningShift] = useState({
+    startTime: defaultShiftManagements.evening?.startTime || "",
+    stopTime: calculateStopTime(
+      defaultShiftManagements.evening?.startTime,
+      defaultShiftManagements.evening?.numberOfHours
+    ),
+  })
+
+   const [customShift, setCustomShift] = useState({
+    startTime: customShiftManagements?.startTime || "",
+    stopTime: calculateStopTime(
+      customShiftManagements?.startTime,
+      customShiftManagements?.numberOfHours
+    ),
+  })
 
   const [selectedImage, setSelectedImage] = useState(null)
 
@@ -167,56 +411,39 @@ const General = () => {
     })
   }
 
-  const timeChange = (value) => {
-    const [hour, minutes] = value.split(":")
-    let endHour = Number(hour) + 8
-    if (endHour >= 24) endHour = endHour - 24
-    return { startHour: hour, endHour, minutes }
+const timeChange = (value) => {
+  const [hour, minutes] = value.split(":")
+  let endHour = Number(hour) + 8
+  if (endHour >= 24) endHour = endHour - 24
+  return { startHour: hour, endHour, minutes }
+}
+
+const handleShiftTimeChange = (shift, value) => {
+  const [hour, minutes] = value.split(":");
+  // Update default shift management state
+  setDefaultShiftManagementState((prev) => {
+    return prev.map((defaultShift) => {
+      if (defaultShift._id === shift.id) {
+        return { ...defaultShift, startHour: hour, minutes };
+      } else {
+        return defaultShift;
+      }
+    });
+  });
+
+  // const isDefaultShift = defaultShiftManagements.some(
+  //   (defaultShift) => defaultShift._id === shift.id
+  // );
+
+  if (!isDefaultShift) {
+    // Update custom shift management state
+    setCustomShiftManagementState((prev) => {
+      return [...prev, { startHour: hour, endHour: Number(hour) + 8, minutes }];
+    });
   }
+};
 
-  const handleShiftTimeChange = (shift, value) => {
-    const [hour, minutes] = value.split(":")
 
-    setDefaultShiftManagementState((prev) => {
-      return prev.map((defaultShift) => {
-        if (defaultShift._id === shift.id) {
-          return { ...defaultShift, startHour: hour, minutes }
-        } else {
-          return defaultShift
-        }
-      })
-    })
-
-    const isDefaultShift = defaultShiftManagements.some(
-      (defaultShift) => defaultShift._id === shift.id
-    )
-
-    if (!isDefaultShift) {
-      setCustomShiftManagementState((prev) => {
-        return prev.map((shiftManagement) => {
-          if (
-            shiftManagement._id === shift.id ||
-            shiftManagement._id === shift._id
-          ) {
-            return {
-              ...shiftManagement,
-              startHour: hour,
-              endHour: Number(hour) + 8,
-              minutes,
-            }
-          } else {
-            return shiftManagement
-          }
-        })
-      })
-      // setCustomShiftManagementState((prev) => {
-      //   return [
-      //     ...prev,
-      //     { startHour: hour, endHour: Number(hour) + 8, minutes },
-      //   ]
-      // })
-    }
-  }
 
   const handleAddressChange = (index, value) => {
     setOfficeAddress((prevofficeAddress) => {
@@ -246,74 +473,57 @@ const General = () => {
   }
 
   const handleFormSubmit = async (event) => {
-    event.preventDefault()
-
-    const numberOfWorkers = formData.numberOfWorkers.split("-")
-    const minStaffCount = numberOfWorkers?.[0]
-    const maxStaffCount = numberOfWorkers?.[1]
-
-    const formDataWithImage = new FormData()
-
-    formDataWithImage.append("minStaffCount", minStaffCount)
-    formDataWithImage.append("maxStaffCount", maxStaffCount)
-    formDataWithImage.append("logo", selectedImage)
-    formDataWithImage.append("brandColor", color)
+    event.preventDefault();
+  
+    const numberOfWorkers = formData.numberOfWorkers.split("-");
+    const minStaffCount = numberOfWorkers?.[0];
+    const maxStaffCount = numberOfWorkers?.[1];
+  
+    const formDataWithImage = new FormData();
+  
+    formDataWithImage.append("minStaffCount", minStaffCount);
+    formDataWithImage.append("maxStaffCount", maxStaffCount);
+    formDataWithImage.append("logo", selectedImage);
+    formDataWithImage.append("brandColor", color);
     formDataWithImage.append(
       "allottedBreakTimeInMilliseconds",
-      +formData.breakDuration * 60000 // convert to milliseconds
-    )
-    defaultShiftManagementState
-      .map((defaultShift) => {
-        const startTime = new Date(Date.now())
-        startTime.setHours(
-          Number(defaultShift.startHour),
-          Number(defaultShift.minutes)
-        )
-        return { ...defaultShift, startTime }
-      })
-      .forEach((defaultShift) => {
-        formDataWithImage.append(
-          "shiftManagements",
-          JSON.stringify(defaultShift)
-        )
-      })
-    customShiftManagementState
-      .map((customShift) => {
-        console.log(customShift)
-        const startTime = new Date(Date.now())
-        startTime.setHours(
-          Number(customShift.startHour),
-          Number(customShift.minutes)
-        )
-        return { ...customShift, startTime, type: "custom", name: "custom" }
-      })
-      .forEach((customShift) => {
-        formDataWithImage.append(
-          "shiftManagements",
-          JSON.stringify(customShift)
-        )
-      })
-
+      formData.breakDuration
+    );
+  
+    // Append default shift management data
+    defaultShiftManagementState.forEach((defaultShift) => {
+      formDataWithImage.append(
+        "shiftManagements",
+        JSON.stringify(defaultShift)
+      );
+    });
+  
+    // Append custom shift management data
+    customShiftManagementState.forEach((customShift) => {
+      formDataWithImage.append(
+        "shiftManagements",
+        JSON.stringify(customShift)
+      );
+    });
+  
+    // Append office addresses
     officeAddress.forEach((address) =>
       formDataWithImage.append("locations", JSON.stringify(address))
-    )
+    );
+  
     const response = await fetchData(
       `/organizations/${organization?._id}`,
       "put",
       formDataWithImage
-    )
-
+    );
+  
     if (response.statusCode === 200) {
-      toast.success(response.message || "Successfully updated settings")
+      toast.success(response.message || "Successfully updated settings");
     } else {
-      toast.error(response.message || "Something went wrong")
+      toast.error(response.message || "Something went wrong");
     }
-
-    console.log(response, "this is response")
-    updateOrganization(response.organization)
-    updateShiftManagements(response.shiftManagements)
-    updateLocations(response.locations)
-  }
+  };
+  
 
   return (
     <section className="p-4">
@@ -404,6 +614,10 @@ const General = () => {
           <ShiftsManagementForm
             shiftManagementEnabled={shiftManagementEnabled}
             setShiftManagementEnabled={setShiftManagementEnabled}
+            morningShift={morningShift}
+            afternoonShift={afternoonShift}
+            eveningShift={eveningShift}
+            customShift={customShift}
             handleShiftTimeChange={handleShiftTimeChange}
             deleteCustomShift={deleteCustomShift}
             addCustomShift={addCustomShift}

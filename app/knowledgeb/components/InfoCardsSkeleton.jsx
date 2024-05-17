@@ -3,8 +3,9 @@ import React from "react";
 import Ellipse1 from "../Ellipse1.svg";
 import Ellipse2 from "../Ellipse2.svg";
 import Ellipse3 from "../Ellipse3.svg";
+import Link from "next/link";
 
-function InfoCards({ title, content }) {
+function InfoCards({ title, content, refLink }) {
   return (
     <div className="p-5 max-w-[410px] bg-white rounded-lg shadow-lg ">
       <h1 className="text-[#449522] text-xl font-medium leading-6 tracking-normal text-left ">
@@ -36,8 +37,9 @@ function InfoCards({ title, content }) {
         <p className="text-sm font-normal leading-6 tracking-normal text-[#706763] text-right">28 entries</p>
 
         </div>
-       
-        <button className="text-[#449522] ">View</button>
+       {/* <Link href={refLink} > */}
+       <button className="text-[#449522] ">View</button>
+       {/* </Link> */}
       </div>
     </div>
   );

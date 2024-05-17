@@ -11,8 +11,8 @@ function page() {
         <input
           type="text"
           placeholder="Search settings..."
-          className="bg-gray-100 px-2 py-2 mr-2 text-gray-500 rounded-md"
-          name="members"
+          className="bg-gray-100 px-2 py-1 mr-2 text-gray-500 border-none rounded"
+          name="Search settings"
         />
         </div>
 

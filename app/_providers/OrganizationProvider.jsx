@@ -33,7 +33,6 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
   const [isFetchingOrganization, setIsFetchingOrganization] = useState(
     organization === null
   )
-
   const fetchOrganization = useCallback(async () => {
     if (isEmployee && !user?.organization) return
     const res = await fetchData(
@@ -92,6 +91,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
         isFetchingOrganization,
         employees,
         updateEmployees,
+        updateOrganization: (value) => value && setOrganization(value)
       }}
     >
       <LocationsProvider organizationId={organization?._id}>
