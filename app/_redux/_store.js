@@ -1,7 +1,7 @@
 "use client"
 import { configureStore } from "@reduxjs/toolkit"
 import { timesheetReducer } from "./timesheet.slice"
-import { earningsReducer } from "./timesheet.slice"
+import { earningsReducer } from "./earnings.slice"
 import { payrollReducer } from "./payroll.slice"
 
 export const store = configureStore({

@@ -39,14 +39,14 @@ function Payroll() {
           })
         )
     }
-  }, [dispatch, organization?._id, currentWeek.start])
+  }, [dispatch, organization?._id, currentWeek.start, cache])
 
   return (
     <section className="h-screen w-full px-[12px] md:px-[40px] flex flex-col gap-4 items-start">
       <div className="flex justify-between items-center py-6 w-full">
-        <Heading as="h1">Earnings</Heading>
+        <Heading as="h1">Payroll</Heading>
         <SubmitButton className="flex items-center gap-[4px] bg-primary-500 text-white rounded-md font-[500] text-[14px] leading-[20px] px-[12px] py-[4px]">
-          <BagSvg /> Request EWA
+          <BagSvg /> Add funds
         </SubmitButton>
       </div>
       <div className="flex flex-col gap-6 justify-between items-start w-full">
