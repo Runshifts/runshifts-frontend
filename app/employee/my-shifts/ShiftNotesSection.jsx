@@ -14,7 +14,7 @@ export default function ShiftNotesSection({ shift }) {
       <div className="flex flex-col items-stretch gap-4 w-full">
         <h3 className="modal-subheading sticky top-0 bg-white">Notes</h3>
         <div>
-          <ShiftNotes shiftId={shift?._id} notesDisplayStyle={"chat"} />
+          <ShiftNotes shiftId={shift?._id} />
         </div>
         <div className="sticky bottom-0 bg-white">
           <ShiftNotesForm shiftId={shift?._id} />
@@ -25,14 +25,13 @@ export default function ShiftNotesSection({ shift }) {
 }
 
 export function ShiftNotes({
-  notesDisplayStyle = "chat" || "section",
   shiftId,
   notesToDisplay,
 }) {
   const { allNotes, fetchNotes, hasFetchedNotes, loadingNotes } =
     useContext(NotesContext)
   const notesForShift = useMemo(
-    () => notesToDisplay || allNotes.filter((note) => note.shift === shiftId),
+    () => notesToDisplay || allNotes.filter((note) => note.shift?._id === shiftId),
     [allNotes, shiftId, notesToDisplay]
   )
   const sortedNotes = useMemo(
@@ -58,34 +57,13 @@ export function ShiftNotes({
               <NoteLikeChatSkeleton shouldJustifyStart />
             </>
           ) : (
-            sortedNotes.map((note) =>
-              notesDisplayStyle === "chat" ? (
-                <NoteLikeChat note={note} key={note._id} />
-              ) : (
-                <NoteLikeSection note={note} key={note._id} />
-              )
-            )
+            sortedNotes.map((note) => (
+              <NoteLikeChat note={note} key={note._id} />
+            ))
           )}
         </ul>
       </div>
     </>
-  )
-}
-
-const NoteLikeSection = ({ note }) => {
-  const { user } = useContext(UserContext)
-  const isOwnNote = useMemo(() => note.creator?._id === user?._id, [note, user])
-  return (
-    <div className="flex flex-col gap-4">
-      <UserHeader
-        user={isOwnNote ? { ...note.creator, fullName: "You" } : note.creator}
-      />
-      <SeverityPill severity={note.severity}>{note.severity}</SeverityPill>
-      <p className="text-gray-700 text-[12px]">{note.details}</p>
-      <p className="text-gray-700 text-[12px]">
-        {timeAgo(new Date(note.createdAt))}
-      </p>
-    </div>
   )
 }
 
@@ -95,8 +73,8 @@ const NoteLikeChat = ({ note }) => {
 
   return (
     <article
-      className={`flex items-start gap-2 max-w-[279px] ${
-        isOwnNote ? "justify-start" : "flex-row-reverse  justify-end"
+      className={`flex items-start gap-2 ${
+        isOwnNote ? "justify-start" : "flex-row-reverse text-right justify-start"
       }`}
     >
       <Image
@@ -106,8 +84,12 @@ const NoteLikeChat = ({ note }) => {
         alt=""
         className="rounded-full w-[34px] h-[34px]"
       />
-      <div className="flex flex-col items-start justify-start gap-2">
-        <h4 className="flex gap-2 justify-start leading-[16px]">
+      <div
+        className={`${
+          isOwnNote ? "items-start" : "items-end"
+        } flex flex-col justify-start gap-2`}
+      >
+        <h4 className="flex flex-col gap-2 justify-start leading-[16px]">
           <span className="capitalize">
             {isOwnNote
               ? "You"

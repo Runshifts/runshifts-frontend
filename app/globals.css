@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components{
-  .modal-subheading{
+@layer components {
+  .modal-subheading {
     @apply text-left font-[400] leading-[150%] text-[14px] text-[#303030];
   }
 }
@@ -17,7 +17,9 @@
 .custom-h1 {
   @apply text-[#292D32] mb-4 mt-2 text-xl not-italic font-medium leading-7 md:text-2xl;
 }
-
+:root {
+  --swiper-pagination-top: 132px;
+}
 .knowledgeb-bg {
   background-image: url("../app/knowledgeb/Frame.svg");
   background-repeat: no-repeat;

@@ -36,7 +36,7 @@
     "sharp": "^0.33.2",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.7.4",
-    "swiper": "^11.0.6",
+    "swiper": "^11.1.1",
     "tailwind-datepicker-react": "^1.4.3",
     "web-vitals": "^3.5.2"
   },

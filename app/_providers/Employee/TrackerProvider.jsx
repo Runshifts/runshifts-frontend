@@ -42,21 +42,26 @@ export default function EmployeeTrackerProvider({ children, shiftId }) {
     setLoading("")
   }, [organization, fetchData, shiftId, loading])
 
-  const checkout = useCallback(async () => {
-    if (loading === "checkout" || !shiftId) return
-    setLoading("checkout")
-    const res = await fetchData(
-      TRACKER_URLS.checkout(organization?._id, shiftId),
-      "get"
-    )
-    if (res.statusCode === 200) {
-      toast.success(res.message)
-      updateAllShifts([res.shift])
-    } else {
-      toast.error(res.message)
-    }
-    setLoading("")
-  }, [organization, fetchData, shiftId, loading, updateAllShifts])
+  const checkout = useCallback(
+    async (time = new Date(), note = {}) => {
+      if (loading === "checkout" || !shiftId) return
+      setLoading("checkout")
+      console.log(note)
+      const res = await fetchData(
+        TRACKER_URLS.checkout(organization?._id, shiftId),
+        "post",
+        { time, note }
+      )
+      if (res.statusCode === 200) {
+        toast.success(res.message)
+        updateAllShifts([res.shift])
+      } else {
+        toast.error(res.message)
+      }
+      setLoading("")
+    },
+    [organization, fetchData, shiftId, loading, updateAllShifts]
+  )
   const startOvertime = useCallback(() => {}, [])
   const endOvertime = useCallback(() => {}, [])
   const startOrResumeBreak = useCallback(async () => {

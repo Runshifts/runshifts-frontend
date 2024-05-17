@@ -17,9 +17,11 @@ import {
   groupShiftsByHoursWithDateKey,
 } from "../../_utils/shifts"
 import { OrganizationContext } from "../OrganizationProvider"
+import { mergeArrays } from "../../_utils"
 
 export const DashboardContext = createContext({
   allShifts: [],
+  allOvertimes: [],
   todaysSnapshot: {},
   organization: null,
   fetchOrganization: () => {},
@@ -41,6 +43,7 @@ export const DashboardContext = createContext({
   indexOfThePresentWeek: 0,
   updateAllShifts: () => {},
   handleUpdateSingleShift: () => {},
+  overtimesInCurrentWeek: []
 })
 
 export default function DashboardProvider({ children }) {
@@ -50,6 +53,7 @@ export default function DashboardProvider({ children }) {
   const fetchData = useAxios()
   const [todaysSnapshot, setTodaysSnapshot] = useState(null)
   const [allShifts, setAllShifts] = useState([])
+  const [allOvertimes, setAllOvertimes] = useState([])
 
   const indexOfThePresentWeek = useMemo(() => {
     const today = new Date(Date.now())
@@ -97,6 +101,10 @@ export default function DashboardProvider({ children }) {
     return filterShiftsByWeek(allShifts, currentWeek)
   }, [allShifts, currentWeek])
 
+  const listOfOvertimesInCurrentWeek = useMemo(() => {
+    return filterShiftsByWeek(allOvertimes, currentWeek)
+  }, [allOvertimes, currentWeek])
+
   const updateAllShifts = useCallback((newShifts = []) => {
     setAllShifts((prev) => {
       return [
@@ -112,6 +120,7 @@ export default function DashboardProvider({ children }) {
     useManageFetchShiftsAndOvertimes({
       updateAllShifts,
       currentWeek,
+      updateAllOvertimes: (update = []) => setAllOvertimes(prev => mergeArrays(prev, update, "_id"))
     })
 
   const handleUpdateSingleShift = useCallback((update) => {
@@ -152,6 +161,8 @@ export default function DashboardProvider({ children }) {
         indexOfThePresentWeek,
         updateAllShifts,
         handleUpdateSingleShift,
+        allOvertimes,
+        overtimesInCurrentWeek: listOfOvertimesInCurrentWeek
       }}
     >
       {children}

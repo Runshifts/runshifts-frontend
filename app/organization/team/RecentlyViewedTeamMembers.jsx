@@ -44,7 +44,7 @@ function RecentlyViewedTeamMember({ user = {}, handleView }) {
         {(user.firstName + " " + user.lastName).trim() || user.fullName}
       </h3>
       <p className="text-gray-800 text-[12px] truncate text-center overflow-hidden w-full">
-        {user.role?.name}
+        {user.position}
       </p>
 
       <button

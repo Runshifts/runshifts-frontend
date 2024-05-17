@@ -7,6 +7,7 @@ const SHIFTS_URLS = {
   dropOff: (shiftId) => `/shifts/${shiftId}/drop-off`,
   requestSwap: (shiftId) => `/shifts/${shiftId}/swap`,
   cancelSwapRequest: (shiftSwapRequestId) => `shifts/swaps/${shiftSwapRequestId}/cancel`,
-  shiftsManagementStats: () => `/shifts/today`
+  shiftsManagementStats: () => `/shifts/today`,
+  requestOvertime: (organizationId) => `/overtimes/${organizationId}/requests`,
 }
 export default SHIFTS_URLS

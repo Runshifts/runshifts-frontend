@@ -75,11 +75,7 @@ const Tracker = ({
         </TrackerTable>
       </TrackerSection>
 
-      <TrackerSection
-        heading={`Employees ${
-          isCurrentDate ? "currently on" : "with used"
-        } break`}
-      >
+      <TrackerSection heading="Employees currently on break">
         {!loading && (
           <TrackerTable headings={["Employees", ""]}>
             {usedBreakShifts.map((shift, rowIndex) => (

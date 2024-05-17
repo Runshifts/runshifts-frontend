@@ -27,7 +27,9 @@ export default function RootLayout({ children }) {
             </UserProvider>
           </LoadingProvider>
         </GoogleOAuthProvider>
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} containerStyle={{
+          zIndex: 9000000000000000
+        }}/>
       </body>
     </html>
   )

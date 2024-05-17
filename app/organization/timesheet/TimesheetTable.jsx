@@ -1,122 +1,227 @@
-import React from "react";
-import Avatar from "../../../public/dashboardImgs/timesheet.svg";
-import Image from "next/image";
+import React, { useCallback, useMemo, useState } from "react"
+import placeholderImage from "../../_assets/img/user.png"
+import Image from "next/image"
+import TooltipModal from "../../_components/AppComps/TooltipModal"
+import ThreeDotIcon from "../../_assets/svgs/More"
+import EyeIcon from "../../_assets/svgs/Eye"
+import DownloadIcon from "../../_assets/svgs/DownloadIcon"
+import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
+import {
+  DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY,
+  ONE_HOUR_IN_MILLISECONDS,
+} from "../../_utils"
+import Modal from "../../_components/AppComps/Modal"
+import TimesheetReview from "./Review"
+import useGetTimesheetActions from "../../_hooks/useGetTimesheetActions"
+import CheckInSquare from "../../_assets/svgs/CheckInSquare"
 
-const ScheduleTable = () => {
-  const employeeNames = [
-    "Charlse Jenkings",
-    "Otto Chris",
-    "Ariana Woods",
-    "Bernard Oslo",
-  ];
-
+const TimesheetTable = ({ shiftsGroupedByEmployee }) => {
   return (
-    <div className="rounded-lg overflow-x-auto  shadow-lg">
-      <table className="min-w-full bg-gray-50 ">
-        <thead className="bg-gray-100">
+    <>
+      <table className="bg-gray-50 flex-grow rounded-[4px]">
+        <thead className="bg-[#F1F3F9]">
           <tr>
-            <th className="py-2 px-4">
+            <TimesheetTableHeading className="py-2 px-4">
               <input type="checkbox" className="form-checkbox" />
-            </th>
-            <th className="py-2 px-4 text-[#2252525] font-thin">Employee</th>
-            <th className="py-2 px-4 text-[#2252525] font-thin">Monday</th>
-            <th className="py-2 px-4 text-[#2252525] font-thin">Tuesday</th>
-            <th className="py-2 px-4 text-[#2252525] font-thin">Wednesday</th>
-            <th className="py-2 px-4 text-[#2252525] font-thin">Thursday</th>
-            <th className="py-2 px-4 text-[#2252525] font-thin">Friday</th>
-            <th className="py-2 px-4 text-[#2252525] font-thin">Saturday</th>
-            <th className="py-2 px-4 text-[#2252525] font-thin">Sunday</th>
-            <th className="py-2 px-4 text-[#2252525] font-thin"></th>
+            </TimesheetTableHeading>
+            <TimesheetTableHeading>Employee</TimesheetTableHeading>
+            {DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY.map((day) => (
+              <TimesheetTableHeading key={day}>{day}</TimesheetTableHeading>
+            ))}
+            <TimesheetTableHeading></TimesheetTableHeading>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {employeeNames.map((employee, rowIndex) => (
-            <tr key={rowIndex}>
-              <td className="py-2 px-4">
-                <input type="checkbox" className="form-checkbox" />
-              </td>
-              <td className="py-1 px-4 flex text-sm text-[#252525] font-medium">
-                <Image src={Avatar} alt="avatar" height={50} width={50} quality={100} className="pr-2" />
-                {employee}
-              </td>
-              <td className="py-1 px-4 text-sm  text-[#252525] font-medium">
-                <input
-                  type="text"
-                  className="border-none w-full focus:outline-none"
-                  value="5.45 hrs"
-                />
-              </td>
-              <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                <input
-                  type="text"
-                  className="border-none w-full focus:outline-none"
-                  value="5.45 hrs"
-                />
-              </td>
-              <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                <input
-                  type="text"
-                  className="border-none w-full focus:outline-none"
-                  value="5.45 hrs"
-                />
-              </td>
-              <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                <input
-                  type="text"
-                  className="border-none w-full focus:outline-none"
-                  value="5.45 hrs"
-                />
-              </td>
-              <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                <input
-                  type="text"
-                  className="border-none w-full focus:outline-none"
-                  value="5.45 hrs"
-                />
-              </td>
-              <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                <input
-                  type="text"
-                  className="border-none w-full focus:outline-none"
-                  value="5.45 hrs"
-                />
-              </td>
-              <td className="py-1 px-4 text-sm text-[#252525] font-medium ">
-                <input
-                  type="text"
-                  className="border-none w-full focus:outline-none"
-                  value="5.45 hrs"
-                />
-              </td>
-              <td className="py-1 px-4 text-sm text-[#252525] font-medium">
-                {/* <Link href='/timesheetReview'> */}
-                  <MoreSvg />
-                {/* <Link>            */}
-              </td>
-            </tr>
+          {Object.keys(shiftsGroupedByEmployee).map((key, rowIndex) => (
+            <EmployeeTableRow
+              key={key}
+              shifts={shiftsGroupedByEmployee[key]}
+              isOdd={rowIndex % 2}
+              index={rowIndex}
+            />
           ))}
         </tbody>
       </table>
-    </div>
-  );
-};
+    </>
+  )
+}
 
-export default ScheduleTable;
+export default TimesheetTable
 
-function MoreSvg() {
+function TimesheetTableHeading({ children }) {
   return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    <th className="max-w-[111px] capitalize py-[13px] px-2 text-[#1D2433] font-thin text-left">
+      {children}
+    </th>
+  )
+}
+
+function TimesheetTableData({ children, className, style = {} }) {
+  return (
+    <td
+      style={style}
+      className={`py-[10px] capitalize px-2 text-sm text-[#1D2433] text-[14px] ${className}`}
     >
-      <path
-        d="M10.0001 16.6667C9.5418 16.6667 9.14958 16.5037 8.82347 16.1775C8.4968 15.8509 8.33347 15.4584 8.33347 15C8.33347 14.5417 8.4968 14.1492 8.82347 13.8225C9.14958 13.4964 9.5418 13.3334 10.0001 13.3334C10.4585 13.3334 10.851 13.4964 11.1776 13.8225C11.5037 14.1492 11.6668 14.5417 11.6668 15C11.6668 15.4584 11.5037 15.8509 11.1776 16.1775C10.851 16.5037 10.4585 16.6667 10.0001 16.6667ZM10.0001 11.6667C9.5418 11.6667 9.14958 11.5034 8.82347 11.1767C8.4968 10.8506 8.33347 10.4584 8.33347 10C8.33347 9.54171 8.4968 9.14921 8.82347 8.82254C9.14958 8.49643 9.5418 8.33337 10.0001 8.33337C10.4585 8.33337 10.851 8.49643 11.1776 8.82254C11.5037 9.14921 11.6668 9.54171 11.6668 10C11.6668 10.4584 11.5037 10.8506 11.1776 11.1767C10.851 11.5034 10.4585 11.6667 10.0001 11.6667ZM10.0001 6.66671C9.5418 6.66671 9.14958 6.50337 8.82347 6.17671C8.4968 5.8506 8.33347 5.45837 8.33347 5.00004C8.33347 4.54171 8.4968 4.14948 8.82347 3.82337C9.14958 3.49671 9.5418 3.33337 10.0001 3.33337C10.4585 3.33337 10.851 3.49671 11.1776 3.82337C11.5037 4.14948 11.6668 4.54171 11.6668 5.00004C11.6668 5.45837 11.5037 5.8506 11.1776 6.17671C10.851 6.50337 10.4585 6.66671 10.0001 6.66671Z"
-        fill="#1D2433"
-        fillOpacity="0.8"
-      />
-    </svg>
+      {children}
+    </td>
+  )
+}
+
+function EmployeeTableRow({ shifts = [], isOdd, index }) {
+  const employee = useMemo(() => {
+    return shifts.find((it) => it.assignee)?.assignee
+  }, [shifts])
+
+  const shiftsGroupedByDayOfTheWeek = useMemo(() => {
+    return groupShiftsByDayOfTheWeek(shifts)
+  }, [shifts])
+
+  const calculateHoursWorked = useCallback((shifts) => {
+    if (!Array.isArray(shifts)) return null
+    const hoursWorked =
+      shifts.reduce(
+        (acc, current) => current.totalTimeWorkedInMilliseconds + acc,
+        0
+      ) / ONE_HOUR_IN_MILLISECONDS
+    return `${hoursWorked.toFixed(2)}hrs`
+  }, [])
+
+  return (
+    <tr
+      style={{ backgroundColor: isOdd ? "#F8F9FC" : "white" }}
+      className="relative"
+    >
+      <TimesheetTableData>
+        <input type="checkbox" className="form-checkbox" />
+      </TimesheetTableData>
+      <TimesheetTableData>
+        <div className="flex items-center gap-2 w-min">
+          <Image
+            src={employee?.profileImage?.secure_url || placeholderImage}
+            alt="avatar"
+            height={24}
+            width={24}
+            className="w-[24px] h-[24px] rounded-full"
+          />
+          {employee?.fullName ||
+            employee?.firstName ||
+            employee?.lastName ||
+            employee?.email}
+        </div>
+      </TimesheetTableData>
+      {DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY.map((_, idx) => (
+        <TimesheetTableData key={idx + 1}>
+          {calculateHoursWorked(shiftsGroupedByDayOfTheWeek[idx + 1]) || (
+            <>--</>
+          )}
+        </TimesheetTableData>
+      ))}
+      <TimesheetTableData
+        style={{ zIndex: 1000 - (index || 0) }}
+        className={`sticky right-0 ${isOdd ? "bg-[#F8F9FC]" : "bg-white"}`}
+      >
+        <>
+          <TimesheetOptionsButton employee={employee} shifts={shifts} />
+        </>
+      </TimesheetTableData>
+    </tr>
+  )
+}
+
+function TimesheetOptionsButton({ employee, shifts }) {
+  return (
+    <TooltipModal
+      tooltipContent={<TimesheetActions employee={employee} shifts={shifts} />}
+      styles={{ right: "100%", top: 0, bottom: 0 }}
+    >
+      <ThreeDotIcon />
+    </TooltipModal>
+  )
+}
+function TimesheetActions({ employee, shifts, index }) {
+  const {
+    approveMultipleShifts: approveShifts,
+    loading,
+    queryMultipleShifts: queryShifts,
+  } = useGetTimesheetActions()
+
+  const approveMultipleShifts = useCallback(
+    (note) => {
+      approveShifts(
+        shifts.filter((it) => !it.isApproved).map((it) => it._id),
+        note,
+        employee?._id
+      )
+    },
+    [shifts, approveShifts]
+  )
+
+  const queryMultipleShifts = useCallback(
+    (note) => {
+      queryShifts(
+        shifts.map((it) => it._id),
+        note,
+        employee?._id
+      )
+    },
+    [shifts, queryShifts]
+  )
+  const allShiftsAreApproved = useMemo(
+    () => shifts.every((it) => it.isApproved),
+    [shifts]
+  )
+  const [showReviewModal, setShowReviewModal] = useState(false)
+  return (
+    <div>
+      <ul className="flex flex-col gap-2 bg-white rounded-[12px] shadow-[0px_2px_8px_0px_#0000001F]">
+        <TimesheetActionButton onClick={() => setShowReviewModal(true)}>
+          <EyeIcon /> Review Timesheet
+        </TimesheetActionButton>
+        <TimesheetActionButton
+          onClick={approveMultipleShifts}
+          isDisabled={allShiftsAreApproved || loading.multipleShifts}
+        >
+          {loading.multipleShifts ? (
+            <>
+              <CheckInSquare /> Approving
+            </>
+          ) : (
+            <>
+              <CheckInSquare />{" "}
+              {allShiftsAreApproved ? "Approved" : "Approve Timesheet"}
+            </>
+          )}
+        </TimesheetActionButton>
+        <TimesheetActionButton>
+          <DownloadIcon /> Download
+        </TimesheetActionButton>
+      </ul>
+      <Modal
+        open={showReviewModal}
+        zIndex={44000000}
+        onClose={() => setShowReviewModal(false)}
+      >
+        <TimesheetReview
+          approveMultipleShifts={approveMultipleShifts}
+          loading={loading}
+          queryMultipleShifts={queryMultipleShifts}
+          employee={employee}
+          shifts={shifts}
+        />
+      </Modal>
+    </div>
+  )
+}
+
+function TimesheetActionButton({ children, onClick, isDisabled }) {
+  return (
+    <button
+      onClick={() => onClick()}
+      disabled={isDisabled}
+      className="disabled:opacity-40 disabled:cursor-not-allowed flex items-center whitespace-nowrap px-2 py-[6px] gap-2  hover:bg-primary-100"
+    >
+      {children}
+    </button>
   )
 }
