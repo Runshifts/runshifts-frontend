@@ -120,7 +120,7 @@ export default function Schedule() {
           currentWeek={currentWeek}
         />
       </>
-      <div className="flex items-start flex-col gap-6 pt-6 pb-4">
+      <div className="flex items-start flex-col gap-6 pt-6 pb-4 relative z-[20]">
         <div className="flex items-center justify-between w-full">
           <Heading as="h1">Schedule</Heading>
           <CreateAndDuplicateShiftButtons

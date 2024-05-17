@@ -21,7 +21,7 @@ export default function ShiftDurationInputs({
 
   const handleSelect = useCallback(
     (selection) => {
-      console.log(selection)
+      // console.log(selection)
       const canUpdate = handleScheduleSelection(selection)
       canUpdate && setSelectedSchedule(selection)
     },
