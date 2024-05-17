@@ -2,7 +2,7 @@ export default function StatisticsCardSkeleton({ mainBg, iconBg }) {
   return (
     <div
       style={{ backgroundColor: mainBg }}
-      className="animate-pulse bg-[#FFEECC] p-[28px] flex flex-wrap justify-start items-center gap-[16px] md:gap-[24px] md:justify-start rounded-lg"
+      className="animate-pulse bg-[#FFEECC] p-[28px] flex justify-start items-center gap-[16px] md:gap-[24px] md:justify-start rounded-lg"
     >
       <div
         style={{ backgroundColor: iconBg }}

@@ -44,9 +44,7 @@ export default function UserProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    const userInLocalStorage = JSON.parse(localStorage.getItem("user"))
-    if (!userInLocalStorage) fetchUser()
-    else setUser(userInLocalStorage)
+    fetchUser()
   }, [fetchUser])
 
   const redirectUser = useRedirectUserByAccountType()

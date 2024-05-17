@@ -1,7 +1,6 @@
 "use client"
 import React, { useContext } from "react";
 import { SidebarData } from "../_data/SidebarData";
-import Avatar from "../_assets/sidebarImg/Avatar.png";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -14,7 +13,6 @@ function Sidebar({ isOpen, onClose }) {
   
   const Pathname = usePathname();
 
-console.log(organization)
   const activeLink =
     "hover:bg-green-100 text-[#449522] pl-4 mt-4 w-full flex justify-start items-center text-sm space-x-1 font-semibold bg-green-100";
   const normalLink =
@@ -32,7 +30,7 @@ console.log(organization)
             <Image width={50} height={50} src={organization?.logo?.secure_url || placeholderImage} alt="avatar" />
             <div className="pl-3">
               <h1 className="font-bold text-sm text-gray-600">{organization?.name}</h1>
-              <p className="font-semibold text-xs text-gray-500 uppercase">{organization?.industry.name}</p>
+              <p className="font-semibold text-xs text-gray-500 uppercase">{organization?.industry?.name}</p>
             </div>
           </div>
 
