@@ -1,8 +1,9 @@
 import React from "react"
 import LogExport from "../../_components/AppComps/LogExport"
 import ReportFilterGroup from "../../_components/AppComps/ReportFilterGroup"
-import Charts from './charts'
-import Optioncard from '../userprofile/Optioncard'
+import Charts from "./charts"
+import Optioncard from "../userprofile/Optioncard"
+import AttendanceSection from "./AttendanceSection"
 
 function Reports() {
   return (
@@ -14,11 +15,13 @@ function Reports() {
 
       <ReportFilterGroup />
 
-      <div className="">
-        <Charts />
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="col-span">
+          <AttendanceSection  />
+        </div>
+        {/* <Charts /> */}
       </div>
       {/* {showCard && <Optioncard onClose={handleCloseCard} />} */}
-
     </section>
   )
 }

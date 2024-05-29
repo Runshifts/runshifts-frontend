@@ -1,140 +1,39 @@
-import React, { useEffect } from "react";
-import ApexCharts from "apexcharts";
-
+import React, { useEffect } from "react"
+import ApexCharts from "apexcharts"
+import { barChartOptions, testAttendanceSeries } from "./DefaultChartOptions"
+import StatisticsGraphicalView, {
+  formatDuration,
+} from "./StatisticsGraphicalView"
+const testSeries = testAttendanceSeries
+  .map((it) => ({
+    absent: { x: formatDuration(it.startDate, it.endDate), y: it.absentShifts },
+    late: { x: formatDuration(it.startDate, it.endDate), y: it.lateShifts },
+  }))
+  .reduce(
+    (acc, curr) => {
+      acc[0] = {
+        ...acc[0],
+        data: [...acc[0].data, curr.late],
+      }
+      acc[1] = { ...acc[1], data: [...acc[1].data, curr.absent] }
+      return acc
+    },
+    [
+      { name: "Late", color: "#449522", data: [] },
+      { name: "Absent", color: "#42526E", data: [] },
+    ]
+  )
 function Barchart() {
-  useEffect(() => {
-    const options = {
-      colors: ["#1A56DB", "#FDBA8C"],
-      series: [
-        {
-          name: "Absent",
-          color: "#42526E",
-          data: [
-            { x: "Sept 1-6", y: 2 },
-            { x: "Sept 7-12", y: 2.5 },
-            { x: "Sept 13-18", y: 3 },
-            { x: "Sept 19-24", y: 3.5 },
-            { x: "Sept 25-30", y: 2 },
-          ],
-        },
-        {
-          name: "Late",
-          color: "#449522",
-          data: [
-            { x: "Sept 1-6", y: 5 },
-            { x: "Sept 7-12", y: 6 },
-            { x: "Sept 13-18", y: 6 },
-            { x: "Sept 19-24", y: 7 },
-            { x: "Sept 25-30", y: 6 },
-          ],
-        },
-      ],
-      chart: {
-        type: "bar",
-        height: "320px",
-        fontFamily: "Inter, sans-serif",
-        toolbar: {
-          show: false,
-        },
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: "70%",
-          borderRadiusApplication: "end",
-          borderRadius: 8,
-        },
-      },
-      tooltip: {
-        shared: true,
-        intersect: false,
-        style: {
-          fontFamily: "Inter, sans-serif",
-        },
-      },
-      states: {
-        hover: {
-          filter: {
-            type: "darken",
-            value: 1,
-          },
-        },
-      },
-      stroke: {
-        show: true,
-        width: 0,
-        colors: ["transparent"],
-      },
-      grid: {
-        show: false,
-        strokeDashArray: 4,
-        padding: {
-          left: 2,
-          right: 2,
-          top: -14,
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      legend: {
-        show: false,
-      },
-      xaxis: {
-        floating: false,
-        labels: {
-          show: true,
-          style: {
-            fontFamily: "Inter, sans-serif",
-            cssClass: "text-xs font-normal fill-gray-500 dark:fill-gray-400",
-          },
-        },
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-      },
-      yaxis: {
-        show: false,
-      },
-      fill: {
-        opacity: 1,
-      },
-    };
-
-    const container = document.getElementById("column-chart");
-    if (container && typeof ApexCharts !== "undefined") {
-      container.innerHTML = "";
-
-      const chart = new ApexCharts(container, options);
-      chart.render();
-
-      return () => {
-        chart.destroy();
-      };
-    }
-  }, []);
-
   return (
     <div>
       <div class=" w-full bg-white rounded-xl shadow-xl p-4 md:p-6">
-      <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center">
           <p>Attendance</p>
-          <select
-            className="bg-white text-gray-500 m-2  mx-2 h-10 w-32 rounded-md flex justify-between items-center"
-            aria-label="Default select example"
-          >
-            <option>Last 30 days</option>
-            <option value="1">Last 7 days</option>
-            <option value="2">Last 14 days</option>
-            <option value="3">Last 3 months</option>
-          </select>
         </div>
-        
-        <div id="column-chart"></div>
-        
+        <div className="flex overflow-auto ">
+          <StatisticsGraphicalView series={testSeries} />
+        </div>
+
         <div class="grid grid-cols-1 items-center dark:border-gray-700 justify-between">
           <div class="flex justify-between items-center pt-5">
             <div className="flex">
@@ -161,10 +60,10 @@ function Barchart() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Barchart;
+export default Barchart
 
 // import React, { useState } from "react";
 // import Chart from "react-apexcharts";

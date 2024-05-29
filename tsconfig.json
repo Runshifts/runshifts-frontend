@@ -29,6 +29,6 @@
     "app/_redux/thunks/timesheet.thunk.js",
     "app/employee/my-shifts/OvertimeApplication.jsx",
     "app/_assets/svgs/CheckInSquare.jsx"
-  ],
+, "app/organization/reports/Dropdown.jsx"  ],
   "exclude": ["node_modules"]
 }
