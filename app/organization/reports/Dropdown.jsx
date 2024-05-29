@@ -87,8 +87,8 @@ export function PastDateDurationSelect({ onSelect = () => {} }) {
 }
 
 export const SECTION_VIEWS = {
-  GRAPHICAL: "graphical",
-  NUMERICAL: "numerical",
+  GRAPHICAL: "Graphical",
+  NUMERICAL: "Numerical",
 }
 export function SectionViewSelect({ onSelect = () => {}, defaultSelection = "---" }) {
   return (

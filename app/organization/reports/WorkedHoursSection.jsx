@@ -2,6 +2,7 @@
 import { testAttendanceSeries } from "./DefaultChartOptions"
 import StatisticsView from "./StatisticsView"
 import { formatDuration } from "./StatisticsGraphicalView"
+import { SECTION_VIEWS } from "./Dropdown"
 
 const testSeries = testAttendanceSeries
   .map((it) => ({
@@ -24,20 +25,21 @@ const testSeries = testAttendanceSeries
   )
 const numericalViewData = testAttendanceSeries.map((it) => ({
   heading: formatDuration(it.startDate, it.endDate),
-  primary: { name: "Absent", value: it.absentShifts },
-  secondary: { name: "Late", value: it.lateShifts },
+  primary: { name: "Hours worked", value: it.absentShifts },
+  secondary: { name: "Overtime hours", value: it.lateShifts },
 }))
 
-function AttendanceSection() {
+function WorkedHoursSection() {
   return (
     <StatisticsView
       series={testSeries}
-      heading="Attendance"
-      primaryDataKey="Absent"
-      secondaryDataKey="Late"
+      heading="Worked Hours"
+      primaryDataKey="Hours worked"
+      secondaryDataKey="Overtime hours"
       numericalViewData={numericalViewData}
+      initialView={SECTION_VIEWS.NUMERICAL}
     />
   )
 }
 
-export default AttendanceSection
+export default WorkedHoursSection

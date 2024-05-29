@@ -84,41 +84,70 @@ export const barChartOptions = {
     },
   },
   fill: {
-    opacity: .1,
+    opacity: 0.1,
+  },
+  tooltip: {
+    style: {
+      fontSize: "12px", // Set font size
+      fontFamily: undefined, // Set font family if needed
+    },
+    theme: "dark", // Set tooltip theme: 'light' or 'dark'
+    x: {
+      show: true,
+      format: "dd MMM", // Date format for x-axis
+      formatter: undefined, // Custom formatter function
+    },
+    y: {
+      formatter: function (val) {
+        return val + " counts" // Custom formatter for y-axis values
+      },
+    },
+    marker: {
+      show: true,
+    },
+    items: {
+      display: "flex",
+    },
+    fixed: {
+      enabled: false,
+      position: "bottomLeft", // Available positions: 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'
+      offsetX: 0,
+      offsetY: 0,
+    },
   },
 }
 
 export const testAttendanceSeries = [
-  // {
-  //   startDate: "2024-03-18T23:00:00.000Z",
-  //   endDate: "2024-03-26T22:59:59.999Z",
-  //   absentShifts: 0,
-  //   lateShifts: 0,
-  // },
-  // {
-  //   startDate: "2024-03-26T23:00:00.000Z",
-  //   endDate: "2024-04-03T22:59:59.999Z",
-  //   absentShifts: 0,
-  //   lateShifts: 0,
-  // },
-  // {
-  //   startDate: "2024-04-03T23:00:00.000Z",
-  //   endDate: "2024-04-11T22:59:59.999Z",
-  //   absentShifts: 0,
-  //   lateShifts: 1,
-  // },
-  // {
-  //   startDate: "2024-04-11T23:00:00.000Z",
-  //   endDate: "2024-04-19T22:59:59.999Z",
-  //   absentShifts: 4,
-  //   lateShifts: 0,
-  // },
-  // {
-  //   startDate: "2024-04-19T23:00:00.000Z",
-  //   endDate: "2024-04-27T22:59:59.999Z",
-  //   absentShifts: 2,
-  //   lateShifts: 1,
-  // },
+  {
+    startDate: "2024-03-18T23:00:00.000Z",
+    endDate: "2024-03-26T22:59:59.999Z",
+    absentShifts: 0,
+    lateShifts: 0,
+  },
+  {
+    startDate: "2024-03-26T23:00:00.000Z",
+    endDate: "2024-04-03T22:59:59.999Z",
+    absentShifts: 0,
+    lateShifts: 0,
+  },
+  {
+    startDate: "2024-04-03T23:00:00.000Z",
+    endDate: "2024-04-11T22:59:59.999Z",
+    absentShifts: 0,
+    lateShifts: 1,
+  },
+  {
+    startDate: "2024-04-11T23:00:00.000Z",
+    endDate: "2024-04-19T22:59:59.999Z",
+    absentShifts: 4,
+    lateShifts: 0,
+  },
+  {
+    startDate: "2024-04-19T23:00:00.000Z",
+    endDate: "2024-04-27T22:59:59.999Z",
+    absentShifts: 2,
+    lateShifts: 1,
+  },
   {
     startDate: "2024-04-27T23:00:00.000Z",
     endDate: "2024-05-05T22:59:59.999Z",

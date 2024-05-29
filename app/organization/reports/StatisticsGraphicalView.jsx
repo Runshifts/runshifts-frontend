@@ -1,7 +1,29 @@
 import React, { useEffect, useRef } from "react"
 import ApexCharts from "apexcharts"
+import { testAttendanceSeries } from "./DefaultChartOptions"
+import { PastDateDurationSelect, SectionViewSelect } from "./Dropdown"
 
-export default function StatisticsGraphicalView({ series = [] }) {
+const testSeries = testAttendanceSeries
+  .map((it) => ({
+    absent: { x: formatDuration(it.startDate, it.endDate), y: it.absentShifts },
+    late: { x: formatDuration(it.startDate, it.endDate), y: it.lateShifts },
+  }))
+  .reduce(
+    (acc, curr) => {
+      acc[0] = {
+        ...acc[0],
+        data: [...acc[0].data, curr.late],
+      }
+      acc[1] = { ...acc[1], data: [...acc[1].data, curr.absent] }
+      return acc
+    },
+    [
+      { name: "Late", color: "#449522", data: [] },
+      { name: "Absent", color: "#42526E", data: [] },
+    ]
+  )
+
+export function StatisticsGraphicalView({ series = [] }) {
   const chartRef = useRef(null)
   useEffect(() => {
     const options = {
@@ -28,7 +50,7 @@ export default function StatisticsGraphicalView({ series = [] }) {
 export const barChartOptions = {
   chart: {
     type: "bar",
-    height: 350,
+    height: 333,
     width: "100%",
     toolbar: {
       show: false,
@@ -49,7 +71,7 @@ export const barChartOptions = {
   xaxis: {
     labels: {
       style: {
-        fontSize: "10px", 
+        fontSize: "10px",
       },
     },
   },

@@ -1,9 +1,8 @@
 import React from "react"
 import LogExport from "../../_components/AppComps/LogExport"
 import ReportFilterGroup from "../../_components/AppComps/ReportFilterGroup"
-import Charts from "./charts"
-import Optioncard from "../userprofile/Optioncard"
 import AttendanceSection from "./AttendanceSection"
+import WorkedHoursSection from "./WorkedHoursSection"
 
 function Reports() {
   return (
@@ -15,9 +14,12 @@ function Reports() {
 
       <ReportFilterGroup />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="col-span">
-          <AttendanceSection  />
+          <AttendanceSection />
+        </div>
+        <div className="col-span">
+          <WorkedHoursSection />
         </div>
         {/* <Charts /> */}
       </div>
