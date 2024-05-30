@@ -7,12 +7,13 @@ import ShiftsPerformanceSection from "./ShiftsPerformanceSection"
 import LabourCostsSection from "./LabourCostsSection"
 import SchedulingSection from "./SchedulingSection"
 import RightToWorDiplay from "./RightToWork"
+import Heading from "../../_components/Headings"
 
 function Reports() {
   return (
     <section className="mx-auto p-3 min-h-screen">
       <div className="flex items-center justify-between py-3">
-        <h1 className="text-[#292D32] font-semibold  md:text-2xl ">Reports</h1>
+        <Heading as="h1">Reports</Heading>
         <LogExport />
       </div>
       <ReportFilterGroup />
