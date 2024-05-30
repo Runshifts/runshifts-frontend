@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import ApexCharts from "apexcharts"
-import { testAttendanceSeries } from "./DefaultChartOptions"
+import { testAttendanceSeries } from "./DefaultBarChartOptions"
 import { PastDateDurationSelect, SectionViewSelect } from "./Dropdown"
 
 const testSeries = testAttendanceSeries

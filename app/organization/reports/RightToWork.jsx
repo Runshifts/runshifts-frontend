@@ -1,38 +1,32 @@
-import React from 'react';
-
-const Donut = () => {
-  
-
+import React from "react"
+import ReportCard from "./ReportCard"
+const RightToWorkDiplay = () => {
   return (
-    <div className='h-[356px] w-[315px] bg-white rounded-xl shadow-xl'>
-      <h1 className='text-gray-900 text-sm text-center p-4 not-italic font-normal leading-5 uppercase'>RIGHT TO WORK</h1>
-      <hr />
-      <div className='flex flex-col items-center justify-center mx- mt-6 mb-4'>
-        <p className="text-gray-600 text-center text-xs not-italic font-normal leading-4 my-2">Remaining Time</p>
-      <div className='bg-[#354258] rounded-xl h-[98px] w-[210px] p-4'>
-                <div className='flex items-center justify-between'>
-                    <div className='text-white'>
-                        <h1 className='text-center text-3xl not-italic font-semibold leading-8'>8</h1>
-                        <p className='text-center not-italic font-normal text-[11px]'>Years</p>
-                    </div>
-                    <div
-                     className='text-white'>
-                        <h1 className='text-center text-3xl not-italic font-semibold leading-8'>4</h1>
-                        <p className='text-center not-italic font-normal text-[11px]'>Months</p>
-                    </div>
-                    <div className='text-white'>
-                        <h1 className='text-center text-3xl not-italic font-semibold leading-8'>28</h1>
-                        <p className='text-center not-italic font-normal text-[11px]'>Days</p>
-                    </div>
-                    <div className='text-white'>
-                        <h1 className='text-center text-3xl not-italic font-semibold leading-8'>59</h1>
-                        <p className='text-center not-italic font-normal text-[11px]'>Minutes</p>
-                    </div>
-                </div>
-            </div>
-      </div>    
-    </div>
-  );
-};
+    <ReportCard heading="RIGHT TO WORK">
+      <div className="flex flex-col items-center justify-center gap-[5px]">
+        <p className="text-gray-600 text-center text-[12px] font-normal leading-[16px] my-2">
+          Remaining Time
+        </p>
+        <div className="bg-[#354258] rounded-xl p-6">
+          <div className="flex gap-6 items-center justify-between">
+            <RightToWorkText value={8} title="Years" />
+            <RightToWorkText value={8} title="Months" />
+            <RightToWorkText value={8} title="Days" />
+            <RightToWorkText value={8} title="Hours" />
+          </div>
+        </div>
+      </div>
+    </ReportCard>
+  )
+}
 
-export default Donut;
+export default RightToWorkDiplay
+
+function RightToWorkText({ title, value }) {
+  return (
+    <div className="text-white text-center flex flex-col w-min items-center">
+      <p className="text-[32px] font-normal leading-[32px]">{value}</p>
+      <p className="text-[11px] font-normal">{title}</p>
+    </div>
+  )
+}

@@ -20,7 +20,7 @@ export default function CardDropdownSelect({
       >
         <button
           onClick={() => setShowOptions((prev) => !prev)}
-          className="text-[12px] text-[#4B5157] flex items-center gap-[4.25px]"
+          className="text-[12px] text-[#4B5157] flex items-center gap-[4.25px] max-h-[20px]"
         >
           {selectedOption
             ? getOptionDisplayValue(selectedOption)
@@ -40,8 +40,8 @@ export default function CardDropdownSelect({
               }}
               isSelected={
                 selectedOption &&
-                getOptionDisplayValue(opt) ===
-                  getOptionDisplayValue(selectedOption)
+                getOptionDisplayValue(opt)?.toLowerCase() ===
+                  getOptionDisplayValue(selectedOption)?.toLowerCase()
               }
               style={{ fontSize: "12px" }}
             >

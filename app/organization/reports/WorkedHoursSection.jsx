@@ -1,5 +1,5 @@
 "use client"
-import { testAttendanceSeries } from "./DefaultChartOptions"
+import { testAttendanceSeries } from "./DefaultBarChartOptions"
 import StatisticsView from "./StatisticsView"
 import { formatDuration } from "./StatisticsGraphicalView"
 import { SECTION_VIEWS } from "./Dropdown"

@@ -21,7 +21,7 @@ export default function StatisticsView({
   )
   return (
     <>
-      <div className="bg-white flex flex-col gap-[12px] w-full bg-white rounded-xl shadow-xl p-4 md:p-6">
+      <div className="bg-white flex flex-col gap-[12px] w-full bg-white rounded-xl shadow-shadow-[0px_1.926px_7.704px_0px_rgba(0,0,0,0.12)] p-4 md:p-6">
         <div className="flex items-center justify-between">
           <h2 className="text-[12px] leading-[16px] uppercase text-[rgba(38, 45, 51, 1)]">
             {heading}
