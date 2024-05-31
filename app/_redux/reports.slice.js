@@ -46,7 +46,7 @@ export const reportsSlice = createSlice({
           state.cache = {
             ...state.cache,
             [action.payload.cacheKey]: {
-              ...(state[action.payload.cacheKey] || {}),
+              ...(state.cache?.[action.payload.cacheKey] || {}),
               attendance: action.payload.attendance,
             },
           }
@@ -65,7 +65,7 @@ export const reportsSlice = createSlice({
           state.cache = {
             ...state.cache,
             [action.payload.cacheKey]: {
-              ...(state[action.payload.cacheKey] || {}),
+              ...(state.cache?.[action.payload.cacheKey] || {}),
               labourCosts: action.payload.earnings,
             },
           }
@@ -85,7 +85,7 @@ export const reportsSlice = createSlice({
           state.cache = {
             ...state.cache,
             [action.payload.cacheKey]: {
-              ...(state[action.payload.cacheKey] || {}),
+              ...(state.cache?.[action.payload.cacheKey] || {}),
               scheduleAdherence: {
                 actualSchedules: action.payload.actualSchedules,
                 plannedSchedules: action.payload.plannedSchedules,
@@ -109,7 +109,7 @@ export const reportsSlice = createSlice({
           state.cache = {
             ...state.cache,
             [action.payload.cacheKey]: {
-              ...(state[action.payload.cacheKey] || {}),
+              ...(state.cache?.[action.payload.cacheKey] || {}),
               shiftsPerformance: {
                 percentageOfAcceptedShifts:
                   action.payload.percentageOfAcceptedShifts,
@@ -139,7 +139,7 @@ export const reportsSlice = createSlice({
           state.cache = {
             ...state.cache,
             [action.payload.cacheKey]: {
-              ...(state[action.payload.cacheKey] || {}),
+              ...(state.cache?.[action.payload.cacheKey] || {}),
               workedHours: action.payload.workedHours,
             },
           }

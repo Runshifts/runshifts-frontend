@@ -3,7 +3,6 @@ import ReportCard from "./ReportCard"
 import useCountdown from "../../_hooks/useCountDown"
 
 const RightToWorkDiplay = ({ employee }) => {
-  console.log(employee)
   const rightToWorkExpiryDate = new Date(employee.rightToWorkExpiry)
   const timeLeftInMilliseconds = rightToWorkExpiryDate.getTime() - Date.now()
   const { years, months, days, hours } = useCountdown(
