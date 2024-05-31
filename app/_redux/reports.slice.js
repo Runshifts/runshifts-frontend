@@ -13,7 +13,7 @@ const initialState = {
   totalEarnedWage: 0,
   cache: {},
   loadingAttendance: true,
-  loadingLaboutCosts: true,
+  loadingLabourCosts: true,
   loadingSheduleAdherence: true,
   loadingShiftPerformance: true,
   loadingWorkedHours: true,
@@ -57,10 +57,10 @@ export const reportsSlice = createSlice({
         toast.error("Something went wrong")
       })
       .addCase(fetchLabourCosts.pending, (state) => {
-        state.loadingLaboutCosts = true
+        state.loadingLabourCosts = true
       })
       .addCase(fetchLabourCosts.fulfilled, (state, action) => {
-        state.loadingLaboutCosts = false
+        state.loadingLabourCosts = false
         if (action.payload.statusCode === 200) {
           state.cache = {
             ...state.cache,
@@ -72,7 +72,7 @@ export const reportsSlice = createSlice({
         }
       })
       .addCase(fetchLabourCosts.rejected, (state) => {
-        state.loadingLaboutCosts = false
+        state.loadingLabourCosts = false
         toast.error("Something went wrong")
       })
 

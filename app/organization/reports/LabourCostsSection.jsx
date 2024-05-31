@@ -1,19 +1,53 @@
 "use client"
-import { PastDateDurationSelect } from "./Dropdown"
+import { useState } from "react"
 import ReportCard from "./ReportCard"
+import { useSelector } from "react-redux"
+import useHandleReportsThunkDispatch from "../../_hooks/useHandleReportsThunkDispatch"
+import { fetchLabourCosts } from "../../_redux/thunks/reports.thunk"
 
-export default function LabourCostsSection() {
+export default function LabourCostsSection({ selectedEmployees }) {
+  const [daysAgo, setDaysAgo] = useState({
+    displayValue: "Last 7 days",
+    value: 7,
+  })
+  const { cache, loadingLabourCosts } = useSelector((store) => store.reports)
+  const { loading, cacheKey } = useHandleReportsThunkDispatch({
+    cache,
+    cacheValueKey: "labourCosts",
+    daysAgo,
+    selectedEmployees,
+    thunkFunction: fetchLabourCosts,
+  })
+
   return (
-    <ReportCard showDateFilter heading={<>Labour cost</>}>
+    <ReportCard
+      handleDateFilterSelect={(val) => setDaysAgo(val)}
+      showDateFilter
+      heading={<>Labour cost</>}
+    >
       <div className="w-full flex gap-[28px] pt-[28px] flex-col items-center justify-between">
         <StatisticsText
-          value={"£150,967.64"}
+          loading={loading || loadingLabourCosts}
+          value={Number(
+            cache[cacheKey]?.labourCosts?.totalEarnings || 0
+          ).toLocaleString("en-gb", {
+            currency: "eur",
+            style: "currency",
+            currency: "GBP",
+          })}
           valueColor="#262D33"
-          title="Earning"
+          title="Earnings"
           flexDirection="column-reverse"
         />
         <StatisticsText
-          value={"£1,967.64"}
+          loading={loading || loadingLabourCosts}
+          value={Number(
+            cache[cacheKey]?.labourCosts?.overtimeEarnings || 0
+          ).toLocaleString("en-gb", {
+            currency: "eur",
+            style: "currency",
+            currency: "GBP",
+          })}
           valueColor="#262D33"
           title="Overtime Earnings"
           flexDirection="column-reverse"
@@ -28,6 +62,7 @@ export function StatisticsText({
   title,
   valueColor,
   flexDirection = "column",
+  loading,
 }) {
   return (
     <div
@@ -38,7 +73,14 @@ export function StatisticsText({
         style={{ color: valueColor }}
         className="text-center text-[30px] font-[600] leading-7"
       >
-        {value}
+        {loading ? (
+          <span
+            style={{ backgroundColor: valueColor }}
+            className="w-[120px] opacity-[.2] h-[34px] rounded-sm block animate-pulse"
+          />
+        ) : (
+          value
+        )}
       </p>
       <p className="text-[#939699] text-center not-italic font-normal text-[12px]">
         {title}
