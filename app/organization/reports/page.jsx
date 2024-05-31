@@ -35,7 +35,7 @@ function Reports() {
         onEmployeeSelect={handleSelectEmployee}
         onEmployeeRemove={handleRemoveEmployee}
       />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
         <div className="col-span">
           <AttendanceSection selectedEmployees={selectedEmployees} />
         </div>
@@ -53,9 +53,11 @@ function Reports() {
         <div className="col-span">
           <SchedulingSection selectedEmployees={selectedEmployees} />
         </div>
-        <div className="col-span-1">
-          <RightToWorDiplay selectedEmployees={selectedEmployees} />
-        </div>
+        {selectedEmployees.length === 1 && (
+          <div className="col-span-1">
+            <RightToWorDiplay employee={selectedEmployees[0]} />
+          </div>
+        )}
       </div>
     </section>
   )

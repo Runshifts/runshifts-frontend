@@ -22,11 +22,15 @@ function ReportFilterGroup({
     setLocationFilter,
     setRoleFilter,
   } = useFilterEmployees(employees, searchText)
-  const { selectedEmployees, handleRemoveEmployee, handleSelectEmployee } =
-    useHandleMultipleEmployeesSelection({
-      onEmployeeRemove,
-      onEmployeeSelect,
-    })
+  const {
+    selectedEmployees,
+    handleRemoveEmployee,
+    handleSelectEmployee,
+    removeLastSelected,
+  } = useHandleMultipleEmployeesSelection({
+    onEmployeeRemove,
+    onEmployeeSelect,
+  })
   return (
     <section>
       <div className="flex items-center justify-start gap-2">
@@ -37,6 +41,7 @@ function ReportFilterGroup({
             handleSearchChange={(val) => setSearchText(val)}
             handleRemove={handleRemoveEmployee}
             handleSelect={handleSelectEmployee}
+            removeLastSelected={removeLastSelected}
           />
           <LocationFilter
             options={locations}

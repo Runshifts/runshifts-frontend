@@ -10,7 +10,9 @@ export default function useHandleMultipleEmployeesSelection({
   const handleSelectEmployee = useCallback(
     (employee) => {
       if (!employee) return
-      const isAlreadySelected = JSON.stringify(selectedEmployees).includes(employee._id)
+      const isAlreadySelected = JSON.stringify(selectedEmployees).includes(
+        employee._id
+      )
       if (isAlreadySelected) return
       setSelectedEmployees((prev) => [...prev, employee])
       typeof onEmployeeSelect === "function" && onEmployeeSelect(employee)
@@ -29,5 +31,16 @@ export default function useHandleMultipleEmployeesSelection({
     [onEmployeeRemove]
   )
 
-  return { selectedEmployees, handleSelectEmployee, handleRemoveEmployee }
+  const removeLastSelected = useCallback(() => {
+    setSelectedEmployees((prev) =>
+      prev.filter((_, idx) => idx !== prev.length - 1)
+    )
+  }, [])
+
+  return {
+    selectedEmployees,
+    handleSelectEmployee,
+    handleRemoveEmployee,
+    removeLastSelected,
+  }
 }

@@ -12,6 +12,7 @@ export default function EmployeesSelect({
   handleSelect,
   handleRemove,
   handleSearchChange,
+  removeLastSelected,
 }) {
   const [showOptions, setShowOptions] = useState(false)
   const containerRef = useOutsideClick(() => setShowOptions(false))
@@ -25,7 +26,7 @@ export default function EmployeesSelect({
       ref={containerRef}
       className={`${showOptions ? "" : "overflow-hidden"} relative`}
     >
-      <div className="flex items-center gap-[2px] max-w-[200px] bg-[#F4F5F7] rounded-[3px] pl-[3px] overflow-auto styled-scrollbar">
+      <div className="flex items-center gap-[2px] w-[200px] bg-[#F4F5F7] rounded-[3px] pl-[3px] overflow-auto styled-scrollbar">
         <div className={selectedEmployees.length > 0 ? "flex m-0" : "hidden"}>
           {selectedEmployees.map((employee) => (
             <SelectedEmployeeChip
@@ -40,6 +41,10 @@ export default function EmployeesSelect({
           onFocus={() => setShowOptions(true)}
           placeholder={selectedEmployees.length === 0 ? "Type to search" : ""}
           onChange={(e) => handleSearchChange(e.target.value)}
+          onKeyDown={(e) =>
+            (e.key === "Backspace" || e.key === "Delete") &&
+            removeLastSelected()
+          }
         />
       </div>
       <ul
