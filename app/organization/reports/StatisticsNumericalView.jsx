@@ -4,6 +4,7 @@ export default function StatisticsGraphicalView({ data = [] }) {
       <div className="grid grid-cols-2 w-full gap-x-[10px] gap-y-2">
         {data.map((datum) => (
           <NumericalViewCard
+            key={datum.heading}
             heading={datum.heading}
             primaryValue={datum.primary.value}
             secondaryValue={datum.secondary.value}

@@ -34,6 +34,7 @@ export default function CardDropdownSelect({
         >
           {options.map((opt) => (
             <Option
+              key={getOptionDisplayValue(opt)}
               onClick={() => {
                 setSelectedOption(opt)
                 onSelect(opt)
@@ -90,7 +91,10 @@ export const SECTION_VIEWS = {
   GRAPHICAL: "Graphical",
   NUMERICAL: "Numerical",
 }
-export function SectionViewSelect({ onSelect = () => {}, defaultSelection = "---" }) {
+export function SectionViewSelect({
+  onSelect = () => {},
+  defaultSelection = "---",
+}) {
   return (
     <CardDropdownSelect
       defaultSelection={defaultSelection}

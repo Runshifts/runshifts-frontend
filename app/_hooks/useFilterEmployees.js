@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 
-export default function useFilterEmployees(employees = []) {
+export default function useFilterEmployees(employees = [], searchText = "") {
   const [departmentFilter, setDepartmentFilter] = useState(null)
   const [positionFilter, setRoleFilter] = useState(null)
   const [locationFilter, setLocationFilter] = useState(null)
@@ -13,10 +13,14 @@ export default function useFilterEmployees(employees = []) {
           employee?.department?.toLowerCase() ===
             departmentFilter.toLowerCase()) &&
         (!positionFilter ||
-          employee?.position?.toLowerCase() === positionFilter.toLowerCase())
+          employee?.position?.toLowerCase() === positionFilter.toLowerCase()) &&
+        (!searchText ||
+          JSON.stringify(employee)
+            .toLowerCase()
+            .includes(searchText.toLowerCase()))
       )
     })
-  }, [employees, departmentFilter, positionFilter, locationFilter])
+  }, [employees, departmentFilter, positionFilter, locationFilter, searchText])
 
   return {
     filteredEmployees,
