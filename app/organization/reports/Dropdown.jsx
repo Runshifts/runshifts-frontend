@@ -58,7 +58,7 @@ export default function CardDropdownSelect({
 export function PastDateDurationSelect({ onSelect = () => {} }) {
   return (
     <CardDropdownSelect
-      defaultSelection="Last 30 days"
+      defaultSelection="Last 7 days"
       options={[
         {
           displayValue: "Last 7 days",

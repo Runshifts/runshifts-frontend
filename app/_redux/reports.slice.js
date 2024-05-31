@@ -45,7 +45,10 @@ export const reportsSlice = createSlice({
         if (action.payload.statusCode === 200) {
           state.cache = {
             ...state.cache,
-            [action.payload.cacheKey]: action.payload.attendance,
+            [action.payload.cacheKey]: {
+              ...(state[action.payload.cacheKey] || {}),
+              attendance: action.payload.attendance,
+            },
           }
         }
       })
@@ -61,7 +64,10 @@ export const reportsSlice = createSlice({
         if (action.payload.statusCode === 200) {
           state.cache = {
             ...state.cache,
-            [action.payload.cacheKey]: action.payload.earnings,
+            [action.payload.cacheKey]: {
+              ...(state[action.payload.cacheKey] || {}),
+              labourCosts: action.payload.earnings,
+            },
           }
         }
       })
@@ -79,10 +85,13 @@ export const reportsSlice = createSlice({
           state.cache = {
             ...state.cache,
             [action.payload.cacheKey]: {
-              actualSchedules: action.payload.actualSchedules,
-              plannedSchedules: action.payload.plannedSchedules,
-              percentageOfScheduleAdherence:
-                action.payload.percentageOfScheduleAdherence,
+              ...(state[action.payload.cacheKey] || {}),
+              scheduleAdherence: {
+                actualSchedules: action.payload.actualSchedules,
+                plannedSchedules: action.payload.plannedSchedules,
+                percentageOfScheduleAdherence:
+                  action.payload.percentageOfScheduleAdherence,
+              },
             },
           }
         }
@@ -100,16 +109,19 @@ export const reportsSlice = createSlice({
           state.cache = {
             ...state.cache,
             [action.payload.cacheKey]: {
-              percentageOfAcceptedShifts:
-                action.payload.percentageOfAcceptedShifts,
-              percentageOfRejectedShifts:
-                action.payload.percentageOfRejectedShifts,
-              percentageOfSwappedShifts:
-                action.payload.percentageOfSwappedShifts,
-              percentageOfCompletedShifts:
-                action.payload.percentageOfCompletedShifts,
-              percentageOfNonRespondedShifts:
-                action.payload.percentageOfNonRespondedShifts,
+              ...(state[action.payload.cacheKey] || {}),
+              shiftsPerformance: {
+                percentageOfAcceptedShifts:
+                  action.payload.percentageOfAcceptedShifts,
+                percentageOfRejectedShifts:
+                  action.payload.percentageOfRejectedShifts,
+                percentageOfSwappedShifts:
+                  action.payload.percentageOfSwappedShifts,
+                percentageOfCompletedShifts:
+                  action.payload.percentageOfCompletedShifts,
+                percentageOfNonRespondedShifts:
+                  action.payload.percentageOfNonRespondedShifts,
+              },
             },
           }
         }
@@ -126,7 +138,10 @@ export const reportsSlice = createSlice({
         if (action.payload.statusCode === 200) {
           state.cache = {
             ...state.cache,
-            [action.payload.cacheKey]: action.payload.workedHours,
+            [action.payload.cacheKey]: {
+              ...(state[action.payload.cacheKey] || {}),
+              workedHours: action.payload.workedHours,
+            },
           }
         }
       })

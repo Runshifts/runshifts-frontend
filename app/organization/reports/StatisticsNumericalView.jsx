@@ -28,13 +28,13 @@ function NumericalViewCard({
     <>
       <div className="rounded-[12px] grow shrink-0 p-4 bg-[#354258] flex flex-col item-start gap-2">
         <h3 className="text-white text-[11px]">{heading}</h3>
-        <div className="flex items-center gap-6 w-full space-between">
-          <p className="text-[11px] grow text-white flex flex-col items-center font-normal">
-            <span className="text-[32px] font-[600]">{primaryValue}</span>
+        <div className="flex items-center gap-6 w-full space-between text-center">
+          <p className="text-[11px] grow text-white text-center flex flex-col items-center font-normal">
+            <span className="text-[32px] font-[600] text-center">{primaryValue}</span>
             {primaryValueTitle}
           </p>
-          <p className="text-[11px] grow text-[#98E179] flex flex-col items-center font-normal">
-            <span className="text-[32px] font-[600]">{secondaryValue}</span>
+          <p className="text-[11px] grow text-[#98E179] text-center flex flex-col items-center font-normal">
+            <span className="text-[32px] font-[600] text-center">{secondaryValue}</span>
             {secondaryValueTitle}
           </p>
         </div>
