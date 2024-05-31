@@ -5,6 +5,6 @@ const REPORTS_URLS = {
   getScheduleAdherence: (organizationId) =>
     `/reports/${organizationId}/schedule-adherence`,
   getShiftsPerformance: (organizationId) =>
-    `/reports/${organizationId}/shift-performance"`,
+    `/reports/${organizationId}/shift-performance`,
 }
 export default REPORTS_URLS

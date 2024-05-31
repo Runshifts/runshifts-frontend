@@ -3,7 +3,7 @@ import axiosFetcher from "../../_utils/axios"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 export const fetchAttendanceStats = createAsyncThunk(
-  "payroll/fetchAttendanceStats",
+  "reports/fetchAttendanceStats",
   async ({ employees, organizationId, daysAgo, cacheKey }) => {
     const res = await axiosFetcher({
       url: `${REPORTS_URLS.getAttendance(
@@ -20,7 +20,7 @@ export const fetchAttendanceStats = createAsyncThunk(
   }
 )
 export const fetchWorkedHours = createAsyncThunk(
-  "payroll/fetchWorkedHours",
+  "reports/fetchWorkedHours",
   async ({ employees, organizationId, daysAgo, cacheKey }) => {
     const res = await axiosFetcher({
       url: `${REPORTS_URLS.getWorkedHours(
@@ -37,7 +37,7 @@ export const fetchWorkedHours = createAsyncThunk(
   }
 )
 export const fetchLabourCosts = createAsyncThunk(
-  "payroll/fetchLabourCosts",
+  "reports/fetchLabourCosts",
   async ({ employees, organizationId, daysAgo, cacheKey }) => {
     const res = await axiosFetcher({
       url: `${REPORTS_URLS.getLabourCosts(
@@ -54,7 +54,7 @@ export const fetchLabourCosts = createAsyncThunk(
   }
 )
 export const fetchScheduleAdherence = createAsyncThunk(
-  "payroll/fetchScheduleAdherence",
+  "reports/fetchScheduleAdherence",
   async ({ employees, organizationId, daysAgo, cacheKey }) => {
     const res = await axiosFetcher({
       url: `${REPORTS_URLS.getScheduleAdherence(
@@ -73,10 +73,10 @@ export const fetchScheduleAdherence = createAsyncThunk(
   }
 )
 export const fetchShiftPerformance = createAsyncThunk(
-  "payroll/fetchShiftPerformance",
+  "reports/fetchShiftPerformance",
   async ({ employees, organizationId, daysAgo, cacheKey }) => {
     const res = await axiosFetcher({
-      url: `${REPORTS_URLS.getScheduleAdherence(
+      url: `${REPORTS_URLS.getShiftsPerformance(
         organizationId
       )}?daysAgo=${daysAgo}&employees=${employees}`,
       method: "get",
