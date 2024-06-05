@@ -1,19 +1,22 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import AuthLayout from "../_components/Auth/Layout"
-import useAxios from "../_hooks/useAxios"
-import FormHeading from "../_components/Auth/Heading"
-import AuthInputAndLabel, { SubmitButton } from "../_components/Auth/Inputs"
-import TermsAndConditionsNotice from "../_components/Auth/TermsAndConditionsNotice"
+import AuthLayout from "../../_components/Auth/Layout"
+import useAxios from "../../_hooks/useAxios"
+import FormHeading from "../../_components/Auth/Heading"
+import AuthInputAndLabel, { SubmitButton } from "../../_components/Auth/Inputs"
+import TermsAndConditionsNotice from "../../_components/Auth/TermsAndConditionsNotice"
 import { IoMailOutline } from "react-icons/io5"
 import { LuShieldCheck } from "react-icons/lu"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import SocialProviders from "../_components/Auth/SocialProviders"
+import SocialProviders from "../../_components/Auth/SocialProviders"
 import toast from "react-hot-toast"
 
-function Signup() {
+export default function EmployerOrDirectorSignup({
+  organizationType,
+  ownerType,
+}) {
   const router = useRouter()
   const fetchData = useAxios()
   const [formData, setFormData] = useState({
@@ -30,7 +33,10 @@ function Signup() {
     async (e) => {
       e.preventDefault()
       setLoading(true)
-      const res = await fetchData("/users/employers", "post", formData)
+      const res = await fetchData("/users/employers", "post", {
+        ...formData,
+        type: ownerType,
+      })
       console.log(res.statusCode)
       if (res?.statusCode === 201) {
         sessionStorage.setItem("email", formData.email)
@@ -81,7 +87,7 @@ function Signup() {
           <p className="text-[#645D5D] font-[400] text-base">
             Already have an account?&nbsp;
             <Link
-              href="/login?type=employer"
+              href={`/login?type=${ownerType}`}
               className="font-[600] text-primary-500"
             >
               Login here
@@ -92,5 +98,3 @@ function Signup() {
     </>
   )
 }
-
-export default Signup

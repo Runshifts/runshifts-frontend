@@ -6,15 +6,15 @@ import { LuShieldCheck } from "react-icons/lu"
 import { TbBuildingSkyscraper } from "react-icons/tb"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import AuthLayout from "../_components/Auth/Layout"
-import useAxios from "../_hooks/useAxios"
-import FormHeading from "../_components/Auth/Heading"
-import AuthInputAndLabel, { SubmitButton } from "../_components/Auth/Inputs"
-import Dropdown from "../_components/AppComps/Dropdown"
-import { Option } from "../_components/AppComps/Select"
-import TermsAndConditionsNotice from "../_components/Auth/TermsAndConditionsNotice"
+import AuthLayout from "../../_components/Auth/Layout"
+import useAxios from "../../_hooks/useAxios"
+import FormHeading from "../../_components/Auth/Heading"
+import AuthInputAndLabel, { SubmitButton } from "../../_components/Auth/Inputs"
+import Dropdown from "../../_components/AppComps/Dropdown"
+import { Option } from "../../_components/AppComps/Select"
+import TermsAndConditionsNotice from "../../_components/Auth/TermsAndConditionsNotice"
 
-function Signup() {
+export default function StaffSignup({ staffType }) {
   const fetchData = useAxios()
   const router = useRouter()
 
@@ -40,7 +40,10 @@ function Signup() {
         return
       }
       setLoading(true)
-      const data = await fetchData("/users/employees", "post", formData)
+      const data = await fetchData("/users/employees", "post", {
+        ...formData,
+        type: staffType,
+      })
       if (data.statusCode === 201) {
         sessionStorage.setItem("email", formData.email)
         router.push("/verify-email?type=employee")
@@ -63,6 +66,9 @@ function Signup() {
                   ...prev,
                   organizationId: org?._id || "",
                 }))
+              }
+              organizationType={
+                staffType === "employee" ? "for-profit" : "non-profit"
               }
             />
             <AuthInputAndLabel
@@ -112,9 +118,11 @@ function Signup() {
   )
 }
 
-export default Signup
-
-function OrganizationInput({ handleOrganizationSelect, selectedId }) {
+function OrganizationInput({
+  handleOrganizationSelect,
+  selectedId,
+  organizationType,
+}) {
   const fetchData = useAxios()
   const [organizationName, setOrganizationName] = useState("")
   const [organizations, setOrganizations] = useState([])
@@ -137,7 +145,7 @@ function OrganizationInput({ handleOrganizationSelect, selectedId }) {
   const makeOrganizationsSearch = useCallback(
     async (searchText) => {
       const data = await fetchData(
-        `/organizations?search=${searchText}&limit=20`,
+        `/organizations?search=${searchText}&limit=20&organizationType=${organizationType}`,
         "get"
       )
       if (data.statusCode === 200) setOrganizations(data.results)
