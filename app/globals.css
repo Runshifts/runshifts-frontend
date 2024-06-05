@@ -107,3 +107,27 @@
 ::-webkit-scrollbar-track {
   background: #f1f1f11c;
 }
+
+::selection {
+  background: #449522;
+  color: #fff;
+}
+
+.styled-scrollbar::-webkit-scrollbar {
+  height: 2px; /* Width of the scrollbar */
+  border-radius: 100px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: #4495222b; /* Track color */
+  border-radius: 100px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background: #449522; /* Thumb color */
+  border-radius: 100px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #449522; /* Thumb color on hover */
+}

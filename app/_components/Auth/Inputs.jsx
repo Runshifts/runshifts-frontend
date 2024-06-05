@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react"
 import { FaRegEyeSlash } from "react-icons/fa"
 
