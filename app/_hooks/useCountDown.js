@@ -25,12 +25,15 @@ export default function useDateCountDown(deadline) {
   const format = (num) => {
     return num < 10 ? "0" + num : num.toString()
   }
+  const years = Math.floor(time / (3600 * 24 * 365))
+  const months = Math.floor((time % (3600 * 24 * 365)) / (3600 * 24 * 30))
 
   return {
+    years,
+    months,
     days: format(Math.floor(time / (3600 * 24))),
     hours: format(Math.floor((time / 3600) % 24)),
     minutes: format(Math.floor((time / 60) % 60)),
     seconds: format(time % 60),
   }
 }
-

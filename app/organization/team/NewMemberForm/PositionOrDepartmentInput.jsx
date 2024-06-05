@@ -2,19 +2,19 @@ import DropDown from "../../../_components/AppComps/Dropdown"
 import FormInputAndLabel from "../../schedule/NewShiftForm/FormInputAndLabel"
 import { Option } from "../../../_components/AppComps/Select"
 import { useContext } from "react"
-import { DepartmentsAndRolesContext } from "../../../_providers/DepartmentsAndRolesProvider"
+import { DepartmentsAndPositionsContext } from "../../../_providers/DepartmentsAndPositionsProvider"
 
-export default function RoleOrDepartmentInput({
+export default function PositionOrDepartmentInput({
   handleSelect = () => {},
   selectedOption,
   inputType,
 }) {
-  const { roles, departments } = useContext(DepartmentsAndRolesContext)
+  const { positions, departments } = useContext(DepartmentsAndPositionsContext)
   const options = {
-    role: roles,
+    positions: positions,
     department: departments,
   }
-  if (inputType !== "role" && inputType !== "department")
+  if (inputType !== "position" && inputType !== "department")
     throw new Error("Invalid Input Type!")
   return (
     <DropDown
@@ -23,16 +23,16 @@ export default function RoleOrDepartmentInput({
           label={inputType}
           inputProps={{
             readOnly: true,
-            value: selectedOption?.name || "",
+            value: selectedOption?.name || selectedOption || "",
             placeholder: inputType,
           }}
         />
       }
       dropdownContent={
         <>
-          {options[inputType].map((role) => (
-            <Option key={role._id} onClick={() => handleSelect(role)}>
-              {role.name}
+          {options[inputType]?.map((position) => (
+            <Option key={position._id} onClick={() => handleSelect(position)}>
+              {position.name}
             </Option>
           ))}
         </>

@@ -1,25 +1,29 @@
-import React from "react";
+import React from "react"
 
-function Export() {
+function Export({ approveAllShifts = () => {}, disabled }) {
   return (
     <section>
       <div className="flex items-center justify-center ">
-        <button className="bg-[#7ED957] rounded-md flex items-center jusitfy-center mx-2 px-3 py-2">
+        <button
+          disabled={disabled}
+          onClick={approveAllShifts}
+          className="bg-[#7ED957] disabled:opacity-50 disabled:cursor-not-allowed rounded-md flex items-center jusitfy-center mx-2 px-3 py-2"
+        >
           <div>
             <ApproveSvg />
           </div>
           <p className="text-white px-2">Approve all</p>
         </button>
         <button className="hidden md:flex items-center justify-center border rounded-md bg-gray-100 text-gray-600 px-3 py-2">
-            <ExportSvg />
+          <ExportSvg />
           <p className="px-2">Export</p>
         </button>
       </div>
     </section>
-  );
+  )
 }
 
-export default Export;
+export default Export
 
 function ExportSvg() {
   return (
@@ -43,7 +47,7 @@ function ExportSvg() {
         fill="#42526E"
       />
     </svg>
-  );
+  )
 }
 
 function ApproveSvg() {
@@ -64,5 +68,5 @@ function ApproveSvg() {
         fill="white"
       />
     </svg>
-  );
+  )
 }

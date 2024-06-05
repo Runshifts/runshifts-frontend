@@ -25,7 +25,7 @@ function Snapshot({ snapshotData }) {
               action={() => {}}
             />
             <p className="font-semibold ml-auto mr-4 text-info-700">
-              ${snapshotData?.projectedLabourCostsToday.toLocaleString("en-us")}
+              ${snapshotData?.projectedLabourCostsToday?.toLocaleString("en-us")}
             </p>
           </div>
           <div className="bg-white flex justify-betwen items-center grow rounded-md overflow-hidden text-gray-700">
@@ -36,7 +36,7 @@ function Snapshot({ snapshotData }) {
               action={() => {}}
             />
             <p className="font-semibold ml-auto mr-4 text-info-700">
-              ${snapshotData?.projectedLabourCostsToday.toLocaleString("en-us")}
+              ${snapshotData?.projectedLabourCostsToday?.toLocaleString("en-us")}
             </p>
           </div>
         </div>

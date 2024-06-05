@@ -31,14 +31,14 @@ const DateInputOptions = {
   defaultDate: false
 }
 
-export default function DateFilter({ dateFilter, updateDateFilter }) {
+export default function DateFilter({ dateFilter, updateDateFilter, options = {} }) {
   return (
     <div className="flex bg-[#F4F5F7] items-center max-w-[120px] rounded-[3px] relative">
       <span className="relative w-full z-[1] bg-transparent">
         <DateInput
           value={dateFilter}
           onChange={updateDateFilter}
-          options={DateInputOptions}
+          options={{...DateInputOptions, ...options}}
         />
       </span>
       <span className="absolute z-[0] right-[8px]">

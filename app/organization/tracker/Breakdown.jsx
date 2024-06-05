@@ -1,7 +1,7 @@
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
 import FormInputAndLabel from "../schedule/NewShiftForm/FormInputAndLabel"
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import { msToHourMinSecond } from "../../_utils"
 
 export const BREAKDOWN_VARIANTS = {
@@ -30,10 +30,15 @@ const Breakdown = ({
       })
   }, [])
 
+  const heading = useMemo(() => {
+    if(shiftOrTimeOff.isOvertime) return "Overtime Review"
+    return "Time Review"
+  },[shiftOrTimeOff])
+
   return (
     <div className="w-[90%] md:w-full mx-auto max-w-[336px] py-[24px] px-[20px] md:px-[40px] bg-white rounded-[16px] shadow-md flex flex-col items-center justify-center gap-[14px]">
       <h3 className="text-center text-[16px] font-[600] text-[#1B1818]">
-        Time Review
+        {heading}
       </h3>
       <Image
         width={69}
@@ -70,7 +75,7 @@ const Breakdown = ({
                 : "Check-in time"
             }
             inputProps={{
-              value: new Date(shiftOrTimeOff?.startTime).toLocaleTimeString(
+              value: new Date(shiftOrTimeOff?.startedAt).toLocaleTimeString(
                 "en-us",
                 { hour12: true }
               ),
@@ -90,7 +95,7 @@ const Breakdown = ({
           />
         </div>
         {variant !== BREAKDOWN_VARIANTS.INCOMING_SHIFT_REQUEST &&
-          variant !== BREAKDOWN_VARIANTS.TIME_OFF && (
+          variant !== BREAKDOWN_VARIANTS.TIME_OFF && !shiftOrTimeOff.isOvertime && (
             <div className="flex gap-4">
               <FormInputAndLabel
                 label="Break duration"

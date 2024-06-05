@@ -11,12 +11,12 @@ export const TrackerContext = createContext({
   allShifts: {
     clockedIn: [],
     clockedOut: [],
-    usedBreak: [],
+    currentlyOnBreak: [],
   },
   shiftsInSelectedDate: {
     clockedIn: [],
     clockedOut: [],
-    usedBreak: [],
+    currentlyOnBreak: [],
   },
   dateFilter: new Date(),
   updateDateFilter: () => {},
@@ -35,7 +35,7 @@ export default function TrackerProvider({
   const [allShifts, setAllShifts] = useState({
     clockedIn: [],
     clockedOut: [],
-    usedBreak: [],
+    currentlyOnBreak: [],
   })
 
   const filterShiftsByDateFilter = useCallback((shifts = [], dateFilter) => {
@@ -50,13 +50,13 @@ export default function TrackerProvider({
     return {
       clockedIn: filterShiftsByDateFilter(allShifts.clockedIn, dateFilter),
       clockedOut: filterShiftsByDateFilter(allShifts.clockedOut, dateFilter),
-      usedBreak: filterShiftsByDateFilter(allShifts.usedBreak, dateFilter),
+      currentlyOnBreak: filterShiftsByDateFilter(allShifts.currentlyOnBreak, dateFilter),
     }
   }, [
     filterShiftsByDateFilter,
     allShifts.clockedIn,
     allShifts.clockedOut,
-    allShifts.usedBreak,
+    allShifts.currentlyOnBreak,
     dateFilter,
   ])
 
@@ -81,12 +81,11 @@ export default function TrackerProvider({
             ...prev.clockedOut,
             ...res.shiftsClockedOut.filter(removeDuplicates(prev.clockedOut)),
           ],
-          usedBreak: [
-            ...prev.usedBreak,
+          currentlyOnBreak: [
+            ...prev.currentlyOnBreak,
             ...[
               ...res.shiftsCurrentlyOnBreak,
-              ...res.shiftsWithUsedBreak,
-            ].filter(removeDuplicates(prev.usedBreak)),
+            ].filter(removeDuplicates(prev.currentlyOnBreak)),
           ],
         }))
         setAlreadyFetchedDates((prev) => ({

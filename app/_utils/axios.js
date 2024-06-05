@@ -14,13 +14,18 @@ export default async function axiosFetcher({
     "Authorization"
   ] = `Bearer ${localStorage.getItem("token")}`
   try {
-    const response = await axios[method](url, body, {
-      ...headers,
-      baseURL: baseURL || process.env.NEXT_PUBLIC_SERVER_URL,
+    const response = await axios({
+      url,
+      data: body,
+      method,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        ...headers,
+      },
     })
     return await response.data
   } catch (err) {
-    console.log(err)
+    console.log(err, "ljljjkklk")
     if (err.message === "Network Error") {
       return {
         message: err.message,

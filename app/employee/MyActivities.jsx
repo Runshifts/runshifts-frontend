@@ -2,6 +2,7 @@
 import { useState } from "react"
 import StatisticsCard from "../_components/AppComps/StatisticsCard"
 import Timer from "../_assets/svgs/Timer"
+import { FaRegEye } from "react-icons/fa"
 
 function MyActivities({ activityData, isLoading }) {
   return (
@@ -53,13 +54,13 @@ function MyActivities({ activityData, isLoading }) {
 
 export default MyActivities
 
-function TextWithToggleableView({ text, color, hideByDefault = false }) {
+export function TextWithToggleableView({ text, color, hideByDefault = false }) {
   const [hide, setHide] = useState(hideByDefault)
   return (
     <p className="flex items-center gap-[4px]">
-      {hide ? "******" : text}
+      {hide ? "*******" : text}
       <button style={{ color }} onClick={() => setHide((prev) => !prev)}>
-        <EyeSvg />
+        {hide ? <FaRegEye /> : <EyeSvg />}
       </button>
     </p>
   )

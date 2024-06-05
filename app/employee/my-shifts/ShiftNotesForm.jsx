@@ -20,19 +20,22 @@ export default function ShiftNotesForm({ shiftId, onSubmit = () => {} }) {
       if (!shiftId) return
       if (!note) return toast.error("Please provide a note before submitting")
       setSubmitting(true)
-      const res = await fetchData(
-        NOTES_URLS.create(organization?._id, shiftId),
-        "post",
-        { note, severity }
-      )
-      if (res.statusCode === 201) {
-        typeof onSubmit === "function" && onSubmit(res.note)
-        updateAllNotes([res.note])
-        setNote("")
-        setSeverity("normal")
-        toast.success(res.message)
+      if (typeof onSubmit === "function") {
+        onSubmit({ note, severity })
       } else {
-        toast.error(res.message || "Something went wrong")
+        const res = await fetchData(
+          NOTES_URLS.create(organization?._id, shiftId),
+          "post",
+          { note, severity }
+        )
+        if (res.statusCode === 201) {
+          updateAllNotes([res.note])
+          setNote("")
+          setSeverity("normal")
+          toast.success(res.message)
+        } else {
+          toast.error(res.message || "Something went wrong")
+        }
       }
       setSubmitting(false)
     },

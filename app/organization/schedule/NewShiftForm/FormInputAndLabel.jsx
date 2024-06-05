@@ -1,6 +1,6 @@
 import { FaTimes } from "react-icons/fa"
 
-export default function FormInputAndLabel({
+export default function ƒFormInputAndLabel({
   inputProps = {},
   labelProps = {},
   label,
@@ -11,10 +11,17 @@ export default function FormInputAndLabel({
       className="flex capitalize items-start flex-col gap-1"
     >
       <FormLabelText>{label}</FormLabelText>
-      <input
-        {...inputProps}
-        className="focus:outline-none focus:border-[#DFE1E6] focus:ring-0 outline-none shadow-none focus:shadow-none border-2 border-solid border-[#DFE1E6] w-full p-[8px] rounded-[3px] disabled:text-[#7A869A] placeholder:text-[#7A869A] text-[14px] leading-[20px] font-[400]"
-      />
+      {inputProps.type === "textarea" ? (
+        <textarea
+          {...inputProps}
+          className={`${inputProps.className} focus:outline-none focus:border-[#DFE1E6] focus:ring-0 outline-none shadow-none focus:shadow-none border-2 border-solid border-[#DFE1E6] w-full p-[8px] rounded-[3px] disabled:text-[#7A869A] placeholder:text-[#7A869A] text-[14px] leading-[20px] font-[400]`}
+        />
+      ) : (
+        <input
+          {...inputProps}
+          className={`${inputProps.className} focus:outline-none focus:border-[#DFE1E6] focus:ring-0 outline-none shadow-none focus:shadow-none border-2 border-solid border-[#DFE1E6] w-full p-[8px] rounded-[3px] disabled:text-[#7A869A] placeholder:text-[#7A869A] text-[14px] leading-[20px] font-[400]`}
+        />
+      )}
     </label>
   )
 }

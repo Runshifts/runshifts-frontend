@@ -1,28 +1,28 @@
 import { useCallback, useContext } from "react"
-import { DepartmentsOrRolesFilter, LocationFilter } from "../_components/AppComps/FilterGroup"
+import { DepartmentsOrPositionsFilter, LocationFilter } from "../_components/AppComps/FilterGroup"
 import { LocationsContext } from "../_providers/LocationsProvider"
-import { DepartmentsAndRolesContext } from "../_providers/DepartmentsAndRolesProvider"
+import { DepartmentsAndPositionsContext } from "../_providers/DepartmentsAndPositionsProvider"
 import useFilterEmployees from "./useFilterEmployees"
 
 export default function useEmployeeFilters(employeesToFilter) {
   const {
     filteredEmployees,
-    roleFilter,
+    positionFilter,
     departmentFilter,
     locationFilter,
-    setRoleFilter,
+    setPositionFilter,
     setDepartmentFilter,
-    setLocationFilter
+    setLocationFilter,
   } = useFilterEmployees(employeesToFilter)
 
   const { locations } = useContext(LocationsContext)
-  const { departments, roles } = useContext(DepartmentsAndRolesContext)
+  const { departments, positions } = useContext(DepartmentsAndPositionsContext)
 
   const renderEmployeeFilters = useCallback(
     (props) => {
       const {
         ComponentToRender,
-        onRoleFilterSelect,
+        onPositionFilterSelect,
         onDepartmentFilterSelect,
         onLocationFilterSelect,
       } = props || {}
@@ -30,11 +30,11 @@ export default function useEmployeeFilters(employeesToFilter) {
         return (
           <ComponentToRender
             {...{
-              roleFilter,
+              positionFilter,
               departmentFilter,
-              setRoleFilter,
+              setPositionFilter,
               setDepartmentFilter,
-              onRoleFilterSelect,
+              onPositionFilterSelect,
               onDepartmentFilterSelect,
               onLocationFilterSelect,
             }}
@@ -55,7 +55,7 @@ export default function useEmployeeFilters(employeesToFilter) {
             />
           </li>
           <li>
-            <DepartmentsOrRolesFilter
+            <DepartmentsOrPositionsFilter
               updateCurrentValue={(newFilterValue, idx) => {
                 setDepartmentFilter(newFilterValue)
                 newFilterValue !== null &&
@@ -68,44 +68,44 @@ export default function useEmployeeFilters(employeesToFilter) {
             />
           </li>
           <li>
-            <DepartmentsOrRolesFilter
+            <DepartmentsOrPositionsFilter
               updateCurrentValue={(newFilterValue, idx) => {
-                setRoleFilter(newFilterValue)
+                setPositionFilter(newFilterValue)
                 newFilterValue !== null &&
-                  typeof onRoleFilterSelect === "function" &&
-                  onRoleFilterSelect(newFilterValue, idx)
+                  typeof onPositionFilterSelect === "function" &&
+                  onPositionFilterSelect(newFilterValue, idx)
               }}
-              currentValue={roleFilter}
+              currentValue={positionFilter}
               name="Position"
-              options={roles}
+              options={positions}
             />
           </li>
         </>
       )
     },
     [
-      roleFilter,
+      positionFilter,
       departmentFilter,
-      setRoleFilter,
+      setPositionFilter,
       setDepartmentFilter,
       locations,
       departments,
-      roles,
+      positions,
       locationFilter,
-      setLocationFilter
+      setLocationFilter,
     ]
   )
 
   return {
     renderEmployeeFilters,
     filteredEmployees,
-    roleFilter,
+    positionFilter,
     departmentFilter,
-    setRoleFilter,
+    setPositionFilter,
     setLocationFilter,
     setDepartmentFilter,
     departments,
-    roles,
+    positions,
     locations,
     locationFilter,
   }

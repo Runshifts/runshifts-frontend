@@ -36,7 +36,7 @@ function Tracker() {
         ...it,
         filter: BREAKDOWN_VARIANTS.CLOCKED_OUT,
       })),
-      ...shiftsInSelectedDate.usedBreak.map((it) => ({
+      ...shiftsInSelectedDate.currentlyOnBreak.map((it) => ({
         ...it,
         filter: BREAKDOWN_VARIANTS.ON_BREAK,
       })),

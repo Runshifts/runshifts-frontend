@@ -37,6 +37,7 @@ export default function Schedule() {
     indexOfThePresentWeek,
     loadingShifts,
     updateAllShifts,
+    overtimesInCurrentWeek,
   } = useContext(DashboardContext)
 
   const { duplicateWeek, inProgress, duplicateSingleShift } =
@@ -72,8 +73,10 @@ export default function Schedule() {
     return currentWeek.start.getTime() < weekWithPresentDateInIt.start.getTime()
   }, [weekWithPresentDateInIt.start, currentWeek.start])
   const { filteredShifts, renderShiftFilters, setWeekFilter } =
-    useRenderShiftFilters(shiftsInCurrentWeek, weekRanges)
-
+    useRenderShiftFilters(
+      [...shiftsInCurrentWeek, ...overtimesInCurrentWeek],
+      weekRanges
+    )
   const { allDays } = useMemo(() => {
     const start = getPreviousMonday(new Date(currentWeek.start))
     const end = getNextSunday(new Date(currentWeek.start))
@@ -117,7 +120,7 @@ export default function Schedule() {
           currentWeek={currentWeek}
         />
       </>
-      <div className="flex items-start flex-col gap-6 pt-6 pb-4">
+      <div className="flex items-start flex-col gap-6 pt-6 pb-4 relative z-[20]">
         <div className="flex items-center justify-between w-full">
           <Heading as="h1">Schedule</Heading>
           <CreateAndDuplicateShiftButtons

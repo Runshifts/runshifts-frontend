@@ -1,125 +1,105 @@
+import { useCallback, useMemo } from "react"
+import {
+  DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY,
+  ONE_HOUR_IN_MILLISECONDS,
+} from "../../_utils"
+import { CalendarShiftDay } from "../CalendarComponents"
 
-import React from "react";
-
-function ShiftsCalenderScroll() {
+export default function EmployeeTimeSheet({ shiftsGroupedByDate }) {
+  const calculateShiftHoursWorked = useCallback((shifts) => {
+    if (!Array.isArray(shifts)) return null
+    const hoursWorked =
+      shifts.length === 0
+        ? null
+        : (
+            shifts.reduce((acc, current) => {
+              return current.totalTimeWorkedInMilliseconds + acc
+            }, 0) / ONE_HOUR_IN_MILLISECONDS
+          ).toFixed(2)
+    return hoursWorked
+  }, [])
+  const calculateOvertimeHoursWorked = useCallback((shifts) => {
+    if (!Array.isArray(shifts)) return null
+    const hoursWorked =
+      shifts.length === 0
+        ? null
+        : (
+            shifts.reduce((acc, current) => {
+              return current.totalTimeWorkedInMilliseconds + acc
+            }, 0) / ONE_HOUR_IN_MILLISECONDS
+          ).toFixed(2)
+    return hoursWorked
+  }, [])
   return (
-    <div className=" p-4">
-      <div className="flex overflow-x-auto scrollbar-hide">
-        <div className="flex-none w-32 h-28 border-dotted border-2 border-gray-300 rounded-md  bg-white m-1 flex items-center justify-center md:w-36">
-          <div className="flex flex-col">
-            <p className=" text-sm font-semibold text-center text-gray-600">
-              Monday
-            </p>
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] mb-2">
-              <p className="font-semibold">Hours worked</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit">9 hours</p>
+    <>
+      <ol className="list-none flex items-stretch gap-2">
+        {DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY.map((day, idx) => (
+          <CalendarShiftDay key={day} day={idx + 1}>
+            <div className="flex flex-col items-center text-center text-[10px] leading-[20px] gap-[10px]">
+              <span>
+                <h6>Hours worked</h6>
+                <TimesheetElement
+                  numberOfHours={calculateShiftHoursWorked(
+                    (shiftsGroupedByDate[idx + 1] || []).filter(
+                      (it) => !it.isOvertime
+                    )
+                  )}
+                  shifts={(shiftsGroupedByDate[idx + 1] || []).filter(
+                    (it) => !it.isOvertime
+                  )}
+                  isOvertime={false}
+                />
+              </span>
+              <span>
+                <h6>Overtime</h6>
+                <TimesheetElement
+                  numberOfHours={calculateOvertimeHoursWorked(
+                    (shiftsGroupedByDate[idx + 1] || []).filter(
+                      (it) => it.isOvertime === true
+                    )
+                  )}
+                  shifts={(shiftsGroupedByDate[idx + 1] || []).filter(
+                    (it) => it.isOvertime === true
+                  )}
+                  isOvertime={true}
+                />
+              </span>
             </div>
-
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] my-2">
-              <p className="font-semibold">Overtime</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit">30 minutes</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-none w-32 h-28 border-dotted border-2 border-gray-300 rounded-md  bg-white m-1 flex items-center justify-center md:w-36">
-          <div className="flex flex-col">
-            <p className=" text-sm font-semibold text-center text-gray-600">
-              Tuesday
-            </p>
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] mb-2">
-              <p className="font-semibold">Hours worked</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit">9 hours</p>
-            </div>
-
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] my-2">
-              <p className="font-semibold">Overtime</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit">30 minutes</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex-none w-32 h-28 border-dotted border-2 border-gray-300 rounded-md  bg-white m-1 flex items-center justify-center md:w-36">
-          <div className="flex flex-col">
-            <p className=" text-sm font-semibold text-center text-gray-600">
-              Wednesday
-            </p>
-             <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] mb-2">
-              <p className="font-semibold">Hours worked</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit">9 hours</p>
-            </div>
-
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] my-2">
-              <p className="font-semibold">Overtime</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit">30 minutes</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="flex-none w-32 h-28 border-dotted border-2 border-gray-300 rounded-md  bg-white m-1 flex items-center justify-center md:w-36">
-          <div className="flex flex-col">
-            <p className=" text-sm font-semibold text-center text-gray-600">
-              Thursday
-            </p>
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] mb-2">
-              <p className="font-semibold">Hours worked</p>
-              <p className="bg-[#E5F7DD] rounded-full w-fit">Ongoing</p>
-            </div>
-
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] my-2">
-              <p className="font-semibold">Overtime</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit">30 minutes</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex-none w-32 h-28 border-dotted border-2 border-gray-300 rounded-md  bg-white m-1 flex items-center justify-center md:w-36">
-          <div className="flex flex-col">
-            <p className=" text-sm font-semibold text-center text-gray-600">
-              Friday
-            </p>
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] mb-2">
-              <p className="font-semibold">Hours worked</p>
-              <p className="bg-[#E5F7DD] rounded-full w-fit px-2 py-1">-</p>
-            </div>
-
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] my-2">
-              <p className="font-semibold">Overtime</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit px-2 py-1">-</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex-none w-32 h-28 border-dotted border-2 border-gray-300 rounded-md  bg-white m-1 flex items-center justify-center md:w-36">
-          <div className="flex flex-col">
-            <p className=" text-sm font-semibold text-center text-gray-600">
-              Saturday
-            </p>
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] mb-2">
-              <p className="font-semibold">Hours worked</p>
-              <p className="bg-[#E5F7DD] rounded-full w-fit px-2 py-1">-</p>
-            </div>
-
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] my-2">
-              <p className="font-semibold">Overtime</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit px-2 py-1">-</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex-none w-32 h-28 border-dotted border-2 border-gray-300 rounded-md  bg-white m-1 flex items-center justify-center md:w-36">
-          <div className="flex flex-col">
-            <p className=" text-sm font-semibold text-gray-600">Sunday</p>
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] mb-2">
-              <p className="font-semibold">Hours worked</p>
-              <p className="bg-[#E5F7DD] rounded-full w-fit px-2 py-1">-</p>
-            </div>
-
-            <div className="flex flex-col items-center text-[10px] px-2 text-[#252525] my-2">
-              <p className="font-semibold">Overtime</p>
-              <p className="bg-[#FFC6C6] rounded-full w-fit px-2 py-1">-</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+          </CalendarShiftDay>
+        ))}
+      </ol>
+    </>
+  )
 }
 
-export default ShiftsCalenderScroll;
+function TimesheetElement({ numberOfHours, shifts, isOvertime }) {
+  const notStartedShift = useMemo(() => {
+    return shifts.find(
+      (it) =>
+        new Date(it.startTime).getTime() > Date.now() &&
+        new Date(it.endTime).getTime() > Date.now() &&
+        !it.endedAt
+    )
+  }, [])
+  const ongoingShift = useMemo(() => {
+    return shifts.find(
+      (it) =>
+        new Date(it.startTime).getTime() < Date.now() &&
+        new Date(it.endTime).getTime() > Date.now() &&
+        !it.endedAt
+    )
+  }, [shifts])
+  return (
+    <div
+      className={`${
+        isOvertime ? "bg-red-300" : "bg-primary-200"
+      } h-[15px] rounded-[50px] w-fit p-[4px] mx-auto flex items-center justify-center`}
+    >
+      {!numberOfHours &&
+      (notStartedShift === undefined || ongoingShift === undefined)
+        ? "-"
+        : `${numberOfHours} hrs`}
+      {ongoingShift && "Ongoing"}
+    </div>
+  )
+}

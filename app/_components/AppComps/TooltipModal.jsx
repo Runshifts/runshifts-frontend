@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from "react"
 import useOutsideClick from "../../_hooks/useOutsideClick"
 
-export default function TooltipModal({ children, tooltipContent, name }) {
+export default function TooltipModal({ children, tooltipContent, name, styles }) {
   const [isVisible, setIsVisible] = useState(false)
-  const [position, setStyles] = useState({
+  const [position, setStyles] = useState(styles || {
     right: "100%",
     top: 0,
     bottom: 0,
@@ -20,17 +20,18 @@ export default function TooltipModal({ children, tooltipContent, name }) {
       setStyles({ right: "100%", top: 0, bottom: 0 })
     else if (distanceFromLeftOfScreen >= current?.clientWidth)
       setStyles({ left: "100%", top: 0, bottom: 0 })
-    else
-      setStyles({ left: "50%", bottom: "100%", transform: "translateX(-50%)" })
-  }, [tooltipRef?.current])
+    else setStyles({ left: "50%", bottom: "100%", transform: "translateX(-50%)" })
+  }, [tooltipRef?.currenttooltipRef?.current])
 
   useEffect(() => {
-    updatePosition()
-    window.addEventListener("resize", updatePosition)
+    if (typeof styles !== "object") {
+      updatePosition()
+      window.addEventListener("resize", updatePosition)
+    }
     return () => {
       window.removeEventListener("resize", updatePosition)
     }
-  }, [updatePosition])
+  }, [updatePosition, styles])
 
   const handleShow = () => {
     setIsVisible(true)
@@ -48,9 +49,8 @@ export default function TooltipModal({ children, tooltipContent, name }) {
       ref={outsideClickRef}
     >
       <span
-        className={`absolute z-10 inline-block ${
-          isVisible ? "" : "invisible opacity-0"
-        }`}
+        className={`absolute z-10 inline-block ${isVisible ? "" : "invisible opacity-0"
+          }`}
         style={{ ...position }}
         ref={tooltipRef}
         name={name}

@@ -3,15 +3,15 @@
 import { createContext, useCallback, useEffect, useState } from "react"
 import useAxios from "../_hooks/useAxios"
 
-export const DepartmentsAndRolesContext = createContext()
+export const DepartmentsAndPositionsContext = createContext()
 
-export default function DepartmentsAndRolesProvider({
+export default function DepartmentsAndPositionsProvider({
   children,
   organizationIndustry,
 }) {
   const fetchData = useAxios()
   const [departments, setDepartments] = useState([])
-  const [roles, setRoles] = useState([])
+  const [positions, setPositions] = useState([])
 
   const getCachedDepartments = useCallback(
     (organizationIndustry) => {
@@ -30,34 +30,34 @@ export default function DepartmentsAndRolesProvider({
     [departments]
   )
 
-  const getCachedRoles = useCallback(
+  const getCachedPositions = useCallback(
     (organizationIndustry) => {
-      let cachedRoles = localStorage.getItem(`${organizationIndustry}_roles`)
-      if (cachedRoles) {
-        cachedRoles = JSON.parse(cachedRoles)
-        if (cachedRoles.length !== roles.length) {
-          setRoles(cachedRoles)
+      let cachedPositions = localStorage.getItem(`${organizationIndustry}_positions`)
+      if (cachedPositions) {
+        cachedPositions = JSON.parse(cachedPositions)
+        if (cachedPositions.length !== positions.length) {
+          setPositions(cachedPositions)
           return true
         }
       }
       return false
     },
-    [roles]
+    [positions]
   )
-  const fetchDepartmentsAndRoles = useCallback(async (organizationIndustry) => {
+  const fetchDepartmentsAndPositions = useCallback(async (organizationIndustry) => {
     if (!organizationIndustry) return
     const hasCachedDepartments = getCachedDepartments(organizationIndustry)
-    const hasCachedRoles = getCachedRoles(organizationIndustry)
-    const [departmentsResponse, rolesResponse] = await Promise.all([
+    const hasCachedPositions = getCachedPositions(organizationIndustry)
+    const [departmentsResponse, positionsResponse] = await Promise.all([
       !hasCachedDepartments
         ? await fetchData(
             `/industries/${organizationIndustry?.name.toLowerCase()}/departments`,
             "get"
           )
         : {},
-      !hasCachedRoles
+      !hasCachedPositions
         ? await fetchData(
-            `/industries/${organizationIndustry?.name.toLowerCase()}/roles`,
+            `/industries/${organizationIndustry?.name.toLowerCase()}/positions`,
             "get"
           )
         : {},
@@ -69,22 +69,22 @@ export default function DepartmentsAndRolesProvider({
         JSON.stringify(departmentsResponse.results)
       )
     }
-    if (rolesResponse.statusCode === 200) {
-      setRoles(rolesResponse.results)
+    if (positionsResponse.statusCode === 200) {
+      setPositions(positionsResponse.results)
       localStorage.setItem(
-        `${organizationIndustry?.name}_roles`,
-        JSON.stringify(rolesResponse.results)
+        `${organizationIndustry?.name}_positions`,
+        JSON.stringify(positionsResponse.results)
       )
     }
   }, [])
 
   useEffect(() => {
-    fetchDepartmentsAndRoles(organizationIndustry)
-  }, [fetchDepartmentsAndRoles, organizationIndustry])
+    fetchDepartmentsAndPositions(organizationIndustry)
+  }, [fetchDepartmentsAndPositions, organizationIndustry])
 
   return (
-    <DepartmentsAndRolesContext.Provider value={{ roles, departments }}>
+    <DepartmentsAndPositionsContext.Provider value={{ positions, departments }}>
       {children}
-    </DepartmentsAndRolesContext.Provider>
+    </DepartmentsAndPositionsContext.Provider>
   )
 }

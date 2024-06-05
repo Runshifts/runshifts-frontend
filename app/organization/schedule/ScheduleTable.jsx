@@ -251,7 +251,7 @@ function Shift({
         } text-[10px] md:min-w-[118px] flex mx-auto gap-[4px] my-[10px] items-center w-max justify-center p-[4px] rounded-full`}
       >
         <Image
-          className="rounded-full w-[24px] h-[24px]"
+          className="rounded-full w-[24px] h-[24px] border border-solid border-white"
           height={24}
           width={24}
           src={assignee.profileImage?.secure_url || placeholderImage}
@@ -264,6 +264,13 @@ function Shift({
           </span>
           {isPendingShift && shift.assignee !== null && (
             <span className="font-400">Pending</span>
+          )}
+          {shift.isOvertime && shift.assignee !== null && (
+            <span className="font-400">
+              Overtime -{" "}
+              {new Date(shift.endTime).getHours() -
+                new Date(shift.startTime).getHours()}hrs
+            </span>
           )}
           {isDroppedOff && shift.assignee !== null && (
             <span className="font-400">Dropped-off</span>

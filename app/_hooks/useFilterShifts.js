@@ -5,7 +5,7 @@ export default function useFilterShifts(shifts = []) {
   const [locationFilter, setLocationFilter] = useState(null)
   const [departmentFilter, setDepartmentFilter] = useState(null)
   const [weekFilter, setWeekFilter] = useState(null)
-  const [roleFilter, setRoleFilter] = useState(null)
+  const [positionFilter, setPositionFilter] = useState(null)
 
   const filteredShifts = useMemo(() => {
     const filtered = shifts.filter((shift) => {
@@ -14,29 +14,28 @@ export default function useFilterShifts(shifts = []) {
           (shift.location && shift.location === locationFilter) ||
           shift.location?._id === locationFilter) &&
         (!departmentFilter ||
-          (shift.assignee?.department &&
-            shift.assignee?.department === departmentFilter?._id) ||
-          shift.assignee?.department?.name?.toLowerCase() ===
+          shift.assignee?.department?.toLowerCase() ===
             departmentFilter.toLowerCase()) &&
-        (!roleFilter ||
-          (shift.assignee?.role && shift.assignee?.role === roleFilter?._id) ||
-          shift.assignee?.role?.name?.toLowerCase() ===
-            roleFilter.toLowerCase())
+        (!positionFilter ||
+          (shift.assignee?.position &&
+            shift.assignee?.position === positionFilter?._id) ||
+          shift.assignee?.position?.name?.toLowerCase() ===
+            positionFilter.toLowerCase())
       )
     })
     if (weekFilter) return filterShiftsByWeek(filtered, weekFilter)
     return filtered
-  }, [shifts, departmentFilter, roleFilter, locationFilter, weekFilter])
+  }, [shifts, departmentFilter, positionFilter, locationFilter, weekFilter])
 
   return {
     filteredShifts,
     setDepartmentFilter,
     setLocationFilter,
-    setRoleFilter,
+    setPositionFilter,
     setWeekFilter,
     departmentFilter,
     locationFilter,
-    roleFilter,
+    positionFilter,
     weekFilter,
   }
 }
