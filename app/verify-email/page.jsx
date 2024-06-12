@@ -51,8 +51,14 @@ function Verify() {
       if (res.statusCode === 200) {
         localStorage.setItem("token", res.token)
         localStorage.setItem("user", JSON.stringify(res.user))
-        if (res.user.type === "employee") router.push("/welcome")
-        else router.push("/new-organization")
+        if (res.user.type === "employee" || res.user.type === "volunteer")
+          router.push("/welcome")
+        else
+          router.push(
+            `/new-organization?type=${
+              res.user.type === "employer" ? "for-profit" : "non-profit"
+            }`
+          )
       } else toast.error(res.message || "Unable to verify your email")
       setLoading(false)
     },

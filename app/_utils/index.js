@@ -183,6 +183,8 @@ export function getUserBasePathForDashboard(accountType) {
   let path
   if (accountType === "employer") path = "/organization"
   else if (accountType === "employee") path = "/employee"
+  else if (accountType === "director") path = "/non-profit"
+  else if (accountType === "volunteer") path = "/volunteer"
   else if (accountType === "admin") path = "/admin"
   return path
 }

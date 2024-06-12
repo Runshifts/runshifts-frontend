@@ -10,6 +10,7 @@ export default function DebouncedDropdownSearch({
   selectedId,
   handleOptionSelect,
   pathName,
+  placeholder
 }) {
   const fetchData = useAxios()
   const [searchText, setSearchText] = useState("")
@@ -61,7 +62,7 @@ export default function DebouncedDropdownSearch({
             type: "text",
             value: searchText,
             onChange: handleSearchTextChange,
-            placeholder: "Business name",
+            placeholder: placeholder || "",
             value: searchText,
           }}
           endAdornment={<IoChevronDown size={20} color="#292D32" />}

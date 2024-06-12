@@ -3,7 +3,11 @@ import React, { useCallback, useState } from "react"
 import FormHeading from "../_components/Auth/Heading"
 import AuthInputAndLabel, { SubmitButton } from "../_components/Auth/Inputs"
 
-export default function StepOne({ isActive, onSubmit = () => {} }) {
+export default function StepOne({
+  isActive,
+  onSubmit = () => {},
+  organizationType,
+}) {
   const [businessName, setBusinessName] = useState("")
 
   const handleSubmit = useCallback(
@@ -21,14 +25,22 @@ export default function StepOne({ isActive, onSubmit = () => {} }) {
         <div className="flex flex-col gap-[17px]">
           <FormHeading>Welcome to RunShifts</FormHeading>
           <AuthInputAndLabel
-            labelText="What is your organization name"
+            labelText={`What is ${
+              organizationType === "for-profit"
+                ? "your organization's name?"
+                : "your non-profit called?"
+            }`}
             inputProps={{
               value: businessName,
               onChange: (e) => setBusinessName(e.target.value),
               required: true,
               type: "text",
-              placeholder: "Business name",
-              min: 4
+              placeholder: `${
+                organizationType === "for-profit"
+                  ? "Business name"
+                  : "Non-profit name"
+              }`,
+              min: 4,
             }}
           />
         </div>
