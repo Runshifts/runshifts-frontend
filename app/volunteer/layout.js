@@ -9,6 +9,7 @@ import {
 import { useSelector } from "react-redux"
 import { useRouter } from "next/navigation"
 import { UserContext } from "../_providers/UserProvider"
+import DashboardLayout from "../_components/DashboardLayout"
 
 export default function Layout({ children }) {
   const dispatch = useDispatch()
@@ -35,5 +36,5 @@ export default function Layout({ children }) {
     if (organization?._id) dispatch(fetchEmployees(organization?._id))
   }, [dispatch, organization?._id])
 
-  return <>{children}</>
+  return <DashboardLayout>{children}</DashboardLayout>
 }
