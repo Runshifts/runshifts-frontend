@@ -16,11 +16,12 @@ export default function UserProvider({ children }) {
   const pathname = usePathname()
   const fetchData = useAxios()
   const [user, setUser] = useState(null)
-
   const redirectAwayFromDashboard = useCallback(() => {
     if (
       pathname.includes("/employee") ||
       pathname.includes("/organization") ||
+      pathname.includes("/volunteer") ||
+      pathname.includes("/non-profit") ||
       pathname.includes("/admin")
     )
       router.push("/")
