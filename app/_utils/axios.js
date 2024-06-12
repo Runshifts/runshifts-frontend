@@ -13,6 +13,7 @@ export default async function axiosFetcher({
   axios.defaults.headers.common[
     "Authorization"
   ] = `Bearer ${localStorage.getItem("token")}`
+  axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_SERVER_URL
   try {
     const response = await axios({
       url,

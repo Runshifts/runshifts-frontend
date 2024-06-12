@@ -4,6 +4,7 @@ import { timesheetReducer } from "./timesheet.slice"
 import { earningsReducer } from "./earnings.slice"
 import { payrollReducer } from "./payroll.slice"
 import { reportsReducer } from "./reports.slice"
+import { organizationReducer } from "./organization.slice"
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     earnings: earningsReducer,
     payroll: payrollReducer,
     reports: reportsReducer,
+    organization: organizationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
