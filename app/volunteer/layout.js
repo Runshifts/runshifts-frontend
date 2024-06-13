@@ -30,7 +30,7 @@ export default function Layout({ children }) {
           }
         }
       })
-  }, [dispatch, router])
+  }, [dispatch, router, user])
 
   useEffect(() => {
     if (organization?._id) dispatch(fetchEmployees(organization?._id))

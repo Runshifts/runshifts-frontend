@@ -8,6 +8,7 @@ import {
 } from "../_redux/thunks/organization.thunk"
 import { useSelector } from "react-redux"
 import { useRouter } from "next/navigation"
+import DashboardLayout from "../_components/DashboardLayout"
 
 export default function Layout({ children }) {
   const dispatch = useDispatch()
@@ -32,5 +33,5 @@ export default function Layout({ children }) {
     if (organization?._id) dispatch(fetchEmployees(organization?._id))
   }, [dispatch, organization?._id])
 
-  return <>{children}</>
+  return <DashboardLayout>{children}</DashboardLayout>
 }
