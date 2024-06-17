@@ -47,7 +47,7 @@ const navLinks = {
   organization: [
     new DashboardLinkItem(<GridOutline />, "Dashboard", "/organization"),
     new DashboardLinkItem(<Calender />, "Schedule", "/organization/schedule"),
-    new DashboardLinkItem(<AlarmClock />, "Tracker", "/organization/timesheet"),
+    new DashboardLinkItem(<AlarmClock />, "Timesheet", "/organization/timesheet"),
     new DashboardLinkItem(<Money />, "Payroll", "/organization/payroll"),
     new DashboardLinkItem(<Watch />, "Tracker", "/organization/tracker"),
     new DashboardLinkItem(<PersonIcon />, "Team", "/organization/team"),

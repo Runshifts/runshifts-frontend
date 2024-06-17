@@ -43,7 +43,7 @@ export default function Layout({ children }) {
         />
       )}
     >
-      {/* {children} */}
+      {children}
     </DashboardLayout>
   )
 }
