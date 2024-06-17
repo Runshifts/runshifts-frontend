@@ -4,6 +4,7 @@ import PersonIcon from "../../_assets/SidebarSvgs/PersonIcon"
 import NotesIcon from "../../_assets/SidebarSvgs/NotesIcon"
 import BookIcon from "../../_assets/SidebarSvgs/BookIcon"
 import DashboardLink from "./DashboardLink"
+import Watch from "../../_assets/SidebarSvgs/Watch"
 
 class DashboardLinkItem {
   constructor(icon, text, href) {
@@ -27,6 +28,17 @@ const navLinks = {
       <BookIcon />,
       "Knowledge base",
       "/knowledge-base/non-profit"
+    ),
+  ],
+  volunteer: [
+    new DashboardLinkItem(<GridOutline />, "Dashboard", "/volunteer"),
+    new DashboardLinkItem(<Calender />, "My Shifts", "/volunteer/my-shifts"),
+    new DashboardLinkItem(<Watch />, "Tracker", "/volunteer/tracker"),
+    new DashboardLinkItem(<NotesIcon />, "Logs", "/volunteer/logs"),
+    new DashboardLinkItem(
+      <BookIcon />,
+      "Knowledge base",
+      "/knowledge-base/volunteer"
     ),
   ],
 }

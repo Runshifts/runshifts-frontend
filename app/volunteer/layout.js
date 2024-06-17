@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect } from "react"
+import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import {
   fetchEmployees,
@@ -8,33 +8,42 @@ import {
 } from "../_redux/thunks/organization.thunk"
 import { useSelector } from "react-redux"
 import { useRouter } from "next/navigation"
-import { UserContext } from "../_providers/UserProvider"
-import DashboardLayout from "../_components/DashboardLayout"
+import DashboardLayout from "../_components/DashboardLayout/DashboardLayout"
+import DashboardLinksListGenerator from "../_components/DashboardLayout/DashboardLinksListGenerator"
 
 export default function Layout({ children }) {
   const dispatch = useDispatch()
-  const { user } = useContext(UserContext)
   const router = useRouter()
   const { organization } = useSelector((store) => store.organization)
 
   useEffect(() => {
-    if (user)
-      dispatch(fetchOrganization(user.organization)).then((res) => {
-        if (typeof res.payload === "string") {
-          if (res.payload.toLowerCase() === "organization not found")
-            router.push("/new-organization?type=non-profit")
-          else if (res.payload.toLowerCase() !== "unauthorized") {
-            localStorage.clear()
-            router.refresh()
-            router.push("/signup?type=non-profit")
-          }
+    dispatch(fetchOrganization()).then((res) => {
+      if (typeof res.payload === "string") {
+        if (res.payload.toLowerCase() === "organization not found")
+          router.push("/new-organization?type=non-profit")
+        else if (res.payload.toLowerCase() !== "unauthorized") {
+          localStorage.clear()
+          router.refresh()
+          router.push("/signup?type=non-profit")
         }
-      })
-  }, [dispatch, router, user])
+      }
+    })
+  }, [dispatch, router])
 
   useEffect(() => {
     if (organization?._id) dispatch(fetchEmployees(organization?._id))
   }, [dispatch, organization?._id])
 
-  return <DashboardLayout>{children}</DashboardLayout>
+  return (
+    <DashboardLayout
+      sidebarContent={({ closeNav }) => (
+        <DashboardLinksListGenerator
+          variant="volunteer"
+          onLinkClick={closeNav}
+        />
+      )}
+    >
+      {children}
+    </DashboardLayout>
+  )
 }
