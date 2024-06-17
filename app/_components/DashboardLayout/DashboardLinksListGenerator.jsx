@@ -5,6 +5,9 @@ import NotesIcon from "../../_assets/SidebarSvgs/NotesIcon"
 import BookIcon from "../../_assets/SidebarSvgs/BookIcon"
 import DashboardLink from "./DashboardLink"
 import Watch from "../../_assets/SidebarSvgs/Watch"
+import AlarmClock from "../../_assets/SidebarSvgs/AlarmClock"
+import Money from "../../_assets/SidebarSvgs/Money"
+import Note from "../../_assets/SidebarSvgs/Note"
 
 class DashboardLinkItem {
   constructor(icon, text, href) {
@@ -39,6 +42,35 @@ const navLinks = {
       <BookIcon />,
       "Knowledge base",
       "/knowledge-base/volunteer"
+    ),
+  ],
+  organization: [
+    new DashboardLinkItem(<GridOutline />, "Dashboard", "/organization"),
+    new DashboardLinkItem(<Calender />, "Schedule", "/organization/schedule"),
+    new DashboardLinkItem(<AlarmClock />, "Tracker", "/organization/timesheet"),
+    new DashboardLinkItem(<Money />, "Payroll", "/organization/payroll"),
+    new DashboardLinkItem(<Watch />, "Tracker", "/organization/tracker"),
+    new DashboardLinkItem(<PersonIcon />, "Team", "/organization/team"),
+    new DashboardLinkItem(<NotesIcon />, "Logs", "/organization/logs"),
+    new DashboardLinkItem(<Note />, "Reports", "/organization/reports"),
+    new DashboardLinkItem(
+      <BookIcon />,
+      "Knowledge base",
+      "/knowledge-base/organization"
+    ),
+  ],
+  employee: [
+    new DashboardLinkItem(<GridOutline />, "Dashboard", "/employee"),
+    new DashboardLinkItem(<Calender />, "My Shifts", "/employee/my-shifts"),
+    new DashboardLinkItem(<AlarmClock />, "Timesheet", "/employee/timesheet"),
+    new DashboardLinkItem(<Money />, "Earnings", "/employee/earnings"),
+    new DashboardLinkItem(<Watch />, "Tracker", "/employee/tracker"),
+    new DashboardLinkItem(<NotesIcon />, "Logs", "/employee/logs"),
+    new DashboardLinkItem(<Note />, "Reports", "/employee/reports"),
+    new DashboardLinkItem(
+      <BookIcon />,
+      "Knowledge base",
+      "/knowledge-base/employee"
     ),
   ],
 }

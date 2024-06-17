@@ -28,7 +28,9 @@ export default function DashboardNav({ closeNav, showNav, children }) {
               className="rounded-[3px] w-[54px] h-[54px] lg:w-[40px] lg:h-[40px]"
             />
           ) : (
-            <PseudoLogo />
+            <div className="rounded-[3px]">
+              <PseudoLogo />
+            </div>
           )}
           <p className="flex items-start flex-col gap-[.8px]">
             <span className="text-[19px] lg:text-[14px] lg:text-[#42526E] text-white font-[700] capitalize">
