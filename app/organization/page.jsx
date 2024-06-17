@@ -8,7 +8,6 @@ import Heading from "../_components/Headings"
 import Calender from "./Calender"
 import { UserContext } from "../_providers/UserProvider"
 import {
-  groupShiftsByAssignee,
   groupShiftsByDayOfTheWeek,
 } from "../_utils/shifts"
 import useRenderShiftFilters from "../_hooks/useRenderShiftFilters"
@@ -17,6 +16,7 @@ import useGetWeekRanges from "../_hooks/useGetWeekRanges"
 import { useDispatch } from "react-redux"
 import { setCurrentWeek } from "../_redux/shifts.slice"
 import { useSelector } from "react-redux"
+import useGetTodaysShiftsTableGrouping from "../_hooks/useGetTodaysShiftsTableGrouping"
 
 export default function Dashboard() {
   const { user } = useContext(UserContext)
@@ -34,49 +34,19 @@ export default function Dashboard() {
     loadingShifts,
   } = useManageFetchWeeklySchedule()
 
-  const { filteredShifts, renderShiftFilters, setWeekFilter } =
-    useRenderShiftFilters(
-      [...listOfShiftsInCurrentWeek, ...listOfOvertimesInCurrentWeek],
-      weekRanges
-    )
+  const { filteredShifts, renderShiftFilters } = useRenderShiftFilters(
+    [...listOfShiftsInCurrentWeek, ...listOfOvertimesInCurrentWeek],
+    weekRanges
+  )
   const shiftsInCurrentWeekGroupedByDate = useMemo(() => {
     return groupShiftsByDayOfTheWeek(filteredShifts)
   }, [filteredShifts])
 
-  const todaysShifts = useMemo(() => {
-    return [
+  const { todaysShiftsGroupedByAssigneesIntoHours } =
+    useGetTodaysShiftsTableGrouping([
       ...listOfShiftsInCurrentWeek,
       ...listOfOvertimesInCurrentWeek,
-    ].filter((shift) => {
-      return (
-        new Date(shift.startTime).toDateString() ===
-        new Date(Date.now()).toDateString()
-      )
-    })
-  }, [listOfShiftsInCurrentWeek, listOfOvertimesInCurrentWeek])
-
-  const todaysShiftsGroupedByAssigneesIntoHours = useMemo(() => {
-    const groupingByAssignees = groupShiftsByAssignee(
-      todaysShifts.filter(
-        (shift) => shift.isAccepted === true && shift.isDroppedOff === false
-      )
-    )
-    for (const key in groupingByAssignees) {
-      if (groupingByAssignees[key].length === 0) continue
-      groupingByAssignees[key] = {
-        assignee: groupingByAssignees[key][0]?.assignee,
-        shiftsStart: groupShiftsByHoursWithDateKey(
-          groupingByAssignees[key],
-          "startTime"
-        ),
-        shiftsEnd: groupShiftsByHoursWithDateKey(
-          groupingByAssignees[key],
-          "endTime"
-        ),
-      }
-    }
-    return groupingByAssignees
-  }, [todaysShifts])
+    ])
 
   return (
     <section className="p-3 min-h-screen">
