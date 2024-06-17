@@ -7,6 +7,7 @@ import placeholderImage from "../../_assets/img/user.png"
 import RunshiftsLogo from "../../_assets/svgs/RunshiftsLogo"
 import { UserContext } from "../../_providers/UserProvider"
 import { useContext } from "react"
+import GearIcon from "../../_assets/svgs/Gear"
 
 export default function DashboardHeader({ openNav }) {
   const { user } = useContext(UserContext)
@@ -41,6 +42,9 @@ export default function DashboardHeader({ openNav }) {
           </button>{" "}
           <button as="button" className="hidden lg:inline-block">
             <Headphones />
+          </button>
+          <button as="button" className="hidden lg:inline-block">
+            <GearIcon />
           </button>
           <Image
             alt={user?.fullName || "User"}

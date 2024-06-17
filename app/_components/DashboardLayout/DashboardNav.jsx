@@ -32,18 +32,18 @@ export default function DashboardNav({ closeNav, showNav, children }) {
               <PseudoLogo />
             </div>
           )}
-          <p className="flex items-start flex-col gap-[.8px]">
+          <p className="flex items-start flex-col gap-[.8px] truncate">
             <span className="text-[19px] lg:text-[14px] lg:text-[#42526E] text-white font-[700] capitalize">
               {organization ? organization.name : "---"}
             </span>
-            <span className="font-[500] text-[#ACB8CD] lg:text-[#6B778C] text-[16px] lg:text-[12px] capitalize">
+            <span className="font-[500] text-left ml-[0] block w-[98%] truncate text-[#ACB8CD] lg:text-[#6B778C] text-[16px] lg:text-[12px] capitalize">
               {organization ? organization.industry?.name : "----"}
             </span>
           </p>
         </div>
         <div className="w-full">{children}</div>
         <div className="w-full text-[14.9px] text-center leading-[19px] flex flex-col items-center gap-[11px] mt-auto">
-          <small className="lg:text-[#42526E] whitespace-normal text-slate-500  text-[14.94px] font-normal">
+          <small className="lg:text-[#42526E] whitespace-normal text-slate-500  text-[14.94px] lg:text-[11px] font-normal">
             You&apos;re in a team management made easy
           </small>
           <Link href="#" className="text-[#5E6C84]">
