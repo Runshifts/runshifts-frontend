@@ -8,7 +8,8 @@ import {
 } from "../_redux/thunks/organization.thunk"
 import { useSelector } from "react-redux"
 import { useRouter } from "next/navigation"
-import DashboardLayout from "../_components/DashboardLayout"
+import DashboardLayout from "../_components/DashboardLayout/DashboardLayout"
+import DashboardLinksListGenerator from "../_components/DashboardLayout/DashboardLinksListGenerator"
 
 export default function Layout({ children }) {
   const dispatch = useDispatch()
@@ -33,5 +34,16 @@ export default function Layout({ children }) {
     if (organization?._id) dispatch(fetchEmployees(organization?._id))
   }, [dispatch, organization?._id])
 
-  return <DashboardLayout>{children}</DashboardLayout>
+  return (
+    <DashboardLayout
+      sidebarContent={({ closeNav }) => (
+        <DashboardLinksListGenerator
+          variant="non-profit"
+          onLinkClick={closeNav}
+        />
+      )}
+    >
+      {children}
+    </DashboardLayout>
+  )
 }

@@ -186,6 +186,7 @@ export function getUserBasePathForDashboard(accountType) {
   else if (accountType === "director") path = "/non-profit"
   else if (accountType === "volunteer") path = "/volunteer"
   else if (accountType === "admin") path = "/admin"
+  console.log(path)
   return path
 }
 

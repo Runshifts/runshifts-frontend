@@ -56,6 +56,8 @@ export default function UserProvider({ children }) {
       if (
         !pathname.startsWith("/organization") &&
         !pathname.startsWith("/new-organization") &&
+        !pathname.startsWith("/non-profit") &&
+        !pathname.startsWith("/volunteer") &&
         !pathname.startsWith("/employee") &&
         !pathname.startsWith("/admin") &&
         !pathname.startsWith("/knowledge")
