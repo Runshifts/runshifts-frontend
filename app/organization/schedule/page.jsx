@@ -23,11 +23,13 @@ import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import NewShiftForm from "./NewShiftForm/NewShiftForm"
 import useHandleShiftDuplication from "../../_hooks/useHandleShiftDuplication"
-import { setCurrentWeek } from "../../_redux/shifts.slice"
+import { addNewShifts, setCurrentWeek } from "../../_redux/shifts.slice"
 import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
+import useGetAllDaysOfTheWeek from "../../_hooks/useGetAllDaysOfTheWeek"
+import useGroupShiftsByAssigneesIntoDays from "../../_hooks/useGroupShiftsByAssigneesIntoDays"
 
 export default function Schedule() {
   const [newShiftDetails, setNewShiftDetails] = useState(null)
@@ -36,9 +38,7 @@ export default function Schedule() {
   // const { shiftRequests, overtimeRequests, loadingShiftRequests } = useContext(
   //   ShiftAndOvertimeRequestsContext
   // )
-  const { employees, organization, shiftManagements } = useSelector(
-    (store) => store.organization
-  )
+  const { employees, organization } = useSelector((store) => store.organization)
 
   const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } =
     useGetWeekRanges(new Date(Date.now()), 7)
@@ -59,7 +59,7 @@ export default function Schedule() {
   const { duplicateWeek, inProgress, duplicateSingleShift } =
     useHandleShiftDuplication({
       week: currentWeek,
-      // updateShifts: updateAllShifts,
+      updateShifts: (shifts) => dispatch(addNewShifts(shifts)),
     })
 
   const handleAddShiftClick = useCallback(
@@ -86,38 +86,19 @@ export default function Schedule() {
   const isPastWeek = useMemo(() => {
     return currentWeek.start.getTime() < weekWithPresentDateInIt.start.getTime()
   }, [weekWithPresentDateInIt.start, currentWeek.start])
-  const { allDays } = useMemo(() => {
-    const start = getPreviousMonday(new Date(currentWeek.start))
-    const end = getNextSunday(new Date(currentWeek.start))
-    const allDays = [new Date(start)]
-    while (start.getTime() < end.getTime()) {
-      const nextDate = new Date(allDays[allDays.length - 1])
-      nextDate.setHours(nextDate.getHours() + 24)
-      allDays.push(nextDate)
-      start.setHours(start.getHours() + 24)
-    }
-    return {
-      allDays,
-    }
-  }, [currentWeek.start, currentWeek.end])
 
-  const shiftsGroupedByAssigneesIntoDays = useMemo(() => {
-    let finalFilteredShifts =
-      selectedUser === null
-        ? filteredShifts
-        : filteredShifts.filter((it) => it?.assignee?._id === selectedUser?._id)
-    const groupingByAssignees = groupShiftsByAssignee(finalFilteredShifts)
-    for (const key in groupingByAssignees) {
-      groupingByAssignees[key] = {
-        assignee: groupingByAssignees[key][0]?.assignee,
-        shifts: groupShiftsByDayOfTheWeek(groupingByAssignees[key]),
-      }
-    }
-    return groupingByAssignees
+  const allDays = useGetAllDaysOfTheWeek(currentWeek)
+  const finalFilteredShifts = useMemo(() => {
+    return selectedUser === null
+      ? filteredShifts
+      : filteredShifts.filter((it) => it?.assignee?._id === selectedUser?._id)
   }, [filteredShifts, selectedUser])
 
+  const shiftsGroupedByAssigneesIntoDays =
+    useGroupShiftsByAssigneesIntoDays(finalFilteredShifts)
+
   return (
-    <section className="p-3 h-screen">
+    <section>
       <>
         {/* <NewShiftForm
           show={newShiftDetails !== null}

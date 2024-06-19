@@ -44,6 +44,10 @@ export const shiftsAndOvertimesSlice = createSlice({
       state.loading =
         typeof action.payload === "boolean" ? action.payload : !state.loading
     },
+    addNewShifts: (state, action) => {
+      if (Array.isArray(action.payload))
+        state.shifts = [...state.shifts, ...action.payload]
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -74,6 +78,6 @@ export const shiftsAndOvertimesSlice = createSlice({
   },
 })
 
-export const { updateLoading, removeError, setCurrentWeek } =
+export const { updateLoading, removeError, setCurrentWeek, addNewShifts } =
   shiftsAndOvertimesSlice.actions
 export const shiftsAndOvertimesReducer = shiftsAndOvertimesSlice.reducer

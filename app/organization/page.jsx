@@ -52,7 +52,7 @@ export default function Dashboard() {
       dispatch(fetchTodaysSnapshot({ organizationId: organization?._id }))
   }, [dispatch, organization?._id, todaysSnapshot])
   return (
-    <section className="p-3 min-h-screen">
+    <section className="min-h-[80dvh]">
       <div className="flex items-center justify-between py-3">
         <Heading className="capitalize">Welcome {user?.firstName}</Heading>
       </div>
