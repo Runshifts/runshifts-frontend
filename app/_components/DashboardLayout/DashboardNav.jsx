@@ -8,7 +8,7 @@ export default function DashboardNav({ closeNav, showNav, children }) {
   const { organization } = useSelector((store) => store.organization)
   return (
     <nav
-      className={`fixed lg:sticky top-0 h-full lg:col-span-3 col-start-1 flex overflow-hidden lg:max-w-full transition-width duration-[350ms] ${
+      className={`fixed lg:sticky z-[1000] top-0 h-full lg:col-span-3 col-start-1 flex overflow-hidden lg:max-w-full transition-width duration-[350ms] ${
         showNav
           ? "max-w-[100dvw] sm:max-w-[328px] whitespace-nowrap"
           : "max-w-0 whitespace-nowrap"

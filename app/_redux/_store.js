@@ -6,6 +6,7 @@ import { payrollReducer } from "./payroll.slice"
 import { reportsReducer } from "./reports.slice"
 import { organizationReducer } from "./organization.slice"
 import { shiftsAndOvertimesReducer } from "./shifts.slice"
+import { shiftsAndOvertimeRequestsReducer } from "./shiftsAndOvertimesRequests.slice"
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     reports: reportsReducer,
     organization: organizationReducer,
     shiftsAndOvertimes: shiftsAndOvertimesReducer,
+    shiftsAndOvertimeRequests: shiftsAndOvertimeRequestsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

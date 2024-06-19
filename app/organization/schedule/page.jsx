@@ -1,26 +1,13 @@
 "use client"
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import CreateAndDuplicateShiftButtons from "../../_components/AppComps/CreateAndDuplicateShiftButtons"
 import ScheduleTable from "./ScheduleTable"
-import { ShiftAndOvertimeRequestsContext } from "../../_providers/Employer/ShiftAndOvertimeRequestsProvider"
 import Heading from "../../_components/Headings"
 import ShiftRequestsSection from "./ShiftRequestsSection"
 import OvertimeRequestsSection from "./OvertimeRequestsSection"
-import { DashboardContext } from "../../_providers/Employer/DashboardContext"
 import { getNextSunday, getPreviousMonday } from "../../_utils"
-import {
-  groupShiftsByAssignee,
-  groupShiftsByDayOfTheWeek,
-} from "../../_utils/shifts"
 import DateRangePicker from "../../_components/AppComps/Datepicker"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
-import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import NewShiftForm from "./NewShiftForm/NewShiftForm"
 import useHandleShiftDuplication from "../../_hooks/useHandleShiftDuplication"
 import { addNewShifts, setCurrentWeek } from "../../_redux/shifts.slice"
@@ -30,14 +17,17 @@ import { useDispatch } from "react-redux"
 import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
 import useGetAllDaysOfTheWeek from "../../_hooks/useGetAllDaysOfTheWeek"
 import useGroupShiftsByAssigneesIntoDays from "../../_hooks/useGroupShiftsByAssigneesIntoDays"
+import { fetchShiftAndOvertimeRequests } from "../../_redux/thunks/shiftsAndOvertimeRequests.thunk"
 
 export default function Schedule() {
   const [newShiftDetails, setNewShiftDetails] = useState(null)
   const dispatch = useDispatch()
   const [selectedUser, setSelectedUser] = useState(null)
-  // const { shiftRequests, overtimeRequests, loadingShiftRequests } = useContext(
-  //   ShiftAndOvertimeRequestsContext
-  // )
+  const {
+    shiftRequests,
+    overtimeRequests,
+    loading: loadingShiftRequests,
+  } = useSelector((store) => store.shiftsAndOvertimeRequests)
   const { employees, organization } = useSelector((store) => store.organization)
 
   const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } =
@@ -45,6 +35,12 @@ export default function Schedule() {
   useEffect(() => {
     dispatch(setCurrentWeek(currentWeek))
   }, [dispatch, currentWeek])
+
+  useEffect(() => {
+    dispatch(
+      fetchShiftAndOvertimeRequests({ organizationId: organization?._id })
+    )
+  }, [dispatch, organization])
 
   const {
     listOfShiftsInCurrentWeek,
@@ -150,16 +146,24 @@ export default function Schedule() {
           }}
         />
       </div>
-      <div className="text-[#252525] min-h-[55dvh] flex flex-col items-start gap-y-[30px] my-4 p-4 shadow-[0px 2px 8px 0px rgba(0, 0, 0, 0.12)] bg-white rounded-lg shadow-xl">
-        {/* <ShiftRequestsSection
-          loading={loadingShiftRequests}
-          shiftRequests={shiftRequests}
-        />
-        <OvertimeRequestsSection
-          loading={loadingShiftRequests}
-          overtimeRequests={overtimeRequests}
-        /> */}
-      </div>
+      {(loadingShiftRequests ||
+        shiftRequests.length > 0 ||
+        overtimeRequests.length > 0) && (
+        <div className="text-[#252525] min-h-[55dvh] flex flex-col items-start gap-y-[30px] my-4 p-4 shadow-[0px 2px 8px 0px rgba(0, 0, 0, 0.12)] bg-white rounded-lg shadow-xl">
+          {(shiftRequests.length > 0 || loadingShiftRequests) && (
+            <ShiftRequestsSection
+              loading={loadingShiftRequests}
+              shiftRequests={shiftRequests}
+            />
+          )}
+          {(overtimeRequests.length > 0 || loadingShiftRequests) && (
+            <OvertimeRequestsSection
+              loading={loadingShiftRequests}
+              overtimeRequests={overtimeRequests}
+            />
+          )}
+        </div>
+      )}
     </section>
   )
 }

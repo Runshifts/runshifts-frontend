@@ -1,27 +1,20 @@
 "use client"
 import { createSlice } from "@reduxjs/toolkit"
 import toast from "react-hot-toast"
-import { fetchShiftsAndOvertimeRequests } from "./thunks/shiftsAndOvertimeRequests.thunk"
+import { fetchShiftAndOvertimeRequests } from "./thunks/shiftsAndOvertimeRequests.thunk"
 
 const initialState = {
-  cache: {},
-  loading: false,
+  loading: true,
   error: null,
-  currentWeek: { start: new Date(Date.now()), end: new Date(Date.now()) },
-  shifts: [],
-  overtimes: [],
-  cache: {},
-  todaysSnapshot: null,
+  shiftRequests: [],
+  overtimeRequests: [],
+  hasFetchedRequests: false,
 }
 
 export const shiftsAndOvertimesSlice = createSlice({
   name: "shiftsAndOvertimeRequests",
   initialState,
   reducers: {
-    setCurrentWeek: (state, action) => {
-      if (action.payload.start && action.payload.end)
-        state.currentWeek = action.payload
-    },
     removeError: (state) => {
       state.error = null
     },
@@ -33,16 +26,22 @@ export const shiftsAndOvertimesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchShiftAndOvertimeRequests.fulfilled, (state, action) => {
-        console.log(action.payload)
+        if (action.payload.success) {
+          state.overtimeRequests = action.payload.overtimeRequests || []
+          state.shiftRequests = action.payload.shiftRequests || []
+        }
+        state.loading = false
       })
       .addCase(fetchShiftAndOvertimeRequests.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
-        toast.error(action.payload || "Something went wrong")
+        toast.error(
+          action.payload ||
+            "Something went wrong with fetching shift and overtime requests"
+        )
       })
   },
 })
 
-export const { updateLoading, removeError, setCurrentWeek } =
-  shiftsAndOvertimesSlice.actions
-export const shiftsAndOvertimesReducer = shiftsAndOvertimesSlice.reducer
+export const { updateLoading, removeError } = shiftsAndOvertimesSlice.actions
+export const shiftsAndOvertimeRequestsReducer = shiftsAndOvertimesSlice.reducer
