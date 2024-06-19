@@ -1,5 +1,4 @@
 import { useCallback, useContext, useMemo, useState } from "react"
-import { ShiftsManagementContext } from "../../../_providers/ShiftManagementContext"
 import { OrganizationContext } from "../../../_providers/OrganizationProvider"
 import FormLocationInput from "./FormLocationInput"
 import FormRadio from "./FormRadio"
@@ -13,8 +12,8 @@ import useAxios from "../../../_hooks/useAxios"
 import Spinner from "../../../_assets/svgs/Spinner"
 import DropDown from "../../../_components/AppComps/Dropdown"
 import { Option } from "../../../_components/AppComps/Select"
-import { DepartmentsAndPositionsContext } from "../../../_providers/DepartmentsAndPositionsProvider"
 import Modal from "../../../_components/AppComps/Modal"
+import { useSelector } from "react-redux"
 
 const getInitialState = (initialState = {}) => ({
   location: null,
@@ -36,7 +35,7 @@ export default function Form({
   currentWeek,
 }) {
   return (
-    <Modal open={show}>
+    <Modal open={show} zIndex={2000}>
       <NewShiftForm
         newShiftDetails={newShiftDetails}
         onCancel={onCancel}
@@ -58,12 +57,16 @@ function NewShiftForm({
   const [shiftData, setShiftData] = useState(() =>
     getInitialState({ location: newShiftDetails?.assignee?.location })
   )
-  const { organization, employees } = useContext(OrganizationContext)
-  const { shiftManagements, customShiftManagements } = useContext(
-    ShiftsManagementContext
+  const { organization, employees, shiftManagements, ...rest } = useSelector(
+    (store) => store.organization
   )
   const defaultShiftManageMents = useMemo(
-    () => shiftManagements.filter((it) => it.type === "default"),
+    () =>
+      shiftManagements.default ? Object.values(shiftManagements.default) : [],
+    [shiftManagements]
+  )
+  const customShiftManagements = useMemo(
+    () => [...shiftManagements.custom],
     [shiftManagements]
   )
   const shiftDurationDate = useMemo(
@@ -217,7 +220,6 @@ function NewShiftForm({
       ),
     []
   )
-
   if (newShiftDetails === null) return null
   return (
     <section className="w-[95dvw] py-[24px] px-[24px] md:px-[40px] max-w-[576px] bg-white rounded-[16px]">
@@ -324,7 +326,7 @@ function EmployeeInput({
   deselectUser,
   selectedPositions,
 }) {
-  const { employees } = useContext(OrganizationContext)
+  const { employees } = useSelector(store => store.organization)
 
   const InputDisplay = useCallback(
     ({ value }) => (
@@ -397,7 +399,7 @@ function PositionInput({
   handleSelect,
   deselectPosition,
 }) {
-  const { positions } = useContext(DepartmentsAndPositionsContext)
+  const { positions } = useSelector((store) => store.organization)
   const availableRoleOptions = useMemo(
     () =>
       positions.filter(

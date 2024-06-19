@@ -5,10 +5,11 @@ import { useCallback, useMemo, useState } from "react"
 import { getNextSunday } from "../../../_utils"
 import DropDown from "../../../_components/AppComps/Dropdown"
 import { Option } from "../../../_components/AppComps/Select"
+import { useSelector } from "react-redux"
 
 export default function ShiftDurationInputs({
   customShiftManagements = [],
-  defaultShiftManageMents = [], 
+  defaultShiftManageMents = [],
   handleScheduleSelection,
   startTime,
   endTime,
@@ -18,7 +19,7 @@ export default function ShiftDurationInputs({
   currentWeek,
 }) {
   const [selectedSchedule, setSelectedSchedule] = useState("")
-
+  const { organization } = useSelector((store) => store.organization)
   const handleSelect = useCallback(
     (selection) => {
       // console.log(selection)
@@ -58,12 +59,15 @@ export default function ShiftDurationInputs({
         (customShiftManagements.length === 0 && (
           <div>
             <p className="text-[14px] font-[400] leading-[20px]">
-              To add custom shifts head over to your
+              To add custom shifts head over to your{" "}
               <Link
-                href="/organization/settings"
+                href={`/${
+                  organization?.type === "non-profit"
+                    ? "non-profit"
+                    : "organization"
+                }/settings`}
                 className="text-[#4689FF] underline"
               >
-                {" "}
                 organisation settings
               </Link>
               .

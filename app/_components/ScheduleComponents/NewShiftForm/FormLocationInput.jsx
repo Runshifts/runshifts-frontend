@@ -1,14 +1,13 @@
-import { useContext } from "react"
-import { LocationsContext } from "../../../_providers/LocationsProvider"
 import DropDown from "../../../_components/AppComps/Dropdown"
 import FormInputAndLabel from "./FormInputAndLabel"
 import { Option } from "../../../_components/AppComps/Select"
+import { useSelector } from "react-redux"
 
 export default function FormLocationInput({
   currentLocation,
   updateCurrentValue,
 }) {
-  const { locations } = useContext(LocationsContext)
+  const { locations } = useSelector((store) => store.organization)
   return (
     <DropDown
       styleTrigger={false}

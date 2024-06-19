@@ -9,7 +9,7 @@ const initialState = {
   error: null,
   organization: null,
   employees: [],
-  shiftManagements: [],
+  shiftManagements: { default: {}, custom: []},
   locations: [],
   departments: [],
   positions: [],
@@ -37,8 +37,8 @@ export const organizationSlice = createSlice({
       .addCase(fetchOrganization.fulfilled, (state, action) => {
         state.loading = false
         state.organization = action.payload.organization
-        state.shiftManagements =
-          action.payload.organization.shiftManagements || []
+        state.shiftManagements = action.payload.organization
+          .shiftManagements || { default: {}, custom: [] }
         state.locations = action.payload.organization.locations || []
         state.isLoadingOrganization = false
       })
