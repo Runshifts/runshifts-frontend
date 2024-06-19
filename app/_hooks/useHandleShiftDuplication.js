@@ -58,7 +58,7 @@ export default function useHandleShiftDuplication({
       toastId = toast.success(data.message)
       setIsDuplicationInProgress(false)
     })
-    socket.on("weekly_duplication_error", (d) => {
+    socket.on("weekly_duplication_error", (data) => {
       toastId = toast.error(data.message)
       toast.remove(toastId)
       setIsDuplicationInProgress(false)
