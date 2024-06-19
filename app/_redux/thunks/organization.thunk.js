@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import DASHBOARD_URLS from "../../_urls/dashboardURLs"
 
 export const fetchOrganization = createAsyncThunk(
-  "payroll/fetchOrganization",
+  "organization/fetchOrganization",
   async (organizationId, { rejectWithValue }) => {
     const res = await axiosFetcher({
       url: `${DASHBOARD_URLS.organization(
@@ -20,7 +20,7 @@ export const fetchOrganization = createAsyncThunk(
 )
 
 export const fetchEmployees = createAsyncThunk(
-  "payroll/fetchEmployees",
+  "organization/fetchEmployees",
   async (organizationId, { rejectWithValue }) => {
     try {
       const res = await axiosFetcher({

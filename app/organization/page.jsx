@@ -66,7 +66,10 @@ export default function Dashboard() {
         {/* <MobileFilter /> */}
         <ul className="hidden lg:flex flex-wrap gap-[8px]">
           {renderShiftFilters({
-            onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
+            onWeekFilterSelect: (_, idx) => {
+              dispatch(setCurrentWeek(weekRanges[idx]))
+              jumpToWeek(idx)
+            },
           })}
         </ul>
       </div>

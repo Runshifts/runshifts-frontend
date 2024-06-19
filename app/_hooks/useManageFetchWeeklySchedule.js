@@ -19,7 +19,9 @@ export default function useManageFetchWeeklySchedule() {
     return filterShiftsByWeek(overtimes, currentWeek)
   }, [overtimes, currentWeek])
 
-  const [loadingShifts, setLoadingShifts] = useState(true)
+  const [loadingShifts, setLoadingShifts] = useState(
+    !cache[JSON.stringify(currentWeek.start)]
+  )
 
   const fetchShifts = useCallback(
     async (date) => {

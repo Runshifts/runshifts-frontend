@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import DASHBOARD_URLS from "../../_urls/dashboardURLs"
 
 export const fetchWeeklySchedule = createAsyncThunk(
-  "payroll/fetchWeeklySchedule",
+  "shifts/fetchWeeklySchedule",
   async ({ organizationId, date }, { rejectWithValue }) => {
     const res = await axiosFetcher({
       url: `${DASHBOARD_URLS.weeklySchedule(
@@ -21,7 +21,7 @@ export const fetchWeeklySchedule = createAsyncThunk(
 )
 
 export const fetchTodaysSnapshot = createAsyncThunk(
-  "payroll/fetchTodaysSnapshot",
+  "shifts/fetchTodaysSnapshot",
   async ({ organizationId }, { rejectWithValue }) => {
     console.log(organizationId, "ddfkaa")
     if (!organizationId) return {}

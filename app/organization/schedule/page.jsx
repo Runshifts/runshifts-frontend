@@ -1,5 +1,11 @@
 "use client"
-import React, { useCallback, useContext, useMemo, useState } from "react"
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 import CreateAndDuplicateShiftButtons from "../../_components/AppComps/CreateAndDuplicateShiftButtons"
 import ScheduleTable from "./ScheduleTable"
 import { ShiftAndOvertimeRequestsContext } from "../../_providers/Employer/ShiftAndOvertimeRequestsProvider"
@@ -17,33 +23,43 @@ import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import NewShiftForm from "./NewShiftForm/NewShiftForm"
 import useHandleShiftDuplication from "../../_hooks/useHandleShiftDuplication"
+import { setCurrentWeek } from "../../_redux/shifts.slice"
+import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
 
 export default function Schedule() {
   const [newShiftDetails, setNewShiftDetails] = useState(null)
-
+  const dispatch = useDispatch()
   const [selectedUser, setSelectedUser] = useState(null)
-  const { shiftRequests, overtimeRequests, loadingShiftRequests } = useContext(
-    ShiftAndOvertimeRequestsContext
+  // const { shiftRequests, overtimeRequests, loadingShiftRequests } = useContext(
+  //   ShiftAndOvertimeRequestsContext
+  // )
+  const { employees, organization, shiftManagements } = useSelector(
+    (store) => store.organization
   )
-  const { employees, organization } = useContext(OrganizationContext)
+
+  const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } =
+    useGetWeekRanges(new Date(Date.now()), 7)
+  useEffect(() => {
+    dispatch(setCurrentWeek(currentWeek))
+  }, [dispatch, currentWeek])
 
   const {
-    shiftsInCurrentWeek,
-    currentWeek,
-    goToNextWeek,
-    goToPrevWeek,
-    jumpToWeek,
-    weekRanges,
-    indexOfThePresentWeek,
+    listOfShiftsInCurrentWeek,
+    listOfOvertimesInCurrentWeek,
     loadingShifts,
-    updateAllShifts,
-    overtimesInCurrentWeek,
-  } = useContext(DashboardContext)
+  } = useManageFetchWeeklySchedule()
 
+  const { filteredShifts, renderShiftFilters } = useRenderShiftFilters(
+    [...listOfShiftsInCurrentWeek, ...listOfOvertimesInCurrentWeek],
+    weekRanges
+  )
   const { duplicateWeek, inProgress, duplicateSingleShift } =
     useHandleShiftDuplication({
       week: currentWeek,
-      updateShifts: updateAllShifts,
+      // updateShifts: updateAllShifts,
     })
 
   const handleAddShiftClick = useCallback(
@@ -62,21 +78,14 @@ export default function Schedule() {
 
   const weekWithPresentDateInIt = useMemo(
     () => ({
-      ...(weekRanges[indexOfThePresentWeek] || {
-        start: getPreviousMonday(new Date(Date.now())),
-        end: getNextSunday(new Date(Date.now())),
-      }),
+      start: getPreviousMonday(new Date(Date.now())),
+      end: getNextSunday(new Date(Date.now())),
     }),
-    [indexOfThePresentWeek, weekRanges]
+    []
   )
   const isPastWeek = useMemo(() => {
     return currentWeek.start.getTime() < weekWithPresentDateInIt.start.getTime()
   }, [weekWithPresentDateInIt.start, currentWeek.start])
-  const { filteredShifts, renderShiftFilters, setWeekFilter } =
-    useRenderShiftFilters(
-      [...shiftsInCurrentWeek, ...overtimesInCurrentWeek],
-      weekRanges
-    )
   const { allDays } = useMemo(() => {
     const start = getPreviousMonday(new Date(currentWeek.start))
     const end = getNextSunday(new Date(currentWeek.start))
@@ -110,7 +119,7 @@ export default function Schedule() {
   return (
     <section className="p-3 h-screen">
       <>
-        <NewShiftForm
+        {/* <NewShiftForm
           show={newShiftDetails !== null}
           newShiftDetails={newShiftDetails}
           onCancel={() => setNewShiftDetails(null)}
@@ -118,7 +127,7 @@ export default function Schedule() {
             updateAllShifts([newShift])
           }}
           currentWeek={currentWeek}
-        />
+        /> */}
       </>
       <div className="flex items-start flex-col gap-6 pt-6 pb-4 relative z-[20]">
         <div className="flex items-center justify-between w-full">
@@ -131,19 +140,16 @@ export default function Schedule() {
         </div>
         <ul className="flex list-none gap-2">
           <DateRangePicker
-            goToNextWeek={() => {
-              setWeekFilter(null)
-              goToNextWeek()
-            }}
-            goToPrevWeek={() => {
-              goToPrevWeek()
-              setWeekFilter(null)
-            }}
+            goToNextWeek={() => goToNextWeek()}
+            goToPrevWeek={() => goToPrevWeek()}
             currentWeek={currentWeek}
           />
           <ul className="hidden md:flex gap-2">
             {renderShiftFilters({
-              onWeekFilterSelect: (_, idx) => jumpToWeek(idx),
+              onWeekFilterSelect: (_, idx) => {
+                dispatch(setCurrentWeek(weekRanges[idx]))
+                jumpToWeek(idx)
+              },
             })}
           </ul>
         </ul>
@@ -164,14 +170,14 @@ export default function Schedule() {
         />
       </div>
       <div className="text-[#252525] min-h-[55dvh] flex flex-col items-start gap-y-[30px] my-4 p-4 shadow-[0px 2px 8px 0px rgba(0, 0, 0, 0.12)] bg-white rounded-lg shadow-xl">
-        <ShiftRequestsSection
+        {/* <ShiftRequestsSection
           loading={loadingShiftRequests}
           shiftRequests={shiftRequests}
         />
         <OvertimeRequestsSection
           loading={loadingShiftRequests}
           overtimeRequests={overtimeRequests}
-        />
+        /> */}
       </div>
     </section>
   )
