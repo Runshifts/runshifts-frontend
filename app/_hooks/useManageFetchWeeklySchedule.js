@@ -1,20 +1,14 @@
 "use client"
-import { useCallback, useContext, useEffect, useMemo, useState } from "react"
-import useAxios from "./useAxios"
-import DASHBOARD_URLS from "../_urls/dashboardURLs"
-import { OrganizationContext } from "../_providers/OrganizationProvider"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import {
-  fetchTodaysSnapshot,
-  fetchWeeklySchedule,
-} from "../_redux/thunks/shifts.thunk"
+import { fetchWeeklySchedule } from "../_redux/thunks/shifts.thunk"
 import { filterShiftsByWeek } from "../_utils/shifts"
 
 export default function useManageFetchWeeklySchedule() {
   const { organization } = useSelector((store) => store.organization)
   const dispatch = useDispatch()
-  const { currentWeek, cache, shifts, overtimes } = useSelector(
+  const { currentWeek, cache, shifts, overtimes, todaysSnapshot } = useSelector(
     (store) => store.shiftsAndOvertimes
   )
   const listOfShiftsInCurrentWeek = useMemo(() => {
@@ -39,17 +33,12 @@ export default function useManageFetchWeeklySchedule() {
         setLoadingShifts(false)
       })
     },
-    [organization, cache]
+    [organization?._id, cache, dispatch]
   )
 
   useEffect(() => {
     fetchShifts(currentWeek.start)
   }, [fetchShifts, currentWeek.start])
-
-  useEffect(() => {
-    if (organization?._id)
-      dispatch(fetchTodaysSnapshot({ organizationId: organization?._id }))
-  }, [dispatch, organization?._id])
 
   return {
     loadingShifts,

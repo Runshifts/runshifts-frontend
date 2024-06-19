@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react"
-import { formatHourAsAmOrPm } from "../_utils"
-import Pill from "../_components/AppComps/Pill"
+import { formatHourAsAmOrPm } from "../../_utils"
+import Pill from "../AppComps/Pill"
 
 export default function Calendar({ shifts, loading }) {
   const daysOfTheWeek = [1, 2, 3, 4, 5, 6, 7]

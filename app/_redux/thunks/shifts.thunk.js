@@ -23,6 +23,8 @@ export const fetchWeeklySchedule = createAsyncThunk(
 export const fetchTodaysSnapshot = createAsyncThunk(
   "payroll/fetchTodaysSnapshot",
   async ({ organizationId }, { rejectWithValue }) => {
+    console.log(organizationId, "ddfkaa")
+    if (!organizationId) return {}
     const res = await axiosFetcher({
       url: `${DASHBOARD_URLS.snapshot(organizationId ? organizationId : null)}`,
       method: "get",

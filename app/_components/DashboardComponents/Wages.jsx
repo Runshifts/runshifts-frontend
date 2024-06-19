@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { SnapshotCard } from "./Snapshot"
-import { getNextSunday, getPreviousMonday } from "../_utils"
+import { getNextSunday, getPreviousMonday } from "../../_utils"
 
 function Snapshot({ snapshotData }) {
   const today = useMemo(() => new Date(Date.now()).toLocaleDateString("en-us"), [])

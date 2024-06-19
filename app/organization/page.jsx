@@ -1,15 +1,13 @@
 "use client"
 import React, { useContext, useEffect, useMemo } from "react"
 import DateRangePicker from "../_components/AppComps/Datepicker"
-import Table from "./Table"
-import Snapshot from "./Snapshot"
-import Wages from "./Wages"
+import Table from "../_components/DashboardComponents/Table"
+import Snapshot from "../_components/DashboardComponents/Snapshot"
+import Wages from "../_components/DashboardComponents/Wages"
 import Heading from "../_components/Headings"
-import Calender from "./Calender"
+import Calender from "../_components/DashboardComponents/Calender"
 import { UserContext } from "../_providers/UserProvider"
-import {
-  groupShiftsByDayOfTheWeek,
-} from "../_utils/shifts"
+import { groupShiftsByDayOfTheWeek } from "../_utils/shifts"
 import useRenderShiftFilters from "../_hooks/useRenderShiftFilters"
 import useManageFetchWeeklySchedule from "../_hooks/useManageFetchWeeklySchedule"
 import useGetWeekRanges from "../_hooks/useGetWeekRanges"
@@ -17,9 +15,11 @@ import { useDispatch } from "react-redux"
 import { setCurrentWeek } from "../_redux/shifts.slice"
 import { useSelector } from "react-redux"
 import useGetTodaysShiftsTableGrouping from "../_hooks/useGetTodaysShiftsTableGrouping"
+import { fetchTodaysSnapshot } from "../_redux/thunks/shifts.thunk"
 
 export default function Dashboard() {
   const { user } = useContext(UserContext)
+  const { organization } = useSelector((store) => store.organization)
   const { todaysSnapshot } = useSelector((store) => store.shiftsAndOvertimes)
   const dispatch = useDispatch()
   const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } =
@@ -47,7 +47,10 @@ export default function Dashboard() {
       ...listOfShiftsInCurrentWeek,
       ...listOfOvertimesInCurrentWeek,
     ])
-
+  useEffect(() => {
+    if (organization?._id && todaysSnapshot === null)
+      dispatch(fetchTodaysSnapshot({ organizationId: organization?._id }))
+  }, [dispatch, organization?._id, todaysSnapshot])
   return (
     <section className="p-3 min-h-screen">
       <div className="flex items-center justify-between py-3">

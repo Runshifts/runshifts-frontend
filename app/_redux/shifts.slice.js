@@ -3,6 +3,21 @@ import { createSlice } from "@reduxjs/toolkit"
 import toast from "react-hot-toast"
 import { fetchTodaysSnapshot, fetchWeeklySchedule } from "./thunks/shifts.thunk"
 
+/*
+    todaysSnapshot, if not null, looks like 
+    {   
+      hoursOfWorkScheduledThisWeek: 0,
+      hoursOfWorkScheduledToday: 0,
+      pendingShiftApplications: 0,
+      projectedLabourCostsThisWeek: 0,
+      projectedLabourCostsToday: 0,
+      shiftsClockedInToday: 0,
+      unfilledOpenShifts: 0,
+      usersCurrentlyOnBreak: 0,
+      usersWithTimeOff: 0,
+  }
+*/
+
 const initialState = {
   cache: {},
   loading: false,
@@ -11,17 +26,7 @@ const initialState = {
   shifts: [],
   overtimes: [],
   cache: {},
-  todaysSnapshot: {
-    hoursOfWorkScheduledThisWeek: 0,
-    hoursOfWorkScheduledToday: 0,
-    pendingShiftApplications: 0,
-    projectedLabourCostsThisWeek: 0,
-    projectedLabourCostsToday: 0,
-    shiftsClockedInToday: 0,
-    unfilledOpenShifts: 0,
-    usersCurrentlyOnBreak: 0,
-    usersWithTimeOff: 0,
-  },
+  todaysSnapshot: null,
 }
 
 export const shiftsAndOvertimesSlice = createSlice({
@@ -59,7 +64,7 @@ export const shiftsAndOvertimesSlice = createSlice({
         toast.error(action.payload || "Something went wrong")
       })
       .addCase(fetchTodaysSnapshot.fulfilled, (state, action) => {
-        console.log(action.payload)
+        state.todaysSnapshot = { ...(action.payload.snapshot || {}) }
       })
       .addCase(fetchTodaysSnapshot.rejected, (state, action) => {
         state.loading = false

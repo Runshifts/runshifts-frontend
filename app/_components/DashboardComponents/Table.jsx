@@ -1,6 +1,6 @@
-import React, { Fragment, useMemo } from "react"
-import Pill from "../_components/AppComps/Pill"
-import { formatHourAsAmOrPm } from "../_utils"
+import React, { useMemo } from "react"
+import Pill from "../AppComps/Pill"
+import { formatHourAsAmOrPm } from "../../_utils"
 
 const ScrollingTimeTable = ({ groupedShifts, title }) => {
   const hours = Array.from({ length: 24 }, (_, index) => index) // Generate hours from midnight to 11pm
@@ -41,10 +41,20 @@ const ScrollingTimeTable = ({ groupedShifts, title }) => {
                     key={index}
                   >
                     {current.shiftsStart[hour]?.map((item) => (
-                      <p key={item._id} className="text-[14px] text-info-500 leading-[20px] font-[600]">Start</p>
+                      <p
+                        key={item._id}
+                        className="text-[14px] text-info-500 leading-[20px] font-[600]"
+                      >
+                        Start
+                      </p>
                     ))}
                     {current.shiftsEnd[hour]?.map((item) => (
-                      <p key={item._id} className="text-[14px] text-info-500 leading-[20px] font-[600]">End</p>
+                      <p
+                        key={item._id}
+                        className="text-[14px] text-info-500 leading-[20px] font-[600]"
+                      >
+                        End
+                      </p>
                     ))}
                   </TableData>
                 ))}
