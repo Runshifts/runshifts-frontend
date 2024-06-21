@@ -36,7 +36,7 @@ const ScheduleTable = ({
         <table className="min-w-full bg-[#EFEDED] rounded-lg min-h-full">
           <thead className="text-[#252525]">
             <tr className="border-b">
-              <th className="sticky z-[10] outline-solid outline outline-info-800 left-0 bg-[#EFEDED] py-2 px-4 border-b border-r border-gray-800">
+              <th className="sticky z-[100] outline-solid outline outline-info-800 left-0 bg-[#EFEDED] py-2 px-4 border-b border-r border-gray-800">
                 <div className="relative text-left whitespace-nowrap">
                   <UsersFilter
                     updateCurrentValue={handleUserFilterSelect}

@@ -3,6 +3,7 @@
 import { useContext, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import {
+  fetchDepartmentsAndPositions,
   fetchEmployees,
   fetchOrganization,
 } from "../_redux/thunks/organization.thunk"
@@ -36,6 +37,10 @@ export default function Layout({ children }) {
   useEffect(() => {
     if (organization?._id) dispatch(fetchEmployees(organization?._id))
   }, [dispatch, organization?._id])
+  useEffect(() => {
+    if (organization?.industry)
+      dispatch(fetchDepartmentsAndPositions(organization.industry?.name))
+  }, [dispatch, organization?.industry])
 
   return (
     <DashboardLayout

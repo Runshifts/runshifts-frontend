@@ -249,3 +249,7 @@ export function isWithinDay(mainDate, dateToCheck) {
 
   return year1 === year2 && month1 === month2 && day1 === day2
 }
+
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}

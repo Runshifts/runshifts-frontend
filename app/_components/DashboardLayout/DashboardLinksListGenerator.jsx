@@ -82,7 +82,7 @@ export default function DashboardLinksListGenerator({
     variant !== "employee" &&
     variant !== "organization" &&
     variant !== "non-profit" &&
-    variant !== "voluteer"
+    variant !== "volunteer"
   )
     return null
   return (

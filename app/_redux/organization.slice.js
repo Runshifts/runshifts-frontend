@@ -1,6 +1,6 @@
 "use client"
 import { createSlice } from "@reduxjs/toolkit"
-import { fetchEmployees, fetchOrganization } from "./thunks/organization.thunk"
+import { fetchDepartmentsAndPositions, fetchEmployees, fetchOrganization } from "./thunks/organization.thunk"
 import toast from "react-hot-toast"
 
 const initialState = {
@@ -53,6 +53,16 @@ export const organizationSlice = createSlice({
         state.isLoadingEmployees = false
       })
       .addCase(fetchEmployees.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+        toast.error(action.payload || "Something went wrong")
+      })
+      .addCase(fetchDepartmentsAndPositions.fulfilled, (state, action) => {
+        state.loading = false
+        state.departments = action.payload.departments
+        state.positions = action.payload.positions
+      })
+      .addCase(fetchDepartmentsAndPositions.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
         toast.error(action.payload || "Something went wrong")

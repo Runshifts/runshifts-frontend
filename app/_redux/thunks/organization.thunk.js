@@ -36,3 +36,30 @@ export const fetchEmployees = createAsyncThunk(
     }
   }
 )
+
+export const fetchDepartmentsAndPositions = createAsyncThunk(
+  "organization/fetchDepartmentsAndPositions",
+  async (organizationIndustry, { rejectWithValue }) => {
+    try {
+      const [departmentsRes, positionsRes] = await Promise.all([
+        await axiosFetcher({
+          url: `/industries/${organizationIndustry?.toLowerCase()}/departments`,
+          method: "get",
+        }),
+        await axiosFetcher({
+          url: `/industries/${organizationIndustry?.toLowerCase()}/positions`,
+          method: "get",
+        }),
+      ])
+      const departments =
+        departmentsRes.statusCode === 200 ? departmentsRes.results : []
+      const positions =
+        positionsRes.statusCode === 200 ? positionsRes.results : []
+      return { departments, positions }
+    } catch (err) {
+      return rejectWithValue(
+        err?.message || "Unable to fetch departments and positions"
+      )
+    }
+  }
+)
