@@ -142,6 +142,7 @@ export default function Schedule() {
           duplicateShift={async (shiftId) => {
             await duplicateSingleShift(organization?._id, shiftId)
           }}
+          isNonProfit
         />
       </div>
       {(loadingShiftRequests ||

@@ -24,6 +24,7 @@ const ScheduleTable = ({
   isPastWeek = true,
   handleUserFilterSelect,
   selectedUser,
+  isNonProfit,
 }) => {
   const daysOfTheWeek = Array.from({ length: 7 }, (_, index) => index + 1)
   const assigneesAndShifts = useMemo(() => {
@@ -85,6 +86,7 @@ const ScheduleTable = ({
                 assignee={current.assignee}
                 shiftsGroupedByDays={current.shifts}
                 isPastWeek={isPastWeek}
+                isNonProfit={isNonProfit}
               />
             ))}
             {loading && (
@@ -112,6 +114,7 @@ function AssigneeRow({
   isPastWeek,
   daysOfTheWeek,
   allDays,
+  isNonProfit,
 }) {
   const assigneeModified = useMemo(
     () => ({
@@ -158,6 +161,7 @@ function AssigneeRow({
           assignee={assigneeModified}
           hoursScheduledForTheWeek={hoursScheduledForTheWeek}
           isAssigned={assignee !== null}
+          isNonProfit={isNonProfit}
         />
       </td>
       {daysOfTheWeek.map((day, listIdx, all) => (
@@ -269,7 +273,8 @@ function Shift({
             <span className="font-400">
               Overtime -{" "}
               {new Date(shift.endTime).getHours() -
-                new Date(shift.startTime).getHours()}hrs
+                new Date(shift.startTime).getHours()}
+              hrs
             </span>
           )}
           {isDroppedOff && shift.assignee !== null && (
@@ -294,7 +299,12 @@ function Shift({
   )
 }
 
-function AssigneePill({ assignee = {}, isAssigned, hoursScheduledForTheWeek }) {
+function AssigneePill({
+  assignee = {},
+  isAssigned,
+  hoursScheduledForTheWeek,
+  isNonProfit,
+}) {
   return (
     <div
       className="flex justify-start items-center gap-[4px] mx-auto w-full whitespace-nowrap max-w-[98px] text-ellipsis overflow-hidden py-[4px] px-[6px] text-info-600 rounded-[50px] bg-red-200"
@@ -318,7 +328,7 @@ function AssigneePill({ assignee = {}, isAssigned, hoursScheduledForTheWeek }) {
               assignee.email?.split("@"))}
           {!isAssigned && <>Not assigned</>}
         </h6>
-        {isAssigned && (
+        {isAssigned && !isNonProfit && (
           <p className="text-[10px]">
             {hoursScheduledForTheWeek} / ${assignee?.hourlyRate}
           </p>
