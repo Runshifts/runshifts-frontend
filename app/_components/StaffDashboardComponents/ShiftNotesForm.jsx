@@ -1,5 +1,5 @@
 import { useCallback, useContext, useMemo, useState } from "react"
-import { SubmitButton } from "../../_components/Auth/Inputs"
+import { SubmitButton } from "../Auth/Inputs"
 import NOTES_URLS from "../../_urls/notesURLS"
 import useAxios from "../../_hooks/useAxios"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"

@@ -20,9 +20,12 @@ export default function Layout({ children }) {
   useEffect(() => {
     dispatch(fetchOrganization()).then((res) => {
       if (typeof res.payload === "string") {
-        if (res.payload.toLowerCase() === "organization not found")
+        if (
+          res.payload.toLowerCase() === "organization not found" &&
+          (user.type === "director" || user.type === "employer")
+        )
           router.push("/new-organization?type=non-profit")
-        else if (res.payload.toLowerCase() !== "unauthorized") {
+        else {
           localStorage.clear()
           router.refresh()
           router.push("/signup?type=non-profit")

@@ -61,7 +61,7 @@ export const formatHourAsAmOrPm = (hour) => {
 }
 
 export const formatDate = (date, options = {}) => {
-  return date.toLocaleDateString("en-US", {
+  return date?.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     ...options,

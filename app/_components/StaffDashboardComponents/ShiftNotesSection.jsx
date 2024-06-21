@@ -1,12 +1,12 @@
 import { useContext, useEffect, useMemo } from "react"
 import ShiftNotesForm, { SeverityPill } from "./ShiftNotesForm"
 import { NotesContext } from "../../_providers/NotesProvider"
-import UserHeader from "../../_components/AppComps/UserHeader"
+import UserHeader from "../AppComps/UserHeader"
 import Image from "next/image"
 import { UserContext } from "../../_providers/UserProvider"
 import placeholderImage from "../../_assets/img/user.png"
 import { timeAgo } from "../../_utils"
-import NoteLikeChatSkeleton from "../../_components/Skeletons/NoteLikeChatSkeleton"
+import NoteLikeChatSkeleton from "../Skeletons/NoteLikeChatSkeleton"
 
 export default function ShiftNotesSection({ shift }) {
   return (
@@ -24,14 +24,12 @@ export default function ShiftNotesSection({ shift }) {
   )
 }
 
-export function ShiftNotes({
-  shiftId,
-  notesToDisplay,
-}) {
+export function ShiftNotes({ shiftId, notesToDisplay }) {
   const { allNotes, fetchNotes, hasFetchedNotes, loadingNotes } =
     useContext(NotesContext)
   const notesForShift = useMemo(
-    () => notesToDisplay || allNotes.filter((note) => note.shift?._id === shiftId),
+    () =>
+      notesToDisplay || allNotes.filter((note) => note.shift?._id === shiftId),
     [allNotes, shiftId, notesToDisplay]
   )
   const sortedNotes = useMemo(
@@ -74,7 +72,9 @@ const NoteLikeChat = ({ note }) => {
   return (
     <article
       className={`flex items-start gap-2 ${
-        isOwnNote ? "justify-start" : "flex-row-reverse text-right justify-start"
+        isOwnNote
+          ? "justify-start"
+          : "flex-row-reverse text-right justify-start"
       }`}
     >
       <Image

@@ -1,14 +1,18 @@
 import React, { Fragment, useContext, useState } from "react"
 import { useCallback, useMemo } from "react"
-import { daysOfTheWeek, formatHourAsAmOrPm, isDateInThePast } from "../_utils"
-import Pill from "../_components/AppComps/Pill"
-import placeholderImage from "../_assets/img/user.png"
+import {
+  daysOfTheWeek,
+  formatHourAsAmOrPm,
+  isDateInThePast,
+} from "../../_utils"
+import Pill from "../AppComps/Pill"
+import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
-import { UserContext } from "../_providers/UserProvider"
-import Modal from "../_components/AppComps/Modal"
-import ShiftApplicationForm from "./my-shifts/ShiftApplicationForm"
-import OwnShiftDetails from "./my-shifts/OwnShiftDetails"
-import ShiftSwapDetails from "./my-shifts/ShiftSwapDetails"
+import { UserContext } from "../../_providers/UserProvider"
+import Modal from "../AppComps/Modal"
+import ShiftApplicationForm from "./ShiftApplicationForm"
+import OwnShiftDetails from "./OwnShiftDetails"
+import ShiftSwapDetails from "./ShiftSwapDetails"
 
 export function ShiftPill({ shift = {} }) {
   const isPending = useMemo(

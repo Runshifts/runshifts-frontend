@@ -1,5 +1,5 @@
 "use client"
-import Modal from "../../_components/AppComps/Modal"
+import Modal from "../AppComps/Modal"
 import ShiftApplicationForm from "./ShiftApplicationForm"
 
 export default function OvertimeApplicationFormModal({

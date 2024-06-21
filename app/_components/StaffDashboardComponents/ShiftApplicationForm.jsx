@@ -1,13 +1,13 @@
 import { useCallback, useContext, useState } from "react"
 import { formatDate, formatHourAsAmOrPm } from "../../_utils"
-import { SubmitButton } from "../../_components/Auth/Inputs"
+import { SubmitButton } from "../Auth/Inputs"
 import FormInputAndLabel from "../../organization/schedule/NewShiftForm/FormInputAndLabel"
 import useAxios from "../../_hooks/useAxios"
 import toast from "react-hot-toast"
 import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
-import DropDown from "../../_components/AppComps/Dropdown"
-import { Option } from "../../_components/AppComps/Select"
+import DropDown from "../AppComps/Dropdown"
+import { Option } from "../AppComps/Select"
 
 export default function ShiftApplicationForm({
   shift = {},

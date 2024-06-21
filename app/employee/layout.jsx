@@ -3,6 +3,7 @@
 import { useContext, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import {
+  fetchDepartmentsAndPositions,
   fetchEmployees,
   fetchOrganization,
 } from "../_redux/thunks/organization.thunk"
@@ -21,20 +22,28 @@ export default function Layout({ children }) {
     if (user)
       dispatch(fetchOrganization(user?.organization)).then((res) => {
         if (typeof res.payload === "string") {
-          if (res.payload.toLowerCase() === "organization not found")
+          if (
+            res.payload.toLowerCase() === "organization not found" &&
+            (user.type === "director" || user.type === "employer")
+          )
             router.push("/new-organization?type=for-profit")
-          else if (res.payload.toLowerCase() !== "unauthorized") {
+          else {
             localStorage.clear()
             router.refresh()
             router.push("/signup?type=for-profit")
           }
         }
       })
-  }, [dispatch, router])
+  }, [dispatch, router, user])
 
   useEffect(() => {
     if (organization?._id) dispatch(fetchEmployees(organization?._id))
   }, [dispatch, organization?._id, user])
+
+  useEffect(() => {
+    if (organization?.industry)
+      dispatch(fetchDepartmentsAndPositions(organization.industry?.name))
+  }, [dispatch, organization?.industry])
 
   return (
     <DashboardLayout
@@ -45,7 +54,7 @@ export default function Layout({ children }) {
         />
       )}
     >
-      {/* {children} */}
+      {children}
     </DashboardLayout>
   )
 }

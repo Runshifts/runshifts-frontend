@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
-import StatisticsCard from "../_components/AppComps/StatisticsCard"
-import Timer from "../_assets/svgs/Timer"
+import StatisticsCard from "../AppComps/StatisticsCard"
+import Timer from "../../_assets/svgs/Timer"
 import { FaRegEye } from "react-icons/fa"
 
 function MyActivities({ activityData, isLoading }) {
