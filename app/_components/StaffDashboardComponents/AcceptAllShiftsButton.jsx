@@ -31,7 +31,7 @@ export default function AcceptAllShiftsButton({
   return (
     <button
       onClick={handleAcceptAllShifts}
-      disabled={isDisabled || loading}
+      disabled={(loading || isDisabled) ? true : false}
       className="px-[12px] py-[6px] disabled:opacity-[.5] disabled:cursor-not-allowed first-letter:capitalize flex items-center gap-[4px] rounded-sm bg-primary-600 text-white leading-[20px] font-[500]"
     >
       {loading ? (

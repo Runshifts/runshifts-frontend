@@ -1,57 +1,92 @@
 "use client"
-import React, { useCallback, useContext, useMemo, useState } from "react"
-import Calender from "../EmployeeCalender"
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
+import Calender from "../../_components/StaffDashboardComponents/EmployeeCalender"
 import Heading from "../../_components/Headings"
 import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 import { UserContext } from "../../_providers/UserProvider"
-import { groupShiftsByDayOfTheWeek } from "../../_utils/shifts"
+import {
+  filterShiftsByWeek,
+  groupShiftsByDayOfTheWeek,
+} from "../../_utils/shifts"
 import DateRangePicker from "../../_components/AppComps/Datepicker"
-import RequestedShifts from "./RequestedShifts"
-import ShiftSwapRequests from "./ShiftSwapRequests"
-import AcceptAllShiftsButton from "./AcceptAllShiftsButton"
+import RequestedShifts from "../../_components/StaffDashboardComponents/RequestedShifts"
+import ShiftSwapRequests from "../../_components/StaffDashboardComponents/ShiftSwapRequests"
+import AcceptAllShiftsButton from "../../_components/StaffDashboardComponents/AcceptAllShiftsButton"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
-import OvertimeApplicationFormModal from "./OvertimeApplication"
+import OvertimeApplicationFormModal from "../../_components/StaffDashboardComponents/OvertimeApplication"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { setCurrentWeek } from "../../_redux/shifts.slice"
+import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
+import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
 
 function page() {
-  const { allShifts } = useContext(EmployeeDashboardContext)
+  const { shifts } = useSelector((store) => store.shiftsAndOvertimes)
   const requestableOvertimeShifts = useMemo(
-    () => allShifts.filter((shift) => !shift.assignee),
-    [allShifts]
+    () => shifts.filter((shift) => !shift.assignee),
+    [shifts]
   )
   const [showOvertimeApplicationModal, setShowOvertimeApplicationModal] =
     useState(false)
+  const { user } = useContext(UserContext)
+  const dispatch = useDispatch()
+  const { goToNextWeek, currentWeek, goToPrevWeek } = useGetWeekRanges(
+    new Date(Date.now()),
+    7
+  )
+  useEffect(() => {
+    dispatch(setCurrentWeek(currentWeek))
+  }, [dispatch, currentWeek])
 
   const {
-    goToNextWeek,
-    goToPrevWeek,
-    currentWeek,
+    listOfShiftsInCurrentWeek,
+    listOfOvertimesInCurrentWeek,
     loadingShifts,
-    shiftsInCurrentWeek,
-    updateAllShifts,
-    swapRequests,
-    loadingSwapRequests,
-  } = useContext(EmployeeDashboardContext)
+  } = useManageFetchWeeklySchedule()
 
-  const { user } = useContext(UserContext)
-  const { organization } = useContext(OrganizationContext)
-  const shiftsGroupedByDays = useMemo(() => {
-    return groupShiftsByDayOfTheWeek(shiftsInCurrentWeek)
-  }, [shiftsInCurrentWeek])
+  const usersShifts = useMemo(() => {
+    return groupShiftsByDayOfTheWeek(
+      listOfShiftsInCurrentWeek.filter(
+        (shift) =>
+          shift.assignee?._id === user?._id && shift.isDroppedOff === false
+      )
+    )
+  }, [listOfShiftsInCurrentWeek, user?._id])
 
-  const handleAcceptAllSucccess = useCallback(
+  const usersOvertimes = useMemo(
     () =>
-      updateAllShifts(
-        shiftsInCurrentWeek.map((shift) =>
-          shift.isDroppedOff === false &&
-          shift.isAccepted === false &&
-          shift.assignee?._id === user?._id &&
-          new Date(shift.startTime) > new Date()
-            ? { ...shift, isAccepted: true }
-            : shift
-        )
+      groupShiftsByDayOfTheWeek(
+        filterShiftsByWeek(listOfOvertimesInCurrentWeek, currentWeek)
       ),
-    [shiftsInCurrentWeek, updateAllShifts, user?._id]
+    [listOfOvertimesInCurrentWeek, currentWeek]
   )
+  const { organization } = useSelector((store) => store.organization)
+  const shiftsGroupedByDays = useMemo(() => {
+    return groupShiftsByDayOfTheWeek([
+      ...listOfShiftsInCurrentWeek,
+      ...listOfOvertimesInCurrentWeek,
+    ])
+  }, [listOfShiftsInCurrentWeek, listOfOvertimesInCurrentWeek])
+
+  const handleAcceptAllSucccess = useCallback(() => {
+    const updateShift = (shift) =>
+      shift.isDroppedOff === false &&
+      shift.isAccepted === false &&
+      shift.assignee?._id === user?._id &&
+      new Date(shift.startTime) > new Date()
+        ? { ...shift, isAccepted: true }
+        : shift
+    dispatch(
+      addNewShifts({ shifts: listOfShiftsInCurrentWeek.map(updateShift) })
+    )
+  }, [listOfShiftsInCurrentWeek, user?._id, dispatch])
+
   return (
     <section className="min-h-screen px-4 pb-4">
       <div className="flex flex-col gap-6 justify-between pt-6 pb-4">
@@ -100,15 +135,15 @@ function page() {
           showOvertimes={false}
         />
       </div>
-      <div className="mb-4 rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
+      {/* <div className="mb-4 rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
         <ShiftSwapRequests
           swapRequests={swapRequests}
           loading={loadingSwapRequests}
         />
-      </div>
-      <div className="rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
+      </div> */}
+      {/* <div className="rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
         <RequestedShifts />
-      </div>
+      </div> */}
     </section>
   )
 }

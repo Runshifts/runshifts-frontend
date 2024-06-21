@@ -31,7 +31,7 @@ const initialState = {
 }
 
 export const shiftsAndOvertimesSlice = createSlice({
-  name: "shifts",
+  name: "shiftsAndOvertimes",
   initialState,
   reducers: {
     setCurrentWeek: (state, action) => {
@@ -48,10 +48,17 @@ export const shiftsAndOvertimesSlice = createSlice({
     addNewShifts: (state, action) => {
       if (Array.isArray(action.payload.shifts))
         state.shifts = mergeArrays(
-          [...state.shifts],
           action.payload.shifts,
+          [...state.shifts],
           "_id"
         )
+    },
+    acceptAllShifts: (state, action) => {
+      if (Array.isArray(action.payload.shifts))
+        state.shifts = state.shifts.map((shift) => ({
+          ...shift,
+          isAccepted: shift.isDeclined === false,
+        }))
     },
   },
   extraReducers: (builder) => {
@@ -63,7 +70,8 @@ export const shiftsAndOvertimesSlice = createSlice({
         ]
         state.shifts = mergeArrays(
           [...state.shifts],
-          [...action.payload.schedule.shifts], "_id"
+          [...action.payload.schedule.shifts],
+          "_id"
         )
         state.cache = {
           ...state.cache,
