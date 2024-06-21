@@ -32,7 +32,6 @@ export default function useManageFetchWeeklySchedule() {
       dispatch(
         fetchWeeklySchedule({ organizationId: organization._id, date })
       ).then((res) => {
-        console.log(res)
         setLoadingShifts(false)
       })
     },

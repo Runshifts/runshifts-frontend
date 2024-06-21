@@ -55,7 +55,7 @@ export default function Schedule() {
   const { duplicateWeek, inProgress, duplicateSingleShift } =
     useHandleShiftDuplication({
       week: currentWeek,
-      updateShifts: (shifts) => dispatch(addNewShifts(shifts)),
+      updateShifts: (shifts) => dispatch(addNewShifts({ shifts })),
     })
 
   const handleAddShiftClick = useCallback(

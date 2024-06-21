@@ -2,6 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import toast from "react-hot-toast"
 import { fetchTodaysSnapshot, fetchWeeklySchedule } from "./thunks/shifts.thunk"
+import { mergeArrays } from "../_utils"
 
 /*
     todaysSnapshot, if not null, looks like 
@@ -45,8 +46,12 @@ export const shiftsAndOvertimesSlice = createSlice({
         typeof action.payload === "boolean" ? action.payload : !state.loading
     },
     addNewShifts: (state, action) => {
-      if (Array.isArray(action.payload))
-        state.shifts = [...state.shifts, ...action.payload]
+      if (Array.isArray(action.payload.shifts))
+        state.shifts = mergeArrays(
+          [...state.shifts],
+          action.payload.shifts,
+          "_id"
+        )
     },
   },
   extraReducers: (builder) => {
@@ -56,7 +61,10 @@ export const shiftsAndOvertimesSlice = createSlice({
           ...state.overtimes,
           ...action.payload.schedule.overtimes,
         ]
-        state.shifts = [...state.shifts, ...action.payload.schedule.shifts]
+        state.shifts = mergeArrays(
+          [...state.shifts],
+          [...action.payload.schedule.shifts], "_id"
+        )
         state.cache = {
           ...state.cache,
           [JSON.stringify(action.payload.date)]: true,
