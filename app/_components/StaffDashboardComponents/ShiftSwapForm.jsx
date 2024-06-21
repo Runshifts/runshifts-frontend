@@ -1,15 +1,16 @@
 import { useCallback, useContext, useMemo, useState } from "react"
-import { formatDate, formatHourAsAmOrPm, isDateInThePast } from "../../_utils"
+import { formatDate, formatHourAsAmOrPm } from "../../_utils"
 import { SubmitButton } from "../Auth/Inputs"
 import FormInputAndLabel from "../../organization/schedule/NewShiftForm/FormInputAndLabel"
 import useAxios from "../../_hooks/useAxios"
 import toast from "react-hot-toast"
 import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"
-import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 import DropDown from "../AppComps/Dropdown"
 import { Option } from "../AppComps/Select"
 import { UserContext } from "../../_providers/UserProvider"
+import { useSelector } from "react-redux"
+import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
 const dateFormatOptions = {
   day: "numeric",
   weekday: "long",
@@ -23,9 +24,10 @@ export default function ShiftSwapForm({
   employee,
 }) {
   const { user } = useContext(UserContext)
-  const { shiftsInCurrentWeek, currentWeek, updateAllSwapRequests } =
-    useContext(EmployeeDashboardContext)
-  const { employees } = useContext(OrganizationContext)
+  const { updateAllSwapRequests } = useContext(EmployeeDashboardContext)
+  const { currentWeek } = useSelector((store) => store.shiftsAndOvertimes)
+  const { listOfShiftsInCurrentWeek } = useManageFetchWeeklySchedule()
+  const { employees } = useSelector((store) => store.organization)
   const [loading, setLoading] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState(employee || null)
   const [selectedShift, setSelectedShift] = useState(null)
@@ -36,7 +38,7 @@ export default function ShiftSwapForm({
   )
   const shiftsOptions = useMemo(
     () =>
-      shiftsInCurrentWeek.filter(
+      listOfShiftsInCurrentWeek.filter(
         (shift) =>
           shift.isDroppedOff === false &&
           currentWeek.start.getTime() <= new Date(shift.startTime).getTime() &&
@@ -47,7 +49,7 @@ export default function ShiftSwapForm({
             : shift.assignee?._id === selectedEmployee?._id)
       ),
     [
-      shiftsInCurrentWeek,
+      listOfShiftsInCurrentWeek,
       selectedEmployee,
       idOfUserToShowShiftOptions,
       currentShift,
@@ -117,9 +119,7 @@ export default function ShiftSwapForm({
             inputProps={{
               readOnly: true,
               value:
-                selectedEmployee?.firstName ||
-                selectedEmployee?.fullName?.split(" ") ||
-                "",
+                selectedEmployee?.firstName || selectedEmployee?.fullName || "",
               placeholder: "Co-worker name",
             }}
           />
