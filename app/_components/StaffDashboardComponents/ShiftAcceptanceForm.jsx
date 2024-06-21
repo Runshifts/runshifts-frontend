@@ -1,16 +1,17 @@
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useState } from "react"
 import { formatDate, formatHourAsAmOrPm } from "../../_utils"
 import { SubmitButton } from "../Auth/Inputs"
 import FormInputAndLabel from "../../organization/schedule/NewShiftForm/FormInputAndLabel"
 import useAxios from "../../_hooks/useAxios"
 import toast from "react-hot-toast"
 import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"
-import { OrganizationContext } from "../../_providers/OrganizationProvider"
-import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+import { addNewShifts } from "../../_redux/shifts.slice"
 
 export default function ShiftAcceptanceForm({ shift = {}, onFinish }) {
-  const { organization } = useContext(OrganizationContext)
-  const { updateAllShifts } = useContext(EmployeeDashboardContext)
+  const { organization } = useSelector((store) => store.organization)
+  const dispatch = useDispatch()
 
   const [loading, setLoading] = useState({
     accept: false,
@@ -32,7 +33,7 @@ export default function ShiftAcceptanceForm({ shift = {}, onFinish }) {
         action === "accept" ? MY_SHIFTS_URLS.accept : MY_SHIFTS_URLS.dropOff
       const res = await fetchData(getUrl(shift._id), "get")
       if (res.statusCode === 200) {
-        updateAllShifts([res.shift])
+        dispatch(addNewShifts({ shifts: [res.shift] }))
         toast.success(
           res.message ||
             `shift ${action === "accept" ? "accepted" : "dropped off"}`
