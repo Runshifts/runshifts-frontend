@@ -96,15 +96,13 @@ export default function Schedule() {
   return (
     <section>
       <>
-        {/* <NewShiftForm
+        <NewShiftForm
           show={newShiftDetails !== null}
           newShiftDetails={newShiftDetails}
           onCancel={() => setNewShiftDetails(null)}
-          handleNewShift={(newShift) => {
-            updateAllShifts([newShift])
-          }}
+          handleNewShift={(newShift) => dispatch(addNewShifts([newShift]))}
           currentWeek={currentWeek}
-        /> */}
+        />
       </>
       <div className="flex items-start flex-col gap-6 pt-6 pb-4 relative z-[20]">
         <div className="flex items-center justify-between w-full">
