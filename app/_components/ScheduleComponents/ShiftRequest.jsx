@@ -4,12 +4,15 @@ import Image from "next/image"
 import { getDateOrdinal } from "../../_utils"
 import useCountdown from "../../_hooks/useCountDown"
 import useAxios from "../../_hooks/useAxios"
-import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import toast from "react-hot-toast"
 import { ShiftAndOvertimeRequestsContext } from "../../_providers/Employer/ShiftAndOvertimeRequestsProvider"
 import { DashboardContext } from "../../_providers/Employer/DashboardContext"
 import Spinner from "../../_assets/svgs/Spinner"
 import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { addNewShifts, updateSingleShift } from "../../_redux/shifts.slice"
+import { handleUpdatedRequest } from "../../_redux/shiftsAndOvertimesRequests.slice"
 
 export function ShiftRequest({ shiftRequest = {} }) {
   const shiftStart = useMemo(
@@ -22,12 +25,14 @@ export function ShiftRequest({ shiftRequest = {} }) {
   const isStillValid = useMemo(() => {
     return +days || +hours || +minutes || +seconds
   }, [days, hours, minutes, seconds])
-
+  console.log(shiftRequest, "herer")
   return (
     <article className="border border-gray-300 rounded-lg p-[10px] flex flex-col gap-y-[8px] w-full max-h-[170px]">
       <UserDisplay
-        firstName={shiftRequest.requester?.firstName || "Placeholder"}
-        lastName={shiftRequest.requester?.lastName || "Name"}
+        firstName={
+          shiftRequest.requester?.firstName || shiftRequest.requester.fullName
+        }
+        lastName={shiftRequest.requester?.lastName || ""}
         image={shiftRequest.requester?.profileImage?.secure_url}
       />
       <div className="bg-[#E5F7DD] rounded-[4px] text-sm px-[4px]">
@@ -101,13 +106,12 @@ export function UserDisplay({
 
 export function AcceptAndRejectButtons({ requestId, requestType }) {
   const [loading, setLoading] = useState("")
-  const { handleUpdatedRequest } = useContext(ShiftAndOvertimeRequestsContext)
-  const { handleUpdateSingleShift } = useContext(DashboardContext)
-  const { updateSingleSwapRequest, updateAllShifts } = useContext(
-    EmployeeDashboardContext
-  )
+  // const { handleUpdateSingleShift } = useContext(DashboardContext)
+  // const { updateSingleSwapRequest, updateAllShifts } = useContext(
+  //   EmployeeDashboardContext
+  // )
 
-  const { organization } = useContext(OrganizationContext)
+  const { organization } = useSelector((store) => store.organization)
   const URLS = useMemo(() => {
     return {
       shift: (decision) =>
@@ -118,22 +122,26 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
     }
   }, [organization?._id, requestId])
 
+  const dispatch = useDispatch()
+
   const callbacks = useMemo(
     () => ({
       shift: ({ application, shift }) => {
-        handleUpdatedRequest(application, "shift")
-        handleUpdateSingleShift(shift)
+        dispatch(handleUpdatedRequest({ data: application, type: "shift" }))
+        dispatch(updateSingleShift(shift))
       },
       overtime: ({ request }) => {
-        handleUpdatedRequest(request, "overtime")
+        dispatch(handleUpdatedRequest({ data: request, type: "overtime" }))
       },
       swap: ({ request }) => {
-        updateSingleSwapRequest(request)
-        updateAllShifts([request.receiverShift, request.senderShift])
+        // updateSingleSwapRequest(request)
+        dispatch(
+          addNewShifts({ shifts: [request.receiverShift, request.senderShift] })
+        )
         console.log(request)
       },
     }),
-    []
+    [dispatch]
   )
 
   const fetchData = useAxios()
@@ -150,14 +158,7 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
       } else toast.error(res.message || "Something went wrong.")
       setLoading("")
     },
-    [
-      fetchData,
-      URLS,
-      requestType,
-      handleUpdatedRequest,
-      handleUpdateSingleShift,
-      loading,
-    ]
+    [fetchData, URLS, requestType, loading]
   )
 
   return (

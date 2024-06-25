@@ -2,12 +2,14 @@
 import { createSlice } from "@reduxjs/toolkit"
 import toast from "react-hot-toast"
 import { fetchShiftAndOvertimeRequests } from "./thunks/shiftsAndOvertimeRequests.thunk"
+import { mergeArrays } from "../_utils"
 
 const initialState = {
   loading: true,
   error: null,
   shiftRequests: [],
   overtimeRequests: [],
+  swapRequests: [],
   hasFetchedRequests: false,
 }
 
@@ -21,6 +23,21 @@ export const shiftsAndOvertimesSlice = createSlice({
     updateLoading: (state, action) => {
       state.loading =
         typeof action.payload === "boolean" ? action.payload : !state.loading
+    },
+    handleUpdatedRequest: (state, action) => {
+      if (action.payload.type === "shift") {
+        state.shiftRequests = mergeArrays(
+          [action.payload.data],
+          state.shiftRequests,
+          "_id"
+        )
+      }
+      if (action.payload.type === "overtime")
+        state.overtimeRequests = mergeArrays(
+          [action.payload.data],
+          state.overtimeRequests,
+          "_id"
+        )
     },
   },
   extraReducers: (builder) => {
@@ -43,5 +60,6 @@ export const shiftsAndOvertimesSlice = createSlice({
   },
 })
 
-export const { updateLoading, removeError } = shiftsAndOvertimesSlice.actions
+export const { updateLoading, removeError, handleUpdatedRequest } =
+  shiftsAndOvertimesSlice.actions
 export const shiftsAndOvertimeRequestsReducer = shiftsAndOvertimesSlice.reducer

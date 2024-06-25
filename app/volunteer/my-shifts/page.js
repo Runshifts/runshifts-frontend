@@ -8,24 +8,21 @@ import React, {
 } from "react"
 import Calender from "../../_components/StaffDashboardComponents/EmployeeCalender"
 import Heading from "../../_components/Headings"
-import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 import { UserContext } from "../../_providers/UserProvider"
 import {
   filterShiftsByWeek,
   groupShiftsByDayOfTheWeek,
 } from "../../_utils/shifts"
 import DateRangePicker from "../../_components/AppComps/Datepicker"
-import RequestedShifts from "../../_components/StaffDashboardComponents/RequestedShifts"
-import ShiftSwapRequests from "../../_components/StaffDashboardComponents/ShiftSwapRequests"
 import AcceptAllShiftsButton from "../../_components/StaffDashboardComponents/AcceptAllShiftsButton"
-import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import OvertimeApplicationFormModal from "../../_components/StaffDashboardComponents/OvertimeApplication"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { addNewShifts, setCurrentWeek } from "../../_redux/shifts.slice"
 import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
 import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
-
+import RequestedShifts from "../../_components/StaffDashboardComponents/RequestedShifts"
+import { fetchShiftAndOvertimeRequests } from "../../_redux/thunks/shiftsAndOvertimeRequests.thunk"
 export default function VolunteerMyShiftsPage() {
   const { shifts } = useSelector((store) => store.shiftsAndOvertimes)
   const requestableOvertimeShifts = useMemo(
@@ -71,6 +68,12 @@ export default function VolunteerMyShiftsPage() {
       addNewShifts({ shifts: listOfShiftsInCurrentWeek.map(updateShift) })
     )
   }, [listOfShiftsInCurrentWeek, user?._id, dispatch])
+
+  useEffect(() => {
+    dispatch(
+      fetchShiftAndOvertimeRequests({ organizationId: organization?._id })
+    )
+  }, [dispatch, organization])
 
   return (
     <section className="min-h-screen px-4 pb-4">
@@ -126,9 +129,9 @@ export default function VolunteerMyShiftsPage() {
           loading={loadingSwapRequests}
         />
       </div> */}
-      {/* <div className="rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
+      <div className="rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
         <RequestedShifts />
-      </div> */}
+      </div>
     </section>
   )
 }

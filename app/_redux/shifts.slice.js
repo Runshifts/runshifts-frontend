@@ -28,6 +28,7 @@ const initialState = {
   overtimes: [],
   cache: {},
   todaysSnapshot: null,
+  activityData: {},
 }
 
 export const shiftsAndOvertimesSlice = createSlice({
@@ -52,6 +53,9 @@ export const shiftsAndOvertimesSlice = createSlice({
           [...state.shifts],
           "_id"
         )
+    },
+    updateSingleShift: (state, action) => {
+      state.shifts = mergeArrays([action.payload], state.shifts, "_id")
     },
     acceptAllShifts: (state, action) => {
       if (Array.isArray(action.payload.shifts))
@@ -94,6 +98,11 @@ export const shiftsAndOvertimesSlice = createSlice({
   },
 })
 
-export const { updateLoading, removeError, setCurrentWeek, addNewShifts } =
-  shiftsAndOvertimesSlice.actions
+export const {
+  updateLoading,
+  removeError,
+  setCurrentWeek,
+  addNewShifts,
+  updateSingleShift,
+} = shiftsAndOvertimesSlice.actions
 export const shiftsAndOvertimesReducer = shiftsAndOvertimesSlice.reducer

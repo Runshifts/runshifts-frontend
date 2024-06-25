@@ -1,12 +1,13 @@
 import RequestedShiftCard from "./RequestedShiftCard"
-import { useContext, useMemo } from "react"
-import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
+import { useContext } from "react"
 import { UserContext } from "../../_providers/UserProvider"
-import { ShiftAndOvertimeRequestsContext } from "../../_providers/Employer/ShiftAndOvertimeRequestsProvider"
+import { useSelector } from "react-redux"
 
 function RequestedShifts() {
   const { user } = useContext(UserContext)
-  const { shiftRequests } = useContext(ShiftAndOvertimeRequestsContext)
+  const { shiftRequests } = useSelector(
+    (store) => store.shiftsAndOvertimeRequests
+  )
 
   return (
     <div className="bg-white">
@@ -15,12 +16,12 @@ function RequestedShifts() {
       </h2>
 
       <div className="flex flex-wrap gap-[8px]">
-          {shiftRequests.map((shiftRequest) => (
-            <RequestedShiftCard
-              key={shiftRequest._id}
-              shiftRequest={shiftRequest}
-            />
-          ))}
+        {shiftRequests.map((shiftRequest) => (
+          <RequestedShiftCard
+            key={shiftRequest._id}
+            shiftRequest={shiftRequest}
+          />
+        ))}
       </div>
     </div>
   )

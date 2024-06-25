@@ -1,13 +1,13 @@
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useState } from "react"
 import { formatDate, formatHourAsAmOrPm } from "../../_utils"
 import { SubmitButton } from "../Auth/Inputs"
 import FormInputAndLabel from "../../organization/schedule/NewShiftForm/FormInputAndLabel"
 import useAxios from "../../_hooks/useAxios"
 import toast from "react-hot-toast"
 import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"
-import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import DropDown from "../AppComps/Dropdown"
 import { Option } from "../AppComps/Select"
+import { useSelector } from "react-redux"
 
 export default function ShiftApplicationForm({
   shift = {},
@@ -15,7 +15,7 @@ export default function ShiftApplicationForm({
   isOvertimeApplication = false,
   requestableOvertimeShifts = [],
 }) {
-  const { organization } = useContext(OrganizationContext)
+  const { organization } = useSelector((store) => store.organization)
   const [selectedOvertimeShift, setSelectedOvertimeShift] = useState(null)
   const [loading, setLoading] = useState(false)
   const fetchData = useAxios()
@@ -28,7 +28,6 @@ export default function ShiftApplicationForm({
         ? MY_SHIFTS_URLS.requestOvertime(organization?._id)
         : MY_SHIFTS_URLS.apply(organization?._id, shift._id)
       const res = await fetchData(url, "post", { shiftId: shift?._id })
-      console.log(res)
       if (res.statusCode === 201) {
         toast.success(res.message || "Application sent!")
         onFinish()
@@ -43,7 +42,7 @@ export default function ShiftApplicationForm({
       }
       setLoading(false)
     },
-    [organization, loading, fetchData, isOvertimeApplication]
+    [organization, loading, fetchData, isOvertimeApplication, shift]
   )
 
   const getShiftDayInput = useCallback((shift) => {

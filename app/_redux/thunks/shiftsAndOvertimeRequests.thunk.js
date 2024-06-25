@@ -6,8 +6,14 @@ export const fetchShiftAndOvertimeRequests = createAsyncThunk(
   async ({ organizationId }) => {
     if (!organizationId) return {}
     const [shiftsRes, overtimeRes] = await Promise.all([
-      await axiosFetcher(`/shifts/${organizationId}/applications`, "get"),
-      await axiosFetcher(`/overtimes/${organizationId}/requests`, "get"),
+      await axiosFetcher({
+        url: `/shifts/${organizationId}/applications`,
+        method: "get",
+      }),
+      await axiosFetcher({
+        url: `/overtimes/${organizationId}/requests`,
+        method: "get",
+      }),
     ])
     const shiftRequests =
       shiftsRes?.statusCode === 200 ? shiftsRes?.results : []
