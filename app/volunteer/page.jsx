@@ -7,7 +7,7 @@ import {
   ReceivedSwaps,
 } from "../_components/StaffDashboardComponents/ShiftSwapRequests"
 import Heading from "../_components/Headings"
-// import { EmployeeDashboardContext } from "../_providers/Employee/EmployeeDashboardContext"
+import ShiftSwapRequests from "../_components/StaffDashboardComponents/ShiftSwapRequests"
 import { UserContext } from "../_providers/UserProvider"
 import { filterShiftsByWeek, groupShiftsByDayOfTheWeek } from "../_utils/shifts"
 import { useDispatch } from "react-redux"
@@ -68,14 +68,11 @@ export default function VolunteerDashboard() {
         />
       </div>
       <div className="mb-4 shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4 rounded-md overflow-hidden shadow-[0px_2px_8px_0px_#0000001F] bg-white">
-        <div className="">
+        <div className="w-full">
           <h2 className="font-semibold text-lg text-[#292D32] py-2 ">
             Shift swap requests
           </h2>
-          <div className="grid gap-2 md:grid-cols-1 lg:grid-cols-4">
-            <SentSwaps />
-            <ReceivedSwaps />
-          </div>
+          <ShiftSwapRequests />
         </div>
       </div>
     </section>

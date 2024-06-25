@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation"
 import DashboardLayout from "../_components/DashboardLayout/DashboardLayout"
 import DashboardLinksListGenerator from "../_components/DashboardLayout/DashboardLinksListGenerator"
 import { UserContext } from "../_providers/UserProvider"
+import { fetchSwapRequests } from "../_redux/thunks/shiftsAndOvertimeRequests.thunk"
 
 export default function Layout({ children }) {
   const dispatch = useDispatch()
@@ -37,6 +38,11 @@ export default function Layout({ children }) {
   useEffect(() => {
     if (organization?._id) dispatch(fetchEmployees(organization?._id))
   }, [dispatch, organization?._id])
+
+  useEffect(() => {
+    if (user?._id) dispatch(fetchSwapRequests())
+  }, [dispatch, user?._id])
+
   useEffect(() => {
     if (organization?.industry)
       dispatch(fetchDepartmentsAndPositions(organization.industry?.name))

@@ -1,7 +1,7 @@
 import ShiftSwapRequestCard from "./ShiftSwapRequestCard"
 import { useContext, useMemo } from "react"
-import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 import { UserContext } from "../../_providers/UserProvider"
+import { useSelector } from "react-redux"
 
 function ShiftSwapReq() {
   return (
@@ -35,7 +35,9 @@ export default ShiftSwapReq
 
 export function ReceivedSwaps() {
   const { user } = useContext(UserContext)
-  const { swapRequests } = useContext(EmployeeDashboardContext)
+  const { swapRequests } = useSelector(
+    (store) => store.shiftsAndOvertimeRequests
+  )
   const incomingRequests = useMemo(
     () => swapRequests.filter((it) => it.sender?._id !== user?._id),
     [swapRequests, user?._id]
@@ -58,7 +60,9 @@ export function ReceivedSwaps() {
 
 export function SentSwaps() {
   const { user } = useContext(UserContext)
-  const { swapRequests } = useContext(EmployeeDashboardContext)
+  const { swapRequests } = useSelector(
+    (store) => store.shiftsAndOvertimeRequests
+  )
   const sentRequests = useMemo(
     () => swapRequests.filter((it) => it.sender?._id === user?._id),
     [swapRequests, user?._id]

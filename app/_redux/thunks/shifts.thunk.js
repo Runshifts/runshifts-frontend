@@ -34,17 +34,3 @@ export const fetchTodaysSnapshot = createAsyncThunk(
     else return { ...res }
   }
 )
-export const fetchSwapRequests = createAsyncThunk(
-  "shifts/fetchSwapRequests",
-  async ({ organizationId }, { rejectWithValue }) => {
-    if (!organizationId) return {}
-    const res = await axiosFetcher({
-      url: `${DASHBOARD_URLS.swapRequests()}`,
-      method: "get",
-    })
-    console.log(res)
-    if (res.statusCode !== 200)
-      return rejectWithValue(res.message || "Unable to fetch swap requests.")
-    else return { ...res }
-  }
-)

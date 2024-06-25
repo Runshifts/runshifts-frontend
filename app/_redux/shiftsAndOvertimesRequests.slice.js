@@ -1,7 +1,10 @@
 "use client"
 import { createSlice } from "@reduxjs/toolkit"
 import toast from "react-hot-toast"
-import { fetchShiftAndOvertimeRequests } from "./thunks/shiftsAndOvertimeRequests.thunk"
+import {
+  fetchShiftAndOvertimeRequests,
+  fetchSwapRequests,
+} from "./thunks/shiftsAndOvertimeRequests.thunk"
 import { mergeArrays } from "../_utils"
 
 const initialState = {
@@ -55,6 +58,20 @@ export const shiftsAndOvertimesSlice = createSlice({
         toast.error(
           action.payload ||
             "Something went wrong with fetching shift and overtime requests"
+        )
+      })
+      .addCase(fetchSwapRequests.fulfilled, (state, action) => {
+        if (action.payload.success) {
+          state.swapRequests = action.payload.swapRequests || []
+        }
+        state.loading = false
+      })
+      .addCase(fetchSwapRequests.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+        toast.error(
+          action.payload ||
+            "Something went wrong with fetching shift swap requests"
         )
       })
   },
