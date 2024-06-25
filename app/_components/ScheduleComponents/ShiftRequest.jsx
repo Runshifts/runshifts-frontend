@@ -25,7 +25,7 @@ export function ShiftRequest({ shiftRequest = {} }) {
   const isStillValid = useMemo(() => {
     return +days || +hours || +minutes || +seconds
   }, [days, hours, minutes, seconds])
-  console.log(shiftRequest, "herer")
+
   return (
     <article className="border border-gray-300 rounded-lg p-[10px] flex flex-col gap-y-[8px] w-full max-h-[170px]">
       <UserDisplay
