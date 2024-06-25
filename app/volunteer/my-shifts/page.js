@@ -13,6 +13,7 @@ import {
   filterShiftsByWeek,
   groupShiftsByDayOfTheWeek,
 } from "../../_utils/shifts"
+import ShiftSwapRequests from "../../_components/StaffDashboardComponents/ShiftSwapRequests"
 import DateRangePicker from "../../_components/AppComps/Datepicker"
 import AcceptAllShiftsButton from "../../_components/StaffDashboardComponents/AcceptAllShiftsButton"
 import OvertimeApplicationFormModal from "../../_components/StaffDashboardComponents/OvertimeApplication"
@@ -23,6 +24,7 @@ import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
 import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
 import RequestedShifts from "../../_components/StaffDashboardComponents/RequestedShifts"
 import { fetchShiftAndOvertimeRequests } from "../../_redux/thunks/shiftsAndOvertimeRequests.thunk"
+
 export default function VolunteerMyShiftsPage() {
   const { shifts } = useSelector((store) => store.shiftsAndOvertimes)
   const requestableOvertimeShifts = useMemo(
@@ -123,12 +125,9 @@ export default function VolunteerMyShiftsPage() {
           showOvertimes={false}
         />
       </div>
-      {/* <div className="mb-4 rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
-        <ShiftSwapRequests
-          swapRequests={swapRequests}
-          loading={loadingSwapRequests}
-        />
-      </div> */}
+      <div className="mb-4 rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
+        <ShiftSwapRequests />
+      </div>
       <div className="rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col gap-[8px] p-[8px] md:p-4">
         <RequestedShifts />
       </div>
