@@ -1,15 +1,14 @@
 import DropDown from "../../../_components/AppComps/Dropdown"
 import FormInputAndLabel from "../../../_components/ScheduleComponents/NewShiftForm/FormInputAndLabel"
 import { Option } from "../../../_components/AppComps/Select"
-import { useContext } from "react"
-import { DepartmentsAndPositionsContext } from "../../../_providers/DepartmentsAndPositionsProvider"
+import { useSelector } from "react-redux"
 
 export default function PositionOrDepartmentInput({
   handleSelect = () => {},
   selectedOption,
   inputType,
 }) {
-  const { positions, departments } = useContext(DepartmentsAndPositionsContext)
+  const { positions, departments } = useSelector((store) => store.organization)
   const options = {
     positions: positions,
     department: departments,

@@ -62,3 +62,39 @@ export const fetchDepartmentsAndPositions = createAsyncThunk(
     }
   }
 )
+
+export const fetchTeamData = createAsyncThunk(
+  "organization/fetchTeamData",
+  async (organizationId, { rejectWithValue }) => {
+    try {
+      const res = await axiosFetcher({
+        url: `/organizations/${organizationId}/team`,
+        method: "get",
+      })
+
+      if (res.statusCode === 200) return res
+      if (res.statusCode === 400) return { organization: null, statuscode: 400 }
+      return rejectWithValue(res.message || "Unable to fetch team data")
+    } catch (err) {
+      return rejectWithValue(err?.message || "Unable to fetch team data")
+    }
+  }
+)
+
+export const fetchStatsForDuration = createAsyncThunk(
+  "organization/fetchStatsForDuration",
+  async ({ organizationId, fromDate }, { rejectWithValue }) => {
+    try {
+      const res = await axiosFetcher({
+        url: `/organizations/${organizationId}/team/stats?fromDate=${fromDate}`,
+        method: "get",
+      })
+
+      if (res.statusCode === 200) return { ...res, fromDate }
+      if (res.statusCode === 400) return { organization: null, statuscode: 400 }
+      return rejectWithValue(res.message || "Unable to fetch team data")
+    } catch (err) {
+      return rejectWithValue(err?.message || "Unable to fetch team data")
+    }
+  }
+)

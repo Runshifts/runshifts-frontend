@@ -20,7 +20,6 @@ export default function useEmployeeFilters(employeesToFilter) {
   const { locations, departments, positions } = useSelector(
     (store) => store.organization
   )
-  console.log(locations, departments, positions)
   const renderEmployeeFilters = useCallback(
     (props) => {
       const {
