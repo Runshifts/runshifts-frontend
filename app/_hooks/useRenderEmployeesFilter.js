@@ -1,8 +1,10 @@
-import { useCallback, useContext } from "react"
-import { DepartmentsOrPositionsFilter, LocationFilter } from "../_components/AppComps/FilterGroup"
-import { LocationsContext } from "../_providers/LocationsProvider"
-import { DepartmentsAndPositionsContext } from "../_providers/DepartmentsAndPositionsProvider"
+import { useCallback } from "react"
+import {
+  DepartmentsOrPositionsFilter,
+  LocationFilter,
+} from "../_components/AppComps/FilterGroup"
 import useFilterEmployees from "./useFilterEmployees"
+import { useSelector } from "react-redux"
 
 export default function useEmployeeFilters(employeesToFilter) {
   const {
@@ -15,9 +17,10 @@ export default function useEmployeeFilters(employeesToFilter) {
     setLocationFilter,
   } = useFilterEmployees(employeesToFilter)
 
-  const { locations } = useContext(LocationsContext)
-  const { departments, positions } = useContext(DepartmentsAndPositionsContext)
-
+  const { locations, departments, positions } = useSelector(
+    (store) => store.organization
+  )
+  console.log(locations, departments, positions)
   const renderEmployeeFilters = useCallback(
     (props) => {
       const {

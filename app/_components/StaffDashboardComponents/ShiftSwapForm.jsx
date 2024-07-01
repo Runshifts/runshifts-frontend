@@ -1,7 +1,7 @@
 import { useCallback, useContext, useMemo, useState } from "react"
 import { formatDate, formatHourAsAmOrPm } from "../../_utils"
 import { SubmitButton } from "../Auth/Inputs"
-import FormInputAndLabel from "../../organization/schedule/NewShiftForm/FormInputAndLabel"
+import FormInputAndLabel from "../ScheduleComponents/NewShiftForm/FormInputAndLabel"
 import useAxios from "../../_hooks/useAxios"
 import toast from "react-hot-toast"
 import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"

@@ -2,7 +2,7 @@ import { useCallback, useContext, useMemo, useState } from "react"
 import {
   AcceptAndRejectButtons,
   UserDisplay,
-} from "../../organization/schedule/ShiftRequest"
+} from "../ScheduleComponents/ShiftRequest"
 import { getDateOrdinal } from "../../_utils"
 import useCountdown from "../../_hooks/useCountDown"
 import { UserContext } from "../../_providers/UserProvider"

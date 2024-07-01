@@ -9,15 +9,13 @@ import LabourCostsSection from "./LabourCostsSection"
 import SchedulingSection from "./SchedulingSection"
 import RightToWorDiplay from "./RightToWork"
 import Heading from "../../_components/Headings"
-import { OrganizationContext } from "../../_providers/OrganizationProvider"
-import { DepartmentsAndPositionsContext } from "../../_providers/DepartmentsAndPositionsProvider"
-import { LocationsContext } from "../../_providers/LocationsProvider"
 import useHandleMultipleEmployeesSelection from "../../_hooks/useHandleMultipleEmployeesSelection"
+import { useSelector } from "react-redux"
 
 function Reports() {
-  const { employees } = useContext(OrganizationContext)
-  const { locations } = useContext(LocationsContext)
-  const { departments, positions } = useContext(DepartmentsAndPositionsContext)
+  const { employees, locations, departments, positions } = useSelector(
+    (store) => store.organization
+  )
   const { selectedEmployees, handleRemoveEmployee, handleSelectEmployee } =
     useHandleMultipleEmployeesSelection({})
 

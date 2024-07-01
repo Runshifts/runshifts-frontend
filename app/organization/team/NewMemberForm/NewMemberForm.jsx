@@ -2,12 +2,12 @@ import Image from "next/image"
 import Modal from "../../../_components/AppComps/Modal"
 import FormInputAndLabel, {
   FormLabelText,
-} from "../../schedule/NewShiftForm/FormInputAndLabel"
+} from "../../../_components/ScheduleComponents/NewShiftForm/FormInputAndLabel"
 import PositionOrDepartmentInput from "./PositionOrDepartmentInput"
-import FormLocationInput from "../../schedule/NewShiftForm/FormLocationInput"
+import FormLocationInput from "../../../_components/ScheduleComponents/NewShiftForm/FormLocationInput"
 import { useCallback, useMemo, useState } from "react"
 import DateInput from "../../../_components/AppComps/DateInput"
-import toast, { CheckmarkIcon } from "react-hot-toast"
+import toast from "react-hot-toast"
 import useAxios from "../../../_hooks/useAxios"
 import Spinner from "../../../_assets/svgs/Spinner"
 
@@ -97,8 +97,14 @@ const NewMemberForm = ({
       if (formData.profileImage?.lastModifiedDate)
         body.set("profileImage", formData.profileImage)
       body.set("locationId", formData.location?._id)
-      body.set("position", formData.position?.name || teamMemberFormData?.user?.position)
-      body.set("department", formData.department?.name || teamMemberFormData?.user?.department)
+      body.set(
+        "position",
+        formData.position?.name || teamMemberFormData?.user?.position
+      )
+      body.set(
+        "department",
+        formData.department?.name || teamMemberFormData?.user?.department
+      )
       body.set("hourlyRate", formData.hourlyEarnings)
       body.set("rightToWorkExpiry", formData.rightToWorkExpiry)
       body.set("firstName", formData.firstName)
@@ -219,7 +225,9 @@ const NewMemberForm = ({
         />
         <PositionOrDepartmentInput
           inputType="position"
-          handleSelect={(position) => setFormData((prev) => ({ ...prev, position }))}
+          handleSelect={(position) =>
+            setFormData((prev) => ({ ...prev, position }))
+          }
           selectedOption={formData.position}
         />
         <FormInputAndLabel

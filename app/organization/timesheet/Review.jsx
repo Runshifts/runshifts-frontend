@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useState } from "react"
 import TimesheetComponent from "./TimesheetComponent"
-import FormInputAndLabel from "../schedule/NewShiftForm/FormInputAndLabel"
+import FormInputAndLabel from "../../_components/ScheduleComponents/NewShiftForm/FormInputAndLabel"
 import Image from "next/image"
 import placeholderImg from "../../_assets/img/user.png"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -111,9 +111,10 @@ const Review = ({
                 "px-[12px] py-[2px] disabled:cursor-not-allowed disabled:bg-primary-200 bg-[#5BC62D] text-[14px] md:py-[8px] md:px-[16px] text-white md:font-[600] rounded-[8px]"
               }
               isLoading={loading.multipleShifts}
-              isDisabled={sortedShifts.every(
-                (it) => it.isApproved
-              ) || loading.multipleShifts}
+              isDisabled={
+                sortedShifts.every((it) => it.isApproved) ||
+                loading.multipleShifts
+              }
               loadingText="Approving timesheet"
             >
               Approve Timesheet

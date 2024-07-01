@@ -1,6 +1,6 @@
 import Modal from "../../_components/AppComps/Modal"
 import UserHeader from "../../_components/AppComps/UserHeader"
-import ShiftNotesForm from "../my-shifts/ShiftNotesForm"
+import ShiftNotesForm from "../../_components/StaffDashboardComponents/ShiftNotesForm"
 
 export default function SendNoteAfterShiftForm({
   shift,

@@ -1,5 +1,5 @@
 import DropDown from "../../../_components/AppComps/Dropdown"
-import FormInputAndLabel from "../../schedule/NewShiftForm/FormInputAndLabel"
+import FormInputAndLabel from "../../../_components/ScheduleComponents/NewShiftForm/FormInputAndLabel"
 import { Option } from "../../../_components/AppComps/Select"
 import { useContext } from "react"
 import { DepartmentsAndPositionsContext } from "../../../_providers/DepartmentsAndPositionsProvider"

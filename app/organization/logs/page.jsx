@@ -12,12 +12,12 @@ import {
   LocationFilter,
   DepartmentsOrPositionsFilter,
 } from "../../_components/AppComps/FilterGroup"
-import { LocationsContext } from "../../_providers/LocationsProvider"
-import { DepartmentsAndPositionsContext } from "../../_providers/DepartmentsAndPositionsProvider"
+import { useSelector } from "react-redux"
 
 function Logs() {
-  const { locations } = useContext(LocationsContext)
-  const { departments, positions } = useContext(DepartmentsAndPositionsContext)
+  const { locations, departments, positions } = useSelector(
+    (store) => store.organization
+  )
   const { allNotes } = useContext(NotesContext)
   const [searchText, setSearchText] = useState("")
   const [dateFilter, setDateFilter] = useState()
@@ -31,7 +31,7 @@ function Logs() {
     location: selectedLocation,
     department: selectedDepartment,
     position: selectedPosition,
-    date: dateFilter
+    date: dateFilter,
   })
 
   const notesGroupedByShifts = useMemo(() => {
