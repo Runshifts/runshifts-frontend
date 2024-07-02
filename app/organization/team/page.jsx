@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux"
 import {
   fetchTeamData,
   fetchStatsForDuration,
+  fetchArchivedTeamMembers,
 } from "../../_redux/thunks/organization.thunk"
 import {
   decrementActiveTeamMembersCount,
@@ -49,6 +50,7 @@ function Team() {
     recentlyViewedEmployees,
     teamStatsCache,
     loadingTeamData,
+    archivedTeamMembers,
   } = useSelector((store) => store.organization)
 
   const handleFetchStatsForDuration = useCallback(
@@ -110,8 +112,10 @@ function Team() {
   )
 
   useEffect(() => {
-    if (organization !== null && !hasInitializedTeam)
+    if (organization !== null && !hasInitializedTeam) {
       dispatch(fetchTeamData(organization?._id))
+      dispatch(fetchArchivedTeamMembers(organization?._id))
+    }
   }, [dispatch, organization?._id, hasInitializedTeam])
 
   return (
@@ -181,6 +185,7 @@ function Team() {
           <RecentlyViewedTeamMembers
             loading={loadingTeamData}
             users={recentlyViewedEmployees}
+            archivedTeamMembers={archivedTeamMembers}
             viewTeamMember={handleViewTeamMember}
           />
         )}

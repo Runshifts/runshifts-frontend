@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
 import TeamMembersSkeleton from "../../_components/Skeletons/TeamMembersSkeleton"
@@ -7,22 +7,42 @@ export default function AllTeamMembers({
   users = [],
   loading,
   viewTeamMember,
+  archivedTeamMembers = [],
 }) {
+  const [activeTab, setActiveTab] = useState("active")
+
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-[16px] text-[#292D32] font-[600]">
-        All team members
-      </h2>
+      <div className="flex items-center gap-4">
+        <h2
+          className={`${
+            activeTab === "active" ? "text-[#292D32]" : "text-[#9A928D]"
+          } text-[16px] font-[600] cursor-pointer`}
+          onClick={() => setActiveTab("active")}
+        >
+          Active team members
+        </h2>
+        <h2
+          className={`${
+            activeTab === "archive" ? "text-[#292D32]" : "text-[#9A928D]"
+          } text-[16px] font-[600] cursor-pointer`}
+          onClick={() => setActiveTab("archive")}
+        >
+          Archived
+        </h2>
+      </div>
       {loading && <TeamMembersSkeleton />}
       {!loading && (
         <div className="flex flex-wrap p-[2px] gap-4">
-          {users.map((user) => (
-            <TeamMember
-              handleView={() => viewTeamMember(user._id)}
-              user={user}
-              key={user._id}
-            />
-          ))}
+          {(activeTab === "active" ? users : archivedTeamMembers).map(
+            (user) => (
+              <TeamMember
+                handleView={() => viewTeamMember(user._id)}
+                user={user}
+                key={user._id}
+              />
+            )
+          )}
         </div>
       )}
     </section>

@@ -6,9 +6,10 @@ import {
   fetchOrganization,
   fetchTeamData,
   fetchStatsForDuration,
+  fetchArchivedTeamMembers,
 } from "./thunks/organization.thunk"
 import toast from "react-hot-toast"
-import { getPastNumOfDays } from "../_utils"
+import { getPastNumOfDays, mergeArrays } from "../_utils"
 
 const initialState = {
   cache: {},
@@ -23,6 +24,7 @@ const initialState = {
   isLoadingOrganization: true,
   isLoadingEmployees: true,
   recentlyViewedEmployees: [],
+  archivedTeamMembers: [],
   teamStats: {
     totalNumOfActiveEmployees: null,
     totalNumOfWorkedHours: null,
@@ -52,10 +54,11 @@ export const organizationSlice = createSlice({
       state.teamStats = { ...state.teamStats, ...(action.payload || {}) }
     },
     updateRecentlyViewed: (state, action) => {
-      state.recentlyViewedEmployees = [
-        ...state.recentlyViewedEmployees,
-        ...(action.payload || []),
-      ]
+      state.recentlyViewedEmployees = mergeArrays(
+        state.recentlyViewedEmployees,
+        action.payload || [],
+        "_id"
+      )
     },
     updateTeamMembers: (state, action) => {
       state.teamMembers = [...state.teamMembers, ...(action.payload || [])]
@@ -148,6 +151,16 @@ export const organizationSlice = createSlice({
       .addCase(fetchStatsForDuration.rejected, (state, action) => {
         state.loading = false
         state.loadingTeamStats = false
+        state.error = action.payload
+        toast.error(action.payload || "Something went wrong")
+      })
+      .addCase(fetchArchivedTeamMembers.fulfilled, (state, action) => {
+        if (action.payload.statusCode === 200) {
+          state.archivedTeamMembers = action.payload.archivedTeamMembers
+        }
+      })
+      .addCase(fetchArchivedTeamMembers.rejected, (state, action) => {
+        state.loading = false
         state.error = action.payload
         toast.error(action.payload || "Something went wrong")
       })

@@ -80,7 +80,23 @@ export const fetchTeamData = createAsyncThunk(
     }
   }
 )
+export const fetchArchivedTeamMembers = createAsyncThunk(
+  "organization/fetchArchivedTeamMembers",
+  async (organizationId, { rejectWithValue }) => {
+    try {
+      const res = await axiosFetcher({
+        url: `/organizations/${organizationId}/team/archive`,
+        method: "get",
+      })
 
+      if (res.statusCode === 200) return res
+      if (res.statusCode === 400) return { organization: null, statuscode: 400 }
+      return rejectWithValue(res.message || "Unable to fetch team data")
+    } catch (err) {
+      return rejectWithValue(err?.message || "Unable to fetch team data")
+    }
+  }
+)
 export const fetchStatsForDuration = createAsyncThunk(
   "organization/fetchStatsForDuration",
   async ({ organizationId, fromDate }, { rejectWithValue }) => {
