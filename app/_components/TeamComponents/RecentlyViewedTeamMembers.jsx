@@ -7,6 +7,7 @@ export default function RecentlyViewedTeamMembers({
   users = [],
   loading,
   viewTeamMember,
+  type
 }) {
   return (
     <section className="flex flex-col gap-4">
@@ -20,6 +21,7 @@ export default function RecentlyViewedTeamMembers({
                 handleView={() => viewTeamMember(user._id)}
                 key={user._id}
                 user={user}
+                userType={type === "non-profit" ? "volunteer" : "employee"}
               />
             ))}
           </div>
@@ -29,7 +31,7 @@ export default function RecentlyViewedTeamMembers({
   )
 }
 
-function RecentlyViewedTeamMember({ user = {}, handleView }) {
+function RecentlyViewedTeamMember({ user = {}, handleView, userType }) {
   return (
     <div className="bg-white px-2 py-[10px] w-full max-w-[146px] capitalize leading-[20px] font-[400] rounded-md shadow-[0px_2px_8px_0px_#0000001F] flex flex-col items-center gap-[8px] shrink-0">
       <Image
@@ -43,8 +45,8 @@ function RecentlyViewedTeamMember({ user = {}, handleView }) {
       <h3 className="text-inherit text-[16px] text-[#1D2433] truncate text-center overflow-hidden w-full">
         {(user.firstName + " " + user.lastName).trim() || user.fullName}
       </h3>
-      <p className="text-gray-800 text-[12px] truncate text-center overflow-hidden w-full">
-        {user.position}
+      <p className="text-gray-800 -mt-2 text-[12px] truncate text-center overflow-hidden w-full">
+        {userType === "volunteer" ? "Volunteer" : user.position?.name}
       </p>
 
       <button

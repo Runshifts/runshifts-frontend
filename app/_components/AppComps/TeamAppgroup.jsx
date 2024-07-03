@@ -1,6 +1,6 @@
 import React from "react"
 
-function TeamAppgroup({ openNewMemberModal = () => {} }) {
+function TeamAppgroup({ openNewMemberModal = () => {}, buttonTitle }) {
   return (
     <section>
       <div className="flex items-center justify-center ">
@@ -11,7 +11,9 @@ function TeamAppgroup({ openNewMemberModal = () => {} }) {
           <div>
             <AddSvg />
           </div>
-          <p className="text-white px-2">Add New</p>
+          <p className="text-white px-2">
+            {buttonTitle ? buttonTitle : "Add New"}
+          </p>
         </button>
 
         <button className="hidden md:flex items-center justify-center rounded bg-[#091E420A] text-gray-600  text-sm font-semibold mx-2 px-2 py-1">

@@ -55,13 +55,17 @@ export const organizationSlice = createSlice({
     },
     updateRecentlyViewed: (state, action) => {
       state.recentlyViewedEmployees = mergeArrays(
-        state.recentlyViewedEmployees,
         action.payload || [],
+        state.recentlyViewedEmployees,
         "_id"
       )
     },
     updateTeamMembers: (state, action) => {
-      state.teamMembers = [...state.teamMembers, ...(action.payload || [])]
+      state.teamMembers = mergeArrays(
+        action.payload || [],
+        state.teamMembers,
+        "_id"
+      )
     },
     incrementActiveTeamMembersCount: (state) => {
       state.teamStats.totalNumOfActiveEmployees =
@@ -70,6 +74,30 @@ export const organizationSlice = createSlice({
     decrementActiveTeamMembersCount: (state) => {
       state.teamStats.totalNumOfActiveEmployees =
         state.teamStats.totalNumOfActiveEmployees - 1
+    },
+    handleArchivedUser: (state, action) => {
+      if (action.payload?.isArchived) {
+        state.archivedTeamMembers = mergeArrays(
+          [action.payload],
+          state.archivedTeamMembers,
+          "_id"
+        )
+        state.teamMembers = state.teamMembers.filter(
+          (member) => member._id !== action.payload._id
+        )
+      }
+    },
+    handleRestoreUser: (state, action) => {
+      if (!action.payload?.isArchived) {
+        state.teamMembers = mergeArrays(
+          [action.payload],
+          state.teamMembers,
+          "_id"
+        )
+        state.archivedTeamMembers = state.archivedTeamMembers.filter(
+          (member) => member._id !== action.payload._id
+        )
+      }
     },
   },
   extraReducers: (builder) => {
@@ -176,5 +204,7 @@ export const {
   incrementActiveTeamMembersCount,
   decrementActiveTeamMembersCount,
   updateTeamStats,
+  handleRestoreUser,
+  handleArchivedUser,
 } = organizationSlice.actions
 export const organizationReducer = organizationSlice.reducer

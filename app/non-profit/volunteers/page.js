@@ -21,6 +21,8 @@ import {
 } from "../../_redux/thunks/organization.thunk"
 import {
   decrementActiveTeamMembersCount,
+  handleArchivedUser,
+  handleRestoreUser,
   incrementActiveTeamMembersCount,
   updateRecentlyViewed,
   updateTeamMembers,
@@ -98,7 +100,8 @@ export default function Team() {
         { lastViewedByEmployerAt: new Date(Date.now()) }
       )
       if (res.statusCode === 200) {
-        dispatch(updateRecentlyViewed([res.teamMember]))
+        res.teamMember?.isArchived === false &&
+          dispatch(updateRecentlyViewed([res.teamMember]))
         setTeamMemberFormData({
           isEdit: true,
           isNew: false,
@@ -122,6 +125,7 @@ export default function Team() {
         <div className="flex items-center justify-between py-3">
           <Heading as="h1">Team</Heading>
           <TeamAppgroup
+            buttonTitle="Add new volunteer"
             openNewMemberModal={() =>
               setTeamMemberFormData({ isNew: true, isEdit: false })
             }
@@ -177,6 +181,7 @@ export default function Team() {
             loading={loadingTeamData}
             users={recentlyViewedEmployees}
             viewTeamMember={handleViewTeamMember}
+            type="non-profit"
           />
         )}
         <AllTeamMembers
@@ -184,24 +189,25 @@ export default function Team() {
           archivedTeamMembers={archivedTeamMembers}
           loading={loadingTeamData}
           users={filteredEmployees}
+          type="non-profit"
         />
       </section>
       <>
         <NewMemberForm
+          type="volunteer"
           show={teamMemberFormData !== null}
           teamMemberFormData={teamMemberFormData}
           onCancel={() => setTeamMemberFormData(null)}
           organizationId={organization?._id}
-          handleUserResponse={(user) => {
-            teamMemberFormData.isEdit && dispatch(updateRecentlyViewed([user]))
-            teamMemberFormData.isNew &&
-              dispatch(incrementActiveTeamMembersCount())
+          handleUserResponse={(user, isEdit) => {
+            isEdit && dispatch(updateRecentlyViewed([user]))
+            !isEdit && dispatch(incrementActiveTeamMembersCount())
             dispatch(updateTeamMembers([user]))
           }}
           handleArchivedUser={(user) => {
             dispatch(decrementActiveTeamMembersCount())
-            // removeArchivedTeamMember(user)
-            // removeArchivedRecentlyViewed(user)
+            if (user.isArchived) dispatch(handleArchivedUser(user))
+            else dispatch(handleRestoreUser(user))
           }}
         />
       </>
