@@ -28,6 +28,7 @@ import {
   updateTeamMembers,
   updateTeamStats,
 } from "../../_redux/organization.slice"
+import TeamStatistics from "../../_components/TeamComponents/TeamStatistics"
 
 const durationOptions = [
   { displayValue: "7 days", fromDate: getPastNumOfDays(7) },
@@ -51,6 +52,7 @@ export default function Team() {
     recentlyViewedEmployees,
     teamStatsCache,
     loadingTeamData,
+    teamStats
   } = useSelector((store) => store.organization)
 
   const handleFetchStatsForDuration = useCallback(
@@ -121,7 +123,7 @@ export default function Team() {
 
   return (
     <>
-      <section className="mx-2 px-3 pb-3 h-screen flex flex-col gap-4">
+      <section className="mx-2 pb-3 h-screen flex flex-col gap-4">
         <div className="flex items-center justify-between py-3">
           <Heading as="h1">Team</Heading>
           <TeamAppgroup
@@ -176,6 +178,12 @@ export default function Team() {
             </div>
           </div>
         </div>
+        <TeamStatistics
+          totalCountOfActiveEmployees={teamStats.totalNumOfActiveEmployees}
+          totalNumberOfWorkedHours={teamStats.totalNumOfWorkedHours}
+          loading={loadingTeamData}
+          loadingStats={loadingTeamStats}
+        />
         {(recentlyViewedEmployees.length > 0 || loadingTeamData) && (
           <RecentlyViewedTeamMembers
             loading={loadingTeamData}

@@ -17,7 +17,7 @@ export default function DashboardLayout({
             : sidebarContent}
         </DashboardNav>
         <main className="col-span-12 lg:col-span-9 h-[calc(100dvh-60px)] lg:h-[calc(100dvh-73px)] overflow-auto w-full">
-          <div className="zbg-white w-full px-[17.5px] lg:px-[40px] pt-[21px] lg:pt-[24px]">
+          <div className="bg-white w-full px-[10px] sm:px-[17.5px] lg:px-[40px] pt-[21px] lg:pt-[24px]">
             {children}
           </div>
         </main>
