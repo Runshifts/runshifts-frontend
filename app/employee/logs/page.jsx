@@ -3,28 +3,36 @@ import React, { useContext, useEffect, useMemo, useState } from "react"
 import LogExport from "../../_components/AppComps/LogExport"
 import PageSearchInput from "../../_components/AppComps/PageSearchInput"
 import LogsContent from "./LogsContent"
-import { NotesContext } from "../../_providers/NotesProvider"
 import useFilterNotes from "../../_hooks/useFilterNotes"
 import { groupNotesByShift } from "../../_utils/notes"
 import DateFilter from "../../organization/tracker/DateFilter"
 import Heading from "../../_components/Headings"
 import { LocationFilter } from "../../_components/AppComps/FilterGroup"
-import { LocationsContext } from "../../_providers/LocationsProvider"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { fetchNotes } from "../../_redux/thunks/notes.thunk"
 
 function Logs() {
-  const { locations } = useContext(LocationsContext)
-  const { allNotes } = useContext(NotesContext)
+  const { organization } = useSelector((store) => store.organization)
+  const dispatch = useDispatch()
+  const { hasFetchedNotes } = useSelector((store) => store.notes)
+  useEffect(() => {
+    if (!hasFetchedNotes && organization !== null)
+      dispatch(fetchNotes(organization?._id))
+  }, [dispatch, hasFetchedNotes, organization])
+
+  const { locations } = useSelector((store) => store.organization)
+  const { notes } = useSelector((store) => store.notes)
   const [searchText, setSearchText] = useState("")
   const [dateFilter, setDateFilter] = useState()
   const [selectedLocation, setSelectedLocation] = useState(null)
 
   const filteredNotes = useFilterNotes({
-    notes: allNotes,
+    notes,
     searchText,
     date: dateFilter,
-    location: selectedLocation
+    location: selectedLocation,
   })
-  console.log(locations)
   const notesGroupedByShifts = useMemo(() => {
     return groupNotesByShift(filteredNotes)
   }, [filteredNotes])

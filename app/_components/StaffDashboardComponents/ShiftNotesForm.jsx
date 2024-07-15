@@ -1,14 +1,15 @@
-import { useCallback, useContext, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { SubmitButton } from "../Auth/Inputs"
 import NOTES_URLS from "../../_urls/notesURLS"
 import useAxios from "../../_hooks/useAxios"
-import { OrganizationContext } from "../../_providers/OrganizationProvider"
-import { NotesContext } from "../../_providers/NotesProvider"
 import toast from "react-hot-toast"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { updateAllNotes } from "../../_redux/notes.slice"
 
-export default function ShiftNotesForm({ shiftId, onSubmit = () => {} }) {
-  const { organization } = useContext(OrganizationContext)
-  const { updateAllNotes } = useContext(NotesContext)
+export default function ShiftNotesForm({ shiftId, onSubmit }) {
+  const { organization } = useSelector((store) => store.organization)
+  const dispatch = useDispatch()
   const [note, setNote] = useState("")
   const [severity, setSeverity] = useState("normal")
   const [submitting, setSubmitting] = useState(false)
@@ -29,7 +30,7 @@ export default function ShiftNotesForm({ shiftId, onSubmit = () => {} }) {
           { note, severity }
         )
         if (res.statusCode === 201) {
-          updateAllNotes([res.note])
+          dispatch(updateAllNotes({ notes: [res.note] }))
           setNote("")
           setSeverity("normal")
           toast.success(res.message)
@@ -39,7 +40,7 @@ export default function ShiftNotesForm({ shiftId, onSubmit = () => {} }) {
       }
       setSubmitting(false)
     },
-    [onSubmit, fetchData, organization, shiftId, updateAllNotes, note, severity]
+    [onSubmit, fetchData, organization, shiftId, dispatch, note, severity]
   )
 
   return (

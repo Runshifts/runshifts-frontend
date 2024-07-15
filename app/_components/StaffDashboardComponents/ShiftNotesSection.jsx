@@ -7,6 +7,9 @@ import { UserContext } from "../../_providers/UserProvider"
 import placeholderImage from "../../_assets/img/user.png"
 import { timeAgo } from "../../_utils"
 import NoteLikeChatSkeleton from "../Skeletons/NoteLikeChatSkeleton"
+import { useSelector } from "react-redux"
+import { fetchNotes } from "../../_redux/thunks/notes.thunk"
+import { useDispatch } from "react-redux"
 
 export default function ShiftNotesSection({ shift }) {
   return (
@@ -25,24 +28,29 @@ export default function ShiftNotesSection({ shift }) {
 }
 
 export function ShiftNotes({ shiftId, notesToDisplay }) {
-  const { allNotes, fetchNotes, hasFetchedNotes, loadingNotes } =
-    useContext(NotesContext)
+  const dispatch = useDispatch()
+  const { organization } = useSelector((store) => store.organization)
+  const {
+    notes,
+    hasFetchedNotes,
+    loading: loadingNotes,
+  } = useSelector((store) => store.notes)
   const notesForShift = useMemo(
-    () =>
-      notesToDisplay || allNotes.filter((note) => note.shift?._id === shiftId),
-    [allNotes, shiftId, notesToDisplay]
+    () => notesToDisplay || notes.filter((note) => note.shift?._id === shiftId),
+    [notes, shiftId, ]
   )
   const sortedNotes = useMemo(
     () =>
       (notesToDisplay || notesForShift).toSorted((a, b) => {
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       }),
     [notesForShift, notesToDisplay]
   )
 
   useEffect(() => {
-    if (notesForShift.length === 0 && !hasFetchedNotes) fetchNotes()
-  }, [notesForShift])
+    if (notesForShift.length === 0 && !hasFetchedNotes && organization)
+      dispatch(fetchNotes(organization?._id))
+  }, [notesForShift, organization])
 
   return (
     <>
