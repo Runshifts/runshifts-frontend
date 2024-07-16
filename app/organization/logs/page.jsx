@@ -1,8 +1,7 @@
 "use client"
-import React, { useContext, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import LogExport from "../../_components/AppComps/LogExport"
 import LogsContent from "../../employee/logs/LogsContent"
-import { NotesContext } from "../../_providers/NotesProvider"
 import useFilterNotes from "../../_hooks/useFilterNotes"
 import { groupNotesByShift } from "../../_utils/notes"
 import PageSearchInput from "../../_components/AppComps/PageSearchInput"
@@ -13,12 +12,21 @@ import {
   DepartmentsOrPositionsFilter,
 } from "../../_components/AppComps/FilterGroup"
 import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { fetchNotes } from "../../_redux/thunks/notes.thunk"
 
 function Logs() {
-  const { locations, departments, positions } = useSelector(
+  const { locations, departments, positions, organization } = useSelector(
     (store) => store.organization
   )
-  const { allNotes } = useContext(NotesContext)
+  const { notes, hasFetchedNotes } = useSelector((store) => store.notes)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!hasFetchedNotes && organization !== null)
+      dispatch(fetchNotes(organization?._id))
+  }, [dispatch, hasFetchedNotes, organization])
+
   const [searchText, setSearchText] = useState("")
   const [dateFilter, setDateFilter] = useState()
   const [selectedLocation, setSelectedLocation] = useState(null)
@@ -26,7 +34,7 @@ function Logs() {
   const [selectedPosition, setSelectedPosition] = useState(null)
 
   const filteredNotes = useFilterNotes({
-    notes: allNotes,
+    notes,
     searchText,
     location: selectedLocation,
     department: selectedDepartment,
