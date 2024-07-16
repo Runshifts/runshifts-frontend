@@ -1,7 +1,5 @@
 import { useContext, useEffect, useMemo } from "react"
 import ShiftNotesForm, { SeverityPill } from "./ShiftNotesForm"
-import { NotesContext } from "../../_providers/NotesProvider"
-import UserHeader from "../AppComps/UserHeader"
 import Image from "next/image"
 import { UserContext } from "../../_providers/UserProvider"
 import placeholderImage from "../../_assets/img/user.png"
