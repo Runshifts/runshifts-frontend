@@ -1,7 +1,7 @@
 "use client"
 import { useContext, useEffect, useState } from "react"
 import TrackerTable from "./TrackerTable"
-import DateFilter from "./DateFilter"
+import DateFilter from "../../_components/DateFilter"
 import { TrackerContext } from "../../_providers/Employer/TrackerProvider"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
 import PageSearchInput from "../../_components/AppComps/PageSearchInput"

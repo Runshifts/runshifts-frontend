@@ -1,5 +1,5 @@
-import DateInput from "../../_components/AppComps/DateInput"
-import Calender from "../../_assets/svgs/CalenderIcon"
+import DateInput from "./AppComps/DateInput"
+import Calender from "../_assets/svgs/CalenderIcon"
 
 const DateInputOptions = {
   datepickerClassNames: "",
@@ -28,17 +28,21 @@ const DateInputOptions = {
   },
   inputNameProp: "date",
   inputPlaceholderProp: "Calender",
-  defaultDate: false
+  defaultDate: false,
 }
 
-export default function DateFilter({ dateFilter, updateDateFilter, options = {} }) {
+export default function DateFilter({
+  dateFilter,
+  updateDateFilter,
+  options = {},
+}) {
   return (
     <div className="flex bg-[#F4F5F7] items-center max-w-[120px] rounded-[3px] relative">
       <span className="relative w-full z-[1] bg-transparent">
         <DateInput
           value={dateFilter}
           onChange={updateDateFilter}
-          options={{...DateInputOptions, ...options}}
+          options={{ ...DateInputOptions, ...options }}
         />
       </span>
       <span className="absolute z-[0] right-[8px]">
