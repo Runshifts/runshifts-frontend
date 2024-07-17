@@ -1,14 +1,16 @@
 import { useCallback, useContext, useMemo, useState } from "react"
-import placeholderImage from "../../_assets/img/user.png"
+import placeholderImage from "../_assets/img/user.png"
 import { HiOutlineTrash } from "react-icons/hi"
 import Image from "next/image"
 import ShareModal from "./ShareModal"
-import { ShiftNotes } from "../../_components/StaffDashboardComponents/ShiftNotesSection"
-import ShiftNotesForm, { SeverityPill } from "../../_components/StaffDashboardComponents/ShiftNotesForm"
-import { timeAgo } from "../../_utils"
-import Modal from "../../_components/AppComps/Modal"
-import useOutsideClick from "../../_hooks/useOutsideClick"
-import { UserContext } from "../../_providers/UserProvider"
+import { ShiftNotes } from "./StaffDashboardComponents/ShiftNotesSection"
+import ShiftNotesForm, {
+  SeverityPill,
+} from "./StaffDashboardComponents/ShiftNotesForm"
+import { timeAgo } from "../_utils"
+import Modal from "./AppComps/Modal"
+import useOutsideClick from "../_hooks/useOutsideClick"
+import { UserContext } from "../_providers/UserProvider"
 
 export default function LogsContent({ notesGroupedByShifts = {} }) {
   const latestNotesOfShifts = useMemo(

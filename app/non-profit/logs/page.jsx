@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useMemo, useState } from "react"
 import LogExport from "../../_components/AppComps/LogExport"
-import LogsContent from "../../employee/logs/LogsContent"
+import LogsContent from "../../_components/LogsContent"
 import useFilterNotes from "../../_hooks/useFilterNotes"
 import { groupNotesByShift } from "../../_utils/notes"
 import PageSearchInput from "../../_components/AppComps/PageSearchInput"

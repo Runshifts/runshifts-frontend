@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react"
 import LogExport from "../../_components/AppComps/LogExport"
 import PageSearchInput from "../../_components/AppComps/PageSearchInput"
-import LogsContent from "./LogsContent"
+import LogsContent from "../../_components/LogsContent"
 import useFilterNotes from "../../_hooks/useFilterNotes"
 import { groupNotesByShift } from "../../_utils/notes"
 import DateFilter from "../../_components/DateFilter"
