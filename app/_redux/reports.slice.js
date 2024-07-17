@@ -14,7 +14,7 @@ const initialState = {
   cache: {},
   loadingAttendance: true,
   loadingLabourCosts: true,
-  loadingSheduleAdherence: true,
+  loadingScheduleAdherence: true,
   loadingShiftPerformance: true,
   loadingWorkedHours: true,
   error: null,
@@ -77,10 +77,10 @@ export const reportsSlice = createSlice({
       })
 
       .addCase(fetchScheduleAdherence.pending, (state) => {
-        state.loadingSheduleAdherence = true
+        state.loadingScheduleAdherence = true
       })
       .addCase(fetchScheduleAdherence.fulfilled, (state, action) => {
-        state.loadingSheduleAdherence = false
+        state.loadingScheduleAdherence = false
         if (action.payload.statusCode === 200) {
           state.cache = {
             ...state.cache,
@@ -97,7 +97,7 @@ export const reportsSlice = createSlice({
         }
       })
       .addCase(fetchScheduleAdherence.rejected, (state) => {
-        state.loadingSheduleAdherence = false
+        state.loadingScheduleAdherence = false
         toast.error("Something went wrong")
       })
       .addCase(fetchShiftPerformance.pending, (state) => {
