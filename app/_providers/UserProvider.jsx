@@ -8,6 +8,7 @@ import useRedirectUserByAccountType from "../_hooks/useRedirectUserByAccountType
 export const UserContext = createContext({
   user: null,
   updateUser: () => {},
+  logout: () => {},
 })
 
 export default function UserProvider({ children }) {
@@ -48,6 +49,11 @@ export default function UserProvider({ children }) {
     user,
   ])
 
+  const logout = useCallback(() => {
+    redirectAwayFromDashboard()
+    localStorage.clear()
+  }, [redirectAwayFromDashboard])
+
   const updateUser = useCallback((value) => {
     setUser(value)
     localStorage.setItem("user", JSON.stringify(value))
@@ -58,7 +64,7 @@ export default function UserProvider({ children }) {
   }, [fetchUser])
 
   return (
-    <UserContext.Provider value={{ user, updateUser }}>
+    <UserContext.Provider value={{ user, updateUser, logout }}>
       {children}
     </UserContext.Provider>
   )

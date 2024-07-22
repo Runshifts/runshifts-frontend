@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/_assets/svgs/Gear.jsx", "app/_redux/notes.slice.js"  ],
+, "app/_assets/svgs/Gear.jsx", "app/_redux/notes.slice.js", "app/_assets/svgs/Logout.jsx"  ],
   "exclude": [
     "node_modules"
   ]
