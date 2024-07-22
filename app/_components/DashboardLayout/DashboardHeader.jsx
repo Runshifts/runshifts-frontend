@@ -13,7 +13,6 @@ import { useContext } from "react"
 import GearIcon from "../../_assets/svgs/Gear"
 import { useRouter } from "next/navigation"
 import { getUserBasePathForDashboard } from "../../_utils"
-import { useSelector } from "react-redux"
 
 export default function DashboardHeader({ openNav }) {
   const { user } = useContext(UserContext)

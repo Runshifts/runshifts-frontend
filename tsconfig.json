@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -26,9 +22,12 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "app/_assets/svgs/Gear.jsx", "app/_redux/notes.slice.js", "app/_assets/svgs/Logout.jsx"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "**/*.tsx",
+    "app/_assets/svgs/Gear.jsx",
+    "app/_redux/notes.slice.js",
+    "app/_assets/svgs/Logout.jsx",
+    "app/_components/ProfileSettingsComponents/DisplayPictureInput.jsx",
+    "app/_components/ProfileSettingsComponents/TwoFAInfoBlock.jsx"
+  ],
+  "exclude": ["node_modules"]
 }
