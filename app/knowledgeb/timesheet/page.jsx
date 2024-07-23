@@ -56,9 +56,9 @@ function HomePage() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M1 5.917 5.724 10.5 15 1.5"
                     />
                   </svg>
@@ -76,9 +76,9 @@ function HomePage() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M1 5.917 5.724 10.5 15 1.5"
                     />
                   </svg>
@@ -97,9 +97,9 @@ function HomePage() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M1 5.917 5.724 10.5 15 1.5"
                     />
                   </svg>
@@ -117,9 +117,9 @@ function HomePage() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M1 5.917 5.724 10.5 15 1.5"
                     />
                   </svg>
@@ -137,9 +137,9 @@ function HomePage() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M1 5.917 5.724 10.5 15 1.5"
                     />
                   </svg>
@@ -171,10 +171,10 @@ function HomePage() {
             </video>
 
             <iframe
-      src="https://youtu.be/020g-0hhCAU?si=vnkNfGUOMY3Ie7nB"
-      frameborder="0"
-      allowfullscreen
-    />
+              src="https://youtu.be/020g-0hhCAU?si=vnkNfGUOMY3Ie7nB"
+              frameborder="0"
+              allowfullscreen
+            />
 
             <hr />
 
@@ -225,8 +225,8 @@ function HomePage() {
                     >
                       <path
                         stroke="currentColor"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M1 6v8a5 5 0 1 0 10 0V4.5a3.5 3.5 0 1 0-7 0V13a2 2 0 0 0 4 0V6"
                       />
                     </svg>
@@ -310,9 +310,9 @@ function HomePage() {
                     >
                       <path
                         stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M9.5 3h9.563M9.5 9h9.563M9.5 15h9.563M1.5 13a2 2 0 1 1 3.321 1.5L1.5 17h5m-5-15 2-1v6m-2 0h4"
                       />
                     </svg>
@@ -381,9 +381,9 @@ function HomePage() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M13 1h5m0 0v5m0-5-5 5M1.979 6V1H7m0 16.042H1.979V12M18 12v5.042h-5M13 12l5 5M2 1l5 5m0 6-5 5"
                   />
                 </svg>
@@ -428,7 +428,9 @@ function HomePage() {
             <Image src={Avatar} alt="dp" />
 
             <div className="ml-6">
-              <h1 className="text-2xl font-normal leading-9 tracking-normal text-left text-[#121416] ">Luci Avetisyan</h1>
+              <h1 className="text-2xl font-normal leading-9 tracking-normal text-left text-[#121416] ">
+                Luci Avetisyan
+              </h1>
               <p className="text-lg pt-5 font-normal leading-5 tracking-normal text-left text-[#6D767E] ">
                 Sed cras nec a nulla sapien adipiscing ut etiam. In sem viverra
                 mollis metus quam adipiscing vel nascetur condimentum felis
@@ -439,7 +441,7 @@ function HomePage() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 export default HomePage;
