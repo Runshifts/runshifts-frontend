@@ -96,6 +96,8 @@ function ProfileForm({ accountType }) {
       <DisplayImageInput
         handleChange={handleFileChange}
         uploadedImg={user?.profileImage?.secure_url}
+        isImageRounded
+        labelText="Upload your profile image"
       />
       <h2 className="text-sm font-[600] leading-5 text-left text-[#42526E] py-2">
         Personal Information

@@ -1,10 +1,7 @@
 import React from "react";
-import Setttings from "../page";
 function Notification() {
   return (
     <div>
-      <Setttings />
-
       <div className="grid grid-rows-4 grid-flow-col gap-4 mx-4">
         <div className="bg-white w-[309px] h-[70px] rounded-xl shadow-xl  flex items-center justify-between">
           <p className="text-xs px-3 not-italic font-normal leading-5 text-[#1D2433]">

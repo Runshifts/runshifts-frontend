@@ -1,12 +1,7 @@
-import React from "react";
-import SetttingsTb from "../page";
 
 function Plan() {
   return (
-    <div>
-      <SetttingsTb />
-
-     
+    <div>     
       <div className=" bg-white flex flex-wrap items-center justify-center">
       <div className="flex justify-around items-center mt-2">
         <div>

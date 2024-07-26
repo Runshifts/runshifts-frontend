@@ -3,7 +3,12 @@ import { useCallback, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import toast from "react-hot-toast"
 
-export default function DisplayImageInput({ handleChange, uploadedImg }) {
+export default function DisplayImageInput({
+  handleChange,
+  uploadedImg,
+  isImageRounded,
+  labelText,
+}) {
   const [preview, setPreview] = useState("")
 
   const handleFileChange = useCallback(
@@ -50,13 +55,15 @@ export default function DisplayImageInput({ handleChange, uploadedImg }) {
           alt=""
           width={86}
           height={86}
-          className="w-[86px] h-[86px] rounded-full object-cover"
+          className={`${
+            isImageRounded ? "rounded-full" : "rounded-[6.67px"
+          } w-[86px] h-[86px] object-cover mb-4`}
         />
         <span className="font-[100] text-[#6B778C] text-[12px]">
           Image size: 100 x 100
         </span>
         <span className="block mt-[2px] cursor-pointer bg-info-100/50 w-fit text-info-500 px-3 py-[2px]">
-          Upload your profile image
+          {labelText}
         </span>
       </label>
     </>

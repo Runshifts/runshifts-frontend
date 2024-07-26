@@ -9,13 +9,19 @@ import EditIcon from "../../_assets/svgs/Pen"
 import LogoutIcon from "../../_assets/svgs/Logout"
 import RunshiftsLogo from "../../_assets/svgs/RunshiftsLogo"
 import { UserContext } from "../../_providers/UserProvider"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import GearIcon from "../../_assets/svgs/Gear"
 import { useRouter } from "next/navigation"
 import { getUserBasePathForDashboard } from "../../_utils"
 
 export default function DashboardHeader({ openNav }) {
   const { user } = useContext(UserContext)
+  const router = useRouter()
+  const basePath = getUserBasePathForDashboard(user?.type)
+  const isEmployerOrDirector = useMemo(
+    () => user?.type === "employer" || user?.type === "director",
+    [user?.type]
+  )
   return (
     <div>
       <header className="sticky top-0 inset-x-0 h-[67px] lg:h-[56px] flex items-center justify-between w-full bg-white px-[18px]">
@@ -48,9 +54,19 @@ export default function DashboardHeader({ openNav }) {
           <button as="button" className="hidden lg:inline-block">
             <Headphones />
           </button>
-          <button as="button" className="hidden lg:inline-block">
-            <GearIcon />
-          </button>
+          {isEmployerOrDirector && (
+            <button
+              as="a"
+              href={`${basePath}/settings`}
+              onClick={(e) => {
+                e.preventDefault()
+                router.push(`${basePath}/settings`)
+              }}
+              className="hidden lg:inline-block"
+            >
+              <GearIcon />
+            </button>
+          )}
           <TooltipModal tooltipContent={<AvatarDropdown />}>
             <Image
               alt={user?.fullName || "User"}
