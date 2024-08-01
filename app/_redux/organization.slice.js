@@ -17,7 +17,7 @@ const initialState = {
   error: null,
   organization: null,
   employees: [],
-  shiftManagements: { default: {}, custom: [] },
+  shiftManagements: { default: [], custom: [] },
   locations: [],
   departments: [],
   positions: [],
@@ -49,6 +49,16 @@ export const organizationSlice = createSlice({
     updateLoading: (state, action) => {
       state.loading =
         typeof action.payload === "boolean" ? action.payload : !state.loading
+    },
+    updateOrganization: (state, action) => {
+      state.organization = action.payload
+    },
+    updateShiftManagements: (state, action) => {
+      state.shiftManagements = action.payload
+    },
+    updateLocations: (state, action) => {
+      console.log(action.payload, "ds;lfds")
+      state.locations = action.payload
     },
     updateTeamStats: (state, action) => {
       state.teamStats = { ...state.teamStats, ...(action.payload || {}) }
@@ -106,7 +116,7 @@ export const organizationSlice = createSlice({
         state.loading = false
         state.organization = action.payload.organization
         state.shiftManagements = action.payload.organization
-          .shiftManagements || { default: {}, custom: [] }
+          .shiftManagements || { default: [], custom: [] }
         state.locations = action.payload.organization.locations || []
         state.isLoadingOrganization = false
       })
@@ -206,5 +216,8 @@ export const {
   updateTeamStats,
   handleRestoreUser,
   handleArchivedUser,
+  updateLocations,
+  updateOrganization,
+  updateShiftManagements,
 } = organizationSlice.actions
 export const organizationReducer = organizationSlice.reducer
