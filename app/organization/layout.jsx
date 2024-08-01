@@ -11,12 +11,13 @@ import { useSelector } from "react-redux"
 import { useRouter } from "next/navigation"
 import DashboardLayout from "../_components/DashboardLayout/DashboardLayout"
 import DashboardLinksListGenerator from "../_components/DashboardLayout/DashboardLinksListGenerator"
+import useShiftListeners from "../_socket/listeners_hooks/useOrganizationShiftListeners"
 
 export default function Layout({ children }) {
   const dispatch = useDispatch()
   const router = useRouter()
   const { organization } = useSelector((store) => store.organization)
-
+  useShiftListeners()
   useEffect(() => {
     dispatch(fetchOrganization()).then((res) => {
       if (typeof res.payload === "string") {
