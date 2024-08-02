@@ -100,7 +100,9 @@ export default function Schedule() {
           show={newShiftDetails !== null}
           newShiftDetails={newShiftDetails}
           onCancel={() => setNewShiftDetails(null)}
-          handleNewShift={(newShift) => dispatch(addNewShifts([newShift]))}
+          handleNewShift={(newShift) =>
+            dispatch(addNewShifts({ shifts: [newShift] }))
+          }
           currentWeek={currentWeek}
         />
       </>

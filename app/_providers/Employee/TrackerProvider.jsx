@@ -1,7 +1,6 @@
 import { createContext, useCallback, useContext, useState } from "react"
 import useAxios from "../../_hooks/useAxios"
 import TRACKER_URLS from "../../_urls/trackerURLs"
-import { OrganizationContext } from "../OrganizationProvider"
 import toast from "react-hot-toast"
 import { EmployeeDashboardContext } from "./EmployeeDashboardContext"
 import { useSelector } from "react-redux"
@@ -39,7 +38,7 @@ export default function EmployeeTrackerProvider({ children, shiftId }) {
     )
     if (res.statusCode === 200) {
       toast.success(res.message)
-      dispatch(addNewShifts([res.shift]))
+      dispatch(addNewShifts({ shifts: [res.shift] }))
     } else {
       toast.error(res.message)
     }
@@ -58,7 +57,7 @@ export default function EmployeeTrackerProvider({ children, shiftId }) {
       )
       if (res.statusCode === 200) {
         toast.success(res.message)
-        dispatch(addNewShifts([res.shift]))
+        dispatch(addNewShifts({ shifts: [res.shift] }))
       } else {
         toast.error(res.message)
       }
@@ -76,7 +75,7 @@ export default function EmployeeTrackerProvider({ children, shiftId }) {
     )
     if (res.statusCode === 200) {
       toast.success(res.message)
-      dispatch(addNewShifts([res.shift]))
+      dispatch(addNewShifts({ shifts: [res.shift] }))
     } else {
       toast.error(res.message)
     }
@@ -91,7 +90,7 @@ export default function EmployeeTrackerProvider({ children, shiftId }) {
     )
     if (res.statusCode === 200) {
       toast.success(res.message)
-      dispatch(addNewShifts([res.shift]))
+      dispatch(addNewShifts({ shifts: [res.shift] }))
     } else {
       toast.error(res.message)
     }
