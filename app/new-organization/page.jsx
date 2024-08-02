@@ -1,11 +1,13 @@
 "use client"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import AuthLayout from "../_components/Auth/Layout"
 import StepOne from "./StepOne"
 import StepTwo from "./StepTwo"
 import StepThree from "./StepThree"
 import { MdArrowBackIos } from "react-icons/md"
+import { useSelector } from "react-redux"
+import { UserContext } from "../_providers/UserProvider"
 
 const backgrounds = {
   1: "bg-[url(/img/create_organization_step_one.png)]",
@@ -14,6 +16,7 @@ const backgrounds = {
 }
 
 function Page() {
+  const { user } = useContext(UserContext)
   const router = useRouter()
   const searchParams = useSearchParams()
   const organizationType = useMemo(
@@ -23,12 +26,13 @@ function Page() {
 
   useEffect(() => {
     if (
-      organizationType !== "non-profit" &&
-      organizationType !== "for-profit"
+      (organizationType !== "non-profit" &&
+        organizationType !== "for-profit") ||
+      (user && (user.type === "volunteer" || user.type === "employee"))
     ) {
       router.push("/")
     }
-  }, [organizationType, router])
+  }, [organizationType, router, user])
 
   const [currentStep, setCurrentStep] = useState(1)
 
