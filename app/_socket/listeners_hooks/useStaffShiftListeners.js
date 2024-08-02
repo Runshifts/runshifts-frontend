@@ -15,7 +15,7 @@ export default function useStaffShiftListeners() {
       dispatch(addNewShifts({ shifts: [data.shift] }))
       setToastId(toast.success(data.message))
     },
-    [updateAllShifts]
+    [dispatch]
   )
 
   useListenFor({
