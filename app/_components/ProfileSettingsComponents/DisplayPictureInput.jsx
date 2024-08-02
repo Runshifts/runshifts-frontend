@@ -56,7 +56,7 @@ export default function DisplayImageInput({
           width={86}
           height={86}
           className={`${
-            isImageRounded ? "rounded-full" : "rounded-[6.67px"
+            isImageRounded ? "rounded-full" : "rounded-[6.67px]"
           } w-[86px] h-[86px] object-cover mb-4`}
         />
         <span className="font-[100] text-[#6B778C] text-[12px]">

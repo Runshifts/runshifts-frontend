@@ -57,7 +57,6 @@ export const organizationSlice = createSlice({
       state.shiftManagements = action.payload
     },
     updateLocations: (state, action) => {
-      console.log(action.payload, "ds;lfds")
       state.locations = action.payload
     },
     updateTeamStats: (state, action) => {
