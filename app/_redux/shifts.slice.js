@@ -2,7 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import toast from "react-hot-toast"
 import { fetchTodaysSnapshot, fetchWeeklySchedule } from "./thunks/shifts.thunk"
-import { mergeArrays } from "../_utils"
+import { getWeekThatDateFallsIn, mergeArrays } from "../_utils"
 
 /*
     todaysSnapshot, if not null, looks like 
@@ -57,6 +57,23 @@ export const shiftsAndOvertimesSlice = createSlice({
     updateSingleShift: (state, action) => {
       state.shifts = mergeArrays([action.payload], state.shifts, "_id")
     },
+    acceptMultipleShifts: (state, action) => {
+      const { start, end, assignee } = action.payload || {}
+      state.shifts = state.shifts.map((shift) => {
+        if (shift.assignee?._id !== assignee) return shift
+        const startDate = new Date(start)
+        const endDate = new Date(end)
+        const shiftStartDate = new Date(shift.startTime)
+        const shiftEndDate = new Date(shift.endTime)
+        if (
+          shiftStartDate.getTime() >= startDate.getTime() &&
+          shiftEndDate.getTime() <= endDate.getTime()
+        ) {
+          return { ...shift, isAccepted: true }
+        }
+        return shift
+      })
+    },
     acceptAllShifts: (state, action) => {
       if (Array.isArray(action.payload.shifts))
         state.shifts = state.shifts.map((shift) => ({
@@ -104,5 +121,6 @@ export const {
   setCurrentWeek,
   addNewShifts,
   updateSingleShift,
+  acceptMultipleShifts,
 } = shiftsAndOvertimesSlice.actions
 export const shiftsAndOvertimesReducer = shiftsAndOvertimesSlice.reducer

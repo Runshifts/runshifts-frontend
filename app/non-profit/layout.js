@@ -11,6 +11,7 @@ import { useSelector } from "react-redux"
 import { useRouter } from "next/navigation"
 import DashboardLayout from "../_components/DashboardLayout/DashboardLayout"
 import DashboardLinksListGenerator from "../_components/DashboardLayout/DashboardLinksListGenerator"
+import OrganizationHooksProvider from "../_providers/Employer/HooksProvider"
 
 export default function Layout({ children }) {
   const dispatch = useDispatch()
@@ -44,15 +45,17 @@ export default function Layout({ children }) {
   }, [dispatch, organization?.industry])
 
   return (
-    <DashboardLayout
-      sidebarContent={({ closeNav }) => (
-        <DashboardLinksListGenerator
-          variant="non-profit"
-          onLinkClick={closeNav}
-        />
-      )}
-    >
-      {children}
-    </DashboardLayout>
+    <OrganizationHooksProvider>
+      <DashboardLayout
+        sidebarContent={({ closeNav }) => (
+          <DashboardLinksListGenerator
+            variant="non-profit"
+            onLinkClick={closeNav}
+          />
+        )}
+      >
+        {children}
+      </DashboardLayout>
+    </OrganizationHooksProvider>
   )
 }

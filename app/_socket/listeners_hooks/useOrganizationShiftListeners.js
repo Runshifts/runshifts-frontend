@@ -4,7 +4,10 @@ import getUseListenForHook from "../../_hooks/getUseListenForHook"
 import SHIFT_EVENTS from "../events/shifts"
 import { DashboardContext as OrganizationDashboardContext } from "../../_providers/Employer/DashboardContext"
 import { useDispatch } from "react-redux"
-import { updateSingleShift } from "../../_redux/shifts.slice"
+import {
+  updateSingleShift,
+  acceptMultipleShifts,
+} from "../../_redux/shifts.slice"
 
 export default function useShiftListeners() {
   const useListenFor = getUseListenForHook()
@@ -37,6 +40,19 @@ export default function useShiftListeners() {
     event: SHIFT_EVENTS.SHIFT_ACCEPTED,
     callback: (data) => {
       if (data.statusCode === 200) dispatch(updateSingleShift(data.shift))
+    },
+  })
+  useListenFor({
+    event: SHIFT_EVENTS.ACCEPTED_ALL_SHIFTS,
+    callback: (data) => {
+      if (data.statusCode === 200)
+        dispatch(
+          acceptMultipleShifts({
+            start: data.data.fromDate,
+            end: data.data.toDate,
+            assignee: data.data.assignee,
+          })
+        )
     },
   })
 }
