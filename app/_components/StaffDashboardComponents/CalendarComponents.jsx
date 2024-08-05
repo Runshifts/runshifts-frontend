@@ -85,19 +85,15 @@ export function RenderShiftsAndOvertimes({
       return <p className=" text-xs text-[#303030] rounded-full">No shifts</p>
     return (
       <ul className="w-full flex flex-col gap-y-2 items-center py-2 max-h-full overflow-auto">
-        {shifts.map((shift) =>
-          shift.assignee ? (
-            <Fragment key={shift._id}>
-              {useDetailedPill ? (
-                <ShiftPillWithDetails shift={shift} />
-              ) : (
-                <ShiftPill shift={shift} />
-              )}
-            </Fragment>
-          ) : (
-            <Fragment key={shift._id}>{null}</Fragment>
-          )
-        )}
+        {shifts.map((shift) => (
+          <Fragment key={shift._id}>
+            {useDetailedPill ? (
+              <ShiftPillWithDetails shift={shift} />
+            ) : (
+              <ShiftPill shift={shift} />
+            )}
+          </Fragment>
+        ))}
       </ul>
     )
   }, [shifts, useDetailedPill])
@@ -162,8 +158,8 @@ export function ShiftPillWithDetails({ shift = {} }) {
   }, [isOwnShift, shift])
 
   if (
-    shift.isDroppedOff === true &&
-    isOwnShift === false &&
+    ((shift.isDroppedOff === true && isOwnShift === false) ||
+      !shift.assignee) &&
     !isDateInThePast(new Date(shift.startTime))
   )
     return <OpenShiftButton shift={shift} />
