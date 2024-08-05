@@ -18,8 +18,20 @@ export default function useStaffShiftListeners() {
     [dispatch]
   )
 
+  const handleMultipleShiftCreateSuccess = useCallback(
+    (data) => {
+      toast.remove(toastId)
+      dispatch(addNewShifts({ shifts: data.shifts }))
+      setToastId(toast.success(data.message))
+    },
+    [dispatch]
+  )
   useListenFor({
     event: SHIFT_EVENTS.NEW_SHIFT,
     callback: handleNewShift,
+  })
+  useListenFor({
+    event: SHIFT_EVENTS.CREATE_MULTIPLE_SHIFTS_SUCCESS,
+    callback: handleMultipleShiftCreateSuccess,
   })
 }

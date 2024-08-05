@@ -13,7 +13,7 @@ import DashboardLayout from "../_components/DashboardLayout/DashboardLayout"
 import DashboardLinksListGenerator from "../_components/DashboardLayout/DashboardLinksListGenerator"
 import { UserContext } from "../_providers/UserProvider"
 import { fetchSwapRequests } from "../_redux/thunks/shiftsAndOvertimeRequests.thunk"
-
+import StaffHooksProvider from "../_providers/StaffHooksProvider"
 export default function Layout({ children }) {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -51,15 +51,17 @@ export default function Layout({ children }) {
   }, [dispatch, organization?.industry])
 
   return (
-    <DashboardLayout
-      sidebarContent={({ closeNav }) => (
-        <DashboardLinksListGenerator
-          variant="employee"
-          onLinkClick={closeNav}
-        />
-      )}
-    >
-      {children}
-    </DashboardLayout>
+    <StaffHooksProvider>
+      <DashboardLayout
+        sidebarContent={({ closeNav }) => (
+          <DashboardLinksListGenerator
+            variant="employee"
+            onLinkClick={closeNav}
+          />
+        )}
+      >
+        {children}
+      </DashboardLayout>
+    </StaffHooksProvider>
   )
 }
