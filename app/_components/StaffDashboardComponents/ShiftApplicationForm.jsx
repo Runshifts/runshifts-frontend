@@ -8,6 +8,8 @@ import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"
 import DropDown from "../AppComps/Dropdown"
 import { Option } from "../AppComps/Select"
 import { useSelector } from "react-redux"
+import { addNewShiftRequest } from "../../_redux/shiftsAndOvertimesRequests.slice"
+import { useDispatch } from "react-redux"
 
 export default function ShiftApplicationForm({
   shift = {},
@@ -19,6 +21,7 @@ export default function ShiftApplicationForm({
   const [selectedOvertimeShift, setSelectedOvertimeShift] = useState(null)
   const [loading, setLoading] = useState(false)
   const fetchData = useAxios()
+  const dispatch = useDispatch()
 
   const handleShiftApplication = useCallback(
     async (shift) => {
@@ -29,6 +32,7 @@ export default function ShiftApplicationForm({
         : MY_SHIFTS_URLS.apply(organization?._id, shift._id)
       const res = await fetchData(url, "post", { shiftId: shift?._id })
       if (res.statusCode === 201) {
+        dispatch(addNewShiftRequest(res.shiftApplication))
         toast.success(res.message || "Application sent!")
         onFinish()
       } else {
@@ -42,7 +46,7 @@ export default function ShiftApplicationForm({
       }
       setLoading(false)
     },
-    [organization, loading, fetchData, isOvertimeApplication, shift]
+    [organization, loading, fetchData, isOvertimeApplication, shift, dispatch]
   )
 
   const getShiftDayInput = useCallback((shift) => {

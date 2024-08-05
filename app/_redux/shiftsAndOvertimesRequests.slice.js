@@ -27,6 +27,9 @@ export const shiftsAndOvertimesSlice = createSlice({
       state.loading =
         typeof action.payload === "boolean" ? action.payload : !state.loading
     },
+    addNewShiftRequest: (state, action) => {
+      state.shiftRequests = [action.payload, ...state.shiftRequests]
+    },
     handleUpdatedRequest: (state, action) => {
       if (action.payload.type === "shift") {
         state.shiftRequests = mergeArrays(
@@ -77,6 +80,10 @@ export const shiftsAndOvertimesSlice = createSlice({
   },
 })
 
-export const { updateLoading, removeError, handleUpdatedRequest } =
-  shiftsAndOvertimesSlice.actions
+export const {
+  updateLoading,
+  removeError,
+  handleUpdatedRequest,
+  addNewShiftRequest,
+} = shiftsAndOvertimesSlice.actions
 export const shiftsAndOvertimeRequestsReducer = shiftsAndOvertimesSlice.reducer

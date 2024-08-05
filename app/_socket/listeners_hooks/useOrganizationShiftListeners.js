@@ -8,6 +8,7 @@ import {
   acceptMultipleShifts,
   addNewShifts,
 } from "../../_redux/shifts.slice"
+import { addNewShiftRequest } from "../../_redux/shiftsAndOvertimesRequests.slice"
 
 export default function useShiftListeners() {
   const useListenFor = getUseListenForHook()
@@ -17,7 +18,6 @@ export default function useShiftListeners() {
   const handleMultipleShiftCreateSuccess = useCallback(
     (data) => {
       toast.remove(toastId)
-      console.log(data, "herer")
       dispatch(addNewShifts({ shifts: data.shifts }))
       setToastId(toast.success(data.message))
     },
@@ -40,6 +40,13 @@ export default function useShiftListeners() {
     event: SHIFT_EVENTS.SHIFT_ACCEPTED,
     callback: (data) => {
       if (data.statusCode === 200) dispatch(updateSingleShift(data.shift))
+    },
+  })
+  useListenFor({
+    event: SHIFT_EVENTS.NEW_SHIFT_REQUEST,
+    callback: (data) => {
+      if (data.statusCode === 201)
+        dispatch(addNewShiftRequest(data.shiftApplication))
     },
   })
   useListenFor({
