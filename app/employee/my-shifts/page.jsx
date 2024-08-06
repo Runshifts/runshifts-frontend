@@ -25,6 +25,7 @@ import { useDispatch } from "react-redux"
 import { setCurrentWeek } from "../../_redux/shifts.slice"
 import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
 import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
+import { mergeArrays } from "../../_utils"
 
 function page() {
   const { shifts } = useSelector((store) => store.shiftsAndOvertimes)
@@ -68,10 +69,13 @@ function page() {
   )
   const { organization } = useSelector((store) => store.organization)
   const shiftsGroupedByDays = useMemo(() => {
-    return groupShiftsByDayOfTheWeek([
-      ...listOfShiftsInCurrentWeek,
-      ...listOfOvertimesInCurrentWeek,
-    ])
+    return groupShiftsByDayOfTheWeek(
+      mergeArrays(
+        listOfShiftsInCurrentWeek,
+        listOfOvertimesInCurrentWeek,
+        "_id"
+      )
+    )
   }, [listOfShiftsInCurrentWeek, listOfOvertimesInCurrentWeek])
 
   const handleAcceptAllSucccess = useCallback(() => {

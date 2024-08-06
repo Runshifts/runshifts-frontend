@@ -86,12 +86,12 @@ export const shiftsAndOvertimesSlice = createSlice({
     builder
       .addCase(fetchWeeklySchedule.fulfilled, (state, action) => {
         state.overtimes = [
-          ...state.overtimes,
           ...action.payload.schedule.overtimes,
+          ...state.overtimes,
         ]
         state.shifts = mergeArrays(
-          [...state.shifts],
           [...action.payload.schedule.shifts],
+          [...state.shifts],
           "_id"
         )
         state.cache = {

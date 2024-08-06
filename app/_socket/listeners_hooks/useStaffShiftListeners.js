@@ -2,7 +2,8 @@ import { useCallback, useState, useContext } from "react"
 import toast from "react-hot-toast"
 import getUseListenForHook from "../../_hooks/getUseListenForHook"
 import SHIFT_EVENTS from "../events/shifts"
-import { addNewShifts } from "../../_redux/shifts.slice"
+import { addNewShifts, updateSingleShift } from "../../_redux/shifts.slice"
+import { updateSingleShiftApplication } from "../../_redux/shiftsAndOvertimesRequests.slice"
 import { useDispatch } from "react-redux"
 
 export default function useStaffShiftListeners() {
@@ -15,16 +16,42 @@ export default function useStaffShiftListeners() {
       dispatch(addNewShifts({ shifts: [data.shift] }))
       setToastId(toast.success(data.message))
     },
-    [dispatch]
+    [dispatch, toastId]
   )
-
   const handleMultipleShiftCreateSuccess = useCallback(
     (data) => {
       toast.remove(toastId)
       dispatch(addNewShifts({ shifts: data.shifts }))
       setToastId(toast.success(data.message))
     },
-    [dispatch]
+    [dispatch, toastId]
+  )
+
+  const handleShiftRequestAcceptance = useCallback(
+    (data) => {
+      if (data.statusCode === 200) {
+        toast.remove(toastId)
+        console.log(data, "accepted")
+        data.shift && dispatch(addNewShifts({ shifts: [data.shift] }))
+        data.shiftApplication &&
+          dispatch(updateSingleShiftApplication(data.shiftApplication))
+        data.message && setToastId(toast.success(data.message))
+      }
+    },
+    [dispatch, toastId]
+  )
+
+  const handleShiftRequestRejection = useCallback(
+    (data) => {
+      if (data.statusCode === 200) {
+        toast.remove(toastId)
+        console.log(data, "rejected")
+        data.shiftApplication &&
+          dispatch(updateSingleShiftApplication(data.shiftApplication))
+        data.message && setToastId(toast.success(data.message))
+      }
+    },
+    [dispatch, toastId]
   )
   useListenFor({
     event: SHIFT_EVENTS.NEW_SHIFT,
@@ -33,5 +60,13 @@ export default function useStaffShiftListeners() {
   useListenFor({
     event: SHIFT_EVENTS.CREATE_MULTIPLE_SHIFTS_SUCCESS,
     callback: handleMultipleShiftCreateSuccess,
+  })
+  useListenFor({
+    event: SHIFT_EVENTS.SHIFT_REQUEST_ACCEPTED,
+    callback: handleShiftRequestAcceptance,
+  })
+  useListenFor({
+    event: SHIFT_EVENTS.SHIFT_REQUEST_REJECTED,
+    callback: handleShiftRequestRejection,
   })
 }

@@ -24,6 +24,7 @@ import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
 import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
 import RequestedShifts from "../../_components/StaffDashboardComponents/RequestedShifts"
 import { fetchShiftAndOvertimeRequests } from "../../_redux/thunks/shiftsAndOvertimeRequests.thunk"
+import { mergeArrays } from "../../_utils"
 
 export default function VolunteerMyShiftsPage() {
   const { shifts } = useSelector((store) => store.shiftsAndOvertimes)
@@ -52,10 +53,13 @@ export default function VolunteerMyShiftsPage() {
   const { organization } = useSelector((store) => store.organization)
 
   const shiftsGroupedByDays = useMemo(() => {
-    return groupShiftsByDayOfTheWeek([
-      ...listOfShiftsInCurrentWeek,
-      ...listOfOvertimesInCurrentWeek,
-    ])
+    return groupShiftsByDayOfTheWeek(
+      mergeArrays(
+        listOfShiftsInCurrentWeek,
+        listOfOvertimesInCurrentWeek,
+        "_id"
+      )
+    )
   }, [listOfShiftsInCurrentWeek, listOfOvertimesInCurrentWeek])
 
   const handleAcceptAllSucccess = useCallback(() => {
