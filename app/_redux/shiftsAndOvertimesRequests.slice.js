@@ -35,6 +35,11 @@ export const shiftsAndOvertimesSlice = createSlice({
         req._id === action.payload._id ? action.payload : req
       )
     },
+    deleteSwapRequest: (state, action) => {
+      state.swapRequests = state.swapRequests.filter(
+        (req) => req._id !== action.payload
+      )
+    },
     addNewSwapRequest: (state, action) => {
       state.swapRequests = [action.payload, ...state.swapRequests]
     },
@@ -106,5 +111,6 @@ export const {
   updateSingleShiftApplication,
   addNewSwapRequest,
   updateSwapRequest,
+  deleteSwapRequest,
 } = shiftsAndOvertimesSlice.actions
 export const shiftsAndOvertimeRequestsReducer = shiftsAndOvertimesSlice.reducer

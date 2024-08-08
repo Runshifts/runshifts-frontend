@@ -7,6 +7,7 @@ import {
   updateSingleShiftApplication,
   addNewSwapRequest,
   updateSwapRequest,
+  deleteSwapRequest,
 } from "../../_redux/shiftsAndOvertimesRequests.slice"
 import { useDispatch } from "react-redux"
 
@@ -89,6 +90,16 @@ export default function useStaffShiftListeners() {
     },
     [dispatch, toastId]
   )
+  const handleSwapRequestCancellation = useCallback(
+    (data) => {
+      if (data.statusCode === 200) {
+        toast.remove(toastId)
+        data.swapRequestId && dispatch(deleteSwapRequest(data.swapRequestId))
+        data.message && setToastId(toast.success(data.message))
+      }
+    },
+    [dispatch, toastId]
+  )
   useListenFor({
     event: SHIFT_EVENTS.NEW_SHIFT,
     callback: handleNewShift,
@@ -116,5 +127,9 @@ export default function useStaffShiftListeners() {
   useListenFor({
     event: SHIFT_EVENTS.SHIFT_SWAP_REJECTED,
     callback: handleSwapRequestRejection,
+  })
+  useListenFor({
+    event: SHIFT_EVENTS.SHIFT_SWAP_CANCELLED,
+    callback: handleSwapRequestCancellation,
   })
 }

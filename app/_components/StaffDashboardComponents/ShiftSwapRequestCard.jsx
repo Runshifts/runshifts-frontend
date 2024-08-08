@@ -9,8 +9,9 @@ import { UserContext } from "../../_providers/UserProvider"
 import useAxios from "../../_hooks/useAxios"
 import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"
 import toast from "react-hot-toast"
-import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 import Spinner from "../../_assets/svgs/Spinner"
+import { useDispatch } from "react-redux"
+import { deleteSwapRequest } from "../../_redux/shiftsAndOvertimesRequests.slice"
 
 export default function ShiftSwapRequestCard({
   swapRequest = {},
@@ -20,10 +21,10 @@ export default function ShiftSwapRequestCard({
   userInFocus,
 }) {
   const { user } = useContext(UserContext)
-  const { deleteSwapRequest } = useContext(EmployeeDashboardContext)
   const { days, hours, minutes, seconds } = useCountdown(
     new Date(swapRequest?.validUntil)
   )
+  const dispatch = useDispatch()
   const [isCanceling, setIsCanceling] = useState(false)
   const fetchData = useAxios()
   const handleCancel = useCallback(async () => {
@@ -36,11 +37,11 @@ export default function ShiftSwapRequestCard({
     let toastFunc
     if (res.statusCode === 200) {
       toastFunc = toast.success
-      deleteSwapRequest(swapRequest)
+      dispatch(deleteSwapRequest(swapRequest?._id))
     } else toastFunc = toast.error
     toastFunc(res.message)
     setIsCanceling(false)
-  }, [fetchData, swapRequest, deleteSwapRequest, isCanceling])
+  }, [fetchData, swapRequest, isCanceling, dispatch])
 
   const isStillValid = useMemo(() => {
     return new Date(swapRequest?.validUntil).getTime() > Date.now()
