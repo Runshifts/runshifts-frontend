@@ -28,7 +28,14 @@ export const shiftsAndOvertimesSlice = createSlice({
         typeof action.payload === "boolean" ? action.payload : !state.loading
     },
     addNewSwapRequest: (state, action) => {
-      console.log(action.payload)
+      state.swapRequests = [action.payload, ...state.swapRequests]
+    },
+    updateSwapRequest: (state, action) => {
+      state.swapRequests = state.swapRequests.map((req) =>
+        req._id === action.payload._id ? action.payload : req
+      )
+    },
+    addNewSwapRequest: (state, action) => {
       state.swapRequests = [action.payload, ...state.swapRequests]
     },
     addNewShiftRequest: (state, action) => {
@@ -98,5 +105,6 @@ export const {
   addNewShiftRequest,
   updateSingleShiftApplication,
   addNewSwapRequest,
+  updateSwapRequest,
 } = shiftsAndOvertimesSlice.actions
 export const shiftsAndOvertimeRequestsReducer = shiftsAndOvertimesSlice.reducer

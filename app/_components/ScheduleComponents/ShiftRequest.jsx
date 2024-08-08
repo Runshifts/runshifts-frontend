@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
 import { getDateOrdinal } from "../../_utils"
@@ -9,7 +9,10 @@ import Spinner from "../../_assets/svgs/Spinner"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { addNewShifts, updateSingleShift } from "../../_redux/shifts.slice"
-import { handleUpdatedRequest } from "../../_redux/shiftsAndOvertimesRequests.slice"
+import {
+  handleUpdatedRequest,
+  updateSwapRequest,
+} from "../../_redux/shiftsAndOvertimesRequests.slice"
 
 export function ShiftRequest({ shiftRequest = {} }) {
   const shiftStart = useMemo(
@@ -103,11 +106,6 @@ export function UserDisplay({
 
 export function AcceptAndRejectButtons({ requestId, requestType }) {
   const [loading, setLoading] = useState("")
-  // const { handleUpdateSingleShift } = useContext(DashboardContext)
-  // const { updateSingleSwapRequest, updateAllShifts } = useContext(
-  //   EmployeeDashboardContext
-  // )
-
   const { organization } = useSelector((store) => store.organization)
   const URLS = useMemo(() => {
     return {
@@ -131,11 +129,10 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
         dispatch(handleUpdatedRequest({ data: request, type: "overtime" }))
       },
       swap: ({ request }) => {
-        // updateSingleSwapRequest(request)
+        dispatch(updateSwapRequest(request))
         dispatch(
           addNewShifts({ shifts: [request.receiverShift, request.senderShift] })
         )
-        console.log(request)
       },
     }),
     [dispatch]

@@ -6,6 +6,7 @@ import { addNewShifts } from "../../_redux/shifts.slice"
 import {
   updateSingleShiftApplication,
   addNewSwapRequest,
+  updateSwapRequest,
 } from "../../_redux/shiftsAndOvertimesRequests.slice"
 import { useDispatch } from "react-redux"
 
@@ -34,7 +35,6 @@ export default function useStaffShiftListeners() {
     (data) => {
       if (data.statusCode === 200) {
         toast.remove(toastId)
-        console.log(data, "accepted")
         data.shift && dispatch(addNewShifts({ shifts: [data.shift] }))
         data.shiftApplication &&
           dispatch(updateSingleShiftApplication(data.shiftApplication))
@@ -48,7 +48,6 @@ export default function useStaffShiftListeners() {
     (data) => {
       if (data.statusCode === 200) {
         toast.remove(toastId)
-        console.log(data, "rejected")
         data.shiftApplication &&
           dispatch(updateSingleShiftApplication(data.shiftApplication))
         data.message && setToastId(toast.success(data.message))
@@ -63,6 +62,18 @@ export default function useStaffShiftListeners() {
         data.swapRequest &&
           data.statusCode === 200 &&
           dispatch(addNewSwapRequest(data.swapRequest))
+        data.message && setToastId(toast.success(data.message))
+      }
+    },
+    [dispatch, toastId]
+  )
+  const handleSwapRequestAcceptance = useCallback(
+    (data) => {
+      if (data.statusCode === 200) {
+        toast.remove(toastId)
+        data.swapRequest && dispatch(updateSwapRequest(data.swapRequest))
+        Array.isArray(data.shifts) &&
+          dispatch(addNewShifts({ shifts: data.shifts }))
         data.message && setToastId(toast.success(data.message))
       }
     },
@@ -88,4 +99,12 @@ export default function useStaffShiftListeners() {
     event: SHIFT_EVENTS.SWAP_REQUEST,
     callback: handleNewSwapRequest,
   })
+  useListenFor({
+    event: SHIFT_EVENTS.SHIFT_SWAP_ACCEPTED,
+    callback: handleSwapRequestAcceptance,
+  })
+  // useListenFor({
+  //   event: SHIFT_EVENTS.SHIFT_SWAP_REJECTED,
+  //   callback: handleShiftRequestRejection,
+  // })
 }
