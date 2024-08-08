@@ -2,8 +2,11 @@ import { useCallback, useState, useContext } from "react"
 import toast from "react-hot-toast"
 import getUseListenForHook from "../../_hooks/getUseListenForHook"
 import SHIFT_EVENTS from "../events/shifts"
-import { addNewShifts, updateSingleShift } from "../../_redux/shifts.slice"
-import { updateSingleShiftApplication } from "../../_redux/shiftsAndOvertimesRequests.slice"
+import { addNewShifts } from "../../_redux/shifts.slice"
+import {
+  updateSingleShiftApplication,
+  addNewSwapRequest,
+} from "../../_redux/shiftsAndOvertimesRequests.slice"
 import { useDispatch } from "react-redux"
 
 export default function useStaffShiftListeners() {
@@ -53,6 +56,18 @@ export default function useStaffShiftListeners() {
     },
     [dispatch, toastId]
   )
+  const handleNewSwapRequest = useCallback(
+    (data) => {
+      if (data.statusCode === 200) {
+        toast.remove(toastId)
+        data.swapRequest &&
+          data.statusCode === 200 &&
+          dispatch(addNewSwapRequest(data.swapRequest))
+        data.message && setToastId(toast.success(data.message))
+      }
+    },
+    [dispatch, toastId]
+  )
   useListenFor({
     event: SHIFT_EVENTS.NEW_SHIFT,
     callback: handleNewShift,
@@ -68,5 +83,9 @@ export default function useStaffShiftListeners() {
   useListenFor({
     event: SHIFT_EVENTS.SHIFT_REQUEST_REJECTED,
     callback: handleShiftRequestRejection,
+  })
+  useListenFor({
+    event: SHIFT_EVENTS.SWAP_REQUEST,
+    callback: handleNewSwapRequest,
   })
 }

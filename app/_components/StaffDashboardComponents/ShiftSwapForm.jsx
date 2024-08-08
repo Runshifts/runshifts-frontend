@@ -5,12 +5,14 @@ import FormInputAndLabel from "../ScheduleComponents/NewShiftForm/FormInputAndLa
 import useAxios from "../../_hooks/useAxios"
 import toast from "react-hot-toast"
 import MY_SHIFTS_URLS from "../../_urls/shiftsURLs"
-import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
+// import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
 import DropDown from "../AppComps/Dropdown"
 import { Option } from "../AppComps/Select"
 import { UserContext } from "../../_providers/UserProvider"
 import { useSelector } from "react-redux"
 import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
+import { useDispatch } from "react-redux"
+import { addNewSwapRequest } from "../../_redux/shiftsAndOvertimesRequests.slice"
 const dateFormatOptions = {
   day: "numeric",
   weekday: "long",
@@ -24,7 +26,8 @@ export default function ShiftSwapForm({
   employee,
 }) {
   const { user } = useContext(UserContext)
-  const { updateAllSwapRequests } = useContext(EmployeeDashboardContext)
+  // const { updateAllSwapRequests } = useContext(EmployeeDashboardContext)
+  const dispatch = useDispatch()
   const { currentWeek } = useSelector((store) => store.shiftsAndOvertimes)
   const { listOfShiftsInCurrentWeek } = useManageFetchWeeklySchedule()
   const { employees } = useSelector((store) => store.organization)
@@ -87,17 +90,17 @@ export default function ShiftSwapForm({
       )
       if (res.statusCode === 200) {
         toast.success(res.message || "Swap request sent!")
-        updateAllSwapRequests([res.request])
+        dispatch(addNewSwapRequest(res.request))
       } else toast.error(res.message || "Unable to send swap request")
       setLoading(false)
     },
     [
+      dispatch,
       employee,
       selectedEmployee,
       currentShift,
       selectedShift,
       fetchData,
-      updateAllSwapRequests,
     ]
   )
 
