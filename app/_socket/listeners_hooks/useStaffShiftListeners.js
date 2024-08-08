@@ -79,6 +79,16 @@ export default function useStaffShiftListeners() {
     },
     [dispatch, toastId]
   )
+  const handleSwapRequestRejection = useCallback(
+    (data) => {
+      if (data.statusCode === 200) {
+        toast.remove(toastId)
+        data.swapRequest && dispatch(updateSwapRequest(data.swapRequest))
+        data.message && setToastId(toast.success(data.message))
+      }
+    },
+    [dispatch, toastId]
+  )
   useListenFor({
     event: SHIFT_EVENTS.NEW_SHIFT,
     callback: handleNewShift,
@@ -103,8 +113,8 @@ export default function useStaffShiftListeners() {
     event: SHIFT_EVENTS.SHIFT_SWAP_ACCEPTED,
     callback: handleSwapRequestAcceptance,
   })
-  // useListenFor({
-  //   event: SHIFT_EVENTS.SHIFT_SWAP_REJECTED,
-  //   callback: handleShiftRequestRejection,
-  // })
+  useListenFor({
+    event: SHIFT_EVENTS.SHIFT_SWAP_REJECTED,
+    callback: handleSwapRequestRejection,
+  })
 }
