@@ -1,16 +1,12 @@
+"use client"
 
+import { Datepicker } from "flowbite-react"
 
-'use client';
-
-import { Datepicker } from 'flowbite-react';
-
-function Component() {
-  return <Datepicker className='' defaultValue={'Calendar'} autoHide={false} />;
+function Calendar() {
+  return <Datepicker className="" defaultValue={"Calendar"} autoHide={false}  />
 }
 
-
-export default Component
-
+export default Calendar
 
 // 'use client'
 

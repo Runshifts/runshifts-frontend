@@ -8,7 +8,8 @@ import OvertimeRequestsSection from "../../_components/ScheduleComponents/Overti
 import { getNextSunday, getPreviousMonday } from "../../_utils"
 import DateRangePicker from "../../_components/AppComps/Datepicker"
 import useRenderShiftFilters from "../../_hooks/useRenderShiftFilters"
-import NewShiftForm from "../../_components/ScheduleComponents/NewShiftForm/NewShiftForm"
+import AddShiftForm from "../../_components/ScheduleComponents/NewShiftForm/AddShiftForm"
+import CreateShiftForm from "../../_components/ScheduleComponents/NewShiftForm/CreateShiftForm"
 import useHandleShiftDuplication from "../../_hooks/useHandleShiftDuplication"
 import { addNewShifts, setCurrentWeek } from "../../_redux/shifts.slice"
 import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
@@ -21,6 +22,7 @@ import { fetchShiftAndOvertimeRequests } from "../../_redux/thunks/shiftsAndOver
 
 export default function Schedule() {
   const [newShiftDetails, setNewShiftDetails] = useState(null)
+  const [showCreateShiftForm, setShowCreateShiftForm] = useState(false)
   const dispatch = useDispatch()
   const [selectedUser, setSelectedUser] = useState(null)
   const {
@@ -72,6 +74,10 @@ export default function Schedule() {
     [currentWeek.start]
   )
 
+  const handleCreateShiftClick = useCallback(() => {
+    setShowCreateShiftForm(true)
+  }, [])
+
   const weekWithPresentDateInIt = useMemo(
     () => ({
       start: getPreviousMonday(new Date(Date.now())),
@@ -96,13 +102,18 @@ export default function Schedule() {
   return (
     <section>
       <>
-        <NewShiftForm
+        <AddShiftForm
           show={newShiftDetails !== null}
           newShiftDetails={newShiftDetails}
           onCancel={() => setNewShiftDetails(null)}
           handleNewShift={(newShift) =>
             dispatch(addNewShifts({ shifts: [newShift] }))
           }
+          currentWeek={currentWeek}
+        />
+        <CreateShiftForm
+          show={showCreateShiftForm}
+          onCancel={() => setShowCreateShiftForm(false)}
           currentWeek={currentWeek}
         />
       </>
@@ -112,7 +123,7 @@ export default function Schedule() {
           <CreateAndDuplicateShiftButtons
             loading={inProgress}
             duplicateWeek={() => duplicateWeek(organization?._id)}
-            showAddShiftModal={handleAddShiftClick}
+            handleCreateShiftClick={handleCreateShiftClick}
           />
         </div>
         <ul className="flex list-none gap-2">

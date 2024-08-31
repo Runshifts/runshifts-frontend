@@ -1,19 +1,16 @@
-import { useCallback, useContext, useMemo, useState } from "react"
-import { OrganizationContext } from "../../../_providers/OrganizationProvider"
+import { useCallback, useMemo, useState } from "react"
 import FormLocationInput from "./FormLocationInput"
 import FormRadio from "./FormRadio"
 import ShiftDurationInputs from "./ShiftDurationInputs"
-import FormInputAndLabel, {
-  FormMultipleSelectInputAndLabel,
-} from "./FormInputAndLabel"
+import FormInputAndLabel from "./FormInputAndLabel"
 import { msToHourMinSecond } from "../../../_utils"
 import toast from "react-hot-toast"
 import useAxios from "../../../_hooks/useAxios"
 import Spinner from "../../../_assets/svgs/Spinner"
-import DropDown from "../../../_components/AppComps/Dropdown"
-import { Option } from "../../../_components/AppComps/Select"
 import Modal from "../../../_components/AppComps/Modal"
 import { useSelector } from "react-redux"
+import EmployeeInput from "./EmployeeInput"
+import PositionInput from "./PositionInput"
 
 const getInitialState = (initialState = {}) => ({
   location: null,
@@ -27,7 +24,7 @@ const getInitialState = (initialState = {}) => ({
   ...initialState,
 })
 
-export default function Form({
+export default function AddShiftFormModal({
   show = false,
   newShiftDetails,
   onCancel = () => {},
@@ -36,7 +33,7 @@ export default function Form({
 }) {
   return (
     <Modal open={show} zIndex={2000}>
-      <NewShiftForm
+      <AddShiftForm
         newShiftDetails={newShiftDetails}
         onCancel={onCancel}
         handleNewShift={handleNewShift}
@@ -46,7 +43,7 @@ export default function Form({
   )
 }
 
-function NewShiftForm({
+function AddShiftForm({
   onCancel,
   newShiftDetails,
   handleNewShift,
@@ -57,7 +54,7 @@ function NewShiftForm({
   const [shiftData, setShiftData] = useState(() =>
     getInitialState({ location: newShiftDetails?.assignee?.location })
   )
-  const { organization, employees, shiftManagements, ...rest } = useSelector(
+  const { organization, employees, shiftManagements } = useSelector(
     (store) => store.organization
   )
   const defaultShiftManageMents = useMemo(
@@ -316,133 +313,5 @@ function NewShiftForm({
         </div>
       </form>
     </section>
-  )
-}
-
-function EmployeeInput({
-  defaultAssignee,
-  selectedUsers,
-  handleSelect,
-  deselectUser,
-  selectedPositions,
-}) {
-  const { employees } = useSelector(store => store.organization)
-
-  const InputDisplay = useCallback(
-    ({ value }) => (
-      <FormInputAndLabel
-        label="Select employee"
-        inputProps={{
-          placeholder: "Select employee",
-          value,
-          readOnly: true,
-          role: defaultAssignee ? "select" : "input",
-        }}
-      />
-    ),
-    []
-  )
-  const availableUserOptions = useMemo(
-    () =>
-      employees.filter(
-        (emp) =>
-          JSON.stringify(selectedUsers).includes(emp._id) === false &&
-          (selectedPositions.length === 0 ||
-            JSON.stringify(selectedPositions)
-              .toLowerCase()
-              .includes(emp.position?.name?.toLowerCase()) === true)
-      ),
-    [employees, selectedUsers, selectedPositions]
-  )
-
-  if (defaultAssignee)
-    return (
-      <InputDisplay
-        value={
-          `${defaultAssignee?.firstName || ""} ${
-            defaultAssignee?.lastName || ""
-          }`.trim() ||
-          defaultAssignee?.email ||
-          ""
-        }
-      />
-    )
-  return (
-    <DropDown
-      dropDownTrigger={
-        <FormMultipleSelectInputAndLabel
-          label="Select employee"
-          placeholder="Select employee"
-          selectedOptions={selectedUsers}
-          handleDeselect={deselectUser}
-          getDisplayValue={(option) =>
-            option.firstName || option.lastName || option.email
-          }
-        />
-      }
-      dropdownContent={
-        <>
-          {availableUserOptions.map((emp) => (
-            <Option key={emp._id} onClick={() => handleSelect(emp)}>
-              {emp.firstName || emp.lastName || emp.email || ""}
-            </Option>
-          ))}
-        </>
-      }
-    />
-  )
-}
-
-function PositionInput({
-  defaultAssignee,
-  selectedPositions = [],
-  handleSelect,
-  deselectPosition,
-}) {
-  const { positions } = useSelector((store) => store.organization)
-  const availableRoleOptions = useMemo(
-    () =>
-      positions.filter(
-        (role) =>
-          JSON.stringify(selectedPositions)?.includes(role._id) === false
-      ),
-    [positions, selectedPositions]
-  )
-
-  if (defaultAssignee)
-    return (
-      <FormInputAndLabel
-        label="Position"
-        inputProps={{
-          placeholder: "Choose position",
-          readOnly: true,
-          value: defaultAssignee?.position?.name || "",
-        }}
-      />
-    )
-  return (
-    <DropDown
-      disabled={availableRoleOptions.length === 0}
-      dropDownTrigger={
-        <FormMultipleSelectInputAndLabel
-          label="Choose Position"
-          placeholder={
-            positions.length > 0 ? "Choose Position" : "No positions available"
-          }
-          selectedOptions={selectedPositions}
-          handleDeselect={deselectPosition}
-          getDisplayValue={(option) => option.name}
-        />
-      }
-      dropdownContent={
-        <>
-          {availableRoleOptions.map((role) => (
-            <Option key={role._id} onClick={() => handleSelect(role)}>
-              {role.name}
-            </Option>
-          ))}
-        </>
-      }
-    />
   )
 }
