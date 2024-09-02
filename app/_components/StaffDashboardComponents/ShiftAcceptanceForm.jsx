@@ -42,7 +42,7 @@ export default function ShiftAcceptanceForm({ shift = {}, onFinish }) {
       } else toast.error(res.message || `Unable to ${action} shift.`)
       setLoading({ accept: false, "drop-off": false })
     },
-    [shift, organization, loading, fetchData]
+    [shift, loading, fetchData, dispatch, onFinish]
   )
 
   return (

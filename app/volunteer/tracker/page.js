@@ -7,7 +7,7 @@ import Heading from "../../_components/Headings"
 import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
 import { UserContext } from "../../_providers/UserProvider"
 
-function page() {
+function Page() {
   const { user } = useContext(UserContext)
   const { listOfShiftsInCurrentWeek } = useManageFetchWeeklySchedule()
   const todaysShift = useMemo(
@@ -42,14 +42,15 @@ function page() {
   )
 }
 
-export default page
+export default Page
 
 function CountDown({ startTime, endTime }) {
   console.log(startTime, endTime)
   const dateInstanceOfStartTime = new Date(startTime)
   const dateInstanceOfEndTime = new Date(endTime)
   const isStartTimeInFuture = useMemo(
-    () => new Date(startTime).getTime() > Date.now()
+    () => new Date(startTime).getTime() > Date.now(),
+    [startTime]
   )
 
   if (!endTime) return null

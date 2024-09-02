@@ -15,6 +15,6 @@ export default function useGetAllDaysOfTheWeek(
       start.setHours(start.getHours() + 24)
     }
     return allDays
-  }, [currentWeek.start, currentWeek.end])
+  }, [currentWeek.start])
   return allDays
 }

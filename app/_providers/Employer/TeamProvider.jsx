@@ -63,7 +63,7 @@ export default function TeamProvider({
       setHasInitialized(true)
     }
     setLoading(false)
-  }, [organizationId])
+  }, [organizationId, fetchData])
 
   useEffect(() => {
     shouldAutoInitialize && initialize()
@@ -96,7 +96,7 @@ export default function TeamProvider({
       }
       setLoadingStats(false)
     },
-    [loadingStats, organizationId, totalNumOfHoursWorkedStore]
+    [loadingStats, organizationId, totalNumOfHoursWorkedStore, fetchData]
   )
 
   const updateRecentlyViewed = useCallback((update = []) => {

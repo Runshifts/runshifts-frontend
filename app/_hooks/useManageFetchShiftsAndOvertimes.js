@@ -35,7 +35,7 @@ export default function useManageFetchShiftsAndOvertimes({
       } else setFetchingShiftsError(true)
       setLoadingShifts(false)
     },
-    [organization, weeksFetched, updateAllShifts, updateAllOvertimes]
+    [organization, weeksFetched, updateAllShifts, updateAllOvertimes, fetchData]
   )
 
   useEffect(() => {

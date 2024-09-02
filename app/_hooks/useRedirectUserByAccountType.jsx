@@ -15,7 +15,7 @@ export default function useRedirectUserByAccountType() {
       }
       if (pathname.startsWith(path) === false) router.push(path)
     },
-    [router]
+    [router, pathname]
   )
 
   return redirectUser

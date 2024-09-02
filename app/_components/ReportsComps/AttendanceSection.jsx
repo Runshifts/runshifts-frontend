@@ -1,5 +1,4 @@
 "use client"
-import { testAttendanceSeries } from "./DefaultBarChartOptions"
 import StatisticsView from "./StatisticsView"
 import { formatDuration } from "./StatisticsGraphicalView"
 import { fetchAttendanceStats } from "../../_redux/thunks/reports.thunk"
@@ -40,7 +39,8 @@ function getAttendanceNumericalData(data = []) {
     secondary: { name: "Late", value: it.lateShifts },
   }))
 }
-function AttendanceSection({ selectedEmployees = [] }) {
+
+export default function AttendanceSection({ selectedEmployees = [] }) {
   const [daysAgo, setDaysAgo] = useState({
     displayValue: "Last 7 days",
     value: 7,
@@ -53,6 +53,7 @@ function AttendanceSection({ selectedEmployees = [] }) {
     selectedEmployees,
     thunkFunction: fetchAttendanceStats,
   })
+  // return null
   return (
     <StatisticsView
       series={getAttendanceGraphSeries(cache[cacheKey]?.attendance || [])}
@@ -70,5 +71,3 @@ function AttendanceSection({ selectedEmployees = [] }) {
     />
   )
 }
-
-export default AttendanceSection

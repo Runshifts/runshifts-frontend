@@ -30,7 +30,6 @@ export function Option({ children, onClick, isSelected, style }) {
   return (
     <span
       onClick={onClick}
-      role="option"
       className={`cursor-pointer truncat block w-[100%] text-[#172B4D] hover:bg-[#F4F5F7] text-sm font-normal leading-tight px-[16px] py-1.5 justify-start items-center ${
         isSelected && "bg-gray-100"
       }`}

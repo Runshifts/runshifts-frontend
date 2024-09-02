@@ -32,24 +32,27 @@ export default function OvertimeRequestsSection({
 export function OvertimeRequest({ overtimeRequest = {} }) {
   const overtimeStart = useMemo(
     () => new Date(overtimeRequest?.shift?.startTime),
-    [overtimeRequest?.startTime]
+    [overtimeRequest?.shift?.startTime]
   )
   const overtimeEnd = useMemo(
     () => new Date(overtimeRequest?.shift?.endTime),
-    [overtimeRequest?.endTime]
+    [overtimeRequest?.shift?.endTime]
   )
 
-  const timeFormatOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
-  }
+  const timeFormatOptions = useMemo(
+    () => ({
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+    []
+  )
 
   const [start, end] = useMemo(
     () => [
       overtimeStart.toLocaleTimeString("default", timeFormatOptions),
       overtimeEnd.toLocaleTimeString("default", timeFormatOptions),
     ],
-    [overtimeStart, overtimeEnd]
+    [overtimeStart, overtimeEnd, timeFormatOptions]
   )
   const isStillValid = useMemo(() => {
     return new Date(overtimeRequest?.validUntil).getTime() > Date.now()

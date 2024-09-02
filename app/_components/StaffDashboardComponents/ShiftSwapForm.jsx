@@ -56,6 +56,7 @@ export default function ShiftSwapForm({
       selectedEmployee,
       idOfUserToShowShiftOptions,
       currentShift,
+      currentWeek.start
     ]
   )
   const fetchData = useAxios()

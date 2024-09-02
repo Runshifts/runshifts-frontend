@@ -21,12 +21,15 @@ export default function useShiftListeners() {
       dispatch(addNewShifts({ shifts: data.shifts }))
       setToastId(toast.success(data.message))
     },
-    [dispatch]
+    [dispatch, toastId]
   )
-  const handleMultipleShiftCreateError = useCallback((data) => {
-    toast.remove(toastId)
-    setToastId(toast.error(data.message))
-  }, [])
+  const handleMultipleShiftCreateError = useCallback(
+    (data) => {
+      toast.remove(toastId)
+      setToastId(toast.error(data.message))
+    },
+    [toastId]
+  )
 
   useListenFor({
     event: SHIFT_EVENTS.CREATE_MULTIPLE_SHIFTS_SUCCESS,

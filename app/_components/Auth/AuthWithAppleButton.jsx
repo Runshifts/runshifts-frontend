@@ -1,5 +1,5 @@
 "use client"
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import { appleAuthHelpers } from "react-apple-signin-auth"
 
 // import AppleLogin from "react-apple-login"
@@ -27,14 +27,17 @@ export default function AuthWithAppleButton({
   //   "https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
   // )
 
-  const authOptions = {
-    clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
-    scope: "email name",
-    redirectURI: `${process.env.NEXT_PUBLIC_BASE_URI}/${path}`,
-    /** State string that is returned with the apple response */
-    state: "employer",
-    usePopup: false,
-  }
+  const authOptions = useMemo(
+    () => ({
+      clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
+      scope: "email name",
+      redirectURI: `${process.env.NEXT_PUBLIC_BASE_URI}/${path}`,
+      /** State string that is returned with the apple response */
+      state: "employer",
+      usePopup: false,
+    }),
+    [path]
+  )
 
   const handleClick = useCallback(async () => {
     console.log("kjhgfddfghj")
@@ -53,6 +56,6 @@ export default function AuthWithAppleButton({
       console.log("\n\n\n\n\nn\n\nn\n\n\n\n\n\n\n\nn\n\n")
       console.log("Apple Auth error", err)
     }
-  }, [authOptions,])
+  }, [authOptions])
   return <>{childComponent({ onClick: handleClick })}</>
 }

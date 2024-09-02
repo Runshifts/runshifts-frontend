@@ -15,7 +15,7 @@ import {
   updateShiftManagements,
 } from "../../_redux/organization.slice"
 
-const GeneralSettings = () => {
+export default function GeneralSettings() {
   const dispatch = useDispatch()
   const fetchData = useAxios()
   const { locations, organization, shiftManagements } = useSelector(
@@ -25,17 +25,12 @@ const GeneralSettings = () => {
   const { default: defaultShiftManagements, custom: customShiftManagements } =
     shiftManagements
 
-  const [formData, setFormData] = useState(() => {
-    const savedFormData = localStorage.getItem("formData")
-    return savedFormData
-      ? JSON.parse(savedFormData)
-      : {
-          businessName: organization?.name || "",
-          numberOfWorkers: "",
-          officeAddress: [""],
-          breakDuration: 0,
-          logo: null,
-        }
+  const [formData, setFormData] = useState({
+    businessName: organization?.name || "",
+    numberOfWorkers: "",
+    officeAddress: [""],
+    breakDuration: 0,
+    logo: null,
   })
 
   const [officeAddress, setOfficeAddress] = useState(
@@ -130,7 +125,7 @@ const GeneralSettings = () => {
     localStorage.setItem("formData", JSON.stringify(formData))
   }, [formData])
 
-  const [color, setColor] = useColor("hex", "#121212")
+  const [color, setColor] = useColor("#121212")
 
   const handleFileChange = (event) => {
     setSelectedImage(event.target.files[0])
@@ -284,11 +279,14 @@ const GeneralSettings = () => {
     },
     [
       organization,
+      fetchData,
       dispatch,
       defaultShiftManagementState,
       formData,
       selectedImage,
-      officeAddress
+      officeAddress,
+      color,
+      customShiftManagementState,
     ]
   )
 
@@ -393,7 +391,7 @@ const GeneralSettings = () => {
           </div>
 
           <div className="m-2">
-            <ColorPicker color={color} setColor={setColor} />
+            {/* <ColorPicker color={color} setColor={setColor} /> */}
           </div>
 
           <div className="flex justify-between items-center mx-2 my-4">
@@ -423,5 +421,3 @@ const GeneralSettings = () => {
     </section>
   )
 }
-
-export default GeneralSettings

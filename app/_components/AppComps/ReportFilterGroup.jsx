@@ -1,3 +1,4 @@
+"use client"
 import { DepartmentsOrPositionsFilter, LocationFilter } from "./FilterGroup"
 import useFilterEmployees from "../../_hooks/useFilterEmployees"
 import useHandleMultipleEmployeesSelection from "../../_hooks/useHandleMultipleEmployeesSelection"

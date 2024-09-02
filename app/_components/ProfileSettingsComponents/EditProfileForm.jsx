@@ -86,7 +86,15 @@ function ProfileForm({ accountType }) {
       }
       setIsUpdating(false)
     },
-    [formData, fetchData, selectedFile, isUpdating, organization, user]
+    [
+      formData,
+      fetchData,
+      selectedFile,
+      isUpdating,
+      organization,
+      user,
+      updateUser,
+    ]
   )
   useEffect(() => {
     setFormData({ ...user })
@@ -190,15 +198,12 @@ function ChangePasswordForm() {
   const { organization } = useContext(OrganizationContext)
 
   const [formData, setFormData] = useState(() => {
-    const savedFormData = localStorage.getItem("formData")
-    return savedFormData
-      ? JSON.parse(savedFormData)
-      : {
-          phoneNumber: "",
-          homeAddress: "",
-          image: "",
-          hourRate: "",
-        }
+    return {
+      phoneNumber: "",
+      homeAddress: "",
+      image: "",
+      hourRate: "",
+    }
   })
 
   const [isSecurityEnabled, setIsSecurityEnabled] = useState(false)

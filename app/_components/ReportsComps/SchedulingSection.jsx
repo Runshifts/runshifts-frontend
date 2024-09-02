@@ -6,7 +6,7 @@ import { fetchScheduleAdherence } from "../../_redux/thunks/reports.thunk"
 import { useState } from "react"
 import useHandleReportsThunkDispatch from "../../_hooks/useHandleReportsThunkDispatch"
 
-export default function SchedulingSection({ selectedEmployees }) {
+export default function SchedulingSection({ selectedEmployees = [] }) {
   const [daysAgo, setDaysAgo] = useState({
     displayValue: "Last 7 days",
     value: 7,

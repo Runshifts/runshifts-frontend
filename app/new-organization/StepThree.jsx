@@ -38,16 +38,13 @@ export default function StepOne({ isActive, onSubmit = () => {} }) {
         prev.filter((it) => it.email.toLowerCase() !== email?.toLowerCase())
       )
     },
-    [teamMembers, email, fullName]
+    []
   )
 
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault()
-      if (
-        teamMembers.length === 0 &&
-        (!fullName.trim() || !email.trim())
-      )
+      if (teamMembers.length === 0 && (!fullName.trim() || !email.trim()))
         return toast.error("All fields are required", toastOptions)
       const body = {
         teamMembers: [...teamMembers, { email, fullName }],

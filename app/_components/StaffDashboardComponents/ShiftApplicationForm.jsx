@@ -46,7 +46,14 @@ export default function ShiftApplicationForm({
       }
       setLoading(false)
     },
-    [organization, loading, fetchData, isOvertimeApplication, shift, dispatch]
+    [
+      organization,
+      loading,
+      fetchData,
+      isOvertimeApplication,
+      dispatch,
+      onFinish,
+    ]
   )
 
   const getShiftDayInput = useCallback((shift) => {

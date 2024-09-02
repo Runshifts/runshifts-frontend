@@ -48,7 +48,7 @@ export default function EmployerOrDirectorSignup({
         })
       setLoading(false)
     },
-    [formData]
+    [formData, fetchData, ownerType, router]
   )
 
   return (

@@ -52,7 +52,7 @@ export default function Team() {
     recentlyViewedEmployees,
     teamStatsCache,
     loadingTeamData,
-    teamStats
+    teamStats,
   } = useSelector((store) => store.organization)
 
   const handleFetchStatsForDuration = useCallback(
@@ -111,7 +111,7 @@ export default function Team() {
         })
       }
     },
-    [organization?._id]
+    [organization?._id, dispatch, fetchData]
   )
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function Team() {
       dispatch(fetchTeamData(organization?._id))
       dispatch(fetchArchivedTeamMembers(organization?._id))
     }
-  }, [dispatch, organization?._id, hasInitializedTeam])
+  }, [dispatch, organization, hasInitializedTeam])
 
   return (
     <>

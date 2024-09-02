@@ -144,6 +144,7 @@ const NewMemberForm = ({
       organizationId,
       handleUserResponse,
       onCancel,
+      fetchData,
     ]
   )
 
@@ -165,6 +166,7 @@ const NewMemberForm = ({
     organizationId,
     handleArchivedUser,
     onCancel,
+    fetchData,
   ])
 
   return (
@@ -468,6 +470,7 @@ const NewVolunteerForm = ({
       organizationId,
       handleUserResponse,
       onCancel,
+      fetchData,
     ]
   )
 
@@ -490,6 +493,7 @@ const NewVolunteerForm = ({
     handleArchivedUser,
     onCancel,
     teamMemberFormData.user?.isArchived,
+    fetchData,
   ])
 
   return (

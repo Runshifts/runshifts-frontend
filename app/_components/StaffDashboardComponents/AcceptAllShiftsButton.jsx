@@ -27,11 +27,11 @@ export default function AcceptAllShiftsButton({
       toast.success(res.message || "Shifts accepted successfully")
     } else toast.error(res.message || "Unable to accept all shifts")
     setLoading(false)
-  }, [currentWeek, organizationId, handleSuccess])
+  }, [currentWeek, organizationId, handleSuccess, fetchData])
   return (
     <button
       onClick={handleAcceptAllShifts}
-      disabled={(loading || isDisabled) ? true : false}
+      disabled={loading || isDisabled ? true : false}
       className="px-[12px] py-[6px] disabled:opacity-[.5] disabled:cursor-not-allowed first-letter:capitalize flex items-center gap-[4px] rounded-sm bg-primary-600 text-white leading-[20px] font-[500]"
     >
       {loading ? (

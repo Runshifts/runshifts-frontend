@@ -40,14 +40,7 @@ export default function UserProvider({ children }) {
       localStorage.clear()
       redirectAwayFromDashboard()
     }
-  }, [
-    router,
-    fetchData,
-    pathname,
-    redirectAwayFromDashboard,
-    redirectUser,
-    user,
-  ])
+  }, [fetchData, redirectAwayFromDashboard, redirectUser, user])
 
   const logout = useCallback(() => {
     redirectAwayFromDashboard()

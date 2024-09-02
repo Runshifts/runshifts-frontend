@@ -28,7 +28,7 @@ export default function DebouncedDropdownSearch({
         setLoadingResults(true)
       }
     },
-    [selectedId]
+    [selectedId, handleOptionSelect]
   )
 
   const handleSearch = useCallback(

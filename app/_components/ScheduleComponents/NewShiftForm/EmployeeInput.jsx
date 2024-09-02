@@ -27,7 +27,7 @@ export default function EmployeeInput({
         }}
       />
     ),
-    []
+    [defaultAssignee]
   )
   const availableUserOptions = useMemo(
     () =>

@@ -9,7 +9,11 @@ import FormHeading, { SubHeadingText } from "../_components/Auth/Heading"
 import { LuShieldCheck } from "react-icons/lu"
 import toast from "react-hot-toast"
 
-const toastOptions = { position: "top-left", className: "mx-[8%]", duration: 3000 }
+const toastOptions = {
+  position: "top-left",
+  className: "mx-[8%]",
+  duration: 3000,
+}
 function ChangePassword() {
   const router = useRouter()
 
@@ -46,7 +50,7 @@ function ChangePassword() {
       } else toast.error(res.message || "Error changing password", toastOptions)
       setLoading(false)
     },
-    [password, confirmPassword, router, fetchData, isFormDataValid, loading]
+    [password, router, fetchData, isFormDataValid, loading]
   )
 
   return (

@@ -135,7 +135,7 @@ function AddShiftForm({
       }))
       return true
     },
-    [shiftManagements, shiftDurationDate, shiftData.date]
+    [shiftDurationDate, shiftData.date]
   )
 
   const handleCancel = useCallback(() => {
@@ -176,12 +176,14 @@ function AddShiftForm({
       setLoading(false)
     },
     [
+      handleCancel,
       shiftData,
       fetchData,
       newShiftDetails?.assignee?._id,
       handleNewShift,
       isMultipleCreateMode,
       employees,
+      organization?._id,
     ]
   )
 

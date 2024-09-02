@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import ApexCharts from "apexcharts"
 
 const StatisticsDonut = ({
@@ -10,7 +10,7 @@ const StatisticsDonut = ({
   width,
   annotations = {},
 }) => {
-  const getChartOptions = () => {
+  const getChartOptions = useCallback(() => {
     return {
       series,
       colors,
@@ -57,8 +57,7 @@ const StatisticsDonut = ({
       },
       annotations,
     }
-  }
-
+  }, [annotations, colors, height, labels, series, width])
   const donutRef = useRef(null)
 
   useEffect(() => {
@@ -69,11 +68,14 @@ const StatisticsDonut = ({
         chart.destroy()
       }
     }
-  }, [donutRef.current])
+  }, [getChartOptions])
 
   return (
     <>
-      <div className="py-6 flex items-center justify-center" ref={donutRef}></div>
+      <div
+        className="py-6 flex items-center justify-center"
+        ref={donutRef}
+      ></div>
     </>
   )
 }

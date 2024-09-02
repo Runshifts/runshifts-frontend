@@ -62,7 +62,7 @@ function Verify() {
       } else toast.error(res.message || "Unable to verify your email")
       setLoading(false)
     },
-    [email, router, fetchData]
+    [email, router, fetchData, loading]
   )
 
   return (

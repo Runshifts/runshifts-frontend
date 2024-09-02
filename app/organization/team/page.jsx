@@ -108,7 +108,7 @@ function Team() {
         })
       }
     },
-    [organization?._id]
+    [organization?._id, dispatch, fetchData]
   )
 
   useEffect(() => {
@@ -116,7 +116,7 @@ function Team() {
       dispatch(fetchTeamData(organization?._id))
       dispatch(fetchArchivedTeamMembers(organization?._id))
     }
-  }, [dispatch, organization?._id, hasInitializedTeam])
+  }, [dispatch, organization, hasInitializedTeam])
 
   return (
     <>

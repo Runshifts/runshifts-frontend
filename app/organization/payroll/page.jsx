@@ -39,7 +39,7 @@ function Payroll() {
           })
         )
     }
-  }, [dispatch, organization?._id, currentWeek.start, cache])
+  }, [dispatch, organization, currentWeek.start, cache])
 
   return (
     <section className="h-screen w-full px-[12px] md:px-[40px] flex flex-col gap-4 items-start">

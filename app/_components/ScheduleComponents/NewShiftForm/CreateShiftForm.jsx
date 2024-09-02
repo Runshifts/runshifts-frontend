@@ -103,7 +103,7 @@ export function CreateShiftForm({ onCancel }) {
       setSelectedShiftManagement(selectedShiftManagement._id)
       return true
     },
-    [shiftManagements, selectedDates]
+    [selectedDates]
   )
   const resetForm = useCallback(() => {
     setSelectedDates([new Date(Date.now()).toDateString()])
@@ -120,7 +120,7 @@ export function CreateShiftForm({ onCancel }) {
       resetForm()
       onCancel()
     }
-  }, [loading, onCancel])
+  }, [loading, onCancel, resetForm])
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault()
@@ -170,6 +170,7 @@ export function CreateShiftForm({ onCancel }) {
       note,
       handleCancel,
       organization,
+      fetchData,
     ]
   )
 
