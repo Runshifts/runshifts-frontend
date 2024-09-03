@@ -21,7 +21,6 @@ export const fetchShiftAndOvertimeRequests = createAsyncThunk(
       shiftsRes?.statusCode === 200 ? shiftsRes?.results : []
     const overtimeRequests =
       overtimeRes?.statusCode === 200 ? overtimeRes?.results : []
-    console.log(shiftRequests, overtimeRequests)
     return {
       overtimeRequests,
       shiftRequests,

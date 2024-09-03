@@ -83,7 +83,6 @@ export default function DebouncedDropdownSearch({
               key={opt._id}
               onClick={() => {
                 handleOptionSelect(opt)
-                console.log(opt)
                 setSearchText(opt.name)
               }}
             >

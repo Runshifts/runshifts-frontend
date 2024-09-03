@@ -18,7 +18,6 @@ export const timesheetSlice = createSlice({
   initialState,
   reducers: {
     updateShifts: (state, action) => {
-      console.log(action.payload.shifts)
       state.shifts = mergeArrays(
         action.payload.shifts,
         [...state.shifts],
@@ -70,7 +69,6 @@ export const timesheetSlice = createSlice({
         }
       })
       .addCase(fetchQueries.rejected, (state, action) => {
-        console.log(action);
         state.loading = false
         toast.error("Something went wrong")
       })

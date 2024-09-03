@@ -37,7 +37,6 @@ export default function EmployerOrDirectorSignup({
         ...formData,
         type: ownerType,
       })
-      console.log(res.statusCode)
       if (res?.statusCode === 201) {
         sessionStorage.setItem("email", formData.email)
         router.push("/verify-email?type=employer")

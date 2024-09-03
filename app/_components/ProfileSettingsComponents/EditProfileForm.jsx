@@ -78,7 +78,6 @@ function ProfileForm({ accountType }) {
         formDataWithImage
       )
       if (response.statusCode === 200) {
-        console.log(response.user, "djfaldsja;")
         updateUser(response.user)
         toast.success(response.message || "Successfully updated profile")
       } else {

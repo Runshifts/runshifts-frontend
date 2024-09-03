@@ -26,7 +26,6 @@ export default async function axiosFetcher({
     })
     return await response.data
   } catch (err) {
-    // console.log(err, "ljljjkklk")
     if (err.message === "Network Error") {
       return {
         message: err.message,

@@ -40,7 +40,6 @@ export default function AuthWithAppleButton({
   )
 
   const handleClick = useCallback(async () => {
-    console.log("kjhgfddfghj")
     try {
       const response = await appleAuthHelpers.signIn({
         authOptions,
@@ -48,12 +47,11 @@ export default function AuthWithAppleButton({
       })
 
       if (response) {
-        console.log(response)
+        // console.log(response)
       } else {
         console.error("Error performing apple signin.", response)
       }
     } catch (err) {
-      console.log("\n\n\n\n\nn\n\nn\n\n\n\n\n\n\n\nn\n\n")
       console.log("Apple Auth error", err)
     }
   }, [authOptions])

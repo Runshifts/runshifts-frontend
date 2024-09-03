@@ -45,7 +45,6 @@ function Page() {
 export default Page
 
 function CountDown({ startTime, endTime }) {
-  console.log(startTime, endTime)
   const dateInstanceOfStartTime = new Date(startTime)
   const dateInstanceOfEndTime = new Date(endTime)
   const isStartTimeInFuture = useMemo(
