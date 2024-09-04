@@ -28,6 +28,6 @@
     "app/_assets/svgs/Logout.jsx",
     "app/_components/ProfileSettingsComponents/DisplayPictureInput.jsx",
     "app/_components/ProfileSettingsComponents/TwoFAInfoBlock.jsx"
-  ],
+, "app/homeEmployee/page.jsx"  ],
   "exclude": ["node_modules"]
 }

@@ -7,37 +7,35 @@ import CommonButtons from './CommonButtons';
 const menuItems = [
     {
         label: 'Home',
-        href: '#',
+        href: '/',
     },
     {
         label: 'About us',
-        href: '#',
+        href: '/about',
     },
     {
         label: 'Pricing',
-        href: '#',
+        href: '/pricing',
     },
     {
         label: 'Solution',
-        href: '#',
         dropdown: [
-            { label: 'Dashboard', href: '#' },
-            { label: 'Settings', href: '#' },
-            { label: 'Earnings', href: '#' },
-            { label: 'Sign out', href: '#' },
+            { label: 'Employer', href: '/homeEmployer' },
+            { label: 'Employee', href: '/homeEmployee' },
+            { label: 'Non-profit', href: '/homeNonprofits' },
         ],
     },
     {
         label: 'Knowledge base',
-        href: '#',
+        href: '/knowledgeb',
     },
     {
         label: 'Contact',
-        href: '#',
+        href: '/contact',
     },
     {
-        label: 'Get started with 50p',
-        href: '#',
+        label: 'Get started for free',
+        href: '/signup?type=for-profit',
         isButton: true,
     },
 ];
@@ -87,7 +85,10 @@ export default function Header() {
                                         </div>
                                     ) : (
                                         <CommonButtons>
+                                            <a href={item.href}>
                                             {item.label}
+                                            </a>
+                                            
                                         </CommonButtons>
                                     )}
                                     {isDropdownOpen && item.dropdown && (

@@ -5,8 +5,7 @@ import LoadingProvider from "./_providers/LoadingProvider"
 import { Toaster } from "react-hot-toast"
 import UserProvider from "./_providers/UserProvider"
 import ReduxProvider from "./_providers/ReduxProvider"
-import Header from './_components/homepageComps/Header.jsx'
-import Footer from './_components/homepageComps/Footer.jsx'
+
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -27,9 +26,7 @@ export default function RootLayout({ children }) {
           <LoadingProvider>
             <UserProvider>
               <ReduxProvider>
-                <Header />
                 {children}
-                <Footer />
                 </ReduxProvider>
             </UserProvider>
           </LoadingProvider>

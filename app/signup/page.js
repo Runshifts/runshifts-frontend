@@ -69,14 +69,14 @@ const Home = () => {
               router.push(textValuesBySignupType[signupType]?.organization.path)
             }
           />
-          <SignupTypeCard
+          {/* <SignupTypeCard
             heading={textValuesBySignupType[signupType]?.staff.heading}
             body={textValuesBySignupType[signupType]?.staff.body}
             imageSrc={user}
             onClick={() =>
               router.push(textValuesBySignupType[signupType]?.staff.path)
             }
-          />
+          /> */}
         </div>
 
         <p className="text-center text-[#645D5D] text-base">Or</p>

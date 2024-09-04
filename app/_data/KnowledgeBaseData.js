@@ -4,12 +4,12 @@ export const KnowledgeBaseData = [
         path: '/knowledgeb',
     },
     {
-        title: 'About us',
-        path: '/knowledgeb/about',
+        title: 'Employer',
+        path: '/knowledgeb/employer',
     },
     {
-        title: 'Solution',
-        path: '/knowledgeb/solution', // Changed from '/knowledgeb/home'
+        title: 'Employee',
+        path: '/knowledgeb/employee', // Changed from '/knowledgeb/home'
     },
     {
         title: 'Docs',
