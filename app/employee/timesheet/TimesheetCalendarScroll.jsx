@@ -3,7 +3,7 @@ import {
   DAYS_OF_THE_WEEK_STARTING_WITH_MONDAY,
   ONE_HOUR_IN_MILLISECONDS,
 } from "../../_utils"
-import { CalendarShiftDay } from "../CalendarComponents"
+import { CalendarShiftDay } from "../../_components/StaffDashboardComponents/CalendarComponents"
 
 export default function EmployeeTimeSheet({ shiftsGroupedByDate }) {
   const calculateShiftHoursWorked = useCallback((shifts) => {
@@ -80,7 +80,7 @@ function TimesheetElement({ numberOfHours, shifts, isOvertime }) {
         new Date(it.endTime).getTime() > Date.now() &&
         !it.endedAt
     )
-  }, [])
+  }, [shifts])
   const ongoingShift = useMemo(() => {
     return shifts.find(
       (it) =>

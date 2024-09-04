@@ -15,7 +15,7 @@ export default function StepOne({
       e.preventDefault()
       onSubmit(businessName)
     },
-    [businessName]
+    [businessName, onSubmit]
   )
 
   if (!isActive) return

@@ -9,7 +9,7 @@ export const KnowledgeBaseData = [
     },
     {
         title: 'Employee',
-        path: '/knowledgeb/employee', // Changed from '/knowledgeb/home'
+        path: '/knowledgeb/employee',
     },
     {
         title: 'Docs',
@@ -17,6 +17,6 @@ export const KnowledgeBaseData = [
     },
     {
         title: 'Contact',
-        path: '/knowledgeb/contact', // Changed from '/knowledgeb/home'
+        path: '/knowledgeb/contact',
     },
 ];

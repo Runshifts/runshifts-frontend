@@ -2,12 +2,12 @@ import CopySvg from "../../_assets/svgs/Copy"
 import Spinner from "../../_assets/svgs/Spinner"
 import { PiPlusBold } from "react-icons/pi";
 
-function CreateAndDuplicateShiftButtons({ duplicateWeek = () => { }, loading, showAddShiftModal = () => {} }) {
+function CreateAndDuplicateShiftButtons({ duplicateWeek = () => { }, loading, handleCreateShiftClick = () => {} }) {
   return (
     <section>
       <div className="flex items-center justify-center ">
         <button
-          onClick={() => showAddShiftModal({ createMultiple: true, })}
+          onClick={() => handleCreateShiftClick()}
           className="bg-[#7ED957] rounded-md flex items-center jusitfy-center mx-2 px-3 py-2"
         >
           <span className="w-[24px] h-[24px] border-[1.5px] border-solid border-white rounded-md flex text-white items-center justify-center">

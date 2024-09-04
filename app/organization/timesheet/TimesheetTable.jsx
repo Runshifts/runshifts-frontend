@@ -154,7 +154,7 @@ function TimesheetActions({ employee, shifts, index }) {
         employee?._id
       )
     },
-    [shifts, approveShifts]
+    [shifts, approveShifts, employee?._id]
   )
 
   const queryMultipleShifts = useCallback(
@@ -165,7 +165,7 @@ function TimesheetActions({ employee, shifts, index }) {
         employee?._id
       )
     },
-    [shifts, queryShifts]
+    [shifts, queryShifts, employee?._id]
   )
   const allShiftsAreApproved = useMemo(
     () => shifts.every((it) => it.isApproved),

@@ -30,14 +30,10 @@ function Verify() {
 
     try {
       const fullVerificationCode = verificationCode.join("");
-      console.log(verificationCode);
-
       const response = await axios.post(URL, {
         emailVerificationCode: fullVerificationCode,
         email: sessionStorage.getItem("email"),
       });
-
-      console.log(response);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       router.push("/welcome");

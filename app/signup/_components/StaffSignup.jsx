@@ -50,7 +50,7 @@ export default function StaffSignup({ staffType }) {
       } else setError(data.message)
       setLoading(false)
     },
-    [formData, fetchData, router]
+    [formData, fetchData, router, staffType]
   )
   return (
     <>
@@ -139,7 +139,7 @@ function OrganizationInput({
         setLoadingOrgSearch(true)
       }
     },
-    [selectedId]
+    [selectedId, handleOrganizationSelect]
   )
 
   const makeOrganizationsSearch = useCallback(
@@ -152,7 +152,7 @@ function OrganizationInput({
       else setOrganizations([])
       setLoadingOrgSearch(false)
     },
-    [fetchData]
+    [fetchData, organizationType]
   )
 
   useEffect(() => {

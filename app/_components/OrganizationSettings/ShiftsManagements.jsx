@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Options from "./Options";
 import { RiDeleteBinLine } from "react-icons/ri";

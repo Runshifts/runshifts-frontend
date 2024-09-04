@@ -1,6 +1,7 @@
+"use client"
 import { useState } from "react"
 import DownChevron from "../../_assets/svgs/DownChevron"
-import { Option } from "../../_components/AppComps/Select"
+import { Option } from "../AppComps/Select"
 import useOutsideClick from "../../_hooks/useOutsideClick"
 
 export default function CardDropdownSelect({

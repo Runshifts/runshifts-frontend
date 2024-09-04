@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import SettingsTab from '../page'
 import { PiWarningCircleFill } from 'react-icons/pi'

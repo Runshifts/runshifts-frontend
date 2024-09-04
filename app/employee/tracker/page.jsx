@@ -6,7 +6,7 @@ import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDash
 import EmployeeTrackerProvider from "../../_providers/Employee/TrackerProvider"
 import Heading from "../../_components/Headings"
 
-function page() {
+function Page() {
   const { shiftsInCurrentWeek } = useContext(EmployeeDashboardContext)
   const todaysShift = useMemo(
     () =>
@@ -38,7 +38,7 @@ function page() {
   )
 }
 
-export default page
+export default Page
 
 function CountDown({ startTime, endTime }) {
   const { hours, minutes, seconds } = useCountdown(
@@ -47,7 +47,8 @@ function CountDown({ startTime, endTime }) {
   const dateInstanceOfStartTime = new Date(startTime)
   const dateInstanceOfEndTime = new Date(endTime)
   const isStartTimeInFuture = useMemo(
-    () => new Date(startTime).getTime() > Date.now()
+    () => new Date(startTime).getTime() > Date.now(),
+    [startTime]
   )
 
   if (!endTime) return null

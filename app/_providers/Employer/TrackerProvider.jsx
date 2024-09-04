@@ -50,7 +50,10 @@ export default function TrackerProvider({
     return {
       clockedIn: filterShiftsByDateFilter(allShifts.clockedIn, dateFilter),
       clockedOut: filterShiftsByDateFilter(allShifts.clockedOut, dateFilter),
-      currentlyOnBreak: filterShiftsByDateFilter(allShifts.currentlyOnBreak, dateFilter),
+      currentlyOnBreak: filterShiftsByDateFilter(
+        allShifts.currentlyOnBreak,
+        dateFilter
+      ),
     }
   }, [
     filterShiftsByDateFilter,
@@ -83,9 +86,9 @@ export default function TrackerProvider({
           ],
           currentlyOnBreak: [
             ...prev.currentlyOnBreak,
-            ...[
-              ...res.shiftsCurrentlyOnBreak,
-            ].filter(removeDuplicates(prev.currentlyOnBreak)),
+            ...[...res.shiftsCurrentlyOnBreak].filter(
+              removeDuplicates(prev.currentlyOnBreak)
+            ),
           ],
         }))
         setAlreadyFetchedDates((prev) => ({
@@ -96,7 +99,7 @@ export default function TrackerProvider({
       setHasInitialized(true)
       setLoading(false)
     },
-    [organizationId, alreadyFetchedDates]
+    [organizationId, fetchData]
   )
 
   useEffect(() => {
@@ -111,7 +114,7 @@ export default function TrackerProvider({
       setLoading(true)
       fetchTrackerData(date)
     },
-    [fetchTrackerData, alreadyFetchedDates]
+    [fetchTrackerData, alreadyFetchedDates, loading]
   )
 
   return (

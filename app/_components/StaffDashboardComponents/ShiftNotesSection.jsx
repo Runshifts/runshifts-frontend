@@ -35,7 +35,7 @@ export function ShiftNotes({ shiftId, notesToDisplay }) {
   } = useSelector((store) => store.notes)
   const notesForShift = useMemo(
     () => notesToDisplay || notes.filter((note) => note.shift?._id === shiftId),
-    [notes, shiftId, ]
+    [notes, shiftId, notesToDisplay]
   )
   const sortedNotes = useMemo(
     () =>
@@ -48,7 +48,7 @@ export function ShiftNotes({ shiftId, notesToDisplay }) {
   useEffect(() => {
     if (notesForShift.length === 0 && !hasFetchedNotes && organization)
       dispatch(fetchNotes(organization?._id))
-  }, [notesForShift, organization])
+  }, [notesForShift, organization, dispatch, hasFetchedNotes])
 
   return (
     <>

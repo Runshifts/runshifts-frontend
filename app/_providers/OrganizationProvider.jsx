@@ -50,7 +50,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
         router.refresh()
       }
     }
-  }, [router, isEmployee, user?.organization])
+  }, [router, isEmployee, user?.organization, fetchData])
 
   const fetchEmployees = useCallback(async () => {
     if (!organization) return
@@ -61,7 +61,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
     if (res.statusCode === 200) {
       setEmployees(res.employees)
     }
-  }, [organization?._id])
+  }, [organization, fetchData])
 
   const updateEmployees = useCallback((update = []) => {
     setEmployees((prev) => [

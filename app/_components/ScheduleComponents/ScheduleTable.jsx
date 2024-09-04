@@ -179,7 +179,7 @@ function AssigneeRow({
               isAssigned={assignee !== null}
             />
           </Fragment>
-          {shouldShowAddShiftButton(day) && (
+          {shouldShowAddShiftButton(day) && assignee !== null && (
             <AddShift
               onClick={() =>
                 showAddShiftModal({

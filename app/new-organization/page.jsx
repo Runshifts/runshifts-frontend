@@ -59,7 +59,6 @@ function Page() {
             organizationType={organizationType}
             isActive={currentStep === 1}
             onSubmit={(name) => {
-              console.log(name)
               sessionStorage.setItem("businessName", name)
               setCurrentStep(2)
             }}

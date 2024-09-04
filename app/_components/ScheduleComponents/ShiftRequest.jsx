@@ -152,7 +152,7 @@ export function AcceptAndRejectButtons({ requestId, requestType }) {
       } else toast.error(res.message || "Something went wrong.")
       setLoading("")
     },
-    [fetchData, URLS, requestType, loading]
+    [fetchData, URLS, requestType, loading, callbacks]
   )
 
   return (

@@ -1,3 +1,4 @@
+"use client"
 import { useCallback } from "react"
 import useAxios from "./useAxios"
 import { useRouter } from "next/navigation"

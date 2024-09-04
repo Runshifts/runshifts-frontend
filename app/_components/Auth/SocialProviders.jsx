@@ -69,7 +69,6 @@ function SocialProviders({
 
   useEffect(() => {
     if (appleAuthCode) {
-      console.log(appleAuthCode)
       handleAppleAuthSuccess(appleAuthCode)
     }
   }, [searchParams, appleAuthCode, handleAppleAuthSuccess])

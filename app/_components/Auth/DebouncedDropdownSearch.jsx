@@ -28,7 +28,7 @@ export default function DebouncedDropdownSearch({
         setLoadingResults(true)
       }
     },
-    [selectedId]
+    [selectedId, handleOptionSelect]
   )
 
   const handleSearch = useCallback(
@@ -83,7 +83,6 @@ export default function DebouncedDropdownSearch({
               key={opt._id}
               onClick={() => {
                 handleOptionSelect(opt)
-                console.log(opt)
                 setSearchText(opt.name)
               }}
             >

@@ -31,7 +31,6 @@ const ScrollingTimeTable = ({ groupedShifts, title }) => {
                   key={current.assignee._id}
                   className="sticky left-0 bg-[#E4E4E4] border-t-solid border-t border-t-[#757575] border-r-solid border-r border-r-[#757575]"
                 >
-                  {console.log(current?.assignee)}
                   <Pill className="font-bold text-info-500 truncate max-w-[120px]">
                     {current.assignee?.firstName || current.assignee?.fullName}
                   </Pill>

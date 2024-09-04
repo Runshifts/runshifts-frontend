@@ -1,3 +1,4 @@
+"use client"
 import NextImage from "next/image"
 import { useCallback, useState } from "react"
 import placeholderImage from "../../_assets/img/user.png"

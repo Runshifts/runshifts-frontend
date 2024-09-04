@@ -27,7 +27,7 @@ import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
 import useManageFetchWeeklySchedule from "../../_hooks/useManageFetchWeeklySchedule"
 import { mergeArrays } from "../../_utils"
 
-function page() {
+function Page() {
   const { shifts } = useSelector((store) => store.shiftsAndOvertimes)
   const requestableOvertimeShifts = useMemo(
     () => shifts.filter((shift) => !shift.assignee),
@@ -152,4 +152,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

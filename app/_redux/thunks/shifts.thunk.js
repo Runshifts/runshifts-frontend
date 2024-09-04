@@ -28,7 +28,6 @@ export const fetchTodaysSnapshot = createAsyncThunk(
       url: `${DASHBOARD_URLS.snapshot(organizationId ? organizationId : null)}`,
       method: "get",
     })
-    console.log(res)
     if (res.statusCode !== 200)
       return rejectWithValue(res.message || "Unable to fetch today's snapshot.")
     else return { ...res }

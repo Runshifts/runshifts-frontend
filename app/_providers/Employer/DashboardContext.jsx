@@ -43,7 +43,7 @@ export const DashboardContext = createContext({
   indexOfThePresentWeek: 0,
   updateAllShifts: () => {},
   handleUpdateSingleShift: () => {},
-  overtimesInCurrentWeek: []
+  overtimesInCurrentWeek: [],
 })
 
 export default function DashboardProvider({ children }) {
@@ -120,7 +120,8 @@ export default function DashboardProvider({ children }) {
     useManageFetchShiftsAndOvertimes({
       updateAllShifts,
       currentWeek,
-      updateAllOvertimes: (update = []) => setAllOvertimes(prev => mergeArrays(prev, update, "_id"))
+      updateAllOvertimes: (update = []) =>
+        setAllOvertimes((prev) => mergeArrays(prev, update, "_id")),
     })
 
   const handleUpdateSingleShift = useCallback((update) => {
@@ -136,7 +137,7 @@ export default function DashboardProvider({ children }) {
       "get"
     )
     if (res.statusCode === 200) setTodaysSnapshot(res.snapshot)
-  }, [organization?._id])
+  }, [organization, fetchData])
 
   useEffect(() => {
     fetchSnapshot()
@@ -162,7 +163,7 @@ export default function DashboardProvider({ children }) {
         updateAllShifts,
         handleUpdateSingleShift,
         allOvertimes,
-        overtimesInCurrentWeek: listOfOvertimesInCurrentWeek
+        overtimesInCurrentWeek: listOfOvertimesInCurrentWeek,
       }}
     >
       {children}

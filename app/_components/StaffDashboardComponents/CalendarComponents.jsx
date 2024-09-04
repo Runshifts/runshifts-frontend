@@ -204,7 +204,7 @@ export function ShiftAssigneePill({ shift, handleClick, isOwnShift }) {
           ? "default"
           : "pointer",
       }
-  }, [shift, isPending, isOwnShift])
+  }, [shift, isPending])
   return (
     <button
       onClick={handleClick}

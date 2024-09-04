@@ -17,7 +17,7 @@ export default function useHandleMultipleEmployeesSelection({
       setSelectedEmployees((prev) => [...prev, employee])
       typeof onEmployeeSelect === "function" && onEmployeeSelect(employee)
     },
-    [selectedEmployees, onEmployeeRemove]
+    [selectedEmployees, onEmployeeSelect]
   )
 
   const handleRemoveEmployee = useCallback(

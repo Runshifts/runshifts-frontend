@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import ReportCard from "./ReportCard"
 import useCountdown from "../../_hooks/useCountDown"

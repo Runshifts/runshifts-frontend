@@ -49,7 +49,6 @@ export default function EmployeeTrackerProvider({ children, shiftId }) {
     async (time = new Date(), note = {}) => {
       if (loading === "checkout" || !shiftId) return
       setLoading("checkout")
-      console.log(note)
       const res = await fetchData(
         TRACKER_URLS.checkout(organization?._id, shiftId),
         "post",

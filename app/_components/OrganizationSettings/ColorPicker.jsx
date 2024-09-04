@@ -1,3 +1,4 @@
+"use client"
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 

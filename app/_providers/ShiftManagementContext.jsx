@@ -20,11 +20,7 @@ export default function ShiftsManagementProvider({ children, organizationId }) {
   const fetchShiftsManagement = useCallback(async () => {
     if (!organizationId) return
     const res = await fetchData(`/shifts-managements/${organizationId}`, "get")
-    // if (res.statusCode === 200) setShiftsManagement(res.results)
-    // console.log(res.results)
-
     if (res.statusCode === 200) {
-      console.log(res.results)
       setShiftsManagement(res.results)
     }
   }, [organizationId, fetchData])

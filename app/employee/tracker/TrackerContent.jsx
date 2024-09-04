@@ -118,7 +118,7 @@ function TrackerContent({ todaysShift }) {
     else if (todaysShift?.breakStartedAt === null && !shiftHasEnded)
       return "Resume"
     else return "Start break"
-  }, [todaysShift, hasStartedBreak, shiftHasEnded])
+  }, [todaysShift, hasStartedBreak, shiftHasEnded, hasUsedUpAllottedBreaktime])
 
   const getTimeDisplay = (date) => {
     return new Date(date || Date.now())

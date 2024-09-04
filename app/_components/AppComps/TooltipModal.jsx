@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useRef, useEffect, useCallback } from "react"
 import useOutsideClick from "../../_hooks/useOutsideClick"
 
@@ -21,7 +22,7 @@ export default function TooltipModal({ children, tooltipContent, name, styles })
     else if (distanceFromLeftOfScreen >= current?.clientWidth)
       setStyles({ left: "100%", top: 0, bottom: 0 })
     else setStyles({ left: "50%", bottom: "100%", transform: "translateX(-50%)" })
-  }, [tooltipRef?.currenttooltipRef?.current])
+  }, [])
 
   useEffect(() => {
     if (typeof styles !== "object") {

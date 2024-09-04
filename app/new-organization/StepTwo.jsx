@@ -32,7 +32,7 @@ export default function StepOne({
       if (res.statusCode === 201) onSubmit(res.organization)
       else toast.error(res.message || "Something went wrong")
     },
-    [industry, employeeCount, fetchData]
+    [industry, employeeCount, fetchData, onSubmit, organizationType]
   )
 
   if (!isActive) return
