@@ -203,7 +203,7 @@ export default function HomePage() {
             24//7 Customer Support
           </h2>
           <p className="text-base not-italic font-normal leading-6 text-[#52525B] py-2">
-          Communicates the availability of assistance whenever it's needed.          </p>
+          Communicates the availability of assistance whenever it&apos;s needed.          </p>
         </div>
       </div>
 

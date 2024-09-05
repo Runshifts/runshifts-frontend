@@ -26,20 +26,9 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-<<<<<<< HEAD
-    "**/*.tsx",
-    "app/_assets/svgs/Gear.jsx",
-    "app/_redux/notes.slice.js",
-    "app/_assets/svgs/Logout.jsx",
-    "app/_components/ProfileSettingsComponents/DisplayPictureInput.jsx",
-    "app/_components/ProfileSettingsComponents/TwoFAInfoBlock.jsx"
-, "app/homeEmployee/page.jsx"  ],
-  "exclude": ["node_modules"]
-=======
     "**/*.tsx"
   ],
   "exclude": [
     "node_modules"
   ]
->>>>>>> 6bbc162be900d5b4e1e72e3c839941cab5d0f473
 }

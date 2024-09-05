@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google"
+import { Inter } from "next/font/google";
 import "./globals.css"
 import GoogleOAuthProvider from "./_providers/GoogleAuth"
 import LoadingProvider from "./_providers/LoadingProvider"
@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast"
 import UserProvider from "./_providers/UserProvider"
 import ReduxProvider from "./_providers/ReduxProvider"
 import { Suspense } from "react"
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Runshifts",
