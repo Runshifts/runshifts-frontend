@@ -166,6 +166,7 @@ export default function EmployeeDashboardProvider({ children }) {
 
   useEffect(() => {
     fetchSwapRequests()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
