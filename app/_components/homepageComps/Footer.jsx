@@ -88,24 +88,24 @@ export default function Footer() {
                             <a href={footerData.logo.href} className="hidden xl:flex items-center">
                                 <Image src={footerData.logo.src} alt={footerData.logo.alt} />
                             </a>
-                            <p className='hidden xl:block text-base not-italic font-normal'>
+                            <p className='hidden xl:block ml-2 text-base not-italic font-normal'>
                                 We help you manage your team and<br /> business seamlessly.
                             </p>
-                            <div className='flex items-center  my-3'>
-                            <div className='bg-[#D5DBE6] p-1 rounded-full w-fit '>
-                            <Linkedin />
+                            <div className='flex items-center ml-0 my-3 xl:ml-2'>
+                                <div className='bg-[#D5DBE6] p-1 rounded-full w-fit '>
+                                    <Linkedin />
                                 </div>
                                 <div className='bg-[#D5DBE6] p-1 rounded-full w-fit mx-2'>
-                                <Fb />
+                                    <Fb />
                                 </div>
                                 <div className='bg-[#D5DBE6] p-1 rounded-full w-fit '>
-                                <Ig />
+                                    <Ig />
                                 </div>
                                 <div className='bg-[#D5DBE6] p-1 rounded-full w-fit mx-2'>
-                                <Whatsapp />
+                                    <Whatsapp />
                                 </div>
                                 <div className='bg-[#D5DBE6] p-1 rounded-full w-fit '>
-                                <Twitter />
+                                    <Twitter />
                                 </div>
                             </div>
                         </div>

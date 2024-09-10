@@ -49,7 +49,7 @@ export default function Header() {
             <nav className="bg-[#000] border-gray-200 dark:bg-gray-900 dark:border-gray-700 relative z-20">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
-                        <Image src={runshiftsLogo} className="h-8" height={200} width={204} alt="Flowbite Logo" />
+                        <Image src={runshiftsLogo} className="h-8" height={200} width={204} alt="runshifts Logo" />
                     </a>
                     <button
                         type="button"
@@ -64,7 +64,7 @@ export default function Header() {
                     </button>
                     {/* Desktop Menu */}
                     <div className={`w-full md:block md:w-auto ${isMobileMenuOpen ? '' : 'hidden'}`} id="navbar-dropdown">
-                        <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                        <ul className="flex flex-col items-start justify-center font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg xl:flex-row xl:items-center xl:justify-center xl:space-x-8 rtl:space-x-reverse xl:mt-0 md:border-0 ">
                             {menuItems.map((item, index) => (
                                 <li key={index} className={item.dropdown ? 'relative' : ''}>
                                     {!item.isButton ? (
