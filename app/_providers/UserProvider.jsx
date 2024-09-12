@@ -34,7 +34,7 @@ export default function UserProvider({ children }) {
     const res = await fetchData("/users/me", "get")
     if (res.statusCode === 200) {
       setUser(res.user)
-      redirectUser(res.user.type)
+      if (!pathname.startsWith("/new-organization")) redirectUser(res.user.type)
       localStorage.setItem("user", JSON.stringify(res.user))
     } else {
       localStorage.clear()
