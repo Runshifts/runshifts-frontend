@@ -15,7 +15,11 @@ export default function AuthInputAndLabel({
       <span className="first-letter:capitalize text-[#101928]">
         {labelText}
       </span>
-      <span className={`${icon ? "pl-[34px]" : "pl-[8px]"} relative pl-[34px] py-4 w-full border-[#D0D5DD] border rounded-lg focus:outline-none focus:shadow-outline overflow-hidden`}>
+      <span
+        className={`${
+          icon ? "pl-[34px]" : "pl-[8px]"
+        } relative pl-[34px] py-4 w-full border-[#D0D5DD] border rounded-lg focus:outline-none focus:shadow-outline overflow-hidden`}
+      >
         <span className="absolute inset-y-[50%] translate-y-[-50%] left-[16px] flex items-center pointer-events-none">
           {icon}
         </span>
@@ -58,7 +62,7 @@ export function SubmitButton({
   isDisabled,
   type,
   style,
-  className
+  className,
 }) {
   return (
     <button
@@ -67,10 +71,11 @@ export function SubmitButton({
       onClick={onClick}
       disabled={isLoading || isDisabled}
       className={`${
-        isLoading
-          ? "bg-primary-500/50 cursor-not-allowed"
-          : "cursor-pointer"
-      } ${className || "bg-primary-500 text-white rounded-md font-[600] w-full px-6 py-4"}`}
+        isLoading ? "bg-primary-500/50 cursor-not-allowed" : "cursor-pointer"
+      } ${
+        className ||
+        "bg-primary-500 text-white rounded-md font-[600] w-full px-6 py-4 disabled:opacity-60 disabled:cursor-not-allowed"
+      }`}
     >
       {isLoading ? loadingText || "Loading..." : children}
     </button>
