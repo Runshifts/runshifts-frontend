@@ -27,6 +27,7 @@ function Page() {
   const redirectUser = useRedirectUserByAccountType()
 
   useEffect(() => {
+    console.log(user)
     if (user?.organization) redirectUser(user?.type)
   }, [user, redirectUser])
 

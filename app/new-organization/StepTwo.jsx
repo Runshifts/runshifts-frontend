@@ -6,7 +6,7 @@ import DebouncedDropdownSearch from "../_components/Auth/DebouncedDropdownSearch
 import useAxios from "../_hooks/useAxios"
 import toast from "react-hot-toast"
 
-export default function StepOne({
+export default function StepTwo({
   isActive,
   onSubmit = () => {},
   organizationType,

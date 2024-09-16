@@ -7,13 +7,14 @@ import { IoClose, IoMailOutline } from "react-icons/io5"
 import toast from "react-hot-toast"
 import useAxios from "../_hooks/useAxios"
 import Link from "next/link"
+import Cloud from "../_assets/svgs/Cloud"
 
 const toastOptions = {
   position: "top-left",
   className: "mx-[8%]",
 }
 
-export default function StepOne({ isActive, onSubmit = () => {} }) {
+export default function StepThree({ isActive, onSubmit = () => {} }) {
   const fetchData = useAxios()
   const [email, setEmail] = useState("")
   const [fullName, setFullName] = useState("")
@@ -32,14 +33,11 @@ export default function StepOne({ isActive, onSubmit = () => {} }) {
     setFullName("")
   }, [teamMembers, email, fullName])
 
-  const removeTeamMember = useCallback(
-    (email) => {
-      setTeamMembers((prev) =>
-        prev.filter((it) => it.email.toLowerCase() !== email?.toLowerCase())
-      )
-    },
-    []
-  )
+  const removeTeamMember = useCallback((email) => {
+    setTeamMembers((prev) =>
+      prev.filter((it) => it.email.toLowerCase() !== email?.toLowerCase())
+    )
+  }, [])
 
   const handleSubmit = useCallback(
     async (e) => {
@@ -115,6 +113,7 @@ export default function StepOne({ isActive, onSubmit = () => {} }) {
           </Link>
         </div>
       </form>
+      <BulkUploadForm />
     </>
   )
 }
@@ -127,5 +126,24 @@ function TeamMemberButton({ text, handleDelete }) {
         <IoClose size={10} />
       </button>
     </li>
+  )
+}
+
+function BulkUploadForm() {
+  return (
+    <>
+      <Link
+        href="/csv-templates/Runshifts Team Members Template - Sheet2.csv"
+        download={true}
+        target="_blank"
+        className="text-[#4779CE] mx-auto block underline font-[500]"
+      >
+        Download CSV template
+      </Link>
+      <label className="cursor-pointer text-[#9A928D] flex items-center justify-center gap-2 border border-[#BAB4B1] border-dashed py-6 px-4 font-semibold text-center rounded-md">
+        <input type="file" accept=".csv" className="sr-only" />
+        <span>Upload csv</span> <Cloud />
+      </label>
+    </>
   )
 }
