@@ -4,10 +4,12 @@ import FormHeading from "../_components/Auth/Heading"
 import AuthInputAndLabel, { SubmitButton } from "../_components/Auth/Inputs"
 import { RiUserLine } from "react-icons/ri"
 import { IoClose, IoMailOutline } from "react-icons/io5"
-import toast from "react-hot-toast"
+import toast, { LoaderIcon } from "react-hot-toast"
 import useAxios from "../_hooks/useAxios"
 import Link from "next/link"
 import Cloud from "../_assets/svgs/Cloud"
+import { useRouter } from "next/navigation"
+import USER_URLS from "../_urls/userURLs"
 
 const toastOptions = {
   position: "top-left",
@@ -47,7 +49,11 @@ export default function StepThree({ isActive, onSubmit = () => {} }) {
       const body = {
         teamMembers: [...teamMembers, { email, fullName }],
       }
-      const res = await fetchData("/users/employees/invite", "post", body)
+      const res = await fetchData(
+        `${USER_URLS.inviteTeamMembers()}`,
+        "post",
+        body
+      )
       if (res.statusCode === 200) onSubmit()
       else toast.error(res.message || "Error sending invite", toastOptions)
     },
@@ -130,6 +136,36 @@ function TeamMemberButton({ text, handleDelete }) {
 }
 
 function BulkUploadForm() {
+  const [selectedFile, setSelectedFile] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const fetchData = useAxios()
+  const router = useRouter()
+
+  const handleSubmit = useCallback(
+    async (csvFile) => {
+      if (loading) return
+      setSelectedFile(csvFile)
+      setLoading(true)
+      const formData = new FormData()
+      formData.append("csvFile", csvFile)
+      const res = await fetchData(
+        `${USER_URLS.inviteTeamMembers()}`,
+        "post",
+        formData
+      )
+      if (res.statusCode === 200) {
+        toast.success(res.message)
+        router.push("/welcome")
+      } else {
+        toast.error(
+          res.message ||
+            "Unable to process file, Something went wrong. Please try again"
+        )
+      }
+      setLoading(false)
+    },
+    [fetchData, router, loading]
+  )
   return (
     <>
       <Link
@@ -140,9 +176,21 @@ function BulkUploadForm() {
       >
         Download CSV template
       </Link>
-      <label className="cursor-pointer text-[#9A928D] flex items-center justify-center gap-2 border border-[#BAB4B1] border-dashed py-6 px-4 font-semibold text-center rounded-md">
-        <input type="file" accept=".csv" className="sr-only" />
-        <span>Upload csv</span> <Cloud />
+      <label className="disabled:opacity-40 cursor-pointer text-[#9A928D] flex items-center justify-center gap-2 border border-[#BAB4B1] border-dashed py-6 px-4 font-semibold text-center rounded-md">
+        <input
+          disabled={loading}
+          onChange={(e) => {
+            if (e.target.files) handleSubmit(e.target.files[0])
+          }}
+          type="file"
+          accept=".csv"
+          className="sr-only"
+        />
+        {loading && <LoaderIcon />}
+        <span className="max-w-[70%] whitespace-nowrap truncate">
+          {selectedFile ? selectedFile.name : "Upload csv"}
+        </span>{" "}
+        <Cloud />
       </label>
     </>
   )
