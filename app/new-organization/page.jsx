@@ -6,8 +6,8 @@ import StepOne from "./StepOne"
 import StepTwo from "./StepTwo"
 import StepThree from "./StepThree"
 import { MdArrowBackIos } from "react-icons/md"
-import { useSelector } from "react-redux"
 import { UserContext } from "../_providers/UserProvider"
+import useRedirectUserByAccountType from "../_hooks/useRedirectUserByAccountType"
 
 const backgrounds = {
   1: "bg-[url(/img/create_organization_step_one.png)]",
@@ -23,6 +23,13 @@ function Page() {
     () => searchParams.get("type"),
     [searchParams]
   )
+
+  const redirectUser = useRedirectUserByAccountType()
+
+  useEffect(() => {
+    console.log(user)
+    if (user?.organization) redirectUser(user?.type)
+  }, [user, redirectUser])
 
   useEffect(() => {
     if (

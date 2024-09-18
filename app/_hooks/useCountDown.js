@@ -37,3 +37,29 @@ export default function useDateCountDown(deadline) {
     seconds: format(time % 60),
   }
 }
+export const Timer = ({ seconds, onEnd }) => {
+  const [timeLeft, setTimeLeft] = useState(seconds)
+
+  useEffect(() => {
+    if (!timeLeft)
+      return typeof onEnd === "function" && onEnd()
+
+    const intervalId = setInterval(() => {
+      setTimeLeft(timeLeft - 1)
+    }, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [timeLeft, onEnd])
+
+  function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+
+    const formattedSeconds =
+      remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds
+
+    return `${minutes}:${formattedSeconds}`
+  }
+
+  return formatTime(timeLeft)
+}

@@ -68,11 +68,11 @@ function Verify() {
   return (
     <>
       <Suspense>
-        {accountType === "employee" ? (
+        {/* {accountType === "employee" ? ( */}
           <EmployerVerification handleSubmit={handleSubmit} loading={loading} />
-        ) : (
-          <EmployeeVerification handleSubmit={handleSubmit} loading={loading} />
-        )}
+        {/* // ) : ( */}
+          {/* <EmployeeVerification handleSubmit={handleSubmit} loading={loading} /> */}
+        {/* )} */}
       </Suspense>
     </>
   )
