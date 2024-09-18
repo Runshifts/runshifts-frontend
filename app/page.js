@@ -70,308 +70,464 @@
 //   )
 // }
 
-import React from "react";
-import Image from "next/image";
-import CustomButtons from "./_components/homepageComps/CommonButtons";
-import Home1 from "./_assets/img/Home1.png";
-import Home2 from "./_assets/img/Home2.png";
-import Home3 from "./_assets/img/Home3.png";
-import Illustration from "./_assets/img/Illustration.svg";
-import Illustration1 from "./_assets/img/Illustration1.svg";
-import Table1 from "./_assets/img/Table1.png";
-import Table2 from "./_assets/img/Table2.png";
-import hands from "./_assets/img/hands.svg";
-import bruce from "./_assets/img/bruce.svg";
-import bruce1 from "./_assets/img/bruce1.svg";
-import pexels from "./_assets/img/pexels.svg";
-import Home from "./_assets/img/Home.svg";
-import Manage from "./_assets/svgs/Manage";
-import Secured from "./_assets/svgs/Secured";
-import Support from "./_assets/svgs/Support";
-import CommonHeader from "./_components/homepageComps/CommonHeader";
-import CommonParagraph from "./_components/homepageComps/CommonParagraph";
-import RightArrow from "./_assets/svgs/RightArrow";
-import Link from "next/link";
-import Layout from "./_components/homepageComps/Layout";
 
-export default function HomePage() {
-  const blogPosts = [
+'use client'
+import Image from "next/image";
+import { useRef } from 'react';
+import runshiftsLogo from "./_components/homepageComps/runshiftsLogo2.svg";
+import CommonButtons from "./_components/homepageComps/CommonButtons";
+import LandingFooter from './_components/homepageComps/LandingFooter';
+import App from './_assets/img/App.svg'
+import Playstore from './_assets/img/Playstore.svg' 
+
+export default function Main() {
+  const formRef = useRef(null);
+
+  const scrollToForm = () => {
+    formRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const features = [
     {
-      image: bruce,
-      title: "What are other companies doing to function with ease?",
-      category: "Operations",
+      icon: <User />,
+      title: "Shift Scheduling",
+      description:
+        "Create and manage shifts effortlessly with our user-friendly interface.",
     },
     {
-      image: bruce1,
-      title: "What are other companies doing to function with ease?",
-      category: "Business",
+      icon: <Heart />,
+      title: "Real-Time Updates",
+      description:
+        "Keep your team informed with instant notifications for any changes.",
     },
     {
-      image: pexels,
-      title: "What are other companies doing to function with ease?",
-      category: "Tech",
+      icon: <Chart />,
+      title: "Conflict Resolution",
+      description:
+        "Automatically detect and resolve scheduling conflicts to maintain smooth operations.",
+    },
+    {
+      icon: <Emoji />,
+      title: "Time Tracking",
+      description:
+        "Monitor working hours and ensure accurate payroll processing.",
+    },
+    {
+      icon: <Bolt />,
+      title: "Reports and Analytics",
+      description:
+        "Gain insights into workforce efficiency with comprehensive reports.",
     },
   ];
 
   return (
-    <Layout>
-      <div className="">
-        <div className="bg-gradient-radial from-[#FD9] via-[#CBF0BC] to-white flex flex-col items-center justify-center px-54 py-6 pt-16">
-          <button className="bg-[#B2E89A] text-[#17320B] rounded-full px-4 py-2 text-base not-italic font-semibold leading-6 ">
-            Team & shift management
-          </button>
-          <h1 className="capitalize text-center text-4xl not-italic font-extrabold text-[#36322F] my-6 xl:text-6xl">
-            Supercharge Your
-            <br /> Team
-          </h1>
-          <CommonParagraph>
-            <p className="text-sm text-center">
-              Streamline scheduling, timekeeping, communication, and reporting
-              to
-              <br /> drive efficiency across your workforce.
+    <div>
+    <div className="bg-gradient-radial from-[#FD9] via-[#CBF0BC] to-white min-h-screen ">
+      <div className="flex items-center justify-between py-4 px-8">
+        <a href="/home" className="flex items-center">
+          <Image src={runshiftsLogo} alt="runshifts" />
+        </a>
+        <CommonButtons>
+          <div onClick={scrollToForm}>
+          Join waitlist
+          </div>
+          </CommonButtons>
+      </div>
+
+      <div className="relative min-h-screen mt-4 xl:mt-16 px-10">
+        {/* Background image with opacity */}
+        <div className="absolute inset-0 bg-[url('../public/img/landingPage.png')] opacity-50"></div>
+
+        {/* Content with no opacity */}
+        <div className="relative z-10">
+          <div className="mt-8 xl:mt-90">
+            <h1 className="text-2xl not-italic font-extrabold text-[#36322F] pt-2 xl:text-5xl xl:pt-20">
+              Revolutionise Your <br /> Workforce Management
+            </h1>
+            <p className="text-base not-italic font-normal leading-7 text-[#475467] my-5">
+              Seamless scheduling, real-time updates, and powerful analytics
+              in one platform.
             </p>
-          </CommonParagraph>
-          <div className="flex items-center my-6">
-            <Link href="/signup?type=for-profit">
-              <CustomButtons>Get Started</CustomButtons>
-            </Link>
-            <Link href={"/about"}>
-              <button className="border border-[#36322F] ml-4 text-[#36322F] rounded-lg px-4 py-2 text-base not-italic font-semibold leading-6 ">
-                Learn more
-              </button>
-            </Link>
-          </div>
 
-          <div className="flex items-center justify-center my-6">
-            <div class="flex -space-x-4 rtl:space-x-reverse">
-              <Image
-                height={53}
-                width={53}
-                class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
-                src={Home1}
-                alt=""
-              />
-              <Image
-                height={53}
-                width={53}
-                class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
-                src={Home2}
-                alt=""
-              />
-              <Image
-                height={53}
-                width={53}
-                class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
-                src={Home3}
-                alt=""
-              />
-            </div>
-            <p className="text-sm not-italic font-bold leading-6 text-[#706763] mx-4 break-words">
-              Join businesses and start scheduling to
-              <br /> get your team working efficiently.
-            </p>
-          </div>
-
-          <div>
-            <Image
-              height={600}
-              width={900}
-              className="mx-auto"
-              src={Home}
-              alt=""
-            />
-          </div>
-        </div>
-
-        <div className=" px-4 xl:px-16">
-          <div className="flex flex-col items-center justify-center my-12">
-            <button className="bg-[#FFCD66] text-[#332200] rounded-full px-4 py-2 text-base not-italic font-semibold leading-6 my-3">
-              Swift Results and operations
-            </button>
-            <h2 className="text-center text-3xl not-italic font-semibold text-[#36322F]">
-              Workflow on Steroids
-            </h2>
-            <p className="text-center text-sm not-italic font-bold leading-6 text-[#706763]">
-              Create an efficient and seamless workflow with your team members
-            </p>
-          </div>
-
-          <div className="flex justify-center items-center gap-4 flex-col xl:flex-row my-8 ">
-            <div className="p-5 rounded-xl mx-3">
-              <Manage />
-              <h2 className="text-lg not-italic font-bold leading-6 text-[#18181B] py-4">
-                Manage your team in real time
-              </h2>
-              <p className="text-base not-italic font-normal leading-6 text-[#52525B] py-2">
-                Emphasizes the platform&apos;s ability to provide
-                up-to-the-minute workforce oversight.{" "}
+            <div className="mt-16 xl:mt-24">
+              <p className="text-base not-italic font-semibold leading-7 text-[#475467]">
+                Coming soon to your app stores
               </p>
-            </div>
-
-            <div className="p-3 border border-dashed rounded-xl mx-3">
-              <Secured />
-              <h2 className="text-lg not-italic font-bold leading-6 text-[#18181B] py-4">
-                Secured & Safe Payments
-              </h2>
-              <p className="text-base not-italic font-normal leading-6 text-[#52525B] py-2">
-                Assures users that financial transactions are protected.{" "}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-xl mx-3">
-              <Support />
-              <h2 className="text-lg not-italic font-bold leading-6 text-[#18181B] py-4">
-                24//7 Customer Support
-              </h2>
-              <p className="text-base not-italic font-normal leading-6 text-[#52525B] py-2">
-                Communicates the availability of assistance whenever it&apos;s
-                needed.{" "}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center justify-around gap-4 bg-[#1A212C] rounded-2xl p-8 my-8 xl:flex-row xl:my-20">
-            <Image
-              src={Illustration}
-              alt="Illustration"
-              height={477}
-              width={384}
-            />
-            <div className="flex flex-col items-start justify-start p-8">
-              <CommonHeader>
-                <div className="text-[#D5DBE6]">
-                  Managing Your Teams
-                  <br /> Schedule and Shifts
-                </div>
-              </CommonHeader>
-              <CommonParagraph>
-                <div className="text-[#EFEDED] py-6">
-                  Streamline your team&apos;s scheduling and shift management
-                  with Runshifts. Our intuitive platform makes it easy to
-                  create, update, and coordinate shifts in real-time. Keep your
-                  workforce informed and operations running smoothly.
-                </div>
-              </CommonParagraph>
-              <Link href={"/signup?type=for-profit"}>
-                <button className="flex items-center border border-[#fff] ml-4 text-[#fff] rounded-lg px-4 py-2 text-base not-italic font-semibold leading-6 ">
-                  <p className="px-2">Create your account now</p>
-                  <RightArrow />
-                </button>
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex flex-col-reverse items-center justify-between gap-4 p-4 xl:flex-row my-20 xl:p-8">
-            <div className="flex flex-col items-start justify-start p-8">
-              <h2 className="text-center text-xl not-italic font-semibold rounded-full text-[#36322F] my-2 xl:text-5xl xl:my-4 ">
-                Fully integrated teams communication and operation features
-              </h2>
-              <CommonParagraph>
-                Runshifts integrates seamless team communication with
-                comprehensive operational tools. Keep your workforce connected
-                and your business running efficiently all in one platform.
-              </CommonParagraph>
-            </div>
-            <Image
-              src={Illustration1}
-              alt="Illustration"
-              height={545}
-              width={473}
-            />
-          </div>
-
-          <div className="w-full flex flex-col items-center justify-center gap-4 bg-[#E5F7DD] rounded-2xl p-2 my-8 xl:flex-row xl:p-8 xl:my-20">
-            <div className="flex flex-col items-center justify-center bg-[#B2E89A] rounded-2xl  xl:w-1/2 p-6">
-              <Image src={Table2} alt="" height={92} width={492} className="" />
-              <Image src={Table1} alt="" height={434} width={392} />
-            </div>
-            <div className="flex flex-col justify-start items-start ml-6 p-8 text-left xl:w-1/2">
-              <button className="bg-[#283142] text-[#fff] rounded-full px-2 text-base not-italic font-semibold leading-6 my-5">
-                Real-time Analytics
-              </button>
-              <CommonHeader>
-                <p className="text-left">
-                  Understand your operations with better reports.
-                </p>
-              </CommonHeader>
-              <Link href="/signup?type=for-profit">
-                <button className="bg-[#283142] text-[#fff] rounded-lg px-4 py-2 text-base not-italic font-semibold leading-6 my-5">
-                  Start using runshifts
-                </button>
-              </Link>
-              <hr />
-              <CommonParagraph>
-                Gain data-driven insights to optimize your workforce. Runshifts
-                provides comprehensive reporting and analytics, giving you the
-                visibility to make informed decisions.
-              </CommonParagraph>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center justify-center my-6 xl:flex-row">
-            <div className="flex flex-col items-start justify-center ">
-              <CommonHeader>Non-Profits & Charities</CommonHeader>
-              <CommonParagraph>
-                <div className="break-words">
-                  Runshifts supports the unique scheduling needs of non-profit
-                  and charitable organizations. Streamline your workforce
-                  management to focus on your mission.
-                </div>
-              </CommonParagraph>
-              <Link href="/signup?type=non-profit">
-                <button className="bg-[#283142] text-[#fff] rounded-lg px-4 py-2 text-base not-italic font-semibold leading-6 my-5">
-                  Start using runshifts for free
-                </button>
-              </Link>
-            </div>
-            <Image
-              src={hands}
-              alt=""
-              height={92}
-              width={492}
-              className="rounded-2xl "
-            />
-          </div>
-
-          <div className="my-8 xl:my-20">
-            <div>
-              <p className="w-fit mx-auto bg-[#B2E89A] text-[#17320B] text-center rounded-full px-2 py-1 text-base not-italic font-semibold leading-6 my-5">
-                Updates
-              </p>
-              <CommonHeader>
-                <div className="text-[#090914] my-4">Read our blog</div>
-              </CommonHeader>
-            </div>
-
-            <div className="flex flex-col gap-6 items-center justify-center xl:flex-row xl:gap-12">
-              {blogPosts.map((post, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center justify-center xl:flex-row"
-                >
-                  <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <Image
-                      src={post.image}
-                      alt={post.title}
-                      height={300}
-                      width={350}
-                      className="rounded-xl mb-4 w-full h-auto" // Image width set to cover the container
-                    />
-                    <div className="p-5">
-                      <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        {post.title}
-                      </h5>
-                      <p className="text-[#5BC62D] text-xs not-italic font-medium leading-5">
-                        {post.category}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <div className="flex flex-col items-start justify-start xl:flex-row">
+                <Image src={App} alt="download" height={52} width={180} className='mr-0 xl:mr-2 my-2' />
+                <Image src={Playstore} alt="download" height={52} width={180} className='ml-0 xl:ml-2' />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
+
+    <div className="flex justify-center items-center min-h-screen mt-10 xl:mt-0">
+      <div className="grid grid-cols-1 gap-6 justify-items-center mx-4 xl:grid-cols-3 xl:m-20">
+        {features.map((feature, index) => (
+          <div
+            key={index}
+            className="bg-[#E5F7DD] p-6 flex flex-col items-center justify-center rounded-lg h-60 w-80"
+          >
+            {feature.icon}
+            <h3 className="text-center text-xl not-italic font-medium leading-7 text-[#101828] pt-4 py-2">
+              {feature.title}
+            </h3>
+            <p className="text-center text-base not-italic font-normal leading-6 text-[#475467]">
+              {feature.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Waitlist Form */}
+    <div ref={formRef}>
+      <div className="my-10 px-16">
+        <h1 className="text-center text-2xl not-italic font-semibold text-[#101828] xl:text-5xl ">
+          Join Our Exclusive Waitlist
+        </h1>
+        <p className="text-center text-sm not-italic font-normal leading-7 text-[#475467] mx-2 xl:text-xl xl:mx-60">
+          Be the first to experience the future of workforce management and
+          enjoy 3 months of free access to our platform.
+        </p>
+      </div>
+
+      <div className="shadow-lg rounded-2xl p-2 px-6 xl:py-16 mx-auto max-w-screen-sm">
+      <form action="#" className="space-y-4 xl:space-y-8">
+            <div className="flex flex-col gap-4 w-[100%] xl:flex-row">
+              <div className="w-[100%] xl:w-[50%] ">
+                <label
+                  for="firstName"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  First name
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                  placeholder="First name"
+                  required
+                />
+              </div>
+              <div className="w-[100%] xl:w-[50%] ">
+                <label
+                  for="lastName"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Last name
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                  placeholder="Last name"
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                for="email"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="subject"
+                className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                placeholder="you@company.com"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="email"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Company name
+              </label>
+              <input
+                type="comapny"
+                id="subject"
+                className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                placeholder="ABC Company"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="industries"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Industry
+              </label>
+              <select
+                id="industries"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option selected value="US">
+                  Tech
+                </option>
+                <option value="CA">Fashion</option>
+                <option value="FR">Agriculture</option>
+              </select>
+            </div>
+            <div>
+              <label
+                for="companysize"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Company size
+              </label>
+              <select
+                id="companysize"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option selected value="US">
+                  1-10
+                </option>
+                <option value="CA">11-50</option>
+                <option value="FR">100+</option>
+              </select>
+            </div>
+
+            <div className="">
+              <div class="flex items-center">
+                <button
+                  id="dropdown-phone-button"
+                  data-dropdown-toggle="dropdown-phone"
+                  class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+                  type="button"
+                >
+                  +234
+                </button>
+                <div
+                  id="dropdown-phone"
+                  class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-gray-700"
+                >
+                  <ul
+                    class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                    aria-labelledby="dropdown-phone-button"
+                  >
+                    <li>
+                      <button
+                        type="button"
+                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        <span class="inline-flex items-center">
+                          Nigeria (+234)
+                        </span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        <span class="inline-flex items-center">
+                          United States (+1)
+                        </span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        <span class="inline-flex items-center">
+                          United Kingdom (+44)
+                        </span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        <span class="inline-flex items-center">
+                          Australia (+61)
+                        </span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        <span class="inline-flex items-center">
+                          Germany (+49)
+                        </span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        <span class="inline-flex items-center">
+                          France (+33)
+                        </span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <label
+                  for="phone-input"
+                  class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+                >
+                  Phone number:
+                </label>
+                <div class="relative w-full">
+                  <input
+                    type="text"
+                    id="phone-input"
+                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-0 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                    placeholder="123-456-7890"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label
+                for="message"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                rows="6"
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+                placeholder="Leave a comment..."
+              ></textarea>
+            </div>
+            <div className="w-full">
+            <CommonButtons>
+             Join waitlist
+            </CommonButtons>
+            </div>
+          </form>
+      </div>
+    </div>
+    <LandingFooter/>
+  </div>
+  );
+}
+
+function User() {
+  return (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="48" height="48" rx="24" fill="#17320B" />
+      <path
+        d="M29 33V31C29 29.9391 28.5786 28.9217 27.8284 28.1716C27.0783 27.4214 26.0609 27 25 27H17C15.9391 27 14.9217 27.4214 14.1716 28.1716C13.4214 28.9217 13 29.9391 13 31V33M35 33V31C34.9993 30.1137 34.7044 29.2528 34.1614 28.5523C33.6184 27.8519 32.8581 27.3516 32 27.13M28 15.13C28.8604 15.3503 29.623 15.8507 30.1676 16.5523C30.7122 17.2539 31.0078 18.1168 31.0078 19.005C31.0078 19.8932 30.7122 20.7561 30.1676 21.4577C29.623 22.1593 28.8604 22.6597 28 22.88M25 19C25 21.2091 23.2091 23 21 23C18.7909 23 17 21.2091 17 19C17 16.7909 18.7909 15 21 15C23.2091 15 25 16.7909 25 19Z"
+        stroke="#CBF0BC"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+function Heart() {
+  return (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="48" height="48" rx="24" fill="#17320B" />
+      <path
+        d="M32.8401 16.61C32.3294 16.099 31.7229 15.6936 31.0555 15.4171C30.388 15.1405 29.6726 14.9982 28.9501 14.9982C28.2276 14.9982 27.5122 15.1405 26.8448 15.4171C26.1773 15.6936 25.5709 16.099 25.0601 16.61L24.0001 17.67L22.9401 16.61C21.9084 15.5783 20.5092 14.9987 19.0501 14.9987C17.5911 14.9987 16.1918 15.5783 15.1601 16.61C14.1284 17.6417 13.5488 19.041 13.5488 20.5C13.5488 21.959 14.1284 23.3583 15.1601 24.39L16.2201 25.45L24.0001 33.23L31.7801 25.45L32.8401 24.39C33.3511 23.8792 33.7565 23.2728 34.033 22.6053C34.3096 21.9379 34.4519 21.2225 34.4519 20.5C34.4519 19.7775 34.3096 19.0621 34.033 18.3946C33.7565 17.7272 33.3511 17.1208 32.8401 16.61V16.61Z"
+        stroke="#CBF0BC"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+function Chart() {
+  return (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="48" height="48" rx="24" fill="#17320B" />
+      <path
+        d="M35 18L25.5 27.5L20.5 22.5L13 30M35 18H29M35 18V24"
+        stroke="#CBF0BC"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+function Emoji() {
+  return (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="48" height="48" rx="24" fill="#17320B" />
+      <path
+        d="M20 26C20 26 21.5 28 24 28C26.5 28 28 26 28 26M21 21H21.01M27 21H27.01M34 24C34 29.5228 29.5228 34 24 34C18.4772 34 14 29.5228 14 24C14 18.4772 18.4772 14 24 14C29.5228 14 34 18.4772 34 24Z"
+        stroke="#CBF0BC"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+function Bolt() {
+  return (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="48" height="48" rx="24" fill="#17320B" />
+      <path
+        d="M25 14L15 26H24L23 34L33 22H24L25 14Z"
+        stroke="#CBF0BC"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   );
 }
