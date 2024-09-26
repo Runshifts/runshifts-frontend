@@ -124,9 +124,10 @@ function Team() {
         <div className="flex items-center justify-between py-3">
           <Heading as="h1">Team</Heading>
           <TeamAppgroup
-            openNewMemberModal={() =>
+            openNewMemberModal={() => {
               setTeamMemberFormData({ isNew: true, isEdit: false })
-            }
+              console.log("opend")
+            }}
           />
         </div>
         <div className="flex gap-2 items-center justify-start">
@@ -197,6 +198,7 @@ function Team() {
       </section>
       <>
         <NewMemberForm
+          type="employee"
           show={teamMemberFormData !== null}
           teamMemberFormData={teamMemberFormData}
           onCancel={() => setTeamMemberFormData(null)}
