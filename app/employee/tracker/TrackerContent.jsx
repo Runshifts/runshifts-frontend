@@ -203,26 +203,6 @@ function TrackerContent({ todaysShift }) {
         />
       </div>
 
-      <div>
-        <div className=" grid grid-cols-1 gap-4 md:grid-cols-2">
-          <OvertimeTracker
-            title="Start Overtime"
-            time="08:45"
-            unit="AM"
-            buttonClassNames="bg-[#5BC62D] text-white"
-            onButtonClick={() => {}}
-            buttonText="Start overtime"
-          />
-          <OvertimeTracker
-            title="End Overtime"
-            time="08:45"
-            unit="PM"
-            buttonClassNames="bg-[#F5542C] text-white"
-            onButtonClick={() => {}}
-            buttonText="End overtime"
-          />
-        </div>
-      </div>
       <SendNoteAfterShiftForm
         show={showSendNoteForm}
         handleHide={() => setShowSendNoteForm(false)}
@@ -315,5 +295,30 @@ function CheckoutConfirmationModal({ handleHide, handleCheckout, show }) {
         </div>
       </div>
     </Modal>
+  )
+}
+
+export function OvertimeTrackerContainer({ todaysOvertime }) {
+  return (
+    <div>
+      <div className=" grid grid-cols-1 gap-4 md:grid-cols-2">
+        <OvertimeTracker
+          title="Start Overtime"
+          time="08:45"
+          unit="AM"
+          buttonClassNames="bg-[#5BC62D] text-white"
+          onButtonClick={() => {}}
+          buttonText="Start overtime"
+        />
+        <OvertimeTracker
+          title="End Overtime"
+          time="08:45"
+          unit="PM"
+          buttonClassNames="bg-[#F5542C] text-white"
+          onButtonClick={() => {}}
+          buttonText="End overtime"
+        />
+      </div>
+    </div>
   )
 }
