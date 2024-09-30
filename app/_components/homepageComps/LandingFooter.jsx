@@ -48,7 +48,7 @@ const footerData = {
     ],
     copyright: {
         year: 2024,
-        text: "Runshifts. All Rights Reserved.",
+        text: "www.runshifts.com",
         href: "https://runshifts.com/",
     },
 };
@@ -83,13 +83,13 @@ export default function Footer() {
 
                     <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
 
-                    <div className="flex flex-col-reverse xl:justify-between xl:flex-row">
+                    <div className="flex items-center justify-center">
                         <div className="mb-6 md:mb-0">
-                            <a href={footerData.logo.href} className="hidden xl:flex items-center">
+                            <a href={footerData.logo.href} className="flex items-center">
                                 <Image src={footerData.logo.src} alt={footerData.logo.alt} />
                             </a>
                             <p className='hidden xl:block ml-2 text-base not-italic font-normal'>
-                                We help you manage your team and<br /> business seamlessly.
+                            Less Toil, More Productivity
                             </p>
                             <div className='flex items-center ml-0 my-3 xl:ml-2'>
                                 <div className='bg-[#D5DBE6] p-1 rounded-full w-fit '>
@@ -98,39 +98,22 @@ export default function Footer() {
                                 <div className='bg-[#D5DBE6] p-1 rounded-full w-fit mx-2'>
                                     <Fb />
                                 </div>
-                                <div className='bg-[#D5DBE6] p-1 rounded-full w-fit '>
+                                <div className='bg-[#D5DBE6] p-0.2 rounded-full w-fit '>
                                     <Ig />
                                 </div>
                                 <div className='bg-[#D5DBE6] p-1 rounded-full w-fit mx-2'>
                                     <Whatsapp />
                                 </div>
-                                <div className='bg-[#D5DBE6] p-1 rounded-full w-fit '>
+                                <div className='bg-[#D5DBE6] p-0.5 rounded-full w-fit '>
                                     <Twitter />
                                 </div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
-                            {footerData.sections.map((section, index) => (
-                                <div key={index}>
-                                    <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                                        {section.title}
-                                    </h2>
-                                    <ul className="text-[#040505] text-sm dark:text-gray-400 font-medium">
-                                        {section.links.map((link, linkIndex) => (
-                                            <li className="mb-4" key={linkIndex}>
-                                                <a href={link.href} className="hover:underline">
-                                                    {link.label}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
+                       
                     </div>
                     <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
                     <div className="sm:flex sm:items-center sm:justify-between">
-                        <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+                        <span className="text-sm text-[#040505CC] sm:text-center dark:text-gray-400">
                             © {footerData.copyright.year}{" "}
                             <a href={footerData.copyright.href} className="hover:underline">
                                 {footerData.copyright.text}

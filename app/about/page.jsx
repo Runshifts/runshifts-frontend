@@ -97,6 +97,7 @@ const teamMembers = [
 export default function About() {
     return (
         <Layout>
+            <div>
             <div className='px-4 my-8 flex flex-col items-center justify-center'>
                 <CommonTitle>About us</CommonTitle>
                 <CommonHeader>Learn more about us</CommonHeader>
@@ -123,22 +124,25 @@ export default function About() {
                     </p>
                     <InnerHeader>What we offer</InnerHeader>
                 </div>
-                <div className='grid grid-cols-1 gap-2 place-items-center justify-content-center xl:grid-cols-3'>
-                    {features.map((feature, index) => (
-                        <div key={index} className='flex flex-col items-center justify-center mt-4'>
-                            <feature.icon />
-                            <h2 className='text-center text-[#101828] text-xl not-italic font-medium leading-7 my-2'>
-                                {feature.title}
-                            </h2>
-                            <p className="text-center text-[#475467] text-sm not-italic font-medium leading-6 my-4 mx-8 md:text-xs">
-                                {feature.description}
-                            </p>
-                        </div>
-                    ))}
-                </div>
+                <div className="flex justify-center">
+  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center w-full">
+    {features.map((feature, index) => (
+      <div key={index} className="flex flex-col items-center justify-center mt-4 max-w-xs">
+        <feature.icon />
+        <h2 className="text-center text-[#101828] text-xl not-italic font-medium leading-7 my-2">
+          {feature.title}
+        </h2>
+        <p className="text-center text-[#475467] text-sm not-italic font-medium leading-6 my-4 mx-8 md:text-xs">
+          {feature.description}
+        </p>
+      </div>
+    ))}
+  </div>
+</div>
+
             </div>
 
-            <div>
+            <div className='mx-4 xl:mx-8'>
                 <div>
                     <InnerHeader>How it works</InnerHeader>
                     <p className="text-center text-[#475467] text-sm not-italic font-medium leading-6 my-4 mx-8 md:text-xs">
@@ -155,7 +159,7 @@ export default function About() {
                         </p>
                     </div>
 
-                    <div className="p-5 border border-dashed rounded-xl mx-3">
+                    <div className="p-2 border border-dashed rounded-xl mx-3 xl:p-5">
                         <Secured />
                         <h2 className="text-lg not-italic font-bold leading-6 text-[#18181B] py-4">Create Schedules</h2>
                         <p className="text-base not-italic font-normal leading-6 text-[#52525B] py-2">
@@ -173,7 +177,7 @@ export default function About() {
                 </div>
                 <div className='flex flex-col items-center justify-center'>
                     <p className="text-center text-[#475467] text-sm not-italic font-medium leading-6 my-4 mx-8 md:text-xs">
-                        Streamline Your Shift Management in 3 Easy Steps
+                    Experience hassle-free shift management with Runshifts. 
                     </p>
                     <CommonButtons>
                         <Link href={'/signup?type=for-profit'}>
@@ -258,6 +262,7 @@ export default function About() {
                         </div>
                     ))}
                 </div>
+            </div>
             </div>
         </Layout>
     );
