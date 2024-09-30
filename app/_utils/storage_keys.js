@@ -1,0 +1,6 @@
+
+
+const STORAGE_KEYS = {
+  TODAYS_SHIFTS: "TODAYS_SHIFT",
+}
+export default STORAGE_KEYS

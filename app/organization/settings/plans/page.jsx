@@ -161,7 +161,7 @@ function CheckedSvg() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_2307_11375)">
+      <g clipPath="url(#clip0_2307_11375)">
         <path
           d="M10.4388 3.25488L4.80379 8.88987L2.24243 6.32851"
           stroke="#98E179"
