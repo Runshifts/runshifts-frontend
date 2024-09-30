@@ -2,11 +2,11 @@
 'use client'
 import Image from "next/image";
 import { useRef } from 'react';
-import runshiftsLogo from "./_components/homepageComps/runshiftsLogo2.svg";
-import CommonButtons from "./_components/homepageComps/CommonButtons";
-import LandingFooter from './_components/homepageComps/LandingFooter';
-import App from './_assets/img/App.svg'
-import Playstore from './_assets/img/Playstore.svg' 
+import runshiftsLogo from "../_components/homepageComps/runshiftsLogo2.svg";
+import CommonButtons from "../_components/homepageComps/CommonButtons";
+import LandingFooter from '../_components/homepageComps/LandingFooter';
+import App from '../_assets/img/App.svg'
+import Playstore from '../_assets/img/Playstore.svg' 
 
 export default function Main() {
   const formRef = useRef(null);
