@@ -7,7 +7,7 @@ import DateRangePicker from "../../_components/AppComps/Datepicker"
 import StatisticsCard from "../../_components/AppComps/StatisticsCard"
 import { SubmitButton } from "../../_components/Auth/Inputs"
 import Heading from "../../_components/Headings"
-import { TextWithToggleableView } from "../MyActivities"
+import { TextWithToggleableView } from "../../_components/StaffDashboardComponents/MyActivities"
 import { useContext, useEffect, useMemo } from "react"
 import { useDispatch } from "react-redux"
 import { OrganizationContext } from "../../_providers/OrganizationProvider"
@@ -16,7 +16,7 @@ import useGetWeekRanges from "../../_hooks/useGetWeekRanges"
 import { ONE_HOUR_IN_MILLISECONDS } from "../../_utils"
 import { fetchEarningsStats } from "../../_redux/thunks/earnings.thunk"
 
-function page() {
+function Page() {
   const dispatch = useDispatch()
   const { organization } = useContext(OrganizationContext)
   const { cache, loading } = useSelector((store) => store.earnings)
@@ -40,7 +40,7 @@ function page() {
           })
         )
     }
-  }, [dispatch, organization?._id, currentWeek.start, cache])
+  }, [dispatch, currentWeek.start, cache, organization])
 
   return (
     <section className="h-screen w-full px-[12px] md:px-[40px] flex flex-col gap-4 items-start">
@@ -116,4 +116,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

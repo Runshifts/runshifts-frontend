@@ -61,7 +61,7 @@ export const formatHourAsAmOrPm = (hour) => {
 }
 
 export const formatDate = (date, options = {}) => {
-  return date.toLocaleDateString("en-US", {
+  return date?.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     ...options,
@@ -183,6 +183,8 @@ export function getUserBasePathForDashboard(accountType) {
   let path
   if (accountType === "employer") path = "/organization"
   else if (accountType === "employee") path = "/employee"
+  else if (accountType === "director") path = "/non-profit"
+  else if (accountType === "volunteer") path = "/volunteer"
   else if (accountType === "admin") path = "/admin"
   return path
 }
@@ -245,4 +247,8 @@ export function isWithinDay(mainDate, dateToCheck) {
   const day2 = dateToCheck.getDate()
 
   return year1 === year2 && month1 === month2 && day1 === day2
+}
+
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }

@@ -2,14 +2,23 @@ import { useCallback, useMemo, useState } from "react"
 import { getFutureWeekRanges, getPastWeekRanges } from "../_utils"
 const NUMBER_OF_WEEKRANGES_TO_GENERATE = 50
 
-export default function useGetWeekRanges(startDate = new Date(Date.now()), numberOfWeeksToGenerate = NUMBER_OF_WEEKRANGES_TO_GENERATE) {
-  const [weekRanges, setWeekRanges] = useState(() => getPastWeekRanges(numberOfWeeksToGenerate, startDate))
+export default function useGetWeekRanges(
+  startDate = new Date(Date.now()),
+  numberOfWeeksToGenerate = NUMBER_OF_WEEKRANGES_TO_GENERATE
+) {
+  const [weekRanges, setWeekRanges] = useState(() =>
+    getPastWeekRanges(numberOfWeeksToGenerate, startDate)
+  )
   const [currentRangeIdx, setCurrentRangeIdx] = useState(weekRanges.length - 1)
 
-  const jumpToWeek = useCallback((weekIdx) => {
-    if(weekIdx >= weekRanges.length || weekIdx < 0) throw new Error("Invalid index")
-    setCurrentRangeIdx(weekIdx) 
-  }, [weekRanges.length])
+  const jumpToWeek = useCallback(
+    (weekIdx) => {
+      if (weekIdx >= weekRanges.length || weekIdx < 0)
+        throw new Error("Invalid index")
+      setCurrentRangeIdx(weekIdx)
+    },
+    [weekRanges.length]
+  )
 
   const goToNextWeek = useCallback(() => {
     const highestDate = new Date(weekRanges[currentRangeIdx].end)
@@ -21,7 +30,7 @@ export default function useGetWeekRanges(startDate = new Date(Date.now()), numbe
       ])
     }
     setCurrentRangeIdx((prev) => prev + 1)
-  }, [currentRangeIdx, weekRanges])
+  }, [currentRangeIdx, weekRanges, numberOfWeeksToGenerate])
 
   const goToPrevWeek = useCallback(() => {
     const lowestDate = new Date(weekRanges[currentRangeIdx].start)
@@ -37,7 +46,7 @@ export default function useGetWeekRanges(startDate = new Date(Date.now()), numbe
     } else {
       setCurrentRangeIdx((prev) => prev - 1)
     }
-  }, [currentRangeIdx, weekRanges])
+  }, [currentRangeIdx, weekRanges, numberOfWeeksToGenerate])
 
   return {
     weekRanges,

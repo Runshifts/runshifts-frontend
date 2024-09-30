@@ -1,4 +1,5 @@
 "use client"
+import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 
 export default function Modal({
@@ -6,19 +7,26 @@ export default function Modal({
   open = false,
   onClose = () => {},
   zIndex,
-  modalClassNames
+  modalClassNames,
 }) {
+  const [canUsePortal, setCanUsePortal] = useState(false)
+  useEffect(() => {
+    if (window) setCanUsePortal(true)
+  }, [])
+if(!canUsePortal) return null
   return (
     <>
       {createPortal(
         <ModalElement
           zIndex={zIndex}
-          children={children}
           open={open}
           onClose={onClose}
           modalClassNames={modalClassNames}
-        />,
-        document.getElementById("modal-container") || document.body
+        >
+          {children}
+        </ModalElement>,
+        globalThis?.document?.getElementById("modal-container") ||
+          globalThis?.document?.body
       )}
     </>
   )
@@ -29,7 +37,7 @@ export function ModalElement({
   children,
   open = false,
   onClose = () => {},
-  modalClassNames
+  modalClassNames,
 }) {
   return (
     <>

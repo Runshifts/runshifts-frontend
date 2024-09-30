@@ -5,7 +5,7 @@ function Export({ approveAllShifts = () => {}, disabled }) {
     <section>
       <div className="flex items-center justify-center ">
         <button
-          disabled={disabled}
+          disabled={disabled ? true : false}
           onClick={approveAllShifts}
           className="bg-[#7ED957] disabled:opacity-50 disabled:cursor-not-allowed rounded-md flex items-center jusitfy-center mx-2 px-3 py-2"
         >

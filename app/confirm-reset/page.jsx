@@ -14,7 +14,7 @@ function Verify() {
   const router = useRouter()
   useEffect(() => {
     if (!sessionStorage.getItem("email")) router.push("/forgot-password")
-  }, [])
+  }, [router])
   const {
     pinInputState,
     pinInputStateBoxReference,
@@ -39,14 +39,15 @@ function Verify() {
         sessionStorage.setItem("passwordResetCode", code)
         router.push("/change-password")
       } else {
-        toast.error(
-          res.message || "An error occurred",
-          { duration: 6000, position: "top-left", className: "mx-[8%]" }
-        )
+        toast.error(res.message || "An error occurred", {
+          duration: 6000,
+          position: "top-left",
+          className: "mx-[8%]",
+        })
       }
       setLoading(false)
     },
-    [pinInputState, loading, fetchData]
+    [pinInputState, loading, fetchData, router]
   )
 
   return (

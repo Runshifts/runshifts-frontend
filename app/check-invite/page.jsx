@@ -46,7 +46,7 @@ function CheckInvite() {
       }
       setLoading(false)
     },
-    [pinInputState, fetchData, router]
+    [pinInputState, fetchData, router, loading]
   )
 
   return (

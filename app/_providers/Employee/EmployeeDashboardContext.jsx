@@ -28,7 +28,7 @@ export const EmployeeDashboardContext = createContext({
   jumpToWeek: () => {},
   shiftsInCurrentWeek: [],
   overtimesInCurrentWeek: [],
-  weekRanges: [{ start: new Date(), end: new Date()}],
+  weekRanges: [{ start: new Date(), end: new Date() }],
   updateAllShifts: () => {},
   handleUpdateSingleShift: () => {},
   handleUpdateSingleOvertime: () => {},
@@ -145,7 +145,7 @@ export default function EmployeeDashboardProvider({ children }) {
     const res = await fetchData(DASHBOARD_URLS.swapRequests(), "get")
     if (res.statusCode === 200) setSwapRequests(res.results)
     setLoadingSwapRequests(false)
-  }, [loadingSwapRequests])
+  }, [loadingSwapRequests, fetchData])
 
   const fetchActivityData = useCallback(async () => {
     if (!user?._id || !organization?._id || loadingActivity) return
@@ -158,7 +158,7 @@ export default function EmployeeDashboardProvider({ children }) {
       setActivityData(rest)
     }
     setLoadingActivity(false)
-  }, [user?._id, organization?._id, loadingActivity])
+  }, [user?._id, organization?._id, loadingActivity, fetchData])
 
   useEffect(() => {
     !activityData && fetchActivityData()
@@ -166,6 +166,7 @@ export default function EmployeeDashboardProvider({ children }) {
 
   useEffect(() => {
     fetchSwapRequests()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

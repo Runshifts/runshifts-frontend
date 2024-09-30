@@ -6,7 +6,11 @@ import DebouncedDropdownSearch from "../_components/Auth/DebouncedDropdownSearch
 import useAxios from "../_hooks/useAxios"
 import toast from "react-hot-toast"
 
-export default function StepOne({ isActive, onSubmit = () => {} }) {
+export default function StepTwo({
+  isActive,
+  onSubmit = () => {},
+  organizationType,
+}) {
   const fetchData = useAxios()
   const [industry, setIndustry] = useState("")
   const [employeeCount, setEmployeeCount] = useState("")
@@ -22,12 +26,13 @@ export default function StepOne({ isActive, onSubmit = () => {} }) {
         industry,
         maxStaffCount,
         minStaffCount,
+        type: organizationType,
       }
       const res = await fetchData("/organizations", "post", body)
       if (res.statusCode === 201) onSubmit(res.organization)
       else toast.error(res.message || "Something went wrong")
     },
-    [industry, employeeCount, fetchData]
+    [industry, employeeCount, fetchData, onSubmit, organizationType]
   )
 
   if (!isActive) return
@@ -40,6 +45,11 @@ export default function StepOne({ isActive, onSubmit = () => {} }) {
             selectedId={industry}
             handleOptionSelect={(industry) => setIndustry(industry?._id || "")}
             pathName="industries"
+            placeholder={`${
+              organizationType === "for-profit"
+                ? "Organization's industry"
+                : "Non-profit's industry"
+            }`}
           />
         </div>
         <div className="flex gap-[8px] flex-wrap">

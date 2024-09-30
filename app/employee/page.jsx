@@ -1,41 +1,56 @@
 "use client"
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import DateRangePicker from "../_components/AppComps/Datepicker"
-import Calender from "./EmployeeCalender"
-import { SentSwaps, ReceivedSwaps } from "./my-shifts/ShiftSwapRequests"
-import MyActivities from "./MyActivities"
+import Calender from "../_components/StaffDashboardComponents/EmployeeCalender"
+import {
+  SentSwaps,
+  ReceivedSwaps,
+} from "../_components/StaffDashboardComponents/ShiftSwapRequests"
+import MyActivities from "../_components/StaffDashboardComponents/MyActivities"
 import Heading from "../_components/Headings"
 import { EmployeeDashboardContext } from "../_providers/Employee/EmployeeDashboardContext"
 import { UserContext } from "../_providers/UserProvider"
 import { filterShiftsByWeek, groupShiftsByDayOfTheWeek } from "../_utils/shifts"
+import { useDispatch } from "react-redux"
+import { setCurrentWeek } from "../_redux/shifts.slice"
+import useGetWeekRanges from "../_hooks/useGetWeekRanges"
+import useManageFetchWeeklySchedule from "../_hooks/useManageFetchWeeklySchedule"
 
 function EmployeeDashboard() {
   const { user } = useContext(UserContext)
+  const dispatch = useDispatch()
+  const { goToNextWeek, currentWeek, goToPrevWeek, weekRanges, jumpToWeek } =
+    useGetWeekRanges(new Date(Date.now()), 7)
+  useEffect(() => {
+    dispatch(setCurrentWeek(currentWeek))
+  }, [dispatch, currentWeek])
+
   const {
-    goToNextWeek,
-    goToPrevWeek,
-    currentWeek,
+    listOfShiftsInCurrentWeek,
+    listOfOvertimesInCurrentWeek,
     loadingShifts,
-    shiftsInCurrentWeek,
-    activityData,
-    loadingActivity,
-    allOvertimes,
-  } = useContext(EmployeeDashboardContext)
+  } = useManageFetchWeeklySchedule()
 
   const usersShifts = useMemo(() => {
     return groupShiftsByDayOfTheWeek(
-      shiftsInCurrentWeek.filter((shift) => shift.assignee?._id === user?._id && shift.isDroppedOff === false)
+      listOfShiftsInCurrentWeek.filter(
+        (shift) =>
+          shift.assignee?._id === user?._id && shift.isDroppedOff === false
+      )
     )
-  }, [shiftsInCurrentWeek, user?._id])
+  }, [listOfShiftsInCurrentWeek, user?._id])
 
   const usersOvertimes = useMemo(
-    () => groupShiftsByDayOfTheWeek(filterShiftsByWeek(allOvertimes, currentWeek)),
-    [allOvertimes, currentWeek]
+    () =>
+      groupShiftsByDayOfTheWeek(
+        filterShiftsByWeek(listOfOvertimesInCurrentWeek, currentWeek)
+      ),
+    [listOfOvertimesInCurrentWeek, currentWeek]
   )
   return (
     <section className="md:px-[21px] flex flex-col gap-4">
       <div className="flex flex-col gap-[24px] pt-6 pb-4">
-        <Heading as="h1">Welcome {user?.firstName}</Heading>
+        <Heading as="h1">Welcome {user?.firstName || user?.fullName}</Heading>
         <DateRangePicker
           goToNextWeek={goToNextWeek}
           goToPrevWeek={goToPrevWeek}
@@ -64,9 +79,9 @@ function EmployeeDashboard() {
           </div>
         </div>
       </div>
-      <div className="rounded-md overflow-hidden shadow-[0px_2px_8px_0px_#0000001F] ">
+      {/* <div className="rounded-md overflow-hidden shadow-[0px_2px_8px_0px_#0000001F] ">
         <MyActivities activityData={activityData} isLoading={loadingActivity} />
-      </div>
+      </div> */}
     </section>
   )
 }

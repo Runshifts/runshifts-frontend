@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react"
 import { SubmitButton } from "../../_components/Auth/Inputs"
 import useGetTimesheetActions from "../../_hooks/useGetTimesheetActions"
 import Modal from "../../_components/AppComps/Modal"
-import FormInputAndLabel from "../schedule/NewShiftForm/FormInputAndLabel"
+import FormInputAndLabel from "../../_components/ScheduleComponents/NewShiftForm/FormInputAndLabel"
 import Image from "next/image"
 
 export default function TimesheetComponent({ shift = {}, onQueryClick }) {
@@ -38,10 +38,7 @@ export default function TimesheetComponent({ shift = {}, onQueryClick }) {
           }
           loadingText="Approving"
           isLoading={loading.singleShift}
-          isDisabled={
-            shift?.isApproved === true ||
-            loading.singleShift
-          }
+          isDisabled={shift?.isApproved === true || loading.singleShift}
         >
           {shift?.isApproved ? "Approved" : "Approve"}
         </SubmitButton>

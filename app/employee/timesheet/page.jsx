@@ -17,7 +17,7 @@ import {
   groupShiftsByDayOfTheWeek,
 } from "../../_utils/shifts"
 
-function page() {
+function Page() {
   const { organization } = useContext(OrganizationContext)
   const { weekRanges, goToNextWeek, goToPrevWeek, currentWeek, jumpToWeek } =
     useGetWeekRanges(new Date(), 7)
@@ -30,7 +30,7 @@ function page() {
   )
   const queriesInCurrentWeek = useMemo(
     () => filterShiftsByWeek(queries, currentWeek),
-    [shifts, currentWeek]
+    [currentWeek, queries]
   )
   const { renderShiftFilters } = useRenderShiftFilters(
     shiftsInCurrentWeek,
@@ -46,7 +46,7 @@ function page() {
           organizationId: organization?._id,
         })
       )
-  }, [dispatch, organization?._id, currentWeek.start, cache])
+  }, [dispatch, organization, currentWeek.start, cache])
 
   useEffect(() => {
     if (
@@ -98,7 +98,7 @@ function page() {
   )
 }
 
-export default page
+export default Page
 
 function DownloadSvg() {
   return (

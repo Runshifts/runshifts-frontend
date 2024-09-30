@@ -1,3 +1,4 @@
+"use client"
 import { useCallback } from "react"
 import useAxios from "./useAxios"
 import useRedirectUserByAccountType from "./useRedirectUserByAccountType"
@@ -8,7 +9,6 @@ export default function useGetAuthWithApple(accountType, organizationId) {
   const redirectUser = useRedirectUserByAccountType()
   const requestAuthWithApple = useCallback(
     async (code) => {
-      console.log(code)
       if (!code) return console.log(code)
       const res = await fetchData("/users/apple", "post", {
         type: accountType,

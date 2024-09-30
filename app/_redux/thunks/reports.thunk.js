@@ -11,7 +11,6 @@ export const fetchAttendanceStats = createAsyncThunk(
       )}?daysAgo=${daysAgo}&employees=${employees}`,
       method: "get",
     })
-    console.log(res, "res")
     return {
       attendance: res.attendance,
       statusCode: res.statusCode,
@@ -28,7 +27,6 @@ export const fetchWorkedHours = createAsyncThunk(
       )}?daysAgo=${daysAgo}&employees=${employees}`,
       method: "get",
     })
-    console.log(res, "res")
     return {
       workedHours: res.workedHours,
       statusCode: res.statusCode,
@@ -45,7 +43,6 @@ export const fetchLabourCosts = createAsyncThunk(
       )}?daysAgo=${daysAgo}&employees=${employees}`,
       method: "get",
     })
-    console.log(res, "res")
     return {
       earnings: res.earnings,
       statusCode: res.statusCode,
@@ -62,7 +59,6 @@ export const fetchScheduleAdherence = createAsyncThunk(
       )}?daysAgo=${daysAgo}&employees=${employees}`,
       method: "get",
     })
-    console.log(res, "res")
     return {
       percentageOfScheduleAdherence: res.percentageOfScheduleAdherence,
       actualSchedules: res.actualSchedules,
@@ -81,7 +77,6 @@ export const fetchShiftPerformance = createAsyncThunk(
       )}?daysAgo=${daysAgo}&employees=${employees}`,
       method: "get",
     })
-    console.log(res, "res")
     return {
       percentageOfAcceptedShifts: res.percentageOfAcceptedShifts,
       percentageOfRejectedShifts: res.percentageOfRejectedShifts,

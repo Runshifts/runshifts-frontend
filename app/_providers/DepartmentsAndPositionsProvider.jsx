@@ -32,7 +32,9 @@ export default function DepartmentsAndPositionsProvider({
 
   const getCachedPositions = useCallback(
     (organizationIndustry) => {
-      let cachedPositions = localStorage.getItem(`${organizationIndustry}_positions`)
+      let cachedPositions = localStorage.getItem(
+        `${organizationIndustry}_positions`
+      )
       if (cachedPositions) {
         cachedPositions = JSON.parse(cachedPositions)
         if (cachedPositions.length !== positions.length) {
@@ -44,39 +46,42 @@ export default function DepartmentsAndPositionsProvider({
     },
     [positions]
   )
-  const fetchDepartmentsAndPositions = useCallback(async (organizationIndustry) => {
-    if (!organizationIndustry) return
-    const hasCachedDepartments = getCachedDepartments(organizationIndustry)
-    const hasCachedPositions = getCachedPositions(organizationIndustry)
-    const [departmentsResponse, positionsResponse] = await Promise.all([
-      !hasCachedDepartments
-        ? await fetchData(
-            `/industries/${organizationIndustry?.name.toLowerCase()}/departments`,
-            "get"
-          )
-        : {},
-      !hasCachedPositions
-        ? await fetchData(
-            `/industries/${organizationIndustry?.name.toLowerCase()}/positions`,
-            "get"
-          )
-        : {},
-    ])
-    if (departmentsResponse.statusCode === 200) {
-      setDepartments(departmentsResponse.results)
-      localStorage.setItem(
-        `${organizationIndustry?.name}_departments`,
-        JSON.stringify(departmentsResponse.results)
-      )
-    }
-    if (positionsResponse.statusCode === 200) {
-      setPositions(positionsResponse.results)
-      localStorage.setItem(
-        `${organizationIndustry?.name}_positions`,
-        JSON.stringify(positionsResponse.results)
-      )
-    }
-  }, [])
+  const fetchDepartmentsAndPositions = useCallback(
+    async (organizationIndustry) => {
+      if (!organizationIndustry) return
+      const hasCachedDepartments = getCachedDepartments(organizationIndustry)
+      const hasCachedPositions = getCachedPositions(organizationIndustry)
+      const [departmentsResponse, positionsResponse] = await Promise.all([
+        !hasCachedDepartments
+          ? await fetchData(
+              `/industries/${organizationIndustry?.name.toLowerCase()}/departments`,
+              "get"
+            )
+          : {},
+        !hasCachedPositions
+          ? await fetchData(
+              `/industries/${organizationIndustry?.name.toLowerCase()}/positions`,
+              "get"
+            )
+          : {},
+      ])
+      if (departmentsResponse.statusCode === 200) {
+        setDepartments(departmentsResponse.results)
+        localStorage.setItem(
+          `${organizationIndustry?.name}_departments`,
+          JSON.stringify(departmentsResponse.results)
+        )
+      }
+      if (positionsResponse.statusCode === 200) {
+        setPositions(positionsResponse.results)
+        localStorage.setItem(
+          `${organizationIndustry?.name}_positions`,
+          JSON.stringify(positionsResponse.results)
+        )
+      }
+    },
+    [fetchData, getCachedDepartments, getCachedPositions]
+  )
 
   useEffect(() => {
     fetchDepartmentsAndPositions(organizationIndustry)

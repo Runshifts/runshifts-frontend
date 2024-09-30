@@ -3,7 +3,7 @@ import Image from "next/image"
 import EyeIcon from "../../_assets/svgs/Eye"
 import placeholderImg from "../../_assets/img/user.png"
 import Modal from "../../_components/AppComps/Modal"
-import FormInputAndLabel from "../../organization/schedule/NewShiftForm/FormInputAndLabel"
+import FormInputAndLabel from "../../_components/ScheduleComponents/NewShiftForm//FormInputAndLabel"
 
 function Queries({ queries = [] }) {
   return (

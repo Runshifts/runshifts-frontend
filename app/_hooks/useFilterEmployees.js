@@ -2,7 +2,7 @@ import { useMemo, useState } from "react"
 
 export default function useFilterEmployees(employees = [], searchText = "") {
   const [departmentFilter, setDepartmentFilter] = useState(null)
-  const [positionFilter, setRoleFilter] = useState(null)
+  const [positionFilter, setPositionFilter] = useState(null)
   const [locationFilter, setLocationFilter] = useState(null)
 
   const filteredEmployees = useMemo(() => {
@@ -25,7 +25,7 @@ export default function useFilterEmployees(employees = [], searchText = "") {
   return {
     filteredEmployees,
     setDepartmentFilter,
-    setRoleFilter,
+    setPositionFilter,
     setLocationFilter,
     departmentFilter,
     positionFilter,

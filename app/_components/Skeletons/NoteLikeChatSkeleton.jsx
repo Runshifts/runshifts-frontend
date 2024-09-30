@@ -1,6 +1,6 @@
 import Image from "next/image"
 import placeholderImage from "../../_assets/img/user.png"
-import { SeverityPill } from "../../employee/my-shifts/ShiftNotesForm"
+import { SeverityPill } from "../StaffDashboardComponents/ShiftNotesForm"
 
 export default function NoteLikeChatSkeleton({ shouldJustifyStart = false }) {
   return (

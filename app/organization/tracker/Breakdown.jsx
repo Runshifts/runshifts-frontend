@@ -1,6 +1,6 @@
 import placeholderImage from "../../_assets/img/user.png"
 import Image from "next/image"
-import FormInputAndLabel from "../schedule/NewShiftForm/FormInputAndLabel"
+import FormInputAndLabel from "../../_components/ScheduleComponents/NewShiftForm/FormInputAndLabel"
 import { useCallback, useMemo } from "react"
 import { msToHourMinSecond } from "../../_utils"
 
@@ -31,9 +31,9 @@ const Breakdown = ({
   }, [])
 
   const heading = useMemo(() => {
-    if(shiftOrTimeOff.isOvertime) return "Overtime Review"
+    if (shiftOrTimeOff.isOvertime) return "Overtime Review"
     return "Time Review"
-  },[shiftOrTimeOff])
+  }, [shiftOrTimeOff])
 
   return (
     <div className="w-[90%] md:w-full mx-auto max-w-[336px] py-[24px] px-[20px] md:px-[40px] bg-white rounded-[16px] shadow-md flex flex-col items-center justify-center gap-[14px]">
@@ -95,7 +95,8 @@ const Breakdown = ({
           />
         </div>
         {variant !== BREAKDOWN_VARIANTS.INCOMING_SHIFT_REQUEST &&
-          variant !== BREAKDOWN_VARIANTS.TIME_OFF && !shiftOrTimeOff.isOvertime && (
+          variant !== BREAKDOWN_VARIANTS.TIME_OFF &&
+          !shiftOrTimeOff.isOvertime && (
             <div className="flex gap-4">
               <FormInputAndLabel
                 label="Break duration"

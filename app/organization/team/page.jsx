@@ -1,26 +1,32 @@
 "use client"
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react"
-import TeamStatistics from "./TeamStatistics"
-import RecentlyViewedTeamMembers from "./RecentlyViewedTeamMembers"
-import AllTeamMembers from "./AllTeamMembers"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import TeamStatistics from "../../_components/TeamComponents/TeamStatistics"
+import RecentlyViewedTeamMembers from "../../_components/TeamComponents/RecentlyViewedTeamMembers"
+import AllTeamMembers from "../../_components/TeamComponents/AllTeamMembers"
 import TeamAppgroup from "../../_components/AppComps/TeamAppgroup"
-import { TeamContext } from "../../_providers/Employer/TeamProvider"
 import useRenderEmployeesFilters from "../../_hooks/useRenderEmployeesFilter"
 import SelectTrigger, { Option } from "../../_components/AppComps/Select"
 import DropDown from "../../_components/AppComps/Dropdown"
 import FilterSvg from "../../_assets/svgs/FilterSvg"
 import { getPastNumOfDays } from "../../_utils"
-import NewMemberForm from "./NewMemberForm/NewMemberForm"
+import NewMemberForm from "../../_components/TeamComponents/NewMemberForm/NewMemberForm"
 import useAxios from "../../_hooks/useAxios"
-import { OrganizationContext } from "../../_providers/OrganizationProvider"
 import PageSearchInput from "../../_components/AppComps/PageSearchInput"
 import Heading from "../../_components/Headings"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import {
+  fetchTeamData,
+  fetchStatsForDuration,
+  fetchArchivedTeamMembers,
+} from "../../_redux/thunks/organization.thunk"
+import {
+  decrementActiveTeamMembersCount,
+  incrementActiveTeamMembersCount,
+  updateRecentlyViewed,
+  updateTeamMembers,
+  updateTeamStats,
+} from "../../_redux/organization.slice"
 
 const durationOptions = [
   { displayValue: "7 days", fromDate: getPastNumOfDays(7) },
@@ -33,29 +39,38 @@ const durationOptions = [
 ]
 
 function Team() {
+  const dispatch = useDispatch()
   const fetchData = useAxios()
-  const { organization } = useContext(OrganizationContext)
-
   const {
+    organization,
+    hasInitializedTeam,
+    loadingTeamStats,
     teamMembers,
-    recentlyViewedTeamMembers,
-    hasInitialized,
-    initialize,
     teamStats,
-    loading,
-    loadingStats,
-    fetchStatsForDuration,
-    updateRecentlyViewed,
-    updateTeamMembers,
-    removeArchivedTeamMember,
-    removeArchivedRecentlyViewed,
-    incrementActiveTeamMembersCount,
-    decrementActiveTeamMembersCount,
-  } = useContext(TeamContext)
+    recentlyViewedEmployees,
+    teamStatsCache,
+    loadingTeamData,
+    archivedTeamMembers,
+  } = useSelector((store) => store.organization)
 
-  useEffect(() => {
-    if (!hasInitialized) initialize()
-  }, [hasInitialized, initialize])
+  const handleFetchStatsForDuration = useCallback(
+    (fromDate) => {
+      if (!organization?._id || loadingTeamStats) return
+      if (teamStatsCache[fromDate.toLocaleDateString()] >= 0) {
+        dispatch(
+          updateTeamStats({
+            totalNumOfWorkedHours:
+              teamStatsCache[fromDate.toLocaleDateString()],
+          })
+        )
+        return
+      }
+      dispatch(
+        fetchStatsForDuration({ organizationId: organization?._id, fromDate })
+      )
+    },
+    [loadingTeamStats, organization?._id, teamStatsCache, dispatch]
+  )
 
   const [search, setSearch] = useState("")
   const [durationFilter, setDurationFilter] = useState(() => ({
@@ -85,7 +100,7 @@ function Team() {
         { lastViewedByEmployerAt: new Date(Date.now()) }
       )
       if (res.statusCode === 200) {
-        updateRecentlyViewed([res.teamMember])
+        dispatch(updateRecentlyViewed([res.teamMember]))
         setTeamMemberFormData({
           isEdit: true,
           isNew: false,
@@ -93,8 +108,15 @@ function Team() {
         })
       }
     },
-    [organization?._id]
+    [organization?._id, dispatch, fetchData]
   )
+
+  useEffect(() => {
+    if (organization !== null && !hasInitializedTeam) {
+      dispatch(fetchTeamData(organization?._id))
+      dispatch(fetchArchivedTeamMembers(organization?._id))
+    }
+  }, [dispatch, organization, hasInitializedTeam])
 
   return (
     <>
@@ -102,9 +124,10 @@ function Team() {
         <div className="flex items-center justify-between py-3">
           <Heading as="h1">Team</Heading>
           <TeamAppgroup
-            openNewMemberModal={() =>
+            openNewMemberModal={() => {
               setTeamMemberFormData({ isNew: true, isEdit: false })
-            }
+              console.log("opend")
+            }}
           />
         </div>
         <div className="flex gap-2 items-center justify-start">
@@ -129,7 +152,7 @@ function Team() {
                     <Option
                       key={opt.displayValue}
                       onClick={() => {
-                        fetchStatsForDuration(opt.fromDate)
+                        handleFetchStatsForDuration(opt.fromDate)
                         setDurationFilter(opt)
                       }}
                       isSelected={
@@ -156,37 +179,40 @@ function Team() {
         <TeamStatistics
           totalCountOfActiveEmployees={teamStats.totalNumOfActiveEmployees}
           totalNumberOfWorkedHours={teamStats.totalNumOfWorkedHours}
-          loading={loading}
-          loadingStats={loadingStats}
+          loading={loadingTeamData}
+          loadingStats={loadingTeamStats}
         />
-        {(recentlyViewedTeamMembers.length > 0 || loading) && (
+        {(recentlyViewedEmployees.length > 0 || loadingTeamData) && (
           <RecentlyViewedTeamMembers
-            loading={loading}
-            users={recentlyViewedTeamMembers}
+            loading={loadingTeamData}
+            users={recentlyViewedEmployees}
+            archivedTeamMembers={archivedTeamMembers}
             viewTeamMember={handleViewTeamMember}
           />
         )}
         <AllTeamMembers
           viewTeamMember={handleViewTeamMember}
-          loading={loading}
+          loading={loadingTeamData}
           users={filteredEmployees}
         />
       </section>
       <>
         <NewMemberForm
+          type="employee"
           show={teamMemberFormData !== null}
           teamMemberFormData={teamMemberFormData}
           onCancel={() => setTeamMemberFormData(null)}
           organizationId={organization?._id}
           handleUserResponse={(user) => {
-            teamMemberFormData.isEdit && updateRecentlyViewed([user])
-            teamMemberFormData.isNew && incrementActiveTeamMembersCount()
-            updateTeamMembers([user])
+            teamMemberFormData.isEdit && dispatch(updateRecentlyViewed([user]))
+            teamMemberFormData.isNew &&
+              dispatch(incrementActiveTeamMembersCount())
+            dispatch(updateTeamMembers([user]))
           }}
           handleArchivedUser={(user) => {
-            decrementActiveTeamMembersCount()
-            removeArchivedTeamMember(user)
-            removeArchivedRecentlyViewed(user)
+            dispatch(decrementActiveTeamMembersCount())
+            // removeArchivedTeamMember(user)
+            // removeArchivedRecentlyViewed(user)
           }}
         />
       </>

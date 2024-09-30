@@ -16,7 +16,6 @@ import TrackerProvider from "./Employer/TrackerProvider"
 import TeamProvider from "./Employer/TeamProvider"
 import { useRouter } from "next/navigation"
 import { UserContext } from "./UserProvider"
-import NotesProvider from "./NotesProvider"
 
 export const OrganizationContext = createContext({
   employees: [],
@@ -51,7 +50,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
         router.refresh()
       }
     }
-  }, [router, isEmployee, user?.organization])
+  }, [router, isEmployee, user?.organization, fetchData])
 
   const fetchEmployees = useCallback(async () => {
     if (!organization) return
@@ -62,7 +61,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
     if (res.statusCode === 200) {
       setEmployees(res.employees)
     }
-  }, [organization?._id])
+  }, [organization, fetchData])
 
   const updateEmployees = useCallback((update = []) => {
     setEmployees((prev) => [
@@ -91,7 +90,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
         isFetchingOrganization,
         employees,
         updateEmployees,
-        updateOrganization: (value) => value && setOrganization(value)
+        updateOrganization: (value) => value && setOrganization(value),
       }}
     >
       <LocationsProvider organizationId={organization?._id}>
@@ -109,9 +108,7 @@ export default function OrganizationProvider({ children, isEmployee = false }) {
                 shouldAutoInitialize={false}
                 organizationId={organization?._id}
               >
-                <NotesProvider organizationId={organization?._id}>
-                  {children}
-                </NotesProvider>
+                {children}
               </TrackerProvider>
             </TeamProvider>
           </ShiftsManagementProvider>

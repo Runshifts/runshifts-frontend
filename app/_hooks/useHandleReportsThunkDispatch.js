@@ -1,7 +1,7 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux"
-import { OrganizationContext } from "../_providers/OrganizationProvider"
 import useDebouncedCallback from "./useDebouncedCallback"
+import { useSelector } from "react-redux"
 
 export default function useHandleReportsThunkDispatch({
   cache = {},
@@ -13,7 +13,7 @@ export default function useHandleReportsThunkDispatch({
   cacheValueKey = "",
   thunkFunction = () => {},
 }) {
-  const { organization } = useContext(OrganizationContext)
+  const { organization } = useSelector((store) => store.organization)
   const cacheKey = useMemo(
     () => `${daysAgo.value}-${selectedEmployees.map((it) => it._id).join(",")}`,
     [daysAgo.value, selectedEmployees]

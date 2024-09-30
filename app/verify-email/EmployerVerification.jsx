@@ -5,8 +5,15 @@ import FormHeading from "../_components/Auth/Heading"
 import { AuthLabelText, SubmitButton } from "../_components/Auth/Inputs"
 import PinInput from "../_components/AppComps/PinInput"
 import useHandlePinInputState from "../_hooks/useHandlePinInputState"
+import { useCallback, useState } from "react"
+import useAxios from "../_hooks/useAxios"
+import USER_URLS from "../_urls/userURLs"
+import toast, { LoaderIcon } from "react-hot-toast"
+import { Timer } from "../_hooks/useCountDown"
 
 function EmployerVerification({ handleSubmit, loading }) {
+  const [countDownTime, setCountDownTime] = useState(0)
+  const [resendingCode, setResendingCode] = useState(false)
   const {
     pinInputState,
     pinInputStateBoxReference,
@@ -15,10 +22,40 @@ function EmployerVerification({ handleSubmit, loading }) {
     handlePaste,
   } = useHandlePinInputState({ pinLength: 6 })
 
+  const fetchData = useAxios()
+
+  const resendCode = useCallback(async () => {
+    if (countDownTime) {
+      return
+    }
+    setResendingCode(true)
+    const res = await fetchData(USER_URLS.resendVerificationEmail(), "post", {
+      email: sessionStorage.getItem("email"),
+    })
+    if (res.statusCode === 200) {
+      const enableResendCodeTime = new Date(Date.now())
+      enableResendCodeTime.setMinutes(enableResendCodeTime.getMinutes() + 3)
+      setCountDownTime((enableResendCodeTime.getTime() - Date.now()) / 1000)
+      toast.success(
+        res.message ||
+          "A new verification code has been sent to your email address"
+      )
+    } else {
+      toast.error(
+        res.message ||
+          "Unable to resend the verification code, something went wrong!"
+      )
+    }
+    setResendingCode(false)
+  }, [fetchData, countDownTime])
+
   return (
     <>
       <AuthLayout bgClassName="bg-[url(/img/employer_verify_email.png)]">
-        <form onSubmit={(e) => handleSubmit(e, pinInputState)} className="flex flex-col gap-8">
+        <form
+          onSubmit={(e) => handleSubmit(e, pinInputState)}
+          className="flex flex-col gap-8"
+        >
           <FormHeading>Verify Account</FormHeading>
           <div>
             <AuthLabelText>
@@ -31,8 +68,29 @@ function EmployerVerification({ handleSubmit, loading }) {
               handlePaste={handlePaste}
               handleChange={handleChange}
             />
+            <button
+              disabled={countDownTime || resendingCode === true}
+              className="mt-2 flex items-center gap-2 text-[14px] text-info-600 disabled:cursor-not-allowed disabled:text-info-600/20 underline"
+              type="button"
+              onClick={() => resendCode()}
+            >
+              {resendingCode && <LoaderIcon />}
+              {countDownTime ? (
+                <span className="no-underline">
+                  <Timer
+                    seconds={countDownTime}
+                    onEnd={() => setCountDownTime(0)}
+                  />
+                </span>
+              ) : null}
+              Resend code
+            </button>
           </div>
-          <SubmitButton type="submit" isDisabled={loading} isLoading={loading}>
+          <SubmitButton
+            type="submit"
+            isDisabled={loading || pinInputState.some((it) => it.length === 0)}
+            isLoading={loading}
+          >
             Verify email
           </SubmitButton>
         </form>

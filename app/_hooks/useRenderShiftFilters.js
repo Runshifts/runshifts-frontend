@@ -1,12 +1,13 @@
-import { useCallback, useContext } from "react"
+import { useCallback } from "react"
 import useFilterShifts from "./useFilterShifts"
 import {
   DepartmentsOrPositionsFilter,
   LocationFilter,
   WeekFilter,
 } from "../_components/AppComps/FilterGroup"
-import { LocationsContext } from "../_providers/LocationsProvider"
-import { DepartmentsAndPositionsContext } from "../_providers/DepartmentsAndPositionsProvider"
+// import { LocationsContext } from "../_providers/LocationsProvider"
+// import { DepartmentsAndPositionsContext } from "../_providers/DepartmentsAndPositionsProvider"
+import { useSelector } from "react-redux"
 
 export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
   const {
@@ -21,8 +22,11 @@ export default function useRenderShiftFilters(shiftsToFilter, weekRanges = []) {
     setLocationFilter,
   } = useFilterShifts(shiftsToFilter)
 
-  const { locations } = useContext(LocationsContext)
-  const { departments, positions } = useContext(DepartmentsAndPositionsContext)
+  const { locations, departments, positions } = useSelector(
+    (store) => store.organization
+  )
+  // const { locations } = useContext(LocationsContext)
+  // const { departments, positions } = useContext(DepartmentsAndPositionsContext)
 
   const renderShiftFilters = useCallback(
     (props = {}) => {

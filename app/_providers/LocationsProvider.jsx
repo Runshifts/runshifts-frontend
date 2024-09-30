@@ -13,7 +13,7 @@ export default function LocationsProvider({ children, organizationId }) {
     if (!organizationId) return
     const res = await fetchData(`/locations/${organizationId}`, "get")
     if (res.statusCode === 200) setLocations(res.locations)
-  }, [organizationId])
+  }, [organizationId, fetchData])
 
   useEffect(() => {
     fetchLocations()

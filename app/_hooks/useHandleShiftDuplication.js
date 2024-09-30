@@ -47,7 +47,7 @@ export default function useHandleShiftDuplication({
         updateShifts([res.duplicate])
       } else toast.error("Unable to duplicate shift, Something went wrong")
     },
-    [fetchData, toast]
+    [fetchData, updateShifts]
   )
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function useHandleShiftDuplication({
       toastId = toast.success(data.message)
       setIsDuplicationInProgress(false)
     })
-    socket.on("weekly_duplication_error", (d) => {
+    socket.on("weekly_duplication_error", (data) => {
       toastId = toast.error(data.message)
       toast.remove(toastId)
       setIsDuplicationInProgress(false)
@@ -71,7 +71,11 @@ export default function useHandleShiftDuplication({
         toast.remove(toastId)
       })
     }
-  }, [socket, updateShifts])
+  }, [updateShifts])
 
-  return { duplicateWeek, duplicateSingleShift, inProgress: isDuplicationInProgress }
+  return {
+    duplicateWeek,
+    duplicateSingleShift,
+    inProgress: isDuplicationInProgress,
+  }
 }

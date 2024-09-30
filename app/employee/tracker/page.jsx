@@ -1,44 +1,38 @@
 "use client"
-import { useContext, useMemo } from "react"
+import {  useMemo } from "react"
 import useCountdown from "../../_hooks/useCountDown"
-import TrackerContent from "./TrackerContent"
-import { EmployeeDashboardContext } from "../../_providers/Employee/EmployeeDashboardContext"
+import TrackerContent, { OvertimeTrackerContainer } from "./TrackerContent"
 import EmployeeTrackerProvider from "../../_providers/Employee/TrackerProvider"
 import Heading from "../../_components/Headings"
+import useGetTodaysShiftAndOvertime from "../../_hooks/useGetTodaysShiftAndOvertime"
 
-function page() {
-  const { shiftsInCurrentWeek } = useContext(EmployeeDashboardContext)
-  const todaysShift = useMemo(
-    () =>
-      shiftsInCurrentWeek.find(
-        (shift) =>
-          new Date(shift.startTime).toDateString() ===
-            new Date().toDateString() && shift.isAccepted === true
-      ),
-    [shiftsInCurrentWeek]
-  )
+function Page() {
+  const { currentOvertime, currentShift } = useGetTodaysShiftAndOvertime()
 
   return (
-    <EmployeeTrackerProvider shiftId={todaysShift?._id}>
+    <EmployeeTrackerProvider shiftId={currentShift?._id}>
       <section className="p-3 h-screen">
         <div className="flex justify-between items-center py-6">
           <Heading>Tracker</Heading>
-          {todaysShift && (
+          {currentShift && (
             <CountDown
-              startTime={new Date(todaysShift?.startTime)}
-              endTime={new Date(todaysShift?.endTime)}
+              startTime={new Date(currentShift?.startTime)}
+              endTime={new Date(currentShift?.endTime)}
             />
           )}
         </div>
         <div>
-          <TrackerContent todaysShift={todaysShift} />
+          <TrackerContent todaysShift={currentShift} />
+          {currentOvertime && (
+            <OvertimeTrackerContainer todaysOvertime={currentOvertime} />
+          )}
         </div>
       </section>
     </EmployeeTrackerProvider>
   )
 }
 
-export default page
+export default Page
 
 function CountDown({ startTime, endTime }) {
   const { hours, minutes, seconds } = useCountdown(
@@ -47,7 +41,8 @@ function CountDown({ startTime, endTime }) {
   const dateInstanceOfStartTime = new Date(startTime)
   const dateInstanceOfEndTime = new Date(endTime)
   const isStartTimeInFuture = useMemo(
-    () => new Date(startTime).getTime() > Date.now()
+    () => new Date(startTime).getTime() > Date.now(),
+    [startTime]
   )
 
   if (!endTime) return null

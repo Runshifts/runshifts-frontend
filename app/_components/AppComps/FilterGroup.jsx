@@ -2,7 +2,7 @@
 import FilterSvg from "../../_assets/svgs/FilterSvg"
 import SelectTrigger, { Option } from "./Select"
 import DropDown from "./Dropdown"
-import { formatDate } from "../../_utils"
+import { capitalizeFirstLetter, formatDate } from "../../_utils"
 import { useMemo } from "react"
 
 export function LocationFilter({
@@ -153,7 +153,7 @@ export function UsersFilter({
               onClick={() => updateCurrentValue(opt)}
               key={opt._id}
             >
-              {opt.firstName || opt.email}
+              {capitalizeFirstLetter(opt.firstName || opt.email)}
             </Option>
           ))}
         </>

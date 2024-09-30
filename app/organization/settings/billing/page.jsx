@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import SettingsTab from '../page'
 import { PiWarningCircleFill } from 'react-icons/pi'
@@ -5,8 +6,6 @@ import { PiWarningCircleFill } from 'react-icons/pi'
 function Billing() {
   return (
     <div>
-      <SettingsTab />
-
       <div className="min-w-sm w-[620px] h-[100px] mx-4 flex bg-[#DEEBFF] p-4 justify-start">
       <div className="text-[#0747A6] mr-5">
       <PiWarningCircleFill className='h-7 w-7'/>

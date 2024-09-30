@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
     "noEmit": true,
     "incremental": true,
-    "esModuleInterop": true,
     "module": "esnext",
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -22,13 +26,9 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "app/_redux/timesheet.slice.js",
-    "app/_redux/_store.js",
-    "app/_redux/auth.slice.js",
-    "app/_redux/thunks/timesheet.thunk.js",
-    "app/employee/my-shifts/OvertimeApplication.jsx",
-    "app/_assets/svgs/CheckInSquare.jsx"
-, "app/organization/reports/Dropdown.jsx", "app/organization/reports/StatisticsView.jsx", "app/_components/AppComps/EmployeeSelect.jsx"  ],
-  "exclude": ["node_modules"]
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -20,16 +20,16 @@ export default function StatisticsCard({
       {icon && (
         <div
           style={{ backgroundColor: iconBg }}
-          className="bg-[#FFDD99] p-[11px] rounded-full"
+          className="bg-[#FFDD99] flex justify-center items-center p-[11px] w-[64px] h-[64px] rounded-full"
         >
           {icon}
         </div>
       )}
 
-      <div className="px-4 text-center md:text-start">
+      <div className="px-4 text-left md:text-start">
         <h1
           style={{ color: titleColor }}
-          className="text-[24px] leading-[40px] font-[500] py-2 text-info-700"
+          className="text-[24px] leading-[40px] font-[500] text-info-700"
         >
           {title}
         </h1>
