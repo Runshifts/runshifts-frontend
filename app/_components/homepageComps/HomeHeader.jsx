@@ -6,7 +6,7 @@ import CommonButtons from './CommonButtons';
 import { MdOutlineCancel } from 'react-icons/md';
 
 const menuItems = [
-    { label: 'Home', href: '/home' },
+    { label: 'Home', href: '/' },
     { label: 'About us', href: '/about' },
     { label: 'Pricing', href: '/pricing' },
     {

@@ -8,7 +8,7 @@ import { MdOutlineCancel } from 'react-icons/md'; // Import cancel icon
 const menuItems = [
     {
         label: 'Home',
-        href: '/home',
+        href: '/',
     },
     {
         label: 'About us',
