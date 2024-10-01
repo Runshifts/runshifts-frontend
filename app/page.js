@@ -70,31 +70,33 @@
 //   )
 // }
 
+
+
+
 import React from "react";
 import Image from "next/image";
-import CustomButtons from "../_components/homepageComps/CommonButtons";
-import Home1 from "../_assets/img/Home1.png";
-import Home2 from "../_assets/img/Home2.png";
-import Home3 from "../_assets/img/Home3.png";
-import Illustration from "../_assets/img/Illustration.svg";
-import Illustration1 from "../_assets/img/Illustration1.svg";
-import Table1 from "../_assets/img/Table1.png";
-import Table2 from "../_assets/img/Table2.png";
-import hands from "../_assets/img/hands.svg";
-import bruce from "../_assets/img/bruce.svg";
-import bruce1 from "../_assets/img/bruce1.svg";
-import pexels from "../_assets/img/pexels.svg";
-import Home from "../_assets/img/Home.svg";
-import Manage from "../_assets/svgs/Manage";
-import Secured from "../_assets/svgs/Secured";
-import Support from "../_assets/svgs/Support";
-import CommonHeader from "../_components/homepageComps/CommonHeader";
-import CommonParagraph from "../_components/homepageComps/CommonParagraph";
-import RightArrow from "../_assets/svgs/RightArrow";
+import CustomButtons from "./_components/homepageComps/CommonButtons";
+import Home1 from "./_assets/img/Home1.png";
+import Home2 from "./_assets/img/Home2.png";
+import Home3 from "./_assets/img/Home3.png";
+import Illustration from "./_assets/img/Illustration.svg";
+import Illustration1 from "./_assets/img/Illustration1.svg";
+import Table1 from "./_assets/img/Table1.png";
+import Table2 from "./_assets/img/Table2.png";
+import hands from "./_assets/img/hands.svg";
+import bruce from "./_assets/img/bruce.svg";
+import bruce1 from "./_assets/img/bruce1.svg";
+import pexels from "./_assets/img/pexels.svg";
+import Home from "./_assets/img/Home.svg";
+import Manage from "./_assets/svgs/Manage";
+import Secured from "./_assets/svgs/Secured";
+import Support from "./_assets/svgs/Support";
+import CommonHeader from "./_components/homepageComps/CommonHeader";
+import CommonParagraph from "./_components/homepageComps/CommonParagraph";
+import RightArrow from "./_assets/svgs/RightArrow";
 import Link from "next/link";
-import Layout from "../_components/homepageComps/Layout";
-import Footer from './../_components/homepageComps/Footer';
-import HomeHeader from "../_components/homepageComps/HomeHeader";
+import Footer from './_components/homepageComps/Footer';
+import HomeHeader from "./_components/homepageComps/HomeHeader";
 
 export default function HomePage() {
   const blogPosts = [
