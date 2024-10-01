@@ -122,7 +122,7 @@ export default function HomePage() {
     <div className="">
       <div className="bg-gradient-radial from-[#FD9] via-[#CBF0BC] to-white">
         <HomeHeader />
-        <div className=" flex flex-col items-center justify-center px-54 py-6 pt-16">
+        <div className=" flex flex-col items-center justify-center px-54 py-6 pt-8  xl:pt-16">
           <button className="bg-[#B2E89A] text-[#17320B] rounded-full px-4 py-2 text-base not-italic font-semibold leading-6 ">
             Team & shift management
           </button>

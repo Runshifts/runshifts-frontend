@@ -4,6 +4,7 @@ import Image from 'next/image';
 import runshiftsLogo1 from './runshiftsLogo1.svg';
 import CommonButtons from './CommonButtons';
 import { MdOutlineCancel } from 'react-icons/md'; // Import cancel icon
+import Link from 'next/link';
 
 const menuItems = [
     {
@@ -68,21 +69,30 @@ export default function Header({ isTransparent = false }) {
     return (
         <div>
             <nav className={`${bgClass} ${textColorClass} border-gray-20 relative z-20`}>
-                <div className="max-w-screen-xl flex flex-wrap items-center justify-between p-4">
-                    <a href="/home" className="flex items-left">
+                <div className="max-w-screen-xl flex  items-center justify-between px-2 py-4">
+                    <a href="/" className="flex justify-start items-left ml-0">
                         <Image src={runshiftsLogo1} className="h-8" height={200} width={204} alt="runshifts Logo" />
                     </a>
-                    <button
-                        type="button"
-                        className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg xl:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        aria-expanded={isMobileMenuOpen}
-                    >
-                        <span className="sr-only">Open main menu</span>
-                        <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
-                        </svg>
-                    </button>
+
+                    <div className="flex justify-start items-left mr-4">
+                        <div className='block xl:hidden'>
+                        <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+                        Get Started for <span className='font-bold'>free</span>
+    </button>
+                        </div>
+
+                        <button
+                            type="button"
+                            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg xl:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-expanded={isMobileMenuOpen}
+                        >
+                            <span className="sr-only">Open main menu</span>
+                            <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
+                            </svg>
+                        </button>
+                    </div>
 
                     {/* Desktop Menu */}
                     <div className={`w-full xl:block xl:w-auto ${isMobileMenuOpen ? '' : 'hidden'}`} id="navbar-dropdown">
@@ -104,9 +114,14 @@ export default function Header({ isTransparent = false }) {
                                             )}
                                         </div>
                                     ) : (
-                                        <CommonButtons>
-                                            <a href={item.href}>{item.label}</a>
-                                        </CommonButtons>
+                                        // <CommonButtons>
+                                        //     <a href={item.href}>{item.label}</a>
+                                        // </CommonButtons>
+<Link href='/signup?type=for-profit'>
+<button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+Get Started for <span className='font-bold'>free</span>
+</button>
+</Link>
                                     )}
                                     {isDropdownOpen && item.dropdown && (
                                         <div className="absolute left-0 top-full mt-2 z-10 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow">
@@ -160,9 +175,11 @@ export default function Header({ isTransparent = false }) {
                                                 )}
                                             </div>
                                         ) : (
-                                            <CommonButtons>
-                                                {item.label}
-                                            </CommonButtons>
+                                            <Link href='/signup?type=for-profit'>
+                                            <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+                                            Get Started for <span className='font-bold'>free</span>
+                                            </button>
+                                            </Link>
                                         )}
                                         {isDropdownOpen && item.dropdown && (
                                             <div className="absolute left-0 top-full mt-2 z-40 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow">
