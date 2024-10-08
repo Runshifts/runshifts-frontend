@@ -8,7 +8,6 @@ import Link from "next/link";
 function InfoCards({ title, content, refLink }) {
   return (
     <div>
-      
       <div className="py-4 px-8 mx-4 my-6 border max-w-screen bg-white rounded-lg shadow-lg ">
         <h1 className="text-[#449522] text-xl font-medium leading-6 tracking-normal text-left ">
           {title}
@@ -21,19 +20,19 @@ function InfoCards({ title, content, refLink }) {
 
         <div className="flex items-center justify-between pt-3">
           <div className="flex items-center justify-between">
-            <div class="flex -space-x-4 rtl:space-x-reverse">
+            <div className="flex -space-x-4 rtl:space-x-reverse">
               <Image
-                class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
+                className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
                 src={Ellipse1}
                 alt=""
               />
               <Image
-                class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
+                className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
                 src={Ellipse2}
                 alt=""
               />
               <Image
-                class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
+                className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
                 src={Ellipse3}
                 alt=""
               />
@@ -45,7 +44,7 @@ function InfoCards({ title, content, refLink }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default InfoCards;

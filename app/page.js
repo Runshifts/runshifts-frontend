@@ -149,25 +149,25 @@ export default function HomePage() {
           </div>
 
           <div className="flex items-center justify-center my-6">
-            <div class="flex -space-x-4 rtl:space-x-reverse">
+            <div className="flex -space-x-4 rtl:space-x-reverse">
               <Image
                 height={53}
                 width={53}
-                class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
+                className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
                 src={Home1}
                 alt=""
               />
               <Image
                 height={53}
                 width={53}
-                class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
+                className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
                 src={Home2}
                 alt=""
               />
               <Image
                 height={53}
                 width={53}
-                class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
+                className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
                 src={Home3}
                 alt=""
               />
