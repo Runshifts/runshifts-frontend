@@ -10,7 +10,7 @@ export default function DebouncedDropdownSearch({
   selectedId,
   handleOptionSelect,
   pathName,
-  placeholder
+  placeholder,
 }) {
   const fetchData = useAxios()
   const [searchText, setSearchText] = useState("")
@@ -46,8 +46,9 @@ export default function DebouncedDropdownSearch({
 
   useEffect(() => {
     const delayOrganizationSearchTimerId = setTimeout(() => {
-      searchText.trim().length > 0 && handleSearch(searchText.trim())
-      searchText.trim().length === 0 && setSearchResults([])
+      // searchText.trim().length > 0 &&
+      handleSearch(searchText.trim())
+      // searchText.t rim().length === 0 && setSearchResults([])
     }, 500)
     return () => clearTimeout(delayOrganizationSearchTimerId)
   }, [searchText, handleSearch])
@@ -60,15 +61,15 @@ export default function DebouncedDropdownSearch({
           inputProps={{
             value: "",
             type: "text",
-            value: searchText,
             onChange: handleSearchTextChange,
             placeholder: placeholder || "",
             value: searchText,
+            className: "capitalize",
           }}
           endAdornment={<IoChevronDown size={20} color="#292D32" />}
         />
       }
-      dropdownContent={
+      dropdownContent={({ toggleDropDown }) => (
         <ul className="relative w-full z-[20]">
           {searchResults.length === 0 &&
             searchText.length > 0 &&
@@ -82,15 +83,17 @@ export default function DebouncedDropdownSearch({
             <Option
               key={opt._id}
               onClick={() => {
+                toggleDropDown(false)
                 handleOptionSelect(opt)
                 setSearchText(opt.name)
               }}
+              className="capitalize"
             >
               {opt.name}
             </Option>
           ))}
         </ul>
-      }
+      )}
     />
   )
 }
