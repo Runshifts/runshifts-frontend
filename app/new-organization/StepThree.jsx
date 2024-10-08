@@ -83,7 +83,6 @@ export default function StepThree({ isActive, onSubmit = () => {} }) {
               inputProps={{
                 value: fullName,
                 onChange: (e) => setFullName(e.target.value),
-                required: true,
                 type: "text",
                 placeholder: "",
               }}
@@ -94,7 +93,6 @@ export default function StepThree({ isActive, onSubmit = () => {} }) {
               inputProps={{
                 value: email,
                 onChange: (e) => setEmail(e.target.value),
-                required: true,
                 type: "email",
                 placeholder: "",
               }}
