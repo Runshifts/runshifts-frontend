@@ -13,6 +13,8 @@ import { IoMailOutline } from "react-icons/io5"
 import { LuShieldCheck } from "react-icons/lu"
 import toast from "react-hot-toast"
 import useRedirectUserByAccountType from "../_hooks/useRedirectUserByAccountType"
+import runshiftsLogo1 from "../_components/homepageComps/runshiftsLogo2.svg"
+import Image from 'next/image'
 
 const LoginForm = () => {
   const redirectUser = useRedirectUserByAccountType()
@@ -64,9 +66,10 @@ const LoginForm = () => {
 
   return (
     <>
-      <AuthLayout bgClassName="bg-[url(/img/login.png)]">
+      <AuthLayout bgClassName="bg-white flex flex-col items-center justify-start xl:bg-[url(/img/login.png)] xl:flex-row">
         <>
-          <form onSubmit={handleLogin} className="flex flex-col gap-8">
+        <Image src={runshiftsLogo1} alt='logo' height={47} width={163} className='block my-6 xl:hidden'/>
+          <form onSubmit={handleLogin} className="border rounded-xl p-4 flex flex-col gap-8 xl:border-none xl:p-0">
             <FormHeading>Welcome Back</FormHeading>
             <div className="flex flex-col gap-4">
               <AuthInputAndLabel

@@ -119,22 +119,20 @@ export default function HomePage() {
 
   return (
 
-    <div className="">
+    <div style={{ fontFamily: 'Poppins, sans-serif' }} className="">
       <div className="bg-gradient-radial from-[#FD9] via-[#CBF0BC] to-white">
         <HomeHeader />
         <div className=" flex flex-col items-center justify-center px-54 py-6 pt-8  xl:pt-16">
           <button className="bg-[#B2E89A] text-[#17320B] rounded-full px-4 py-2 text-base not-italic font-semibold leading-6 ">
             Team & shift management
           </button>
-          <h1 className="capitalize text-center text-4xl not-italic font-extrabold text-[#36322F] my-6 xl:text-6xl">
-            Supercharge Your
-            <br /> Team
+          <h1 className="capitalize text-center text-4xl not-italic font-extrabold text-[#36322F] my-6 w-[348px] xl:w-[845px] xl:text-7xl">
+            Supercharge Your Team
           </h1>
           <CommonParagraph>
-            <div className="text-sm text-center">
-              Streamline scheduling, timekeeping, communication, and reporting
-              to
-              <br /> drive efficiency across your workforce.
+            <div className="text-sm text-center w-[348px] xl:w-[461px]">
+            Streamline scheduling, timekeeping, communication, and reporting
+              to drive efficiency across your workforce.
             </div>
           </CommonParagraph>
           <div className="flex items-center my-6">
@@ -180,8 +178,8 @@ export default function HomePage() {
 
           <div>
             <Image
-              height={600}
-              width={900}
+              height={800}
+              width={1100}
               className="mx-auto"
               src={Home}
               alt=""
@@ -210,7 +208,7 @@ export default function HomePage() {
               Manage your team in real time
             </h2>
             <p className="text-base not-italic font-normal leading-6 text-[#52525B] py-2">
-              Emphasizes the platform&apos;s ability to provide
+              Emphasises the platform&apos;s ability to provide
               up-to-the-minute workforce oversight.{" "}
             </p>
           </div>
@@ -237,22 +235,22 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-around gap-4 bg-[#1A212C] rounded-2xl p-8 my-8 xl:flex-row xl:my-20">
+        <div className="flex flex-col items-center justify-around gap-4 bg-[#1A212C] rounded-2xl p-2 my-8 xl:flex-row xl:px-10 xl:my-20">
           <Image
             src={Illustration}
             alt="Illustration"
             height={477}
             width={384}
+
           />
-          <div className="flex flex-col items-start justify-start p-8">
+          <div className="flex flex-col items-start justify-start px-1 xl:p-8">
             <CommonHeader>
-              <div className="text-[#D5DBE6]">
-                Managing Your Teams
-                <br /> Schedule and Shifts
+              <div className="text-left text-[#D5DBE6] px-4 w-[350px] xl:[578px] ">
+                Managing Your Teams Schedule and Shifts
               </div>
             </CommonHeader>
             <CommonParagraph>
-              <div className="text-[#EFEDED] py-6">
+              <div className="text-left text-[#EFEDED] px-4  py-6">
                 Streamline your team&apos;s scheduling and shift management
                 with Runshifts. Our intuitive platform makes it easy to
                 create, update, and coordinate shifts in real-time. Keep your
@@ -260,7 +258,7 @@ export default function HomePage() {
               </div>
             </CommonParagraph>
             <Link href={"/signup?type=for-profit"}>
-              <button className="flex items-center border border-[#fff] ml-4 text-[#fff] rounded-lg px-4 py-2 text-base not-italic font-semibold leading-6 ">
+              <button className="flex items-center border border-[#fff] ml-0 text-[#fff] rounded-lg px-4 py-2 text-base not-italic font-semibold leading-6 ml-4 ">
                 <p className="px-2">Create your account now</p>
                 <RightArrow />
               </button>

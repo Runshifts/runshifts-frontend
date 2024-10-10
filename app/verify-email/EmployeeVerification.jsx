@@ -5,6 +5,8 @@ import FormHeading from "../_components/Auth/Heading"
 import { AuthLabelText, SubmitButton } from "../_components/Auth/Inputs"
 import PinInput from "../_components/AppComps/PinInput"
 import useHandlePinInputState from "../_hooks/useHandlePinInputState"
+import runshiftsLogo1 from "../_components/homepageComps/runshiftsLogo2.svg"
+import Image from 'next/image'
 
 function EmployeeVerification({ handleSubmit, loading }) {
   const {
@@ -17,7 +19,7 @@ function EmployeeVerification({ handleSubmit, loading }) {
 
   return (
     <>
-      <AuthLayout bgClassName="bg-[url(/img/employee_verify_email.png)]">
+      <AuthLayout bgClassName="bg-white flex flex-col items-center justify-center xl:bg-[url(/img/employee_verify_email.png)] xl:flex-row">
         <form
           onSubmit={(e) => handleSubmit(e, pinInputState)}
           className="flex flex-col gap-8"
