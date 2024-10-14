@@ -168,10 +168,11 @@ const NewMemberForm = ({
     onCancel,
     fetchData,
   ])
+  
 
   return (
-    <section className="w-[95dvw] py-[24px] px-[24px] md:px-[35px] max-w-[320px] bg-white rounded-[16px] gap-y-[14px] flex flex-col">
-      <div className="flex flex-col gapp-[14px] items-center justify-center">
+<section className="w-[95dvw] my-2 max-h-[90vh] min-h-screen py-[24px] px-[24px] md:px-[35px] max-w-[320px] bg-white rounded-[16px] gap-y-[14px] flex flex-col overflow-y-auto">
+<div className="flex flex-col gap-[14px] items-center justify-center">
         {!isEditMode && (
           <h3 className="text-center font-[600] text-[16px] text-[#1B1818] mb-[14px]">
             New Team Member
@@ -321,7 +322,7 @@ const NewMemberForm = ({
               <button
                 type="button"
                 onClick={onCancel}
-                className="text-[#1E1E1E] text-[14px] text-[14px] px-[8px] font-[500] py-[4px] w-full"
+                className="text-[#1E1E1E] text-[14px] px-[8px] font-[500] py-[4px] w-full"
               >
                 Go Back
               </button>
@@ -344,7 +345,7 @@ const NewMemberForm = ({
                   <button
                     type="button"
                     onClick={() => setShowArchiveConfirmation(false)}
-                    className="text-[#1E1E1E] text-[14px] text-[14px] px-[8px] py-[4px] w-full"
+                    className="text-[#1E1E1E] text-[14px] px-[8px] py-[4px] w-full"
                   >
                     Go Back
                   </button>

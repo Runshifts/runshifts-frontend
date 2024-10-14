@@ -1,6 +1,45 @@
+// export default function App() {
+//     function Submit(e) {
+//       const formEle = document.querySelector("form");
+//       const formDatab = new FormData(formEle);
+//       fetch(
+//         "https://script.google.com/macros/s/AKfycbwQcf4gyMpb2MbNe-k59Hjt-ejQZ3Y_nGr0WKLpPbFq9l6I5uADQnGAhHQVrJIGfjRd/exec",
+//         {
+//           method: "POST",
+//           body: formDatab
+//         }
+//       )
+//         .then((res) => res.json())
+//         .then((data) => {
+//           console.log(data);
+//         })
+//         .catch((error) => {
+//           console.log(error);
+//         });
+//     }
+//     return (
+//       <div className="App">
+//         <h1>Contact Me form</h1>
+//         <h2>
+//           This demonstrates how to send data from a website form to Google sheet
+//           in React or Vanilla jS
+//         </h2>
+//         <div>
+//           <form className="form" onSubmit={(e) => Submit(e)}>
+//             <input placeholder="Your Name" name="Name" type="text" />
+//             <input placeholder="Your Email" name="Email" type="text" />
+//             <input placeholder="Your Message" name="Message" type="text" />
+//             <input name="Name" type="submit" />
+//           </form>
+//         </div>
+//       </div>
+//     );
+//   }
+
+
+
+
 import { useState, useEffect, useRef } from "react";
-import CommonButtons from "../_components/homepageComps/CommonButtons";
-import axios from 'axios';
 
 function ContactForm({ formRef }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -13,21 +52,26 @@ function ContactForm({ formRef }) {
     function handleSubmit(e) {
         const formEle = document.querySelector("form");
         const formDatab = new FormData(formEle);
+
+        const phoneInput = formDatab.get('Phone');
+        const Phone = `${selectedCountry.code}${phoneInput}`;
+         formDatab.set('Phone', Phone);
+
         fetch(
-            "https://script.google.com/macros/s/AKfycbx8q49ee2HMm1PJke8bLZQ1g-LlXZZUnd-f5AsW-sWSY-V-JlQJTthnXSvOlUEs4oSv/exec",
-            {
-                method: "POST",
-                body: formDatab
-            }
+          "https://script.google.com/macros/s/AKfycbx-lkOXWOwV0brTab_yNH4ujp3W740ZoqsbvCUzPsS8va_-NtkhgV5SCKpgemagZsXr/exec",
+          {
+            method: "POST",
+            body: formDatab
+          }
         )
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
 
     // Reference to the dropdown element
     const dropdownRef = useRef(null);
@@ -147,6 +191,9 @@ function ContactForm({ formRef }) {
                             </option>
                             <option value="Fashion">Fashion</option>
                             <option value="Agriculture">Agriculture</option>
+                            <option value="Fashion">Education</option>
+                            <option value="Fashion">Health</option>
+                            <option value="Fashion">Manufacturing</option>
                         </select>
                     </div>
                     <div>
@@ -163,7 +210,8 @@ function ContactForm({ formRef }) {
                                 1-10
                             </option>
                             <option value="11-50">11-50</option>
-                            <option value="100+">100+</option>
+                            <option value="100+">100-200</option>
+                            <option value="100+">200+</option>
                         </select>
                     </div>
 
@@ -200,6 +248,7 @@ function ContactForm({ formRef }) {
                                 <div
                                     ref={dropdownRef}
                                     id="dropdown-Phone"
+                                    name='Phone'
                                     className="z-10 mt-72 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-gray-700"
                                 >
                                     <ul

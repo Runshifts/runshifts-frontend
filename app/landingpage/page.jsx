@@ -131,8 +131,6 @@ export default function Main() {
           </div>
         </div>
       </div>
-
-      {/* Waitlist Form */}
       <div>
       <ContactForm formRef={formRef} />
         </div>
