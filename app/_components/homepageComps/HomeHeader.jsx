@@ -46,18 +46,18 @@ export default function Header({ isTransparent = false }) {
     return (
         <div>
             <nav className="text-[#000] relative z-20">
-                <div className="max-w-screen-xl flex items-center justify-between p-4">
-                    <a href="/" className="flex justify-start items-left">
-                        <Image src={runshiftsLogo1} className="h-8" height={200} width={204} alt="runshifts Logo" />
+                <div className="max-w-screen-xl flex items-start justify-between p-4">
+                    <a href="/" className="flex justify-start items-start pl-1 xl:pl-10">
+                        <Image src={runshiftsLogo1} className="" height={150} width={150} alt="runshifts Logo" />
                     </a>
                     <div className="flex justify-start items-left mr-4">
-                        <div className='block xl:hidden'>
-                        <Link href='/signup?type=for-profit'>
-<button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
-Get Started for <span className='font-bold'>free</span>
-</button>
-</Link>
-                        </div>
+                        {/* <div className='block xl:hidden'>
+                            <Link href='/signup?type=for-profit'>
+                                <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+                                    Get Started for <span className='font-bold'>free</span>
+                                </button>
+                            </Link>
+                        </div> */}
 
                         <button
                             type="button"
@@ -78,12 +78,12 @@ Get Started for <span className='font-bold'>free</span>
                             {menuItems.map((item, index) => (
                                 <li key={index} className={item.dropdown ? 'relative' : ''}>
                                     {!item.isButton ? (
-                                        <div className="flex items-center py-2 px-3 text-[#000] rounded xl:bg-transparent xl:p-0">
+                                        <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center py-2 px-3 text-sm text-[#000] rounded xl:bg-transparent xl:p-0">
                                             <a href={item.href}>{item.label}</a>
                                             {item.dropdown && (
                                                 <button
-                                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                                    className="flex items-center justify-between w-full py-2 px-3 text-[#000] rounded hover:bg-gray-100 xl:hover:bg-transparent xl:border-0 xl:p-0 xl:w-auto"
+                                                    
+                                                    className="flex items-center justify-between w-full py-2 px-3 text-[#000] rounded hover:bg-[gray-100] xl:hover:bg-transparent xl:border-0 xl:p-0 xl:w-auto"
                                                 >
                                                     <svg className="w-2.5 h-2.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
@@ -93,17 +93,17 @@ Get Started for <span className='font-bold'>free</span>
                                         </div>
                                     ) : (
                                         <Link href='/signup?type=for-profit'>
-                                        <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
-                                        Get Started for <span className='font-bold'>free</span>
-                                        </button>
+                                            <button className='bg-[#449522] rounded-lg text-white p-2 px-4 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+                                                Get Started for <span className='font-bold'>free</span>
+                                            </button>
                                         </Link>
                                     )}
                                     {isDropdownOpen && item.dropdown && (
-                                        <div className="absolute left-0 top-full mt-2 z-10 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow">
-                                            <ul className="py-2 text-sm text-[#000]">
+                                        <div className="absolute left-0 top-full mt-2 z-10 w-44 bg-white  divide-y divide-gray-100 rounded-lg shadow">
+                                            <ul className="py-2 text-sm text-[#000] ">
                                                 {item.dropdown.map((dropdownItem, dropdownIndex) => (
                                                     <li key={dropdownIndex}>
-                                                        <a href={dropdownItem.href} className="block px-4 py-2 hover:bg-gray-100">
+                                                        <a href={dropdownItem.href} className="block px-4 py-2 hover:text-white hover:bg-[#449522]">
                                                             {dropdownItem.label}
                                                         </a>
                                                     </li>
@@ -181,17 +181,17 @@ Get Started for <span className='font-bold'>free</span>
                                             </div>
                                         ) : (
                                             <Link href='/signup?type=for-profit'>
-<button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
-Get Started for <span className='font-bold'>free</span>
-</button>
-</Link>
+                                                <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+                                                    Get Started for <span className='font-bold'>free</span>
+                                                </button>
+                                            </Link>
                                         )}
                                         {isDropdownOpen && item.dropdown && (
                                             <div className="absolute left-0 top-full mt-2 z-40 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow">
                                                 <ul className="py-2 text-sm text-black">
                                                     {item.dropdown.map((dropdownItem, dropdownIndex) => (
                                                         <li key={dropdownIndex}>
-                                                            <a href={dropdownItem.href} className="block px-4 py-2 hover:bg-gray-100">
+                                                            <a href={dropdownItem.href} className="block px-4 py-2 hover:text-white hover:bg-[#449522]">
                                                                 {dropdownItem.label}
                                                             </a>
                                                         </li>

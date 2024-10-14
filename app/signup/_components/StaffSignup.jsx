@@ -54,7 +54,7 @@ export default function StaffSignup({ staffType }) {
   )
   return (
     <>
-      <AuthLayout bgClassName="bg-[url(/img/employee_signup.png)]">
+      <AuthLayout bgClassName="bg-white xl:bg-[url(/img/employee_signup.png)]">
         <form onSubmit={handleCreateAccount} className="flex flex-col gap-8">
           <FormHeading>Lets get you setup with RunShifts</FormHeading>
           {error && <p className="text-red-500 text-center my-2">{error}</p>}

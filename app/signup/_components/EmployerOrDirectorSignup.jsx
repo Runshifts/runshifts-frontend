@@ -12,6 +12,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import SocialProviders from "../../_components/Auth/SocialProviders"
 import toast from "react-hot-toast"
+import runshiftsLogo1 from "../../_components/homepageComps/runshiftsLogo2.svg"
+import Image from 'next/image'
 
 export default function EmployerOrDirectorSignup({
   organizationType,
@@ -52,8 +54,9 @@ export default function EmployerOrDirectorSignup({
 
   return (
     <>
-      <AuthLayout bgClassName="bg-[url(/img/employer_signup.png)]">
-        <form onSubmit={handleCreateAccount} className="flex flex-col gap-8">
+      <AuthLayout bgClassName="bg-white flex flex-col items-center justify-start xl:bg-[url(/img/employer_signup.png)] xl:flex-row ">
+      <Image src={runshiftsLogo1} alt='logo' height={47} width={163} className='block my-6 xl:hidden'/>
+        <form onSubmit={handleCreateAccount} className="border rounded-xl p-4 flex flex-col gap-8 xl:border-none xl:p-0">
           <FormHeading>Create an account</FormHeading>
           <div className="flex flex-col gap-4">
             <AuthInputAndLabel

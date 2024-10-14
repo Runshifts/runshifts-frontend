@@ -10,6 +10,8 @@ import Link from "next/link"
 import Cloud from "../_assets/svgs/Cloud"
 import { useRouter } from "next/navigation"
 import USER_URLS from "../_urls/userURLs"
+import runshiftsLogo1 from "../../_components/homepageComps/runshiftsLogo2.svg"
+import Image from 'next/image'
 
 const toastOptions = {
   position: "top-left",
@@ -63,7 +65,8 @@ export default function StepThree({ isActive, onSubmit = () => {} }) {
   if (!isActive) return
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-[49px]">
+            <Image src={runshiftsLogo1} alt='logo' height={47} width={163} className='block my-6 xl:hidden'/>
+      <form onSubmit={handleSubmit} className="border rounded-xl p-4 flex flex-col gap-[49px] xl:border-none xl:p-0">
         <div className="flex flex-col gap-[17px]">
           <FormHeading>Invite team members</FormHeading>
           {teamMembers.length > 0 && (
@@ -124,7 +127,7 @@ export default function StepThree({ isActive, onSubmit = () => {} }) {
 
 function TeamMemberButton({ text, handleDelete }) {
   return (
-    <li className="text-[12px] flex items-center gap-[8px] max-w-[200px] justify-between items-center p-[4px] rounded-lg border border-[#201D1D]/20 text-[#201D1D]/80 whitespace-nowrap overflow-hidden text-ellipsis">
+    <li className="text-[12px] flex items-center gap-[8px] max-w-[200px] justify-between p-[4px] rounded-lg border border-[#201D1D]/20 text-[#201D1D]/80 whitespace-nowrap overflow-hidden text-ellipsis">
       {text}
       <button onClick={handleDelete} type="button">
         <IoClose size={10} />
