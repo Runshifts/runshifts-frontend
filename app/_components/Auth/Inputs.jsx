@@ -26,7 +26,9 @@ export default function AuthInputAndLabel({
         <input
           {...inputProps}
           type={inputType}
-          className="w-full p-0 pl-[8px] border-0 ring-0 focus:ring-0 outline-none focus:outline-none"
+          className={`${
+            inputProps.className || ""
+          } w-full p-0 pl-[8px] border-0 ring-0 focus:ring-0 outline-none focus:outline-none`}
         />
         <span className="absolute z-10 inset-y-[50%] translate-y-[-50%] right-[16px] flex items-center cursor-pointer">
           {endAdornment}

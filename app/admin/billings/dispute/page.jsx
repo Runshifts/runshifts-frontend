@@ -4,12 +4,13 @@ import Button from "../../../_components/AppComps/Button";
 function page() {
   return (
     <section className="">
-      <form class="max-w-sm mx-auto my-3 p-5 bg-whitw rounded-lg shadow-lg">
-        
+      <form className="max-w-sm mx-auto my-3 p-5 bg-whitw rounded-lg shadow-lg">
         <div className="text-[#1B1818] text-center">
-            <p className="text-sm  font-normal leading-4 my-1">Dispute Details</p>
-            <h1 className="text-base font-semibold leading-5 ">12 Jan 2024</h1>
-            <p className="text-xs text-[#AEA7A3] font-normal leading-3 my-1 ">ID:12342334 <span className="text-[#706763] ml-2">Status Open</span></p>
+          <p className="text-sm  font-normal leading-4 my-1">Dispute Details</p>
+          <h1 className="text-base font-semibold leading-5 ">12 Jan 2024</h1>
+          <p className="text-xs text-[#AEA7A3] font-normal leading-3 my-1 ">
+            ID:12342334 <span className="text-[#706763] ml-2">Status Open</span>
+          </p>
         </div>
 
         <div className="mb-5">
@@ -106,10 +107,9 @@ function page() {
           <Button>Mark as resolved</Button>
           <button className="ml-2">Back</button>
         </div>
-
       </form>
     </section>
-  );
+  )
 }
 
 export default page;

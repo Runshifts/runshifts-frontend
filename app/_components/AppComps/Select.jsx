@@ -26,11 +26,11 @@ export default function SelectTrigger({
   )
 }
 
-export function Option({ children, onClick, isSelected, style }) {
+export function Option({ children, onClick, isSelected, style, className }) {
   return (
     <span
       onClick={onClick}
-      className={`cursor-pointer truncat block w-[100%] text-[#172B4D] hover:bg-[#F4F5F7] text-sm font-normal leading-tight px-[16px] py-1.5 justify-start items-center ${
+      className={`${className} cursor-pointer truncate block w-[100%] text-[#172B4D] hover:bg-[#F4F5F7] text-sm font-normal leading-tight px-[16px] py-1.5 justify-start items-center ${
         isSelected && "bg-gray-100"
       }`}
       style={style}
