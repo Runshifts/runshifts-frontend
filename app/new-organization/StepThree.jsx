@@ -10,7 +10,7 @@ import Link from "next/link"
 import Cloud from "../_assets/svgs/Cloud"
 import { useRouter } from "next/navigation"
 import USER_URLS from "../_urls/userURLs"
-import runshiftsLogo1 from "../../_components/homepageComps/runshiftsLogo2.svg"
+import runshiftsLogo from "../_components/homepageComps/runshiftsLogo2.svg"
 import Image from 'next/image'
 
 const toastOptions = {
@@ -65,7 +65,7 @@ export default function StepThree({ isActive, onSubmit = () => {} }) {
   if (!isActive) return
   return (
     <>
-            <Image src={runshiftsLogo1} alt='logo' height={47} width={163} className='block my-6 xl:hidden'/>
+            <Image src={runshiftsLogo} alt='logo' height={47} width={163} className='block my-6 xl:hidden'/>
       <form onSubmit={handleSubmit} className="border rounded-xl p-4 flex flex-col gap-[49px] xl:border-none xl:p-0">
         <div className="flex flex-col gap-[17px]">
           <FormHeading>Invite team members</FormHeading>

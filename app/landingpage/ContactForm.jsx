@@ -169,8 +169,10 @@ function ContactForm({ formRef }) {
                                 1-10
                             </option>
                             <option value="11-50">11-50</option>
-                            <option value="100+">100-200</option>
-                            <option value="100+">200+</option>
+                            <option value="100+">51-100</option>
+                            <option value="100+">101-200</option>
+                            <option value="100+">201-500</option>
+                            <option value="100+">500+</option>
                         </select>
                     </div>
 

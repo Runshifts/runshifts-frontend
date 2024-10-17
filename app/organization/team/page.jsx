@@ -100,12 +100,14 @@ function Team() {
         { lastViewedByEmployerAt: new Date(Date.now()) }
       )
       if (res.statusCode === 200) {
-        dispatch(updateRecentlyViewed([res.teamMember]))
+      
+        dispatch(updateRecentlyViewed([res?.teamMember]))
         setTeamMemberFormData({
           isEdit: true,
           isNew: false,
-          user: res.teamMember,
+          user: res?.teamMember,
         })
+      
       }
     },
     [organization?._id, dispatch, fetchData]
