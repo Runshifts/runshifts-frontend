@@ -5,7 +5,7 @@ import FormInputAndLabel, {
 } from "../../../_components/ScheduleComponents/NewShiftForm/FormInputAndLabel"
 import PositionOrDepartmentInput from "./PositionOrDepartmentInput"
 import FormLocationInput from "../../../_components/ScheduleComponents/NewShiftForm/FormLocationInput"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useState, useEffect } from "react"
 import DateInput from "../../../_components/AppComps/DateInput"
 import toast from "react-hot-toast"
 import useAxios from "../../../_hooks/useAxios"
@@ -13,7 +13,7 @@ import Spinner from "../../../_assets/svgs/Spinner"
 
 export default function FormModal({
   show = false,
-  onCancel = () => {},
+  onCancel = () => { },
   teamMemberFormData,
   organizationId,
   handleUserResponse,
@@ -44,6 +44,7 @@ export default function FormModal({
     </Modal>
   )
 }
+
 const NewMemberForm = ({
   teamMemberFormData,
   onCancel,
@@ -55,10 +56,12 @@ const NewMemberForm = ({
     submit: false,
     archive: false,
   })
+
   const isEditMode = useMemo(
     () => teamMemberFormData?.isEdit === true,
     [teamMemberFormData?.isEdit]
   )
+console.log(teamMemberFormData, 'teamMemberFormData')
   const [formData, setFormData] = useState({
     firstName: isEditMode ? teamMemberFormData?.user?.firstName : "",
     lastName: isEditMode ? teamMemberFormData?.user?.lastName : "",
@@ -81,8 +84,9 @@ const NewMemberForm = ({
   })
 
   const handleChange = useCallback((e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-  }, [])
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
   const profileImagePreview = useMemo(() => {
     if (formData.profileImage?.lastModifiedDate)
@@ -168,11 +172,11 @@ const NewMemberForm = ({
     onCancel,
     fetchData,
   ])
-  
+
 
   return (
-<section className="w-[95dvw] my-2 max-h-[90vh] min-h-screen py-[24px] px-[24px] md:px-[35px] max-w-[320px] bg-white rounded-[16px] gap-y-[14px] flex flex-col overflow-y-auto">
-<div className="flex flex-col gap-[14px] items-center justify-center">
+    <section className="w-[95dvw] my-2 max-h-[90vh] min-h-screen py-[24px] px-[24px] md:px-[35px] max-w-[320px] bg-white rounded-[16px] gap-y-[14px] flex flex-col overflow-y-auto">
+      <div className="flex flex-col gap-[14px] items-center justify-center">
         {!isEditMode && (
           <h3 className="text-center font-[600] text-[16px] text-[#1B1818] mb-[14px]">
             New Team Member
@@ -199,7 +203,7 @@ const NewMemberForm = ({
             name: "firstName",
             type: "text",
             onChange: handleChange,
-            required: true,
+            required: !isEditMode,
           }}
         />
         <FormInputAndLabel
@@ -207,10 +211,11 @@ const NewMemberForm = ({
           inputProps={{
             placeholder: "Doe",
             value: formData.lastName,
+            disabled: isEditMode,
             name: "lastName",
             type: "text",
             onChange: handleChange,
-            required: true,
+            required: !isEditMode,
           }}
         />
         <FormInputAndLabel
@@ -248,20 +253,20 @@ const NewMemberForm = ({
         <FormInputAndLabel
           label="Hourly earnings"
           inputProps={{
-            placeholder: "£123",
-            value: `${formData.hourlyEarnings}`,
+            placeholder: "20",
+            value: formData.hourlyEarnings,
             name: "hourlyEarnings",
             type: "number",
             onChange: handleChange,
-            required: true,
+            required: !isEditMode,
           }}
         />
         <DateInput
-          label={<FormLabelText>Right to work date</FormLabelText>}
-          onChange={(rightToWorkExpiry) =>
-            setFormData((prev) => ({ ...prev, rightToWorkExpiry }))
-          }
+          label="Right to work expiry"
           value={formData.rightToWorkExpiry}
+          onChange={(date) =>
+            setFormData((prev) => ({ ...prev, rightToWorkExpiry: date }))
+          }
         />
         {teamMemberFormData.isEdit && (
           <div className="flex gap-4">
@@ -415,7 +420,7 @@ const NewVolunteerForm = ({
       : "",
     rightToWorkExpiry: isEditMode
       ? new Date(teamMemberFormData?.user?.rightToWorkExpiry || Date.now()) ||
-        null
+      null
       : null,
     profileImage: isEditMode
       ? teamMemberFormData?.user?.profileImage || null
@@ -620,7 +625,7 @@ const NewVolunteerForm = ({
               <button
                 type="button"
                 onClick={onCancel}
-                className="text-[#1E1E1E] text-[14px] text-[14px] px-[8px] font-[500] py-[4px] w-full"
+                className="text-[#1E1E1E] text-[14px] px-[8px] font-[500] py-[4px] w-full"
               >
                 Go Back
               </button>
@@ -643,7 +648,7 @@ const NewVolunteerForm = ({
                   <button
                     type="button"
                     onClick={() => setShowArchiveConfirmation(false)}
-                    className="text-[#1E1E1E] text-[14px] text-[14px] px-[8px] py-[4px] w-full"
+                    className="text-[#1E1E1E] text-[14px] px-[8px] py-[4px] w-full"
                   >
                     Go Back
                   </button>

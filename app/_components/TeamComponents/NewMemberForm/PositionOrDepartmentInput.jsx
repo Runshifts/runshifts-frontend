@@ -9,6 +9,7 @@ export default function PositionOrDepartmentInput({
   inputType,
 }) {
   const { positions, departments } = useSelector((store) => store.organization)
+  console.log(useSelector((store) => store.organization), 'positions')
   const options = {
     positions: positions,
     department: departments,

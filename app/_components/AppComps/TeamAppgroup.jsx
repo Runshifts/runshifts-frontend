@@ -47,6 +47,7 @@ function ImportTeamButton() {
     } else toast.error(res.message)
     inputRef.current.value = ""
     setLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
