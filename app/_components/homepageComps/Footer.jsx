@@ -20,7 +20,7 @@ const footerData = {
         {
             title: "Platform",
             links: [
-                { label: "Pricing", href: "https://flowbite.com/" },
+                { label: "Pricing", href: "/pricing" },
                 { label: "Employers", href: "/homeEmployer" },
                 { label: "Employees", href: "/homeEmployee" },
                 { label: "Non-profit", href: "/nonProfit" },

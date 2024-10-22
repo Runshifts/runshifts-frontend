@@ -1,12 +1,11 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import runshiftsLogo from "./runshiftsLogo.svg";
 import { KnowledgeBaseData } from "../../_data/KnowledgeBaseData";
-import Link from "next/link";
-import Button from "../AppComps/Button";
 
-export default function KnowledgeBaseNav() {
+const KnowledgeBaseNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
 
@@ -16,23 +15,16 @@ export default function KnowledgeBaseNav() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
+      setIsSticky(window.scrollY > 0);
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <nav
-      className={`border-gray-200 bg-[#000000] dark:bg-gray-800 dark:border-gray-700 ${
+      className={`relative border-gray-200 bg-black dark:bg-gray-800 dark:border-gray-700 ${
         isSticky ? "sticky top-0 z-50" : ""
       }`}
     >
@@ -46,7 +38,7 @@ export default function KnowledgeBaseNav() {
         <button
           onClick={toggleMenu}
           type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm  rounded-lg md:hidden text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
           aria-controls="navbar-solid-bg"
           aria-expanded={isOpen ? "true" : "false"}
         >
@@ -67,34 +59,61 @@ export default function KnowledgeBaseNav() {
             />
           </svg>
         </button>
-        <div
-          className={`${
-            isOpen ? "block" : "hidden"
-          } md:block md:w-auto`}
-          id="navbar-solid-bg"
-        >
-          <ul className="flex flex-col md:flex-row font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
+        
+        {/* Desktop Menu */}
+        <div className="hidden md:block md:w-auto">
+          <ul className="flex flex-row font-medium space-x-8 rtl:space-x-reverse items-center">
             {KnowledgeBaseData.map((item, index) => (
               <li key={index}>
                 <Link
                   href={item.path}
-                  className="block py-2 px-3 text-white text-lg font-semibold leading-7 tracking-normal hover:text-[#449522] md:p-0 bg-[#449522] text-center md:bg-transparent md:text-[#ffffff] md:dark:text-[#ffffff] dark:bg-[#449522] md:dark:bg-transparent"
-                  aria-current="page"
+                  className="text-white text-lg font-normal leading-7 tracking-normal hover:text-[#449522]"
                 >
                   {item.title}
                 </Link>
               </li>
             ))}
             <li>
-              <button className="text-white bg-[#449522] hover:bg-[#348117] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <a href='/signup?type=for-profit'>
+              <Link
+                href="/signup?type=for-profit"
+                className="text-white bg-[#449522] hover:bg-[#348117] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+              >
                 Try for free
-                </a>      
-              </button>
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        <div
+          className={`${
+            isOpen ? "block" : "hidden"
+          } absolute top-full left-0 right-0 md:hidden bg-black shadow-lg`}
+        >
+          <ul className="py-2">
+            {KnowledgeBaseData.map((item, index) => (
+              <li key={index}>
+                <Link
+                  href={item.path}
+                  className="block px-4 py-2 text-white text-lg font-normal hover:bg-[#449522] transition-colors"
+                >
+                  {item.title}
+                </Link>
+              </li>
+            ))}
+            <li className="px-4 py-2">
+              <Link
+                href="/signup?type=for-profit"
+                className="block w-[1/2] xl:w-full text-center text-white bg-[#449522] hover:bg-[#348117] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+              >
+                Try for free
+              </Link>
             </li>
           </ul>
         </div>
       </div>
     </nav>
   );
-}
+};
+
+export default KnowledgeBaseNav;

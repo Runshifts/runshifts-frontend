@@ -51,15 +51,7 @@ export default function Header({ isTransparent = false }) {
                         <Image src={runshiftsLogo1} className="" height={150} width={150} alt="runshifts Logo" />
                     </a>
                     <div className="flex justify-start items-left mr-4">
-                        {/* <div className='block xl:hidden'>
-                            <Link href='/signup?type=for-profit'>
-                                <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
-                                    Get Started for <span className='font-bold'>free</span>
-                                </button>
-                            </Link>
-                        </div> */}
-
-                        <button
+                            <button
                             type="button"
                             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg xl:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -78,12 +70,12 @@ export default function Header({ isTransparent = false }) {
                             {menuItems.map((item, index) => (
                                 <li key={index} className={item.dropdown ? 'relative' : ''}>
                                     {!item.isButton ? (
-                                        <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center py-2 px-3 text-sm text-[#000] rounded xl:bg-transparent xl:p-0">
+                                        <div className="flex items-center py-2 px-3 text-[#000] rounded xl:bg-transparent xl:p-0">
                                             <a href={item.href}>{item.label}</a>
                                             {item.dropdown && (
                                                 <button
-                                                    
-                                                    className="flex items-center justify-between w-full py-2 px-3 text-[#000] rounded hover:bg-[gray-100] xl:hover:bg-transparent xl:border-0 xl:p-0 xl:w-auto"
+                                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                                    className="flex items-center justify-between w-full py-2 px-3 text-[#000] rounded hover:bg-gray-100 xl:hover:bg-transparent xl:border-0 xl:p-0 xl:w-auto"
                                                 >
                                                     <svg className="w-2.5 h-2.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
@@ -92,18 +84,21 @@ export default function Header({ isTransparent = false }) {
                                             )}
                                         </div>
                                     ) : (
+                                        // <CommonButtons>
+                                        //     <a href={item.href}>{item.label}</a>
+                                        // </CommonButtons>
                                         <Link href='/signup?type=for-profit'>
-                                            <button className='bg-[#449522] rounded-lg text-white p-2 px-4 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+                                            <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
                                                 Get Started for <span className='font-bold'>free</span>
                                             </button>
                                         </Link>
                                     )}
                                     {isDropdownOpen && item.dropdown && (
-                                        <div className="absolute left-0 top-full mt-2 z-10 w-44 bg-white  divide-y divide-gray-100 rounded-lg shadow">
-                                            <ul className="py-2 text-sm text-[#000] ">
+                                        <div className="absolute left-0 top-full mt-2 z-10 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow">
+                                            <ul className="py-2 text-sm text-black">
                                                 {item.dropdown.map((dropdownItem, dropdownIndex) => (
                                                     <li key={dropdownIndex}>
-                                                        <a href={dropdownItem.href} className="block px-4 py-2 hover:text-white hover:bg-[#449522]">
+                                                        <a href={dropdownItem.href} className="block px-4 py-2 hover:bg-gray-100">
                                                             {dropdownItem.label}
                                                         </a>
                                                     </li>

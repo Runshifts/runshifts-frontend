@@ -76,9 +76,9 @@ export default function Header({ isTransparent = false }) {
 
                     <div className="flex justify-start items-left mr-4">
                         <div className='block xl:hidden'>
-                        <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
-                        Get Started for <span className='font-bold'>free</span>
-    </button>
+                            <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+                                Get Started for <span className='font-bold'>free</span>
+                            </button>
                         </div>
 
                         <button
@@ -117,11 +117,11 @@ export default function Header({ isTransparent = false }) {
                                         // <CommonButtons>
                                         //     <a href={item.href}>{item.label}</a>
                                         // </CommonButtons>
-<Link href='/signup?type=for-profit'>
-<button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
-Get Started for <span className='font-bold'>free</span>
-</button>
-</Link>
+                                        <Link href='/signup?type=for-profit'>
+                                            <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+                                                Get Started for <span className='font-bold'>free</span>
+                                            </button>
+                                        </Link>
                                     )}
                                     {isDropdownOpen && item.dropdown && (
                                         <div className="absolute left-0 top-full mt-2 z-10 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow">
@@ -176,9 +176,9 @@ Get Started for <span className='font-bold'>free</span>
                                             </div>
                                         ) : (
                                             <Link href='/signup?type=for-profit'>
-                                            <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
-                                            Get Started for <span className='font-bold'>free</span>
-                                            </button>
+                                                <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
+                                                    Get Started for <span className='font-bold'>free</span>
+                                                </button>
                                             </Link>
                                         )}
                                         {isDropdownOpen && item.dropdown && (
