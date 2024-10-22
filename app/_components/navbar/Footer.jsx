@@ -69,7 +69,7 @@ function Footer() {
           </p>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
           <div className="mr-4 text-sm font-medium leading-5 tracking-normal text-left text-[#040505CC]">
             <p className="mb-4">Platform</p>
             <p className="mb-4">Plans & Pricing</p>

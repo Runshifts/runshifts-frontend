@@ -260,7 +260,7 @@ export default function HomePage() {
             </CommonParagraph>
             <Link href={"/signup?type=for-profit"}>
               <button className="flex items-center border border-[#fff] ml-6 text-[#fff] rounded-lg  px-6 py-3 mb-6 text-base not-italic font-semibold leading-6 ">
-                <p className="px-2">Create your account now</p>
+                <p className="px-2">Get started</p>
                 <RightArrowWhite />
               </button>
             </Link>
@@ -301,7 +301,7 @@ export default function HomePage() {
             </CommonHeader>
             <Link href="/signup?type=for-profit">
               <button className="bg-[#283142] text-[#fff] rounded-lg px-4 py-2 text-base not-italic font-semibold leading-6 my-5">
-                Start using runshifts
+                Start using Runshifts
               </button>
             </Link>
             <hr />
@@ -328,7 +328,7 @@ export default function HomePage() {
             </CommonParagraph>
             <Link href="/signup?type=non-profit">
               <button className="bg-[#283142] text-[#fff] rounded-lg px-4 py-2 text-base not-italic font-semibold leading-6 my-5">
-                Start using runshifts for free
+                Start using Runshifts for free
               </button>
             </Link>
           </div>

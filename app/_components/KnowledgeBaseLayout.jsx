@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import KnowledgeBaseNav from "./navbar/KnowledgeBaseNav";
-import Footer from "./navbar/Footer";
+import Footer from "./homepageComps/Footer";
 
 export default function KnowledgeBaseLayout({ children }) {
   return (
