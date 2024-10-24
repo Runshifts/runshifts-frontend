@@ -1,8 +1,8 @@
 
 export default function CommonParagraph({ children }) {
     return (
-        <p className="text-left text-[#475467] text-sm not-italic font-medium leading-6 my-4 md:text-base">
+        <div className="text-left text-[#475467] text-sm not-italic font-medium leading-6 my-4 md:text-base">
             {children}
-        </p>
+        </div>
     )
 }
