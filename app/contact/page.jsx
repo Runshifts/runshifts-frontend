@@ -39,7 +39,7 @@ export default function page() {
           <ContactForm formType="contactus" />
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-16 mx-8 my-5 xl:flex-row xl:mx-28 xl:my-16">
+        <div className="flex flex-col items-center justify-between gap-16 mx-8 my-5 xl:flex-row xl:mx-28 xl:my-20">
   {contactInfo.map((item, index) => (
     <div key={index} className="flex flex-col items-center justify-center">
       <item.icon />
