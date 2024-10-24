@@ -40,7 +40,8 @@ function ContactForm({ formRef, formType = 'landing' }) {
 
     const FORM_ENDPOINTS = {
         landing: "https://script.google.com/macros/s/AKfycbx-lkOXWOwV0brTab_yNH4ujp3W740ZoqsbvCUzPsS8va_-NtkhgV5SCKpgemagZsXr/exec",
-        pricing: "https://script.google.com/macros/s/AKfycbxX5QaKmuqF4pXXlG38Z9NrZfB9iDhN40JqOMC89EPxteli_Bw52xawIcJVu9M40NWZ/exec"
+        pricing: "https://script.google.com/macros/s/AKfycbxX5QaKmuqF4pXXlG38Z9NrZfB9iDhN40JqOMC89EPxteli_Bw52xawIcJVu9M40NWZ/exec",
+        contactus: "https://script.google.com/macros/s/AKfycbysr9x6s-Zzj69BDnEUr7ns3h1SUm13JDqJFsoiNGK7cw_SQ13WOoBm-7-jX0OwR5Lv/exec",
     };
 
     function handleSubmit(e) {
@@ -98,16 +99,23 @@ function ContactForm({ formRef, formType = 'landing' }) {
 
     return (
         <div ref={formRef}>
-            <div className="my-10 px-0 xl:px-16">
+            <div className="my-5 px-0 xl:px-16 xl:my-10">
                 <h1 className="text-center text-2xl not-italic font-semibold text-[#101828] xl:text-5xl ">
-                    {formType === 'landing' ? 'Join Our Exclusive Waitlist' : 'Get Started Today'}
+                    {formType === 'landing'
+                        ? 'Join Our Exclusive Waitlist'
+                        : formType === 'pricing'
+                            ? 'Get Started Today'
+                            : 'Get in touch'}
                 </h1>
                 <p className="text-center text-[15px] pt-4 not-italic font-normal leading-7 text-[#475467] mx-2 xl:text-xl xl:">
                     {formType === 'landing'
                         ? 'Be the first to experience the future of workforce management and enjoy 3 months of free access to our platform.'
-                        : 'Fill out this form to get started with your selected plan.'}
+                        : formType === 'pricing'
+                            ? 'Fill out this form to get started with your selected plan.'
+                            : 'We’d love to hear from you. Please fill out this form.'}
                 </p>
             </div>
+
 
             <div className="form shadow-lg rounded-2xl p-2 px-6 xl:py-16 mx-auto max-w-screen-sm">
                 <form onSubmit={handleSubmit} className="space-y-4 xl:space-y-8">
@@ -171,27 +179,6 @@ function ContactForm({ formRef, formType = 'landing' }) {
                             required
                         />
                     </div>
-                    {/* <div>
-                        <label
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >
-                            Industry
-                        </label>
-                        <select
-                            name="Industries"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 "
-                        >
-                            <option selected value="Tech">
-                                Tech
-                            </option>
-                            <option value="Fashion">Fashion</option>
-                            <option value="Agriculture">Agriculture</option>
-                            <option value="Fashion">Education</option>
-                            <option value="Fashion">Health</option>
-                            <option value="Fashion">Manufacturing</option>
-                        </select>
-                    </div> */}
-
                     <IndustrySelect />
                     <div>
                         <label

@@ -55,7 +55,7 @@ const plans = [
       "Basic chat and email support",
     ],
     buttonText: "Let's chat",
-    isEnterprise: true, // Add this flag to identify the enterprise plan
+    isEnterprise: true, // flag to identify the enterprise plan
   },
 ];
 
