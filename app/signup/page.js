@@ -8,6 +8,8 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Heading from "../_components/Headings"
 import ErrorBoundary from "../_errorBoundaries"
+import runshiftsLogo1 from "../_components/homepageComps/runshiftsLogo2.svg"
+import Image from 'next/image'
 
 const textValuesBySignupType = {
   "non-profit": {
@@ -51,13 +53,15 @@ const Home = () => {
   }, [signupType, router])
 
   return (
-    <div className="bg-[url(/img/homepage.png)] h-screen bg-cover bg-center flex items-center px-[8%] justify-end">
-      <div className="flex flex-col gap-4 px-6 md:px-8 py-[64px] bg-white rounded-[16px] w-[90dvw] max-w-[534px]">
+    <div className="bg-white xl:bg-[url(/img/homepage.png)] h-screen bg-cover bg-center flex flex-col xl:flex-row items-center xl:justify-end ">
+      <Image src={runshiftsLogo1} alt='logo' height={47} width={163} className='block my-6 xl:hidden'/>
+      <div className="border mx-6 rounded-xl xl:border-none">
+      <div className="flex flex-col gap-4 px-6 md:px-8 py-[24px] bg-white rounded-[16px] w-[90dvw] max-w-[534px] xl:py-[64px]">
         <div className="text-gray-800 gap-8 flex flex-col">
           <Heading
             as="h1"
             size="base"
-            className="text-[40px] leading-[48px] font-[600] text-[#1B1818]"
+            className="text-[40px] leading-[48px] font-[600] text-[#1B1818] text-center xl:text-left"
           >
             Sign up
           </Heading>
@@ -87,6 +91,7 @@ const Home = () => {
         >
           Login
         </Link>
+      </div>
       </div>
     </div>
   )

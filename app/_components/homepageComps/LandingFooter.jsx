@@ -64,7 +64,7 @@ export default function Footer() {
                             Join our newsletter to<br /> keep up to date with us!
                         </h2>
 
-                        <div className='flex items-start mt-3'>
+                        <div className='flex flex-col items-start mt-3 xl:flex-row'>
                             <div class="relative mb-6 mr-2">
                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
@@ -72,11 +72,13 @@ export default function Footer() {
                                         <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
                                     </svg>
                                 </div>
-                                <input type="text" id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your email" />
+                                <input type="text" id="input-group-1" class="w-[200px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[360px] ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your email" />
                             </div>
 
                             <CommonButtons>
+                                <div className='max-w-screen xl:w-full'>
                                 Subscribe
+                                </div>
                             </CommonButtons>
                         </div>
                     </div>
@@ -84,14 +86,14 @@ export default function Footer() {
                     <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
 
                     <div className="flex items-center justify-center">
-                        <div className="mb-6 md:mb-0">
+                        <div className="flex flex-col items-center justify-center mb-6 xl:mb-0">
                             <a href={footerData.logo.href} className="flex items-center">
                                 <Image src={footerData.logo.src} alt={footerData.logo.alt} />
                             </a>
                             <p className='hidden xl:block ml-2 text-base not-italic font-normal'>
                             Less Toil, More Productivity
                             </p>
-                            <div className='flex items-center ml-0 my-3 xl:ml-2'>
+                            <div className='flex items-center justify-center ml-0 my-3 xl:ml-2'>
                                 <div className='bg-[#D5DBE6] p-1 rounded-full w-fit '>
                                     <Linkedin />
                                 </div>
@@ -113,13 +115,13 @@ export default function Footer() {
                     </div>
                     <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
                     <div className="sm:flex sm:items-center sm:justify-between">
-                        <span className="text-sm text-[#040505CC] sm:text-center dark:text-gray-400">
+                        <span className="flex items-center justify-center gap-2 text-sm text-[#040505CC]">
                             © {footerData.copyright.year}{" "}
                             <a href={footerData.copyright.href} className="hover:underline">
                                 {footerData.copyright.text}
                             </a>
                         </span>
-                        <div className="flex mt-4 sm:justify-center sm:mt-0">
+                        <div className="flex mt-4 items-center justify-center sm:mt-0">
                             {footerData.bottomLinks.map((link, index) => (
                                 <a
                                     key={index}

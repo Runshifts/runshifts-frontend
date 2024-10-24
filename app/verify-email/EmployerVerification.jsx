@@ -10,6 +10,8 @@ import useAxios from "../_hooks/useAxios"
 import USER_URLS from "../_urls/userURLs"
 import toast, { LoaderIcon } from "react-hot-toast"
 import { Timer } from "../_hooks/useCountDown"
+import runshiftsLogo1 from "../_components/homepageComps/runshiftsLogo2.svg"
+import Image from 'next/image'
 
 function EmployerVerification({ handleSubmit, loading }) {
   const [countDownTime, setCountDownTime] = useState(0)
@@ -51,10 +53,11 @@ function EmployerVerification({ handleSubmit, loading }) {
 
   return (
     <>
-      <AuthLayout bgClassName="bg-[url(/img/employer_verify_email.png)]">
+      <AuthLayout bgClassName="bg-white flex flex-col items-center justify-start xl:bg-[url(/img/employer_verify_email.png)] xl:flex-row">
+      <Image src={runshiftsLogo1} alt='logo' height={47} width={163} className='block my-6 xl:hidden'/>
         <form
           onSubmit={(e) => handleSubmit(e, pinInputState)}
-          className="flex flex-col gap-8"
+          className="border rounded-xl p-4 flex flex-col gap-8 xl:border-none xl:p-0"
         >
           <FormHeading>Verify Account</FormHeading>
           <div>

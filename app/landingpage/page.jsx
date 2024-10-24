@@ -2,18 +2,19 @@
 'use client'
 import Image from "next/image";
 import { useRef } from 'react';
-import runshiftsLogo from "./_components/homepageComps/runshiftsLogo2.svg";
-import CommonButtons from "./_components/homepageComps/CommonButtons";
-import LandingFooter from './_components/homepageComps/LandingFooter';
-import App from './_assets/img/App.svg'
-import Playstore from './_assets/img/Playstore.svg' 
+import runshiftsLogo from "../_components/homepageComps/runshiftsLogo2.svg";
+import CommonButtons from "../_components/homepageComps/CommonButtons";
+import LandingFooter from '../_components/homepageComps/LandingFooter';
+import App from '../_assets/img/App.svg'
+import Playstore from '../_assets/img/Playstore.svg'
+import ContactForm from './ContactForm';
 
 export default function Main() {
   const formRef = useRef(null);
 
   const scrollToForm = () => {
     formRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
+};
 
   const features = [
     {
@@ -49,311 +50,96 @@ export default function Main() {
   ];
 
   return (
-    <div>
-    <div className="bg-gradient-radial from-[#FD9] via-[#CBF0BC] to-white min-h-screen ">
-      <div className="flex items-center justify-between py-4 px-8">
-        <a href="/home" className="flex items-center">
-          <Image src={runshiftsLogo} alt="runshifts" />
-        </a>
-        <CommonButtons>
-          <div onClick={scrollToForm}>
-          Join waitlist
-          </div>
+    <div style={{ fontFamily: 'Poppins, sans-serif' }} className="">
+      <div className="bg-gradient-radial from-[#FD9] via-[#CBF0BC] to-white min-h-screen  ">
+        <div className="">
+        <div className="flex items-center justify-between py-4 px-4  xl:px-16 ">
+          <a href="/home" className="">
+            <Image src={runshiftsLogo} alt="runshifts" />
+          </a>
+          <CommonButtons>
+            <div onClick={scrollToForm}>
+              Join waitlist
+            </div>
           </CommonButtons>
-      </div>
+        </div>
 
-      <div className="relative min-h-screen mt-4 xl:mt-16 px-10">
-        {/* Background image with opacity */}
-        <div className="absolute inset-0 bg-[url('../public/img/landingPage.png')] opacity-50"></div>
+        <div className="relative min-h-screen mt-4 pl-4  xl:pl-16 xl:mt-16 ">
+          {/* Background image with opacity */}
+          <div className="absolute inset-0 bg-[url('../public/img/landingPage.png')] opacity-50"></div>
 
-        {/* Content with no opacity */}
-        <div className="relative z-10">
-          <div className="mt-8 xl:mt-90">
-            <h1 className="text-2xl not-italic font-extrabold text-[#36322F] pt-2 xl:text-5xl xl:pt-20">
-              Revolutionise Your <br /> Workforce Management
-            </h1>
-            <p className="text-base not-italic font-normal leading-7 text-[#475467] my-5">
-              Seamless scheduling, real-time updates, and powerful analytics
-              in one platform.
-            </p>
-
-            <div className="mt-16 xl:mt-24">
-              <p className="text-base not-italic font-semibold leading-7 text-[#475467]">
-                Coming soon to your app stores
+          {/* Content with no opacity */}
+          <div className="relative z-10">
+            <div className="mt-2 xl:mt-90">
+              <h1 className="text-[26px] not-italic font-extrabold text-[#36322F] pt-2 xl:text-5xl xl:pt-20">
+                Revolutionise Your <br/> Workforce Management
+              </h1>
+              <p className="text-base not-italic  font-normal leading-7 text-[#475467] my-5">
+                Seamless scheduling, real-time updates, and powerful analytics
+                in one platform.
               </p>
-              <div className="flex flex-col items-start justify-start xl:flex-row">
-                <Image src={App} alt="download" height={52} width={180} className='mr-0 xl:mr-2 my-2' />
-                <Image src={Playstore} alt="download" height={52} width={180} className='ml-0 xl:ml-2' />
+
+              <div className="mt-16 xl:mt-24">
+                <p className="text-base not-italic font-semibold leading-7 text-[#475467]">
+                  Coming soon to your app stores
+                </p>
+                <div className="flex items-start justify-start gap-3">
+                  <Image src={App} alt="download" height={52} width={165} className='mr-0 xl:mr-2 my-2' />
+                  <Image src={Playstore} alt="download" height={52} width={165} className='ml-0 xl:ml-2 my-2' />
+                </div>
               </div>
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
 
-    <div className="flex justify-center items-center min-h-screen mt-10 xl:mt-0">
-      <div className="grid grid-cols-1 gap-6 justify-items-center mx-4 xl:grid-cols-3 xl:m-20">
-        {features.map((feature, index) => (
-          <div
-            key={index}
-            className="bg-[#E5F7DD] p-6 flex flex-col items-center justify-center rounded-lg h-60 w-80"
-          >
-            {feature.icon}
-            <h3 className="text-center text-xl not-italic font-medium leading-7 text-[#101828] pt-4 py-2">
-              {feature.title}
-            </h3>
-            <p className="text-center text-base not-italic font-normal leading-6 text-[#475467]">
-              {feature.description}
-            </p>
+      <div className="flex flex-col items-center justify-center min-h-screen mt-10 xl:mt-0">
+        <h2 className="text-3xl font-bold mb-8">Why choose us</h2>
+        <div className="flex flex-wrap justify-center gap-6 max-w-[1200px] w-full px-4">
+          <div className="flex flex-col gap-4 justify-center w-full xl:flex-row">
+            {features.slice(0, 3).map((feature, index) => (
+              <div
+                key={index}
+                className="bg-[#E5F7DD] p-6 flex flex-col items-center justify-center rounded-lg h-60 w-80 mx-2"
+              >
+                {feature.icon}
+                <h3 className="text-center text-xl font-medium leading-7 text-[#101828] pt-4 py-2">
+                  {feature.title}
+                </h3>
+                <p className="text-center text-base font-normal leading-6 text-[#475467]">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
           </div>
-        ))}
+          <div className="flex flex-col gap-4 justify-center w-full xl:flex-row">
+            {features.slice(3, 5).map((feature, index) => (
+              <div
+                key={index + 3}
+                className="bg-[#E5F7DD] p-6 flex flex-col items-center justify-center rounded-lg h-60 w-80 mx-2"
+              >
+                {feature.icon}
+                <h3 className="text-center text-xl font-medium leading-7 text-[#101828] pt-4 py-2">
+                  {feature.title}
+                </h3>
+                <p className="text-center text-base font-normal leading-6 text-[#475467]">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
+      <div>
+      <ContactForm formType="landing" formRef={formRef} />
+        </div>
+      <LandingFooter />
     </div>
-
-    {/* Waitlist Form */}
-    <div ref={formRef}>
-      <div className="my-10 px-16">
-        <h1 className="text-center text-2xl not-italic font-semibold text-[#101828] xl:text-5xl ">
-          Join Our Exclusive Waitlist
-        </h1>
-        <p className="text-center text-sm not-italic font-normal leading-7 text-[#475467] mx-2 xl:text-xl xl:mx-60">
-          Be the first to experience the future of workforce management and
-          enjoy 3 months of free access to our platform.
-        </p>
-      </div>
-
-      <div className="shadow-lg rounded-2xl p-2 px-6 xl:py-16 mx-auto max-w-screen-sm">
-      <form action="#" className="space-y-4 xl:space-y-8">
-            <div className="flex flex-col gap-4 w-[100%] xl:flex-row">
-              <div className="w-[100%] xl:w-[50%] ">
-                <label
-                  for="firstName"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  First name
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="First name"
-                  required
-                />
-              </div>
-              <div className="w-[100%] xl:w-[50%] ">
-                <label
-                  for="lastName"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Last name
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="Last name"
-                  required
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                for="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="subject"
-                className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                placeholder="you@company.com"
-                required
-              />
-            </div>
-            <div>
-              <label
-                for="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                Company name
-              </label>
-              <input
-                type="comapny"
-                id="subject"
-                className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                placeholder="ABC Company"
-                required
-              />
-            </div>
-            <div>
-              <label
-                for="industries"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Industry
-              </label>
-              <select
-                id="industries"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option selected value="US">
-                  Tech
-                </option>
-                <option value="CA">Fashion</option>
-                <option value="FR">Agriculture</option>
-              </select>
-            </div>
-            <div>
-              <label
-                for="companysize"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Company size
-              </label>
-              <select
-                id="companysize"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option selected value="US">
-                  1-10
-                </option>
-                <option value="CA">11-50</option>
-                <option value="FR">100+</option>
-              </select>
-            </div>
-
-            <div className="">
-              <div class="flex items-center">
-                <button
-                  id="dropdown-phone-button"
-                  data-dropdown-toggle="dropdown-phone"
-                  class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
-                  type="button"
-                >
-                  +234
-                </button>
-                <div
-                  id="dropdown-phone"
-                  class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-gray-700"
-                >
-                  <ul
-                    class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                    aria-labelledby="dropdown-phone-button"
-                  >
-                    <li>
-                      <button
-                        type="button"
-                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        <span class="inline-flex items-center">
-                          Nigeria (+234)
-                        </span>
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        type="button"
-                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        <span class="inline-flex items-center">
-                          United States (+1)
-                        </span>
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        type="button"
-                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        <span class="inline-flex items-center">
-                          United Kingdom (+44)
-                        </span>
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        type="button"
-                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        <span class="inline-flex items-center">
-                          Australia (+61)
-                        </span>
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        type="button"
-                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        <span class="inline-flex items-center">
-                          Germany (+49)
-                        </span>
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        type="button"
-                        class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        <span class="inline-flex items-center">
-                          France (+33)
-                        </span>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-                <label
-                  for="phone-input"
-                  class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-                >
-                  Phone number:
-                </label>
-                <div class="relative w-full">
-                  <input
-                    type="text"
-                    id="phone-input"
-                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-0 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                    placeholder="123-456-7890"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="sm:col-span-2">
-              <label
-                for="message"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Message
-              </label>
-              <textarea
-                id="message"
-                rows="6"
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
-                placeholder="Leave a comment..."
-              ></textarea>
-            </div>
-            <div className="w-full">
-            <CommonButtons>
-             Join waitlist
-            </CommonButtons>
-            </div>
-          </form>
-      </div>
-    </div>
-    <LandingFooter/>
-  </div>
   );
 }
+
+
 
 function User() {
   return (

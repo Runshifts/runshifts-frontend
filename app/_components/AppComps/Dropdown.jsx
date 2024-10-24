@@ -10,17 +10,17 @@ export default function DropDown({
   const dropdownRef = useOutsideClick(() => setShowDropDown(false))
 
   return (
-    <div
-      ref={dropdownRef}
-      onClick={(e) => {
-        e.stopPropagation()
-        disabled === false && setShowDropDown(true)
-      }}
-      className="relative"
-    >
-      {typeof dropDownTrigger === "function"
-        ? dropDownTrigger({ isOpen: showDropDown })
-        : dropDownTrigger}
+    <div ref={dropdownRef} className="relative">
+      <div
+        onClick={(e) => {
+          e.stopPropagation()
+          disabled === false && setShowDropDown(true)
+        }}
+      >
+        {typeof dropDownTrigger === "function"
+          ? dropDownTrigger({ isOpen: showDropDown })
+          : dropDownTrigger}
+      </div>
       <div
         className={`${
           showDropDown
@@ -28,7 +28,13 @@ export default function DropDown({
             : "max-h-0 overflow-hidden"
         } absolute shadow rounded-[3px] z-[10] top-[calc(115%)] bg-white min-w-full w-max flex flex-col items-start text-[14px]`}
       >
-        {dropdownContent}
+        {typeof dropdownContent === "function"
+          ? dropdownContent({
+              toggleDropDown: (value) => {
+                setShowDropDown(value)
+              },
+            })
+          : dropdownContent}
       </div>
     </div>
   )

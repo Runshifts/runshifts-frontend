@@ -16,33 +16,34 @@ function InfoCards({ title, content, refLink }) {
       </p>
       <hr />
       <div className="flex items-center justify-between pt-3">
-      <div className="flex items-center justify-between">
-        <div class="flex -space-x-4 rtl:space-x-reverse">
-          <Image
-            class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
-            src={Ellipse1}
-            alt=""
-          />
-          <Image
-            class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
-            src={Ellipse2}
-            alt=""
-          />
-          <Image
-            class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
-            src={Ellipse3}
-            alt=""
-          />
+        <div className="flex items-center justify-between">
+          <div className="flex -space-x-4 rtl:space-x-reverse">
+            <Image
+              className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
+              src={Ellipse1}
+              alt=""
+            />
+            <Image
+              className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
+              src={Ellipse2}
+              alt=""
+            />
+            <Image
+              className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
+              src={Ellipse3}
+              alt=""
+            />
+          </div>
+          <p className="text-sm font-normal leading-6 tracking-normal text-[#706763] text-right">
+            28 entries
+          </p>
         </div>
-        <p className="text-sm font-normal leading-6 tracking-normal text-[#706763] text-right">28 entries</p>
-
-        </div>
-       {/* <Link href={refLink} > */}
-       <button className="text-[#449522] ">View</button>
-       {/* </Link> */}
+        {/* <Link href={refLink} > */}
+        <button className="text-[#449522] ">View</button>
+        {/* </Link> */}
       </div>
     </div>
-  );
+  )
 }
 
 export default InfoCards;
