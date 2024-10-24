@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import runshiftsLogo1 from './runshiftsLogo1.svg';
+// import runshiftsLogo1 from "../../_components/navbar/runshiftsLogo.svg"
 import CommonButtons from './CommonButtons';
-import { MdOutlineCancel } from 'react-icons/md'; // Import cancel icon
+import { MdOutlineCancel } from 'react-icons/md';
 import Link from 'next/link';
 
 const menuItems = [
@@ -70,16 +71,16 @@ export default function Header({ isTransparent = false }) {
         <div>
             <nav className={`${bgClass} ${textColorClass} border-gray-20 relative z-20`}>
                 <div className="max-w-screen-xl flex  items-center justify-between px-2 py-4">
-                    <a href="/" className="flex justify-start items-left ml-0">
-                        <Image src={runshiftsLogo1} className="h-8" height={200} width={204} alt="runshifts Logo" />
+                <a href="/" className="flex justify-start items-start pl-1 xl:pl-10">
+                <Image src={runshiftsLogo1} className="" quality={100} height={150} width={150} alt="runshifts Logo" />
                     </a>
 
                     <div className="flex justify-start items-left mr-4">
-                        <div className='block xl:hidden'>
+                        {/* <div className='block xl:hidden'>
                             <button className='bg-[#449522] rounded-lg text-white p-2 whitespace-nowrap text-sm not-italic font-normal leading-6 xl:text-base '>
                                 Get Started for <span className='font-bold'>free</span>
                             </button>
-                        </div>
+                        </div> */}
 
                         <button
                             type="button"
