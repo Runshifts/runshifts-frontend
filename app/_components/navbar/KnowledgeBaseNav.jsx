@@ -24,17 +24,19 @@ const KnowledgeBaseNav = () => {
 
   return (
     <nav
-      className={`relative border-gray-200 bg-black dark:bg-gray-800 dark:border-gray-700 ${
+      className={`relative border-gray-200 bg-black z-50 dark:bg-gray-800 dark:border-gray-700 ${
         isSticky ? "sticky top-0 z-50" : ""
       }`}
     >
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
+        <Link href={'/'}>
         <Image
           src={runshiftsLogo}
           quality={100}
           className="h-8"
           alt="runshifts Logo"
         />
+        </Link>
         <button
           onClick={toggleMenu}
           type="button"

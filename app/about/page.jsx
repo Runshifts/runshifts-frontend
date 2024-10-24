@@ -94,25 +94,61 @@ const teamMembers = [
     }
 ];
 
+const testimonials = [
+    {
+        testimonial:
+            "Runshifts has transformed the way we manage our workforce. The scheduling process is now faster and more efficient, and our team loves the real-time updates!",
+        name: "Alex R.",
+        position: "Operations Manager",
+        image: Alex,
+    },
+    {
+        testimonial:
+            "The conflict resolution feature has been a game-changer for us. No more overlapping shifts or last-minute scrambles!",
+        name: "Jessica M.",
+        position: "HR Director",
+        image: Alex,
+    },
+    {
+        testimonial:
+            "Since we started using Runshifts, our productivity has increased significantly. Highly recommend it!",
+        name: "Michael T.",
+        position: "Business Owner",
+        image: Alex,
+    },
+];
+
 export default function About() {
     return (
         <Layout>
             <div>
                 <div className='px-4 my-8 flex flex-col items-center justify-center'>
                     <CommonTitle>About us</CommonTitle>
-                    <CommonHeader>Learn more about us</CommonHeader>
-                    <CommonParagraph>Learn more about Runshifts and the team behind it</CommonParagraph>
+                    <CommonHeader>
+                        <div className='w-[325px] xl:w-[745px]'>
+                            Empowering Businesses and Teams
+                        </div>
+                    </CommonHeader>
+                    {/* <CommonParagraph>Learn more about Runshifts and the team behind it</CommonParagraph> */}
                 </div>
 
                 <div className='px-4 flex flex-col-reverse items-center justify-between mx-2 xl:flex-row xl:mx-16'>
-                    <div className='flex flex-col items-start justify-start mx-2'>
-                        <CommonHeader>Who we are</CommonHeader>
+                    <div className='flex flex-col items-center justify-center mx-2 xl:items-start xl:justify-start'>
+                        <CommonHeader>
+                            <div className='text-center xl:text-left'>
+                            Who we are
+                            </div>
+                            </CommonHeader>
                         <CommonParagraph>
-                            At Runshifts, we believe in making workforce management as seamless and efficient as possible. Our team of experts has created an innovative platform that addresses the common challenges of scheduling and shift management. Whether you&apos;re a small business or a large enterprise, Runshifts provides the tools you need to optimize your operations.
+                            <div className='w-[328px] text-center xl:text-left xl:w-[501px]'>
+                                At Runshifts, we believe in making workforce management as seamless and efficient as possible. Our team of experts has created an innovative platform that addresses the common challenges of scheduling and shift management. Whether you&apos;re a small business or a large enterprise, Runshifts provides the tools you need to optimize your operations.
+                            </div>
                         </CommonParagraph>
-                        <CommonButtons>
-                            <div>Start using Runshifts</div>
-                        </CommonButtons>
+                        <Link href="/signup?type=for-profit">
+                            <button className="bg-[#283142] text-[#fff] rounded-lg px-4 py-2 text-base not-italic font-semibold leading-6 my-5">
+                                Start using Runshifts
+                            </button>
+                        </Link>
                     </div>
                     <Image src={peoplehands} alt='' height={313} width={513} className='xl:ml-8' />
                 </div>
@@ -194,47 +230,28 @@ export default function About() {
                         <InnerHeader>What Our Clients Say</InnerHeader>
                     </div>
 
-                    <div className='flex flex-col justify-center items-start gap-4 mx-2 md:flex-row md:mx-8 mt-3'>
-                        <div className='flex flex-col justify-center items-start'>
-                            <p className='bg-[#F0F0F0] p-3 rounded-2xl mb-2 text-black text-sm not-italic font-normal'>
-                                &apos;Runshifts has transformed the way we manage our workforce. The scheduling process is now faster and more efficient, and our team loves the real-time updates!&apos;
-                            </p>
-                            <div className='flex '>
-                                <Image src={Alex} alt='' height={30} width={30} />
-                                <div className='ml-3'>
-                                    <h2 className='text-sm not-italic font-normal text-[#040505]'>Alex R.,</h2>
-                                    <p className='text-sm not-italic font-normal text-[#040505]'>Operations Manager</p>
+                    <div className="flex flex-col justify-center items-start gap-4 mx-2 md:flex-row md:mx-8 mt-3">
+                        {testimonials.map((item, index) => (
+                            <div key={index} className="relative flex flex-col justify-center items-start">
+                                
+                                <p className="w-full h-full xl:w-[365px] xl:h-[116px] bg-[#F0F0F0] p-3 rounded-2xl mb-2 text-black text-sm not-italic font-normal relative before:content-[''] before:absolute before:bottom-[-10px] before:left-4 before:w-0 before:h-0 before:border-l-[10px] before:border-r-[10px] before:border-t-[10px] before:border-l-transparent before:border-r-transparent before:border-t-[#F0F0F0]">
+                                    &apos;{item.testimonial}&apos;
+                                </p>
+                                <div className="flex mt-2">
+                                    <Image src={item.image} alt={item.name} height={50} width={50} />
+                                    <div className="ml-3">
+                                        <h2 className="text-sm not-italic font-normal text-[#040505]">
+                                            {item.name}
+                                        </h2>
+                                        <p className="text-sm not-italic font-normal text-[#040505]">
+                                            {item.position}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div className='flex flex-col justify-center items-start'>
-                            <p className='bg-[#F0F0F0] p-3 rounded-2xl mb-2 text-black text-sm not-italic font-normal'>
-                                &apos;Runshifts has transformed the way we manage our workforce. The scheduling process is now faster and more efficient, and our team loves the real-time updates!&apos;
-                            </p>
-                            <div className='flex '>
-                                <Image src={Alex} alt='' height={30} width={30} />
-                                <div className='ml-3'>
-                                    <h2 className='text-sm not-italic font-normal text-[#040505]'>Alex R.,</h2>
-                                    <p className='text-sm not-italic font-normal text-[#040505]'>Operations Manager</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='flex flex-col justify-center items-start'>
-                            <p className='bg-[#F0F0F0] p-3 rounded-2xl mb-2 text-black text-sm not-italic font-normal'>
-                                &apos;Runshifts has transformed the way we manage our workforce. The scheduling process is now faster and more efficient, and our team loves the real-time updates!&apos;
-                            </p>
-                            <div className='flex '>
-                                <Image src={Alex} alt='' height={30} width={30} />
-                                <div className='ml-3'>
-                                    <h2 className='text-sm not-italic font-normal text-[#040505]```jsx
-                                '>Alex R.,</h2>
-                                    <p className='text-sm not-italic font-normal text-[#040505]'>Operations Manager</p>
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
+
                 </div>
 
                 <div className='my-10'>
@@ -244,7 +261,7 @@ export default function About() {
 
                     <div className='flex flex-col items-center justify-center gap-4 lg:flex-row lg:justify-between mx-3 xl:px-16'>
                         {teamMembers.map((member, index) => (
-                            <div key={index} className='bg-[#F9FAFB] flex flex-col items-center justify-center p-2 rounded mx-2'>
+                            <div key={index} className='bg-[#F9FAFB] flex flex-col items-center justify-center p-6 rounded mx-2'>
                                 <Image src={member.image} alt={member.alt} height={80} width={80} className='rounded-full' />
                                 <h3 className='text-center text-lg not-italic font-semibold leading-7 text-[#101828] my-2'>{member.name}</h3>
                                 <h3 className='text-center text-lg not-italic font-semibold leading-7 text-[#449522] mt-2'>{member.role}</h3>

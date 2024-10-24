@@ -132,7 +132,7 @@ export default function Main() {
         </div>
       </div>
       <div>
-      <ContactForm formRef={formRef} />
+      <ContactForm formType="landing" formRef={formRef} />
         </div>
       <LandingFooter />
     </div>

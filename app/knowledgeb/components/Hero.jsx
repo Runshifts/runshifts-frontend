@@ -4,7 +4,7 @@ import React from "react";
 function HeroPageContent({ title, subtitle, onSubmit, popular }) {
   return (
     <div
-      className="knowledgeb-bg bg-cover bg-center h-screen flex flex-col justify-start  items-center mt-10 xl:-mt-24 xl:justify-center xl:items-center"
+      className="knowledgeb-bg bg-cover bg-center h-screen flex flex-col justify-center  items-center -mt-28 xl:justify-center xl:items-center"
     >
       <h1 className="text-4xl font-semibold tracking-normal text-left mb-8 md:text-6xl">
         {title}
@@ -25,7 +25,7 @@ function HeroPageContent({ title, subtitle, onSubmit, popular }) {
           />
           <button
             type="submit"
-            className="text-white absolute end-2.5 bottom-2.5 bg-[#449522] hover:bg-[#1e490e] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white absolute end-2.5 bottom-2.5 bg-[#449522] hover:bg-[#1e490e] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
           >
             Search
           </button>
