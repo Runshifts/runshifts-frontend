@@ -70,8 +70,8 @@ export default function HomeEmployer() {
     <Layout>
     <div className=''>
       <div className="mx-8 px-4 mt-8 flex flex-col items-center justify-center">
-        <CommonTitle>Employer</CommonTitle>
-        <CommonHeader>Run your business with efficiency</CommonHeader>
+        <CommonTitle>Non-profits</CommonTitle>
+        <CommonHeader>Non-profits and NGOs are not left out</CommonHeader>
         <CommonParagraph>
           We believe RunShifts should be accessible to all companies, no matter
           the size.
