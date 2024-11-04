@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Runshifts",
-  description: "",
+  description: "Less Toil, More Productivity",
 };
 
 
