@@ -77,7 +77,7 @@ export default function Footer() {
 
                             <CommonButtons>
                                 <div className='max-w-screen xl:w-full'>
-                                Subscribe
+                                    Subscribe
                                 </div>
                             </CommonButtons>
                         </div>
@@ -91,27 +91,45 @@ export default function Footer() {
                                 <Image src={footerData.logo.src} alt={footerData.logo.alt} />
                             </a>
                             <p className='hidden xl:block ml-2 text-base not-italic font-normal'>
-                            Less Toil, More Productivity
+                                Less Toil, More Productivity
                             </p>
-                            <div className='flex items-center justify-center ml-0 my-3 xl:ml-2'>
-                                <div className='bg-[#D5DBE6] p-1 rounded-full w-fit '>
+                            <div className="flex items-center ml-0 my-3 xl:ml-2">
+                                <Link
+                                    href="https://www.linkedin.com/company/runshifts"
+                                    className="bg-[#D5DBE6] p-1 rounded-full w-fit"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     <Linkedin />
-                                </div>
-                                <div className='bg-[#D5DBE6] p-1 rounded-full w-fit mx-2'>
+                                </Link>
+                                <Link
+                                    href="https://web.facebook.com/people/Runshifts/61565224161044"
+                                    className="bg-[#D5DBE6] p-1 rounded-full w-fit mx-2"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     <Fb />
-                                </div>
-                                <div className='bg-[#D5DBE6] p-0.2 rounded-full w-fit '>
+                                </Link>
+                                <Link
+                                    href="https://www.instagram.com/runshifts?igsh=NjFheHMyem1xYnU3&utm_source=qr"
+                                    className="bg-[#D5DBE6] p-0.5 rounded-full w-fit"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     <Ig />
-                                </div>
-                                <div className='bg-[#D5DBE6] p-1 rounded-full w-fit mx-2'>
+                                </Link>
+                                <Link
+                                    href="https://wa.me/message/VSKLWVADBPPYF1"
+                                    className="bg-[#D5DBE6] p-1 rounded-full w-fit mx-2"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     <Whatsapp />
-                                </div>
-                                <div className='bg-[#D5DBE6] p-0.5 rounded-full w-fit '>
-                                    <Twitter />
-                                </div>
+                                </Link>
                             </div>
+
                         </div>
-                       
+
                     </div>
                     <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
                     <div className="sm:flex sm:items-center sm:justify-between">
