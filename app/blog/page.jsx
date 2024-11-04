@@ -11,6 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BlogProd from "../_assets/img/BlogProd.svg"
 import Others from './Others'
+
 const categories = [
     {
         title: 'Team productivity',
@@ -34,20 +35,20 @@ export default function Blog() {
         <Layout>
             <div className='px-4 my-8 flex flex-col items-center justify-center'>
                 <CommonHeader>
-                    <div className='text-center w-[568px]'>
+                    <div className='text-center w-[368px] xl:w-[568px]'>
                         Blogs on team
                     </div>
                 </CommonHeader>
                 <CommonHeader>
-                    <div className='text-center w-[768px] mt-0'>
+                    <div className='text-center w-[368px] xl:w-[768px] mt-0'>
                         management and productivity
                     </div>
                 </CommonHeader>
 
                 {/* Categories Section */}
-                <div className='w-full max-w-[1280px] flex flex-col items-center justify-center mt-10 mb-4 mx-2 px-4'>
+                <div className='w-full max-w-[1280px] flex flex-col items-center justify-center mt-10 mb-4 px-0 xl:px-4'>
                     <CommonTitle>Read by category</CommonTitle>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 xl:gap-6 mt-8">
                         {categories.map(({ id, title, imageUrl }) => (
                             <div key={id} className="relative rounded-lg">
                                 <Image
@@ -78,13 +79,13 @@ export default function Blog() {
                     </div>
                 </div>
 
-                <div className='flex flex-col-reverse items-center justify-between mx-2 xl:flex-row'>
-                    <div className='flex flex-col items-start justify-start'>
-                        <button className="bg-[#B2E89A] text-[#17320B] rounded-full px-4 py-2 text-base not-italic font-normal leading-6 ">
+                <div className='flex flex-col-reverse items-center justify-between xl:flex-row'>
+                    <div className='flex flex-col items-center justify-center xl:items-start xl:justify-start'>
+                        <button className="bg-[#B2E89A] text-[#17320B] rounded-full px-4 py-2 text-base not-italic font-normal leading-6 mt-3 text-center xl:mt-0 xl:text-start">
                             Team productivity
                         </button>
                         <CommonHeader>
-                            <div className='text-center xl:text-left w-[591px] '>
+                            <div className='text-center xl:text-left w-[328px] xl:w-[591px] '>
                                 Types of Feedback: Exploring Feedback Types with Examples
                             </div>
                         </CommonHeader>
@@ -99,7 +100,7 @@ export default function Blog() {
                             </button>
                         </Link>
                     </div>
-                    <Image src={BlogProd} alt='' height={313} width={513} className='rounded-xl xl:ml-8' />
+                    <Image src={BlogProd} alt='' height={313} width={513} className='rounded-xl ml-0 xl:ml-8' />
                 </div>
 
                 <div>

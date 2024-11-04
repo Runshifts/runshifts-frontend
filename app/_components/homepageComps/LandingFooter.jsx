@@ -29,7 +29,7 @@ const footerData = {
         {
             title: "Company",
             links: [
-                { label: "Blog", href: "/" },
+                { label: "Blog", href: "/blog" },
                 { label: "Careers", href: "/" },
                 { label: "News", href: "/" },
             ],

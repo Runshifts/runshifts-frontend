@@ -6,16 +6,22 @@ import { Toaster } from "react-hot-toast"
 import UserProvider from "./_providers/UserProvider"
 import ReduxProvider from "./_providers/ReduxProvider"
 import { Suspense } from "react"
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Runshifts",
   description: "",
-}
+};
+
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+       <head>
+        <title>Runshifts</title>
+        <link rel="icon" href="/img/Favicon.svg" type="image/svg+xml" />
+      </head>
       <body className={inter.className}>
         <script
           src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
