@@ -18,13 +18,13 @@ const contactInfo = [
     icon: Location,
     title: 'Office',
     description: 'Come say hello at our office HQ.',
-    contactInfo: '100 Smith Street\nCollingwood VIC 3066 UK',
+    contactInfo: '20-22 Wenlock Road,\nLondon, England, N1 7GU',
   },
   {
     icon: Phone,
     title: 'Phone',
     description: 'Mon-Fri from 8am to 5pm.',
-    contactInfo: '+1 (800) 123-4567',
+    contactInfo: '+44 7749 097551',
   },
 ];
 

@@ -70,9 +70,6 @@
 //   )
 // }
 
-
-
-
 import React from "react";
 import Image from "next/image";
 import CustomButtons from "./_components/homepageComps/CommonButtons";
@@ -82,11 +79,7 @@ import Home3 from "./_assets/img/Home3.png";
 import Illustration from "./_assets/img/Illustration.svg";
 import Illustration1 from "./_assets/img/Illustration1.svg";
 import Design from "./_assets/img/Design.png";
-import Table2 from "./_assets/img/Table2.png";
 import hands from "./_assets/img/hands.svg";
-import bruce from "./_assets/img/bruce.svg";
-import bruce1 from "./_assets/img/bruce1.svg";
-import pexels from "./_assets/img/pexels.svg";
 import Home from "./_assets/img/Home.svg";
 import Manage from "./_assets/svgs/Manage";
 import Secured from "./_assets/svgs/Secured";
@@ -95,31 +88,13 @@ import CommonHeader from "./_components/homepageComps/CommonHeader";
 import CommonParagraph from "./_components/homepageComps/CommonParagraph";
 import RightArrowWhite from "./_assets/svgs/RightArrowWhite";
 import Link from "next/link";
-import Footer from './_components/homepageComps/Footer';
+import Footer from "./_components/homepageComps/Footer";
 import HomeHeader from "./_components/homepageComps/HomeHeader";
+import HomeBlog from "./_components/homepageComps/HomeBlog";
 
 export default function HomePage() {
-  const blogPosts = [
-    {
-      image: bruce,
-      title: "What are other companies doing to function with ease?",
-      category: "Operations",
-    },
-    {
-      image: bruce1,
-      title: "What are other companies doing to function with ease?",
-      category: "Business",
-    },
-    {
-      image: pexels,
-      title: "What are other companies doing to function with ease?",
-      category: "Tech",
-    },
-  ];
-
   return (
-
-    <div style={{ fontFamily: 'Poppins, sans-serif' }} className="">
+    <div style={{ fontFamily: "Poppins, sans-serif" }} className="">
       <div className="bg-gradient-radial from-[#FD9] via-[#CBF0BC] to-white">
         <HomeHeader />
         <div className=" flex flex-col items-center justify-center px-54 py-6 pt-8  xl:pt-16">
@@ -131,7 +106,7 @@ export default function HomePage() {
           </h1>
           <CommonParagraph>
             <div className="text-sm text-center w-[348px] xl:w-[461px]">
-            Streamline scheduling, timekeeping, communication, and reporting
+              Streamline scheduling, timekeeping, communication, and reporting
               to drive efficiency across your workforce.
             </div>
           </CommonParagraph>
@@ -208,8 +183,8 @@ export default function HomePage() {
               Manage your team in real time
             </h2>
             <p className="text-base not-italic font-normal leading-6 text-[#52525B] py-2">
-              Emphasises the platform&apos;s ability to provide
-              up-to-the-minute workforce oversight.{" "}
+              Emphasises the platform&apos;s ability to provide up-to-the-minute
+              workforce oversight.{" "}
             </p>
           </div>
 
@@ -242,7 +217,6 @@ export default function HomePage() {
             height={477}
             width={384}
             className="py-0 xl:py-8"
-
           />
           <div className="flex flex-col items-start justify-start  xl:p-8">
             <CommonHeader>
@@ -252,10 +226,10 @@ export default function HomePage() {
             </CommonHeader>
             <CommonParagraph>
               <div className="text-left text-[#EFEDED] font-[400px] opacity-80 px-6 py-3 w-[350px] xl:w-[578px] xl:pb-6 pt-2 ">
-                Streamline your team&apos;s scheduling and shift management
-                with Runshifts. Our intuitive platform makes it easy to
-                create, update, and coordinate shifts in real-time. Keep your
-                workforce informed and operations running smoothly.
+                Streamline your team&apos;s scheduling and shift management with
+                Runshifts. Our intuitive platform makes it easy to create,
+                update, and coordinate shifts in real-time. Keep your workforce
+                informed and operations running smoothly.
               </div>
             </CommonParagraph>
             <Link href={"/signup?type=for-profit"}>
@@ -274,8 +248,8 @@ export default function HomePage() {
             </h2>
             <p className="text-left text-[#475467] text-sm not-italic font-[400px] leading-6 my-4 md:text-lg">
               Runshifts integrates seamless team communication with
-              comprehensive operational tools. Keep your workforce connected
-              and your business running efficiently all in one platform.
+              comprehensive operational tools. Keep your workforce connected and
+              your business running efficiently all in one platform.
             </p>
           </div>
           <Image
@@ -316,14 +290,13 @@ export default function HomePage() {
         <div className="flex flex-col-reverse items-start justify-center p-0 my-6 xl:p-8 xl:my-20 xl:flex-row xl:justify-between xl:items-center">
           <div className="flex flex-col items-start justify-start  xl:justify-center ">
             <CommonHeader>
-              <div className='mt-4 my-0'>
-              Non-Profits & Charities
-              </div>
-              </CommonHeader>
+              <div className="mt-4 my-0">Non-Profits & Charities</div>
+            </CommonHeader>
             <CommonParagraph>
               <div className="w-[100%] xl:w-[491px] ">
-                Runshifts supports the unique scheduling needs of non-profit and charitable organizations. Streamline your workforce
-                management to focus on your mission.
+                Runshifts supports the unique scheduling needs of non-profit and
+                charitable organizations. Streamline your workforce management
+                to focus on your mission.
               </div>
             </CommonParagraph>
             <Link href="/signup?type=non-profit">
@@ -341,46 +314,21 @@ export default function HomePage() {
           />
         </div>
 
-        <div className="my-8 xl:my-20">
-          <div>
+        <div>
+          <div className="my-8 xl:my-20">
             <p className="w-fit mx-auto bg-[#B2E89A] text-[#17320B] text-center rounded-full px-4 py-1 text-base not-italic font-normal leading-6 my-5">
               Updates
             </p>
             <CommonHeader>
-              <div className="text-[#090914] my-4 xl:mb-8 xl:my-0">Read our blog</div>
+              <div className="text-[#090914] my-4 xl:mb-8 xl:my-0">
+                Read our blog
+              </div>
             </CommonHeader>
           </div>
-
-          <div className="flex flex-col gap-6 items-center justify-center xl:flex-row xl:gap-12">
-            {blogPosts.map((post, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center justify-center xl:flex-row"
-              >
-                <div className="max-w-sm bg-white rounded-lg  ">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    height={300}
-                    width={350}
-                    className="rounded-xl mb-4 w-full h-auto"
-                  />
-                  <div className="">
-                    <h5 className="mb-2 text-start text-[21px] font-bold tracking-tight text-gray-900">
-                      {post.title}
-                    </h5>
-                    <p className="text-[#5BC62D] text-xs not-italic font-medium leading-5">
-                      {post.category}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <HomeBlog />
         </div>
       </div>
       <Footer />
     </div>
-
   );
 }
